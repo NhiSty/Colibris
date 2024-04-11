@@ -14,3 +14,12 @@ docker logs -f golang
 ```bash
 docker compose restart golang
 ```
+
+# generate the swagger documentation
+```bash
+swag init
+```
+# swagger url
+```bash
+http://localhost:8080/api/v1/swagger/index.html
+```
