@@ -1,2 +1,4 @@
 .idea
 .env
+/Back/tmp/*
+/Back/go.sum
