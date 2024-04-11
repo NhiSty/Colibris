@@ -42,6 +42,7 @@ require (
 	github.com/tdewolff/parse/v2 v2.7.12 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
+	github.com/zc2638/swag v1.5.1 // indirect
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/crypto v0.21.0 // indirect
 	golang.org/x/net v0.22.0 // indirect
