@@ -1,6 +1,7 @@
 package main
 
 import (
+	connector "Colibris/db"
 	"Colibris/docs"
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
@@ -15,6 +16,8 @@ func main() {
 	r := gin.Default()
 	docs.SwaggerInfo.BasePath = "/api/v1"
 
+	connector.Migrate()
+
 	v1 := r.Group("/api/v1")
 	{
 		v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
@@ -24,6 +27,9 @@ func main() {
 			})
 		})
 		v1.GET("/ping", pingController)
+
+		//	v1.POST("/user", findByController)
+
 	}
 
 	r.Run(":8080")
@@ -46,3 +52,32 @@ func pingController(c *gin.Context) {
 		"message": "Pong ! This is an env value : " + os.Getenv("Hello"),
 	})
 }
+
+/*
+type Email struct {
+	email string
+}
+
+func findByController(c *gin.Context) {
+	var email Email
+	err := c.ShouldBind(email)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"message": "You must specify an email",
+		})
+	}
+	fmt.Println(email)
+	user, err := connector.GetUserByEmail(email.email)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": "User not found",
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"user": user,
+		})
+	}
+
+}
+*/
