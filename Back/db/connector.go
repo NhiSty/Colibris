@@ -63,13 +63,15 @@ func Migrate() {
 	}
 
 	db.Create(&User{
-		Model:       gorm.Model{},
-		Email:       "test@test.com",
-		Password:    "test",
-		Username:    "test",
-		Firstname:   "test",
-		Lastname:    "test",
-		Colocations: nil,
+		Model:     gorm.Model{},
+		Email:     "test@test.com",
+		Password:  "test",
+		Username:  "test",
+		Firstname: "test",
+		Lastname:  "test",
+		Colocations: []Colocation{
+			{Name: "Testo"},
+		},
 	})
 
 	fmt.Println("Migration complete")
@@ -77,25 +79,18 @@ func Migrate() {
 
 type User struct {
 	gorm.Model
-	Email       string `gorm:"unique"`
-	Password    string `gorm:"not null"`
-	Username    string `gorm:"not null"`
-	Firstname   string `gorm:"not null"`
-	Lastname    string `gorm:"not null"`
-	Colocations []Colocation
-}
-
-func GetUserByEmail(email string) (User, error) {
-	db := GetConnection()
-	var user User
-	err := db.First(&user, "email = ?", email).Error
-	return user, err
+	Email       string       `gorm:"unique"`
+	Password    string       `gorm:"not null"`
+	Username    string       `gorm:"not null"`
+	Firstname   string       `gorm:"not null"`
+	Lastname    string       `gorm:"not null"`
+	Colocations []Colocation `gorm:"foreignkey:UserID"`
 }
 
 type Colocation struct {
 	gorm.Model
 	Name   string `gorm:"not null"`
-	UserID uint   `gorm:"not null"`
+	UserID uint
 }
 
 type ColocMember struct {
@@ -133,4 +128,11 @@ type AchievedService struct {
 	Desc         string  `gorm:"not null"`
 	Cost         float32 `gorm:"not null"`
 	ColocationID uint    `gorm:"not null"`
+}
+
+func GetUserByEmail(email string) (User, error) {
+	db := GetConnection()
+	var user User
+	err := db.Model(&user).Preload("Colocations").Where("email = ?", email).First(&user).Error
+	return user, err
 }

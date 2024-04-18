@@ -1,8 +1,10 @@
 package main
 
 import (
+	"Colibris/PostType"
 	connector "Colibris/db"
 	"Colibris/docs"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
 	swaggerfiles "github.com/swaggo/files"
@@ -15,6 +17,7 @@ func main() {
 
 	r := gin.Default()
 	docs.SwaggerInfo.BasePath = "/api/v1"
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	connector.Migrate()
 
@@ -28,7 +31,7 @@ func main() {
 		})
 		v1.GET("/ping", pingController)
 
-		//	v1.POST("/user", findByController)
+		v1.POST("/user", findByController)
 
 	}
 
@@ -37,7 +40,6 @@ func main() {
 }
 
 // @BasePath /api/v1
-
 // PingExample godoc
 // @Summary ping example with an env value
 // @Schemes
@@ -53,26 +55,28 @@ func pingController(c *gin.Context) {
 	})
 }
 
-/*
-type Email struct {
-	email string
-}
-
+// @BasePath /api/v1
+// UserExample godoc
+// @Summary  retrieve an user
+// @Schemes
+// @Description Retrieve an user using his email
+// @Tags post user email
+// @Accept json
+// @Produce json
+// @Success 200 User object
+// @Param email body string true "User email" SchemaExample({"email" : "test@test.com"})
+// @Router /user [post]
 func findByController(c *gin.Context) {
-	var email Email
-	err := c.ShouldBind(email)
+	var email PostType.Email
+	err := c.ShouldBindJSON(&email)
 	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{
-			"message": "You must specify an email",
-		})
+		c.AbortWithStatus(http.StatusBadRequest)
 	}
 	fmt.Println(email)
-	user, err := connector.GetUserByEmail(email.email)
+	user, err := connector.GetUserByEmail(email.Email)
 
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"message": "User not found",
-		})
+		c.AbortWithStatus(http.StatusNotFound)
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"user": user,
@@ -80,4 +84,3 @@ func findByController(c *gin.Context) {
 	}
 
 }
-*/
