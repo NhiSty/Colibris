@@ -1,42 +1,4 @@
 info:
   contact: {}
-paths:
-  /ping:
-    get:
-      consumes:
-      - application/json
-      description: ping example with an env value
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 'Pong ! This is an env value : " {string}'
-          schema:
-            type: string
-      summary: ping example with an env value
-      tags:
-      - ping env value
-  /user:
-    post:
-      consumes:
-      - application/json
-      description: Retrieve an user using his email
-      parameters:
-      - description: User email
-        in: body
-        name: email
-        required: true
-        schema:
-          example: '{"email" : "test@test.com"}'
-          type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: User
-      summary: retrieve an user
-      tags:
-      - post user email
+paths: {}
 swagger: "2.0"
