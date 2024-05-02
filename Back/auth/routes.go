@@ -1,12 +1,17 @@
 package auth
 
 import (
+	"Colibris/users"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func AuthRoutes(authRoutes *gin.RouterGroup) {
+func Routes(authRoutes *gin.RouterGroup, db *gorm.DB) {
+	userRepo := users.NewUserRepository(db)
+	authService := NewAuthService(userRepo)
+	authController := NewAuthController(authService)
+
 	routes := authRoutes.Group("/auth")
-	authController := Controller{}
 	{
 		routes.POST("login", authController.Login)
 		routes.POST("register", authController.Register)
