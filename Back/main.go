@@ -1,3 +1,10 @@
+// @title Swagger Example API
+// @version 1.0
+// @description This is a sample server for a pet store.
+// @termsOfService http://swagger.io/terms/
+
+// @host localhost:8080
+// @BasePath /api/v1
 package main
 
 import (
