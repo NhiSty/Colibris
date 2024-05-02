@@ -9,7 +9,7 @@ package main
 
 import (
 	"Colibris/auth"
-	connector "Colibris/db"
+	"Colibris/db"
 	"Colibris/docs"
 	"Colibris/users"
 	"github.com/gin-gonic/gin"
@@ -20,15 +20,16 @@ import (
 
 func main() {
 	r := gin.Default()
+	database := db.Connect()
+	db.Migrate(database)
+
 	const prefixUrl string = "/api/v1"
 	docs.SwaggerInfo.BasePath = prefixUrl
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
-	connector.Migrate()
-
 	v1 := r.Group(prefixUrl)
 	{
-		auth.AuthRoutes(v1)
+		auth.Routes(v1, database)
 		users.UserRoutes(v1)
 		v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
