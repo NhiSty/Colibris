@@ -1,48 +1,37 @@
+// @title Swagger Example API
+// @version 1.0
+// @description This is a sample server for a pet store.
+// @termsOfService http://swagger.io/terms/
+
+// @host localhost:8080
+// @BasePath /api/v1
 package main
 
 import (
+	"Colibris/auth"
+	"Colibris/db"
 	"Colibris/docs"
+	"Colibris/users"
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"net/http"
-	"os"
 )
 
 func main() {
-
 	r := gin.Default()
-	docs.SwaggerInfo.BasePath = "/api/v1"
+	database := db.Connect()
+	db.Migrate(database)
 
-	v1 := r.Group("/api/v1")
+	const prefixUrl string = "/api/v1"
+	docs.SwaggerInfo.BasePath = prefixUrl
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+
+	v1 := r.Group(prefixUrl)
 	{
+		auth.Routes(v1, database)
+		users.UserRoutes(v1)
 		v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-		v1.GET("/", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "Welcome to the API",
-			})
-		})
-		v1.GET("/ping", pingController)
 	}
-
 	r.Run(":8080")
-
-}
-
-// @BasePath /api/v1
-
-// PingExample godoc
-// @Summary ping example with an env value
-// @Schemes
-// @Description ping example with an env value
-// @Tags ping env value
-// @Accept json
-// @Produce json
-// @Success 200 {string} string "Pong ! This is an env value : " {string}
-// @Router /ping [get]
-func pingController(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Pong ! This is an env value : " + os.Getenv("Hello"),
-	})
 }
