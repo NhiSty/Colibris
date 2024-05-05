@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> loginUser(String email, String password) async {
+  void loginUser(String email, String password) async {
     String? apiUrl = dotenv.env['API_URL'];
     var url = Uri.parse('$apiUrl/auth/login');
     var body = json.encode({'email': email, 'password': password});

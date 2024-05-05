@@ -6,8 +6,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'auth/login.dart';
 import 'auth/register.dart';
 
-Future main() async {
-  await dotenv.load(fileName: '.env');  // Chargez les variables d'environnement avant de démarrer l'application
+void main() async {
+  await dotenv.load(fileName: ".env");
+
   runApp(const MyApp());
 }
 
