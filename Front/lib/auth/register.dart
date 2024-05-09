@@ -1,7 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register'),
+        title: const Text('Inscription'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -33,13 +34,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                if (_isLoading)
-                  const CircularProgressIndicator(),
+                const Text(
+                  'Colibri',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                Image.asset(
+                  'assets/images/login_page.png',
+                  height: 200,
+                  width: 200,
+                ),
+                if (_isLoading) const CircularProgressIndicator(),
+                const Text(
+                  'Inscription',
+                  style: TextStyle(fontSize: 16),
+                ),
                 if (!_isLoading) ...[
+                  buildTextFormField(_firstNameController, 'Nom'),
+                  const SizedBox(height: 10),
+                  buildTextFormField(_lastNameController, 'Prénom'),
+                  const SizedBox(height: 10),
                   buildTextFormField(_emailController, 'Email'),
-                  buildTextFormField(_firstNameController, 'First Name'),
-                  buildTextFormField(_lastNameController, 'Last Name'),
-                  buildTextFormField(_passwordController, 'Password', obscureText: true),
+                  const SizedBox(height: 10),
+                  buildTextFormField(_passwordController, 'Mot de passe',
+                      obscureText: true),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
@@ -52,9 +69,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         );
                       }
                     },
-                    child: const Text('Register'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.green,
+                    ),
+                    child: const Text('S\'inscrire'),
                   ),
                 ],
+                const SizedBox(height: 20),
+                const Text(
+                  'Déjà dans nos petit papier ?',
+                  style: TextStyle(fontSize: 16),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/login');
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.green,
+                  ),
+                  child: const Text('Connecte-toi !'),
+                ),
               ],
             ),
           ),
@@ -63,27 +98,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  TextFormField buildTextFormField(TextEditingController controller, String label, {TextInputType keyboardType = TextInputType.text, bool obscureText = false}) {
+  TextFormField buildTextFormField(
+      TextEditingController controller, String label,
+      {TextInputType keyboardType = TextInputType.text,
+      bool obscureText = false}) {
     return TextFormField(
       controller: controller,
-      decoration: InputDecoration(labelText: label),
+      decoration: InputDecoration(
+        labelText: label,
+        border: const OutlineInputBorder(),
+      ),
       keyboardType: keyboardType,
       obscureText: obscureText,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please enter $label';
+          return '$label invalide';
         }
         return null;
       },
     );
   }
 
-  void registerUser(String email, String password, String firstname, String lastname) async {
+  void registerUser(
+      String email, String password, String firstname, String lastname) async {
     setState(() {
       _isLoading = true;
     });
 
-    String? apiUrl =  dotenv.env['API_URL'];
+    String? apiUrl = dotenv.env['API_URL'];
     var url = Uri.parse('$apiUrl/auth/register');
     var body = json.encode({
       'email': email,
@@ -126,7 +168,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         builder: (context) {
           return AlertDialog(
             title: Text('Error'),
-            content: Text('Failed to create user. Status code: ${response.statusCode}'),
+            content: Text(
+                'Failed to create user. Status code: ${response.statusCode}'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
