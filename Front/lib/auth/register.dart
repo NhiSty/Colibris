@@ -67,6 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           _firstNameController.text,
                           _lastNameController.text,
                         );
+                        Navigator.pushNamed(context, '/login');
                       }
                     },
                     style: ElevatedButton.styleFrom(
