@@ -2,6 +2,7 @@ package auth
 
 import (
 	"Colibris/users"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -34,7 +35,6 @@ func (ctl *Controller) Register(c *gin.Context) {
 	user := users.User{
 		Email:     req.Email,
 		Password:  req.Password,
-		Username:  req.Username,
 		Firstname: req.FirstName,
 		Lastname:  req.LastName,
 	}
@@ -55,6 +55,7 @@ func (ctl *Controller) Register(c *gin.Context) {
 
 func (ctl *Controller) Login(c *gin.Context) {
 	var req UserLoginRequest
+	fmt.Print("req", req)
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ApiResponse{
 			Success: false,
