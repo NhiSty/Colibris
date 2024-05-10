@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
+import 'package:front/auth/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -126,38 +123,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _isLoading = true;
     });
 
-    String? apiUrl = dotenv.env['API_URL'];
-    var url = Uri.parse('$apiUrl/auth/register');
-    var body = json.encode({
-      'email': email,
-      'password': password,
-      'firstname': firstname,
-      'lastname': lastname
-    });
-
-    var response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: body,
-    );
+    var response = await register(email, password, firstname, lastname);
 
     setState(() {
       _isLoading = false;
     });
 
-    if (response.statusCode == 201) {
+    if (!mounted) return;
+
+    if (response == 201) {
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Registration Successful'),
-            content: Text('User was successfully created.'),
+            title: const Text('Registration Successful'),
+            content: const Text('User was successfully created.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -168,15 +154,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Error'),
-            content: Text(
-                'Failed to create user. Status code: ${response.statusCode}'),
+            title: const Text('Error'),
+            content: Text('Failed to create user. Status code: $response'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
