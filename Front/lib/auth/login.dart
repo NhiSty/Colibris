@@ -75,6 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (_formKey.currentState!.validate()) {
                       loginUser(
                           _emailController.text, _passwordController.text);
+                      Navigator.pushNamed(context, '/home');
                     }
                   },
                   style: ElevatedButton.styleFrom(
