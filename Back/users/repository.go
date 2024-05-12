@@ -7,10 +7,17 @@ import (
 type UserRepository interface {
 	AddUser(user *User) error
 	GetUserByEmail(email string) (*User, error)
+	GetUserById(id any) (*User, error)
 }
 
 type userRepository struct {
 	db *gorm.DB
+}
+
+func (r *userRepository) GetUserById(id any) (*User, error) {
+	var user User
+	result := r.db.Where("id = ?", id).First(&user)
+	return &user, result.Error
 }
 
 func (r *userRepository) GetUserByEmail(email string) (*User, error) {
