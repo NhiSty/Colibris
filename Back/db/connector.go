@@ -1,6 +1,7 @@
 package db
 
 import (
+	reset_password "Colibris/reset-password"
 	"Colibris/users"
 	"fmt"
 	"gorm.io/driver/postgres"
@@ -28,6 +29,7 @@ func Connect() *gorm.DB {
 func Migrate(db *gorm.DB) {
 	err := db.AutoMigrate(
 		&users.User{},
+		&reset_password.ResetPassword{},
 	)
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
