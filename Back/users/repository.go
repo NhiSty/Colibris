@@ -8,10 +8,19 @@ type UserRepository interface {
 	AddUser(user *User) error
 	GetUserByEmail(email string) (*User, error)
 	GetUserById(id any) (*User, error)
+	UpdateUser(user *User) (*User, error)
 }
 
 type userRepository struct {
 	db *gorm.DB
+}
+
+func (r *userRepository) UpdateUser(user *User) (*User, error) {
+	result := r.db.Save(user)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return user, nil
 }
 
 func (r *userRepository) GetUserById(id any) (*User, error) {
