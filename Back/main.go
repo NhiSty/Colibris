@@ -11,6 +11,7 @@ import (
 	"Colibris/auth"
 	"Colibris/db"
 	"Colibris/docs"
+	"Colibris/reset-password"
 	"Colibris/users"
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
@@ -30,6 +31,7 @@ func main() {
 	v1 := r.Group(prefixUrl)
 	{
 		auth.Routes(v1, database)
+		reset_password.Routes(v1, database)
 		users.UserRoutes(v1)
 		v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
