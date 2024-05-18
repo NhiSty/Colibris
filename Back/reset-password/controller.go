@@ -32,9 +32,8 @@ func (ctl *ResetPasswordController) ForgotPassword(c *gin.Context) {
 	}
 
 	_, err = services.SendResetPasswordEmail("daossama.98@gmail.com", "test", token)
-	// Envoyer l'email avec le lien de réinitialisation ici
 
-	c.Status(http.StatusOK) // Réponse 200 sans message
+	c.Status(http.StatusOK)
 }
 
 func (ctl *ResetPasswordController) AskResetPassword(c *gin.Context) {
@@ -46,7 +45,7 @@ func (ctl *ResetPasswordController) AskResetPassword(c *gin.Context) {
 		return
 	}
 
-	c.Status(http.StatusOK) // Réponse 200 sans message
+	c.Status(http.StatusOK)
 }
 
 func (ctl *ResetPasswordController) ResetPassword(c *gin.Context) {
@@ -68,5 +67,5 @@ func (ctl *ResetPasswordController) ResetPassword(c *gin.Context) {
 		return
 	}
 
-	c.Status(http.StatusOK) // Réponse 200 sans message
+	c.Status(http.StatusOK)
 }

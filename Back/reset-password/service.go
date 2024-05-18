@@ -38,7 +38,6 @@ func (s *ResetPasswordService) DeleteToken(token string) error {
 }
 
 func (s *ResetPasswordService) ResetPassword(token string, newPassword string) (*users.User, error) {
-	// Validate the token and retrieve the associated email
 	email, err := s.repo.ValidateToken(token)
 	if err != nil {
 		return nil, err
@@ -53,21 +52,17 @@ func (s *ResetPasswordService) ResetPassword(token string, newPassword string) (
 		return nil, err
 	}
 
-	// Hash the new password before saving
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, errors.New("failed to hash password")
 	}
 
-	// Update the user's password
 	updatedUser, err := s.userRepo.UpdateUser(user.ID, map[string]interface{}{
 		"password": string(hashedPassword),
 	})
 	if err != nil {
 		return nil, errors.New("failed to update password")
 	}
-
-	// Delete the token after successful password reset
 	err = s.repo.DeleteToken(token)
 	if err != nil {
 		return nil, err
