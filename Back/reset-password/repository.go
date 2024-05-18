@@ -43,6 +43,5 @@ func (repo *ResetPasswordRepository) DeleteToken(token string) error {
 }
 
 func generateToken() string {
-	// Générer un jeton aléatoire (vous pouvez utiliser une bibliothèque pour cela)
-	return "randomlyGeneratedToken"
+	return "testOssama"
 }
