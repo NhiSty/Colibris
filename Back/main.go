@@ -13,6 +13,7 @@ import (
 	"Colibris/docs"
 	"Colibris/reset-password"
 	"Colibris/users"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
 	swaggerfiles "github.com/swaggo/files"
@@ -21,6 +22,9 @@ import (
 
 func main() {
 	r := gin.Default()
+
+	r.Use(cors.Default())
+
 	database := db.Connect()
 	db.Migrate(database)
 

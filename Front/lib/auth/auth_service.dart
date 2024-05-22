@@ -1,11 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-
 import 'package:front/dio/dio.dart';
-
-
-
 
 Future<int> login(String email, String password) async {
   Response response;

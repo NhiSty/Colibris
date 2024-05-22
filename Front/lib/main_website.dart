@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:front/website/pages/auth/login_page.dart';
 import 'package:front/website/pages/auth/register_page.dart';
 import 'package:front/website/pages/backoffice/user_handle_page.dart';
 import 'package:front/website/pages/home_page.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const MyWebsite());
 }
 

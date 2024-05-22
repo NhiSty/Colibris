@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
+import 'package:front/auth/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -45,7 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Container(
+                  SizedBox(
                     width: 250,
                     child: TextFormField(
                       controller: _firstNameController,
@@ -62,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Container(
+                  SizedBox(
                     width: 250,
                     child: TextFormField(
                       controller: _lastNameController,
@@ -79,7 +76,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Container(
+                  SizedBox(
                     width: 250,
                     child: TextFormField(
                       controller: _emailController,
@@ -97,7 +94,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Container(
+                  SizedBox(
                     width: 250,
                     child: TextFormField(
                       controller: _passwordController,
@@ -116,13 +113,23 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: _isLoading ? null : _registerUser,
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        registerUser(
+                          _emailController.text,
+                          _passwordController.text,
+                          _firstNameController.text,
+                          _lastNameController.text,
+                        );
+                        Navigator.pushNamed(context, '/login');
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.green,
                     ),
                     child: _isLoading
-                        ? CircularProgressIndicator()
+                        ? const CircularProgressIndicator()
                         : const Text('S\'inscrire'),
                   ),
                   const SizedBox(height: 20),
@@ -148,70 +155,63 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  // @TODO séparer la logique
-  void _registerUser() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
+  void registerUser(
+      String email, String password, String firstname, String lastname) async {
+    print('IN register page...');
 
-      String? apiUrl = dotenv.env['API_URL'];
-      var url = Uri.parse('$apiUrl/auth/register');
-      var body = json.encode({
-        'email': _emailController.text,
-        'password': _passwordController.text,
-        'firstname': _firstNameController.text,
-        'lastname': _lastNameController.text
-      });
+    setState(() {
+      _isLoading = true;
+    });
 
-      var response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: body,
+    print('avant envoit mail : $email');
+    print('avant envoit password : $password');
+    print('avant envoit firstname : $firstname');
+    print('avant envoit lastame : $lastname');
+
+    var response = await register(email, password, firstname, lastname);
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (!mounted) return;
+
+    if (response == 201) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Registration Successful'),
+            content: const Text('User was successfully created.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
       );
-
-      setState(() {
-        _isLoading = false;
-      });
-
-      if (response.statusCode == 201) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Registration Successful'),
-              content: Text('User was successfully created.'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      } else {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Error'),
-              content: Text(
-                  'Failed to create user. Status code: ${response.statusCode}'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      }
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text('Failed to create user. Status code: $response'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 }

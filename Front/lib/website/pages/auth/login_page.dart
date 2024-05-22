@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front/auth/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -37,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Container(
+                  SizedBox(
                     width: 250,
                     child: TextFormField(
                       controller: _emailController,
@@ -55,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Container(
+                  SizedBox(
                     width: 250,
                     child: TextFormField(
                       controller: _passwordController,
@@ -74,26 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/home');
-
-                      // @TODO à rétablir quand le back sera prêt
-                      /*
-                      if (_formKey.currentState != null &&
-                          _formKey.currentState!.validate()) {
-                        print("here");
-                        /*
-                        loginUser(
-                          _emailController.text,
-                          _passwordController.text,
-                        );
-                        */
-                      } else {
-                        print("form invalide");
-                      }
-
-                       */
-                    },
+                    onPressed: loginClick,
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.green,
@@ -121,5 +103,33 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  loginClick() async {
+    if (_formKey.currentState!.validate()) {
+      var res = await login(_emailController.text, _passwordController.text);
+      if (!mounted) return;
+      if (res == 200) {
+        Navigator.pushNamed(context, '/home');
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Erreur'),
+              content: const Text('Email ou mot de passe incorrect'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
   }
 }
