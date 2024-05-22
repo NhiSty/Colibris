@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:front/website/pages/auth/login_page.dart';
+import 'package:front/website/pages/auth/register_page.dart';
+import 'package:front/website/pages/backoffice/user_handle_page.dart';
 import 'package:front/website/pages/home_page.dart';
-import 'package:front/website/pages/login_page.dart';
-import 'package:front/website/pages/register_page.dart';
 
 void main() {
   runApp(const MyWebsite());
@@ -23,6 +24,7 @@ class MyWebsite extends StatelessWidget {
           '/login': (context) => const LoginPage(),
           '/register': (context) => const RegisterPage(),
           '/home': (context) => const HomePage(),
+          '/backoffice/user': (context) => const UserHandlePage(),
         });
   }
 }

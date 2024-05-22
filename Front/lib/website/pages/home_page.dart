@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
         mainAxisSpacing: 8,
         crossAxisSpacing: 8,
         children: [
-          _buildCard(context, 'User', '/user_administration',
+          _buildCard(context, 'User', '/backoffice/user',
               'Gérer vos utilisateurs', Icons.person),
           _buildCard(context, 'Colocation', '/colocation_administration',
               'Gérer vos colocations', Icons.home),
