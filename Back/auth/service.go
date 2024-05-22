@@ -9,6 +9,7 @@ import (
 type Service interface {
 	Register(user *users.User) error
 	Login(email, password string) (*users.User, error)
+	GetUser(id any) (*users.User, error)
 }
 
 type authService struct {
@@ -35,6 +36,14 @@ func (s *authService) Login(email, password string) (*users.User, error) {
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		return nil, errors.New("invalid credentials")
+	}
+	return user, nil
+}
+
+func (s *authService) GetUser(id any) (*users.User, error) {
+	user, err := s.userRepo.GetUserById(id)
+	if err != nil {
+		return nil, err
 	}
 	return user, nil
 }

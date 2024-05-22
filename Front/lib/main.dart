@@ -1,10 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'auth/login.dart';
 import 'auth/register.dart';
+import 'home_screen.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -28,6 +27,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
+        '/home': (context) => HomeScreen(),
       },
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );

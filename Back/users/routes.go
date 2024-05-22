@@ -1,12 +1,21 @@
 package users
 
-import "github.com/gin-gonic/gin"
+import (
+	"Colibris/middlewares"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+)
 
-func UserRoutes(userRoutes *gin.RouterGroup) {
+func Routes(userRoutes *gin.RouterGroup, db *gorm.DB) {
+	userRepo := NewUserRepository(db)
+	userController := NewUserController(userRepo)
 	routes := userRoutes.Group("/users")
-	userController := Controller{}
+	AuthMiddleware := middlewares.AuthMiddleware
+
 	{
 		routes.GET("", userController.GetAllUsers)
-		routes.GET("/:id", userController.GetUserById)
+		routes.GET("/:id", AuthMiddleware(), userController.GetUserById)
+		routes.PATCH("/:id", AuthMiddleware(), userController.UpdateUser)
+		routes.DELETE("/:id", userController.DeleteUserById)
 	}
 }
