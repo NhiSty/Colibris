@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:front/screen/add_new_task_screen.dart';
 
 import 'auth/login.dart';
 import 'auth/register.dart';
@@ -25,9 +26,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/login',
       routes: {
-        '/login': (context) => LoginScreen(),
-        '/register': (context) => RegisterScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
         '/home': (context) => HomeScreen(),
+        '/add-new-task': (context) => const AddNewTaskScreen()
       },
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );

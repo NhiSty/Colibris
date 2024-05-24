@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front/customWidget/custom_bottom_navigation_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   final List<Map<String, dynamic>> dataList = [
@@ -153,52 +154,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.green,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              spreadRadius: 5,
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: Icon(Icons.home),
-              color: Colors.white,
-              onPressed: () {
-                print('clicked on home button');
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.thumbs_up_down),
-              color: Colors.white,
-              onPressed: () {
-                print('clicked on like/dislike button');
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.chat),
-              color: Colors.white,
-              onPressed: () {
-                print('clicked on chat button');
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.person),
-              color: Colors.white,
-              onPressed: () {
-                print('clicked on profile button');
-              },
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: const CustomBottomNavigationBar()
     );
   }
 }
