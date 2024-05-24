@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func ColocMemberRoutes(colocMemberRoutes *gin.RouterGroup, db *gorm.DB) {
+func Routes(colocMemberRoutes *gin.RouterGroup, db *gorm.DB) {
 	routes := colocMemberRoutes.Group("/coloc-members")
 	colocMemberRepo := NewColocMemberRepository(db)
 	colocMemberService := NewColocMemberService(colocMemberRepo)

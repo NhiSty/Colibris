@@ -11,5 +11,5 @@ type Colocation struct {
 	UserID       uint
 	ColocMembers []colocMembers.ColocMember `gorm:"foreignKey:ColocationID"`
 	Description  string
-	ColocType    bool
+	IsPermanent  bool
 }

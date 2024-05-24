@@ -21,7 +21,7 @@ func (ctl *Controller) CreateColocation(c *gin.Context) {
 		Name:        req.Name,
 		UserID:      req.UserId,
 		Description: req.Description,
-		ColocType:   req.ColocType,
+		IsPermanent: req.IsPermanent,
 	}
 
 	if err := ctl.colocService.createColocation(&colocation); err != nil {

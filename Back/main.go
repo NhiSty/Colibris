@@ -33,11 +33,10 @@ func main() {
 	v1 := r.Group(prefixUrl)
 	{
 		auth.Routes(v1, database)
-		users.UserRoutes(v1)
-		colocations.ColocationRoutes(v1, database)
-		colocMembers.ColocMemberRoutes(v1, database)
-		reset_password.Routes(v1, database)
 		users.Routes(v1, database)
+		colocations.Routes(v1, database)
+		colocMembers.Routes(v1, database)
+		reset_password.Routes(v1, database)
 		v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
 	r.Run(":8080")

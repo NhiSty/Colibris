@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func ColocationRoutes(colocationRoutes *gin.RouterGroup, db *gorm.DB) {
+func Routes(colocationRoutes *gin.RouterGroup, db *gorm.DB) {
 	routes := colocationRoutes.Group("/colocations")
 	colocRepo := NewColocationRepository(db)
 	colocService := NewColocationService(colocRepo)
