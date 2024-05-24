@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
+import 'package:front/auth/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -71,13 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      loginUser(
-                          _emailController.text, _passwordController.text);
-                      Navigator.pushNamed(context, '/home');
-                    }
-                  },
+                  onPressed: loginClick,
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.green,
@@ -106,19 +97,38 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void loginUser(String email, String password) async {
-    String? apiUrl = dotenv.env['API_URL'];
-    var url = Uri.parse('$apiUrl/auth/login');
-    var body = json.encode({'email': email, 'password': password});
-    var response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: body,
-    );
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+  loginClick() async {
+    if (_formKey.currentState!.validate()) {
+      var res = await login(_emailController.text, _passwordController.text);
+      if (!mounted) return;
+      if (res == 200) {
+        Navigator.pushNamed(context, '/home');
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Erreur'),
+              content: const Text('Email ou mot de passe incorrect'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
   }
 }
+
+ 
+
+
 
 /*
 
