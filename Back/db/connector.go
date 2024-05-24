@@ -1,9 +1,9 @@
 package db
 
 import (
-	reset_password "Colibris/reset-password"
 	colocMembers "Colibris/colocMember"
 	colocations "Colibris/colocation"
+	reset_password "Colibris/reset-password"
 	"Colibris/users"
 	"fmt"
 	"gorm.io/driver/postgres"
