@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front/colocation/Colocation.dart';
 import 'package:front/colocation/colocation_service.dart';
+import 'package:front/colocation/create_colocation.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -73,6 +74,17 @@ class HomeScreen extends StatelessWidget {
                       return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
                       return Text('Erreur: ${snapshot.error}');
+                    } else if (snapshot.data!.isEmpty) {
+                      return const Center(
+                        child: Text(
+                          'Aucune colocation trouvée',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
                     } else {
                       return ListView.builder(
                         itemCount: snapshot.data!.length,
@@ -115,7 +127,11 @@ class HomeScreen extends StatelessWidget {
             right: 20,
             child: FloatingActionButton(
               onPressed: () {
-                print('clicked on add button');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateColocationPage()),
+                );
               },
               backgroundColor: Colors.green,
               child: const Text(

@@ -20,3 +20,24 @@ Future<List<Colocation>> fetchColocations() async {
     throw Exception('Failed to load colocations');
   }
 }
+
+Future<int> createColocation(
+    String name, String description, bool isPermanent) async {
+  try {
+    var response = await dio.post(
+      '/colocations',
+      data: {
+        'name': name,
+        'description': description,
+        'isPermanent': isPermanent,
+        "userId": 1
+      },
+    );
+    return response.statusCode!;
+  } on DioException catch (e) {
+    log('Dio error!');
+    log('Response status: ${e.response!.statusCode}');
+    log('Response data: ${e.response!.data}');
+    return e.response?.statusCode ?? 500;
+  }
+}
