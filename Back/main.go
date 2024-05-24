@@ -23,7 +23,16 @@ import (
 func main() {
 	r := gin.Default()
 
-	r.Use(cors.Default())
+	//r.Use(cors.Default())
+	config := cors.Config{
+		AllowOrigins:     []string{"*"}, // Frontend origin
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}
+
+	r.Use(cors.New(config))
 
 	database := db.Connect()
 	db.Migrate(database)
