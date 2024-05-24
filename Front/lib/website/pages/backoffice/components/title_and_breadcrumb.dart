@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:front/website/pages/backoffice/components/search_bar_and_add_user_button.dart';
 
 class TitleAndBreadcrumb extends StatelessWidget {
-  const TitleAndBreadcrumb({super.key});
+  final VoidCallback onUpdate;
+
+  const TitleAndBreadcrumb({super.key, required this.onUpdate});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class TitleAndBreadcrumb extends StatelessWidget {
             ],
           ),
           const Spacer(),
-          const SearchBarAndAddUserButton(),
+          SearchBarAndAddUserButton(onUpdate: onUpdate),
         ],
       ),
     );

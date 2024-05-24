@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:front/website/pages/backoffice/dialogs/add_user_dialog.dart';
 
 class SearchBarAndAddUserButton extends StatelessWidget {
-  const SearchBarAndAddUserButton({super.key});
+  final VoidCallback onUpdate;
+
+  const SearchBarAndAddUserButton({super.key, required this.onUpdate});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class SearchBarAndAddUserButton extends StatelessWidget {
               // @todo handle search text change here
             },
             decoration: const InputDecoration(
-              hintText: 'Rechercher un utilisateur',
+              hintText: 'Search user...',
               border: OutlineInputBorder(),
               suffixIcon: Icon(Icons.search),
               contentPadding: EdgeInsets.symmetric(
@@ -28,9 +30,9 @@ class SearchBarAndAddUserButton extends StatelessWidget {
         const SizedBox(width: 8.0),
         ElevatedButton(
           onPressed: () {
-            showAddUserDialog(context);
+            showAddUserDialog(context, onUpdate);
           },
-          child: const Text('Ajouter un utilisateur'),
+          child: const Text('Add user'),
         ),
       ],
     );

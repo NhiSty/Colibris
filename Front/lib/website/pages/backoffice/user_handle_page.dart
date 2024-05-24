@@ -34,7 +34,7 @@ class _UserHandlePageState extends State<UserHandlePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const TitleAndBreadcrumb(),
+            TitleAndBreadcrumb(onUpdate: _fetchUsers),
             const SizedBox(height: 16.0),
             Expanded(
               child: FutureBuilder<List<User>>(

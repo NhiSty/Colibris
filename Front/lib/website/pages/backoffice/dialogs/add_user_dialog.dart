@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:front/auth/auth_service.dart';
 import 'package:front/website/share/custom_dialog.dart';
 
-void showAddUserDialog(BuildContext context) {
+void showAddUserDialog(BuildContext context, VoidCallback onUpdate) {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -55,6 +55,7 @@ void showAddUserDialog(BuildContext context) {
                     content: Text('User added successfully'),
                   ));
                   Navigator.pop(context);
+                  onUpdate();
                 } else {
                   if (responseCode == 400) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
