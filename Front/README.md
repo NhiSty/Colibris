@@ -15,6 +15,9 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+## Ececuter le backoffice web
+`flutter run -d chrome lib/main_website.dart`
+=======
 ## Troubleshouting
 
 ### error while testing api on android emulator
