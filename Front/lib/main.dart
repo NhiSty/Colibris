@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+
 import 'auth/login.dart';
 import 'auth/register.dart';
+import 'colocation/colocation_tasklist_screen.dart';
 import 'home_screen.dart';
 
 void main() async {
@@ -28,8 +30,20 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
         '/home': (context) => HomeScreen(),
+        ColocationTaskList.routeName: (context) => ColocationTaskList(key: key, colocationId: colocationId)
       },
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      onGenerateRoute: (settings) {
+        final args = settings.arguments;
+        switch (settings.name) {
+          case ColocationTaskList.routeName:
+            return MaterialPageRoute(
+              builder: (context) {
+                return CalendarScreen(username: args as String);
+              },
+            );
+        }
+      },
     );
   }
 }

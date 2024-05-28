@@ -92,6 +92,7 @@ class HomeScreen extends StatelessWidget {
                           final item = snapshot.data![index];
                           return GestureDetector(
                             onTap: () {
+                              Navigator.pushNamed(context, '/colocation/task-list');
                               print('Clicked on ${item.name}');
                             },
                             child: Padding(
