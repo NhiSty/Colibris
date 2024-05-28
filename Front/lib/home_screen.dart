@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:front/colocation/Colocation.dart';
 import 'package:front/colocation/colocation_service.dart';
 import 'package:front/colocation/create_colocation.dart';
+import 'package:front/notification/invitation.dart';
+import 'package:front/notification/invitation_service.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -44,13 +46,64 @@ class HomeScreen extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 16.0),
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.circle_notifications,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          print('clicked on notification button');
+                      child: FutureBuilder<List<Invitation>>(
+                        future: fetchInvitations(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return IconButton(
+                              icon: const Icon(
+                                Icons.circle_notifications,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {},
+                            );
+                          } else {
+                            final invitations = snapshot.data!;
+                            if (invitations.isEmpty) {
+                              return IconButton(
+                                icon: const Icon(
+                                  Icons.circle_notifications,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {},
+                              );
+                            } else {
+                              return Stack(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.circle_notifications,
+                                      color: Colors.white,
+                                      size: 40,
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                  Positioned(
+                                    top: 2,
+                                    right: 7,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(2),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Text(
+                                        invitations.length.toString(),
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                          }
                         },
                       ),
                     ),
@@ -73,18 +126,19 @@ class HomeScreen extends StatelessWidget {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
-                      return Text('Erreur: ${snapshot.error}');
-                    } else if (snapshot.data!.isEmpty) {
-                      return const Center(
-                        child: Text(
-                          'Aucune colocation trouvée',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                      if (snapshot.data == null) {
+                        return const Center(
+                          child: Text(
+                            'Aucune colocation trouvée',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
+                      return Text('Erreur: ${snapshot.error}');
                     } else {
                       return ListView.builder(
                         itemCount: snapshot.data!.length,
