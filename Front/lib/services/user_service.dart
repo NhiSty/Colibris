@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:front/dio/dio.dart';
 import 'package:front/website/share/secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class UserService {
   final Dio _dio = dio;
@@ -33,13 +34,7 @@ class UserService {
   Future<void> updateUser(int userId, Map<String, dynamic> userData) async {
     try {
       print('Updating user...with the id $userId');
-      String? token = await getToken();
-      print('token === $token');
-
-      Map<String, dynamic> headers = {};
-      if (token != null) {
-        headers['Authorization'] = 'Bearer $token';
-      }
+      var headers = await addHeader();
 
       final response = await dio.patch('/users/$userId',
           data: userData, options: Options(headers: headers));
@@ -63,14 +58,7 @@ class UserService {
 
   Future<void> deleteUser(int userId) async {
     try {
-      print('Deleting user...with the id $userId');
-      String? token = await getToken();
-      print('token === $token');
-
-      Map<String, dynamic> headers = {};
-      if (token != null) {
-        headers['Authorization'] = 'Bearer $token';
-      }
+      var headers = await addHeader();
 
       final response = await _dio.delete('/users/$userId',
           options: Options(headers: headers));
@@ -109,6 +97,17 @@ class UserService {
       print('Response data: ${e.response?.data}');
       throw Exception('Failed to load user data');
     }
+  }
+}
+
+Future<Map<String, dynamic>> decodeToken() async {
+  var token = await getToken() ?? '';
+  try {
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+    return decodedToken;
+  } catch (e) {
+    print('Failed to decode token: $e');
+    throw Exception('Failed to decode token');
   }
 }
 
