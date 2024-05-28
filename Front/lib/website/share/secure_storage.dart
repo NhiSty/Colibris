@@ -9,3 +9,12 @@ Future<void> saveToken(String token) async {
 Future<String?> getToken() async {
   return await _storage.read(key: 'token');
 }
+
+Future<Map<String, dynamic>> addHeader() async {
+  String? token = await getToken();
+  Map<String, dynamic> headers = {};
+  if (token != null) {
+    headers['Authorization'] = 'Bearer $token';
+  }
+  return headers;
+}

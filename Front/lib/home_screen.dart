@@ -1,54 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:front/colocation/Colocation.dart';
+import 'package:front/colocation/colocation_service.dart';
+import 'package:front/colocation/create_colocation.dart';
 
 class HomeScreen extends StatelessWidget {
-  final List<Map<String, dynamic>> dataList = [
-    {
-      'title': 'Co-locations',
-      'subtitle': '',
-    },
-    {
-      'title': 'Co-location 1',
-      'subtitle':
-          'Supporting line text lorem ipsum dolor sit amet, consectetur.',
-    },
-    {
-      'title': 'Vacances Venise',
-      'subtitle':
-          'Supporting line text lorem ipsum dolor sit amet, consectetur.',
-    },
-    {
-      'title': 'Week-ends Marseille',
-      'subtitle':
-          'Supporting line text lorem ipsum dolor sit amet, consectetur.',
-    },
-    {
-      'title': 'Week-ends Marseille',
-      'subtitle':
-          'Supporting line text lorem ipsum dolor sit amet, consectetur.',
-    },
-    {
-      'title': 'Week-ends Marseille',
-      'subtitle':
-          'Supporting line text lorem ipsum dolor sit amet, consectetur.',
-    },
-    {
-      'title': 'Week-ends Marseille',
-      'subtitle':
-          'Supporting line text lorem ipsum dolor sit amet, consectetur.',
-    },
-    {
-      'title': 'Week-ends Marseille',
-      'subtitle':
-          'Supporting line text lorem ipsum dolor sit amet, consectetur.',
-    },
-    {
-      'title': 'Week-ends fin',
-      'subtitle':
-          'Supporting line text lorem ipsum dolor sit amet, consectetur.',
-    },
-  ];
-
-  HomeScreen({super.key});
+  HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -111,24 +67,55 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: dataList.length,
-                  itemBuilder: (context, index) {
-                    final item = dataList[index];
-                    return GestureDetector(
-                      onTap: () {
-                        print('Clicked on ${item['title']}');
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: ListTile(
-                          leading: const Icon(Icons.home),
-                          title: Text(item['title'] as String),
-                          subtitle: Text(item['subtitle'] as String),
-                          trailing: const Icon(Icons.arrow_forward_ios),
+                child: FutureBuilder<List<Colocation>>(
+                  future: fetchColocations(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Text('Erreur: ${snapshot.error}');
+                    } else if (snapshot.data!.isEmpty) {
+                      return const Center(
+                        child: Text(
+                          'Aucune colocation trouvée',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    } else {
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          final item = snapshot.data![index];
+                          return GestureDetector(
+                            onTap: () {
+                              print('Clicked on ${item.name}');
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: ListTile(
+                                leading: const Icon(Icons.home),
+                                title: Text(item.name),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        'Créé le : ${DateTime.parse(item.createdAt).toLocal().toString().split(' ')[0]}'),
+                                    Text('Description : ${item.description}'),
+                                    Text('Ville : ${item.city}'),
+                                  ],
+                                ),
+                                trailing: const Icon(Icons.arrow_forward_ios),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
                   },
                 ),
               ),
@@ -139,7 +126,11 @@ class HomeScreen extends StatelessWidget {
             right: 20,
             child: FloatingActionButton(
               onPressed: () {
-                print('clicked on add button');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateColocationPage()),
+                );
               },
               backgroundColor: Colors.green,
               child: const Text(
