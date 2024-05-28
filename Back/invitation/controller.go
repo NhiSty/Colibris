@@ -45,6 +45,7 @@ func (ctl *Controller) CreateInvitation(c *gin.Context) {
 		UserID:       user.ID,
 		ColocationID: req.ColocationID,
 		State:        "pending",
+		Sender:       userIDFromToken.(uint),
 	}
 
 	if err := ctl.invService.CreateInvitation(&invitation); err != nil {

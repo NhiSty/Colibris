@@ -11,6 +11,7 @@ type Invitation struct {
 	UserID       uint
 	ColocationID uint
 	State        InvitationState `gorm:"type:varchar(20);not null"`
+	Sender       uint
 }
 
 type InvitationState string
