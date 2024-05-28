@@ -9,6 +9,7 @@ package main
 
 import (
 	"Colibris/auth"
+	"Colibris/chat"
 	colocMembers "Colibris/colocMember"
 	colocations "Colibris/colocation"
 	"Colibris/db"
@@ -47,6 +48,7 @@ func main() {
 	{
 		auth.Routes(v1, database)
 		users.Routes(v1, database)
+		chat.Routes(v1, database)
 		colocations.Routes(v1, database)
 		colocMembers.Routes(v1, database)
 		reset_password.Routes(v1, database)
