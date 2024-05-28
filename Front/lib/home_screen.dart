@@ -193,7 +193,7 @@ class HomeScreen extends StatelessWidget {
               icon: Icon(Icons.person),
               color: Colors.white,
               onPressed: () {
-                print('clicked on profile button');
+                Navigator.pushNamed(context, '/profile');
               },
             ),
           ],

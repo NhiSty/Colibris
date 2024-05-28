@@ -89,6 +89,27 @@ class UserService {
       throw Exception('Failed to delete user');
     }
   }
+
+  Future<Map<String, dynamic>> getUserById(int userId) async {
+    try {
+      print('Fetching user data...');
+      final response = await _dio.get('/users/$userId');
+
+      if (response.statusCode == 200) {
+        print('Response data: ${response.data}');
+        return response.data;
+      } else {
+        throw Exception('Failed to load user data');
+      }
+    } on DioException catch (e) {
+      print('Error: ${e.response?.statusCode}');
+      print('Response data: ${e.response?.data}');
+      print('Dio error!');
+      print('Response status: ${e.response?.statusCode}');
+      print('Response data: ${e.response?.data}');
+      throw Exception('Failed to load user data');
+    }
+  }
 }
 
 class User {
