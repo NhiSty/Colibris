@@ -22,14 +22,37 @@ func (r *colocationRepository) GetColocationById(id int) (*Colocation, error) {
 }
 
 func (r *colocationRepository) CreateColocation(colocation *Colocation) error {
-
+	colocation.ColocMembers = append(colocation.ColocMembers, colocMembers.ColocMember{
+		UserID:       colocation.UserID,
+		ColocationID: colocation.ID,
+	})
 	return r.db.Create(colocation).Error
 }
 
 func (r *colocationRepository) GetAllUserColocations(userId int) ([]Colocation, error) {
 	var colocations []Colocation
-	result := r.db.Where("user_id = ?", userId).Find(&colocations)
-	return colocations, result.Error
+	result := r.db.Preload("ColocMembers").Find(&colocations)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	var filteredColocations []Colocation
+	userIDUint := uint(userId)
+
+	for _, colocation := range colocations {
+		if colocation.UserID == userIDUint {
+			filteredColocations = append(filteredColocations, colocation)
+			continue
+		}
+		for _, member := range colocation.ColocMembers {
+			if member.UserID == userIDUint {
+				filteredColocations = append(filteredColocations, colocation)
+				break
+			}
+		}
+	}
+
+	return filteredColocations, nil
 }
 func (r *colocationRepository) AddColocMember(colocation *Colocation) error {
 	colocation.ColocMembers = append(colocation.ColocMembers, colocMembers.ColocMember{
