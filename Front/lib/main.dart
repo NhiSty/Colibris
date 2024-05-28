@@ -27,22 +27,24 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/login',
       routes: {
-        '/login': (context) => LoginScreen(),
-        '/register': (context) => RegisterScreen(),
-        '/home': (context) => HomeScreen(),
-        ColocationTaskList.routeName: (context) => ColocationTaskList(key: key, colocationId: colocationId)
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/home': (context) => HomeScreen()
       },
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
       onGenerateRoute: (settings) {
-        final args = settings.arguments;
+        final routes = settings.arguments as Map;
+        print(routes);
         switch (settings.name) {
-          case ColocationTaskList.routeName:
+          case ColocationTasklistScreen.routeName:
             return MaterialPageRoute(
               builder: (context) {
-                return CalendarScreen(username: args as String);
+                var colocationId = routes;
+                return ColocationTasklistScreen(colocationId: routes['colocationId']);
               },
             );
         }
+        return null;
       },
     );
   }
