@@ -31,7 +31,7 @@ class Colocation {
       userId: json['UserID'],
       colocMembers: json['ColocMembers'],
       description: json['Description'],
-      isPermanent: json['ColocType'],
+      isPermanent: json['IsPermanent'],
     );
   }
 }
