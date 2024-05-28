@@ -13,6 +13,7 @@ import (
 	"Colibris/docs"
 	"Colibris/reset-password"
 	"Colibris/users"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
 	swaggerfiles "github.com/swaggo/files"
@@ -21,6 +22,18 @@ import (
 
 func main() {
 	r := gin.Default()
+
+	//r.Use(cors.Default())
+	config := cors.Config{
+		AllowOrigins:     []string{"*"}, // Frontend origin
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}
+
+	r.Use(cors.New(config))
+
 	database := db.Connect()
 	db.Migrate(database)
 
