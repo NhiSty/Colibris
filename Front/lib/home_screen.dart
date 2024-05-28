@@ -106,8 +106,7 @@ class HomeScreen extends StatelessWidget {
                                     Text(
                                         'Créé le : ${DateTime.parse(item.createdAt).toLocal().toString().split(' ')[0]}'),
                                     Text('Description : ${item.description}'),
-                                    Text(
-                                        'Type de colocation : ${item.isPermanent ? 'Permanent' : 'Temporaire'}'),
+                                    Text('Ville : ${item.city}'),
                                   ],
                                 ),
                                 trailing: const Icon(Icons.arrow_forward_ios),
