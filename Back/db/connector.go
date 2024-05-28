@@ -3,6 +3,7 @@ package db
 import (
 	colocMembers "Colibris/colocMember"
 	colocations "Colibris/colocation"
+	invitations "Colibris/invitation"
 	reset_password "Colibris/reset-password"
 	"Colibris/users"
 	"fmt"
@@ -34,6 +35,7 @@ func Migrate(db *gorm.DB) {
 		&colocations.Colocation{},
 		&colocMembers.ColocMember{},
 		&reset_password.ResetPassword{},
+		&invitations.Invitation{},
 	)
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
