@@ -22,6 +22,10 @@ func (ctl *Controller) CreateColocation(c *gin.Context) {
 		UserID:      req.UserId,
 		Description: req.Description,
 		IsPermanent: req.IsPermanent,
+		Address:     req.Address,
+		City:        req.City,
+		ZipCode:     req.ZipCode,
+		Country:     req.Country,
 	}
 
 	if err := ctl.colocService.createColocation(&colocation); err != nil {
@@ -40,6 +44,7 @@ func NewColocController(colocService ColocationService) *Controller {
 }
 
 func (ctl *Controller) GetColocationById(c *gin.Context) {
+
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
