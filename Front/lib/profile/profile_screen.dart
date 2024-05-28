@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:front/services/user_service.dart';
-import 'package:front/website/share/secure_storage.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -11,18 +10,18 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
+  final _lastnameController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  bool _isEditingName = false;
+  bool _isEditingLastName = false;
   bool _isEditingFirstName = false;
   bool _isEditingEmail = false;
   bool _isEditingPassword = false;
 
   bool get _isAnyFieldEditing => [
-        _isEditingName,
+        _isEditingLastName,
         _isEditingFirstName,
         _isEditingEmail,
         _isEditingPassword
@@ -36,17 +35,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _fetchUserData() async {
     try {
-      String? token = await getToken();
-      if (token != null) {
-        int userId = 1; // Replace this with the actual user ID
-        final userService = UserService();
-        final userData = await userService.getUserById(userId);
-        setState(() {
-          _nameController.text = userData['lastname'] ?? '';
-          _firstNameController.text = userData['firstname'] ?? '';
-          _emailController.text = userData['email'] ?? '';
-        });
-      }
+      var user = await decodeToken();
+      int userId = user['user_id'];
+      final userService = UserService();
+      final userData = await userService.getUserById(userId);
+      setState(() {
+        _lastnameController.text = userData['Lastname'] ?? '';
+        _firstNameController.text = userData['Firstname'] ?? '';
+        _emailController.text = userData['Email'] ?? '';
+      });
     } catch (e) {
       print('Error fetching user data: $e');
     }
@@ -75,18 +72,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 16.0),
               _buildEditableRow(
-                label: 'Name',
-                controller: _nameController,
-                isEditing: _isEditingName,
+                label: 'Lastname',
+                controller: _lastnameController,
+                isEditing: _isEditingLastName,
                 onEdit: () {
                   setState(() {
-                    _isEditingName = !_isEditingName;
+                    _isEditingLastName = !_isEditingLastName;
                   });
                 },
               ),
               const SizedBox(height: 16.0),
               _buildEditableRow(
-                label: 'First Name',
+                label: 'Firstname',
                 controller: _firstNameController,
                 isEditing: _isEditingFirstName,
                 onEdit: () {
@@ -124,11 +121,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _isAnyFieldEditing ? null : _submitForm,
-                  child: const Text('Submit'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     textStyle: const TextStyle(fontSize: 18),
                   ),
+                  child: const Text('Submit'),
                 ),
               ),
             ],
@@ -140,10 +137,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _submitForm() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // Perform submit action
-      print('Form submitted');
-      String? token = await getToken();
-      print('token ====$token');
+      String newName = _lastnameController.text;
+      String newFirstName = _firstNameController.text;
+      String newEmail = _emailController.text;
+      String newPassword = _passwordController.text;
+
+      Map<String, dynamic> updatedUserData = {
+        'Lastname': newName,
+        'Firstname': newFirstName,
+        'Email': newEmail,
+        'Password': newPassword,
+      };
+
+      try {
+        var user = await decodeToken();
+        int userId = user['user_id'];
+
+        final userService = UserService();
+        await userService.updateUser(userId, updatedUserData);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('User profile updated successfully'),
+          ),
+        );
+      } catch (e) {
+        print('Error updating user data: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to update user profile'),
+          ),
+        );
+      }
     }
   }
 
@@ -168,9 +193,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             obscureText: obscureText,
             decoration: InputDecoration(
               hintText: hintText,
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               enabledBorder:
-                  isEditing ? OutlineInputBorder() : InputBorder.none,
+                  isEditing ? const OutlineInputBorder() : InputBorder.none,
             ),
             validator: (value) {
               if (label == 'Password') {

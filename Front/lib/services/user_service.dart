@@ -10,11 +10,9 @@ class UserService {
 
   Future<List<User>> getAllUsers() async {
     try {
-      print('Fetching all users...');
       final response = await _dio.get('/users');
 
       if (response.statusCode == 200) {
-        log('Response data: ${response.data}');
         List<User> users =
             (response.data as List).map((user) => User.fromJson(user)).toList();
         return users;
@@ -33,13 +31,10 @@ class UserService {
 
   Future<void> updateUser(int userId, Map<String, dynamic> userData) async {
     try {
-      print('Updating user...with the id $userId');
       var headers = await addHeader();
 
       final response = await dio.patch('/users/$userId',
           data: userData, options: Options(headers: headers));
-
-      print('here response $response');
 
       if (response.statusCode == 200) {
         log('User updated successfully');
@@ -80,11 +75,13 @@ class UserService {
 
   Future<Map<String, dynamic>> getUserById(int userId) async {
     try {
+      var headers = await addHeader();
+
       print('Fetching user data...');
-      final response = await _dio.get('/users/$userId');
+      final response =
+          await _dio.get('/users/$userId', options: Options(headers: headers));
 
       if (response.statusCode == 200) {
-        print('Response data: ${response.data}');
         return response.data;
       } else {
         throw Exception('Failed to load user data');
