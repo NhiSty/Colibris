@@ -132,7 +132,7 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                         _countryController.text,
                         _cityController.text,
                       );
-                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/home');
                     }
                   },
                   style: ElevatedButton.styleFrom(
