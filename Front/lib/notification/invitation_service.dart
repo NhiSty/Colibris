@@ -13,17 +13,12 @@ Future<List<Invitation>> fetchInvitations() async {
     var response = await dio.get('/invitations/user/${userData['user_id']}',
         options: Options(headers: headers));
     if (response.statusCode == 200) {
-      print(response.data);
       List<dynamic> data = response.data['result'];
-      print(data);
-
       return data.map((invit) => Invitation.fromJson(invit)).toList();
     } else {
       throw Exception('Failed to load invitations 8');
     }
   } on DioException catch (e) {
-    print("Error: ${e}");
-    print('Error: ${e}');
     log('Dio error!');
     log('Response status: ${e.response!.statusCode}');
     log('Response data: ${e.response!.data}');

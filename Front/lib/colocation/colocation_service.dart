@@ -27,6 +27,25 @@ Future<List<Colocation>> fetchColocations() async {
   }
 }
 
+Future<Map<String, dynamic>> fetchColocation(int colocationId) async {
+  var headers = await addHeader();
+  try {
+    var response = await dio.get('/colocations/$colocationId',
+        options: Options(headers: headers));
+    if (response.statusCode == 200) {
+      print(response);
+      return response.data["result"];
+    } else {
+      throw Exception('Failed to load colocation');
+    }
+  } on DioException catch (e) {
+    log('Dio error!');
+    log('Response status: ${e.response!.statusCode}');
+    log('Response data: ${e.response!.data}');
+    throw Exception('Failed to load colocation');
+  }
+}
+
 Future<int> createColocation(String name, String description, bool isPermanent,
     String address, String zipcode, String country, String city) async {
   var headers = await addHeader();

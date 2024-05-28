@@ -3,10 +3,11 @@ import 'package:front/colocation/Colocation.dart';
 import 'package:front/colocation/colocation_service.dart';
 import 'package:front/colocation/create_colocation.dart';
 import 'package:front/notification/invitation.dart';
+import 'package:front/notification/invitation_list_page.dart';
 import 'package:front/notification/invitation_service.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,7 @@ class HomeScreen extends StatelessWidget {
                     Expanded(
                       child: Container(
                         alignment: Alignment.center,
+                        padding: const EdgeInsets.only(left: 50.0),
                         child: const Text(
                           'Accueil',
                           style: TextStyle(
@@ -57,6 +59,7 @@ class HomeScreen extends StatelessWidget {
                               icon: const Icon(
                                 Icons.circle_notifications,
                                 color: Colors.white,
+                                size: 38,
                               ),
                               onPressed: () {},
                             );
@@ -68,7 +71,15 @@ class HomeScreen extends StatelessWidget {
                                   Icons.circle_notifications,
                                   color: Colors.white,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  // tell the user that there are no invitations
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Vous n\'avez pas de nouvelles invitations'),
+                                    ),
+                                  );
+                                },
                               );
                             } else {
                               return Stack(
@@ -77,16 +88,23 @@ class HomeScreen extends StatelessWidget {
                                     icon: const Icon(
                                       Icons.circle_notifications,
                                       color: Colors.white,
-                                      size: 40,
+                                      size: 38,
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                InvitationListPage(invitations:invitations,)),
+                                      );
+                                    },
                                   ),
                                   Positioned(
                                     top: 2,
                                     right: 7,
                                     child: Container(
                                       padding: const EdgeInsets.all(2),
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         color: Colors.red,
                                         shape: BoxShape.circle,
                                       ),
@@ -214,28 +232,28 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
-              icon: Icon(Icons.home),
+              icon: const Icon(Icons.home),
               color: Colors.white,
               onPressed: () {
                 print('clicked on home button');
               },
             ),
             IconButton(
-              icon: Icon(Icons.thumbs_up_down),
+              icon: const Icon(Icons.thumbs_up_down),
               color: Colors.white,
               onPressed: () {
                 print('clicked on like/dislike button');
               },
             ),
             IconButton(
-              icon: Icon(Icons.chat),
+              icon: const Icon(Icons.chat),
               color: Colors.white,
               onPressed: () {
                 print('clicked on chat button');
               },
             ),
             IconButton(
-              icon: Icon(Icons.person),
+              icon: const Icon(Icons.person),
               color: Colors.white,
               onPressed: () {
                 print('clicked on profile button');
