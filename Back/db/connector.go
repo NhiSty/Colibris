@@ -4,6 +4,7 @@ import (
 	colocMembers "Colibris/colocMember"
 	colocations "Colibris/colocation"
 	reset_password "Colibris/reset-password"
+	tasks "Colibris/task"
 	"Colibris/users"
 	"fmt"
 	"gorm.io/driver/postgres"
@@ -33,6 +34,7 @@ func Migrate(db *gorm.DB) {
 		&users.User{},
 		&colocations.Colocation{},
 		&colocMembers.ColocMember{},
+		&tasks.Task{},
 		&reset_password.ResetPassword{},
 	)
 	if err != nil {

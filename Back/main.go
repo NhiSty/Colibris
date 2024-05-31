@@ -14,6 +14,7 @@ import (
 	"Colibris/db"
 	"Colibris/docs"
 	"Colibris/reset-password"
+	tasks "Colibris/task"
 	"Colibris/users"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -49,6 +50,7 @@ func main() {
 		users.Routes(v1, database)
 		colocations.Routes(v1, database)
 		colocMembers.Routes(v1, database)
+		tasks.Routes(v1, database)
 		reset_password.Routes(v1, database)
 		v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
