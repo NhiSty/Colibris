@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:front/notification/invitation.dart';
-import 'package:front/notification/invitation_accept_page.dart';
+import 'package:front/invitation/invitation.dart';
+import 'package:front/invitation/invitation_accept_page.dart';
 
 class InvitationListPage extends StatefulWidget {
   final List<Invitation> invitations; // List of invitations
 
-  InvitationListPage({required this.invitations});
+  const InvitationListPage({super.key, required this.invitations});
 
   @override
   _InvitationListPageState createState() => _InvitationListPageState();
@@ -30,7 +30,9 @@ class _InvitationListPageState extends State<InvitationListPage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => InvitationAcceptPage(
-                      colocationId: widget.invitations[index].colocationId),
+                    invitationId: widget.invitations[index].id,
+                    colocationId: widget.invitations[index].colocationId,
+                  ),
                 ),
               );
             },
@@ -41,6 +43,7 @@ class _InvitationListPageState extends State<InvitationListPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => InvitationAcceptPage(
+                        invitationId: widget.invitations[index].id,
                         colocationId: widget.invitations[index].colocationId),
                   ),
                 );

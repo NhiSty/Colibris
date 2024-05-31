@@ -40,7 +40,7 @@ void showAddUserDialog(BuildContext context, VoidCallback onUpdate) {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {

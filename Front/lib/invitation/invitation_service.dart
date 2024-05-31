@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:front/dio/dio.dart';
-import 'package:front/notification/invitation.dart';
+import 'package:front/invitation/invitation.dart';
 import 'package:front/services/user_service.dart';
 import 'package:front/website/share/secure_storage.dart';
 
@@ -51,7 +51,7 @@ Future<int> updateInvitation(int invitId, String state) async {
   var headers = await addHeader();
   try {
     var response = await dio.patch(
-      '/invitations/',
+      '/invitations',
       data: {
         'state': state,
         'invitationId': invitId,

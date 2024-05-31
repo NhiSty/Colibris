@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/colocation/Colocation.dart';
 import 'package:front/colocation/colocation_service.dart';
 import 'package:front/colocation/create_colocation.dart';
-import 'package:front/notification/invitation.dart';
-import 'package:front/notification/invitation_list_page.dart';
-import 'package:front/notification/invitation_service.dart';
+import 'package:front/invitation/invitation_list_page.dart';
+import 'package:front/invitation/bloc/invitation_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    context.read<InvitationBloc>().add(FetchInvitations());
+
     return Scaffold(
       body: Stack(
         children: [
@@ -48,13 +50,11 @@ class HomeScreen extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 16.0),
-                      child: FutureBuilder<List<Invitation>>(
-                        future: fetchInvitations(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
+                      child: BlocBuilder<InvitationBloc, InvitationState>(
+                        builder: (context, state) {
+                          if (state is InvitationLoading) {
                             return const CircularProgressIndicator();
-                          } else if (snapshot.hasError) {
+                          } else if (state is InvitationError) {
                             return IconButton(
                               icon: const Icon(
                                 Icons.circle_notifications,
@@ -63,8 +63,8 @@ class HomeScreen extends StatelessWidget {
                               ),
                               onPressed: () {},
                             );
-                          } else {
-                            final invitations = snapshot.data!;
+                          } else if (state is InvitationLoaded) {
+                            final invitations = state.invitations;
                             if (invitations.isEmpty) {
                               return IconButton(
                                 icon: const Icon(
@@ -72,7 +72,6 @@ class HomeScreen extends StatelessWidget {
                                   color: Colors.white,
                                 ),
                                 onPressed: () {
-                                  // tell the user that there are no invitations
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text(
@@ -94,8 +93,11 @@ class HomeScreen extends StatelessWidget {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                InvitationListPage(invitations:invitations,)),
+                                          builder: (context) =>
+                                              InvitationListPage(
+                                            invitations: invitations,
+                                          ),
+                                        ),
                                       );
                                     },
                                   ),
@@ -121,6 +123,8 @@ class HomeScreen extends StatelessWidget {
                                 ],
                               );
                             }
+                          } else {
+                            return Container();
                           }
                         },
                       ),
@@ -201,7 +205,8 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CreateColocationPage()),
+                    builder: (context) => CreateColocationPage(),
+                  ),
                 );
               },
               backgroundColor: Colors.green,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:front/colocation/colocation_service.dart';
 
 class CreateColocationPage extends StatefulWidget {
+  const CreateColocationPage({super.key});
+
   @override
   _CreateColocationPageState createState() => _CreateColocationPageState();
 }

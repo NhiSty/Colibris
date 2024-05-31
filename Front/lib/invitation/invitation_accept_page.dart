@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:front/colocation/colocation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/colocation/colocation_service.dart';
+import 'package:front/invitation/bloc/invitation_bloc.dart';
 
 class InvitationAcceptPage extends StatefulWidget {
   final int colocationId;
+  final int invitationId;
 
-  const InvitationAcceptPage({Key? key, required this.colocationId})
-      : super(key: key);
+  const InvitationAcceptPage(
+      {super.key, required this.colocationId, required this.invitationId});
 
   @override
   _InvitationAcceptPageState createState() => _InvitationAcceptPageState();
@@ -53,26 +55,32 @@ class _InvitationAcceptPageState extends State<InvitationAcceptPage> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              // TODO: Handle accept invitation
+                              context.read<InvitationBloc>().add(
+                                  InvitationAccept(
+                                      state: 'accepted',
+                                      invitationId: widget.invitationId));
+                              Navigator.pop(context);
                             },
-                            child: const Text('Accepter',
-                                style: TextStyle(
-                                    color: Colors.white)), // Texte blanc
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green, // Bouton vert
                             ),
+                            child: const Text('Accepter',
+                                style: TextStyle(color: Colors.white)),
                           ),
                           const SizedBox(width: 16),
                           ElevatedButton(
                             onPressed: () {
-                              // TODO: Handle refuse invitation
-                            },
-                            child: const Text('Refuser',
-                                style: TextStyle(
-                                    color: Colors.white)), // Texte blanc
+                              context.read<InvitationBloc>().add(
+                                  InvitationReject(
+                                      state: 'declined',
+                                      invitationId: widget.invitationId));
+                              Navigator.pop(context);
+                            }, // Texte blanc
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red, // Bouton rouge
                             ),
+                            child: const Text('Refuser',
+                                style: TextStyle(color: Colors.white)),
                           ),
                         ],
                       ),
@@ -87,7 +95,7 @@ class _InvitationAcceptPageState extends State<InvitationAcceptPage> {
 
 class InvitationCard extends StatelessWidget {
   final Map<String, dynamic>? colocationData;
-  const InvitationCard({Key? key, this.colocationData}) : super(key: key);
+  const InvitationCard({super.key, this.colocationData});
 
   @override
   Widget build(BuildContext context) {
