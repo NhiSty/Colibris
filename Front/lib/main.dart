@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:front/invitation/bloc/invitation_bloc.dart';
 import 'auth/login.dart';
 import 'auth/register.dart';
+import 'colocation/colocation_tasklist_screen.dart';
 import 'home_screen.dart';
 import 'invitation/invitation_list_page.dart';
 import 'colocation/create_colocation.dart';
