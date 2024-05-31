@@ -10,11 +10,9 @@ class UserService {
 
   Future<List<User>> getAllUsers() async {
     try {
-      print('Fetching all users...');
       final response = await _dio.get('/users');
 
       if (response.statusCode == 200) {
-        log('Response data: ${response.data}');
         List<User> users =
             (response.data as List).map((user) => User.fromJson(user)).toList();
         return users;
@@ -33,13 +31,10 @@ class UserService {
 
   Future<void> updateUser(int userId, Map<String, dynamic> userData) async {
     try {
-      print('Updating user...with the id $userId');
       var headers = await addHeader();
 
       final response = await dio.patch('/users/$userId',
           data: userData, options: Options(headers: headers));
-
-      print('here response $response');
 
       if (response.statusCode == 200) {
         log('User updated successfully');
@@ -75,6 +70,29 @@ class UserService {
       log('Response status: ${e.response?.statusCode}');
       log('Response data: ${e.response?.data}');
       throw Exception('Failed to delete user');
+    }
+  }
+
+  Future<Map<String, dynamic>> getUserById(int userId) async {
+    try {
+      var headers = await addHeader();
+
+      print('Fetching user data...');
+      final response =
+          await _dio.get('/users/$userId', options: Options(headers: headers));
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('Failed to load user data');
+      }
+    } on DioException catch (e) {
+      print('Error: ${e.response?.statusCode}');
+      print('Response data: ${e.response?.data}');
+      print('Dio error!');
+      print('Response status: ${e.response?.statusCode}');
+      print('Response data: ${e.response?.data}');
+      throw Exception('Failed to load user data');
     }
   }
 }

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:front/auth/login.dart';
+import 'package:front/auth/register.dart';
+import 'package:front/colocation/create_colocation.dart';
+import 'package:front/home_screen.dart';
 import 'package:front/invitation/bloc/invitation_bloc.dart';
-import 'auth/login.dart';
-import 'auth/register.dart';
-import 'colocation/colocation_tasklist_screen.dart';
-import 'home_screen.dart';
-import 'invitation/invitation_list_page.dart';
-import 'colocation/create_colocation.dart';
+import 'package:front/invitation/invitation_list_page.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
