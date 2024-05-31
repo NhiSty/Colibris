@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:front/colocation/Colocation.dart';
-import 'package:front/dio/dio.dart';
+import 'package:front/colocation/colocation.dart';
+import 'package:front/utils/dio.dart';
 import 'package:front/services/user_service.dart';
 import 'package:front/website/share/secure_storage.dart';
 

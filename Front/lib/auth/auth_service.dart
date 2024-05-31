@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:front/dio/dio.dart';
+import 'package:front/utils/dio.dart';
 import 'package:front/website/share/secure_storage.dart';
 
 

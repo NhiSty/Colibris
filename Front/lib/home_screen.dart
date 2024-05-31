@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/colocation/Colocation.dart';
-import 'package:front/colocation/colocation_service.dart';
+import 'package:front/colocation/bloc/colocation_bloc.dart';
 import 'package:front/colocation/create_colocation.dart';
 import 'package:front/invitation/invitation_list_page.dart';
 import 'package:front/invitation/bloc/invitation_bloc.dart';
@@ -12,6 +11,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<InvitationBloc>().add(FetchInvitations());
+    context.read<ColocationBloc>().add(const FetchColocations());
 
     return Scaffold(
       body: Stack(
@@ -142,13 +142,15 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: FutureBuilder<List<Colocation>>(
-                  future: fetchColocations(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                child: BlocBuilder<ColocationBloc, ColocationState>(
+                  builder: (context, state) {
+                    print(state);
+                    if (state is ColocationInitial) {
                       return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      if (snapshot.data == null) {
+                    } else if (state is ColocationLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is ColocationError) {
+                      if (state.isDirty) {
                         return const Center(
                           child: Text(
                             'Aucune colocation trouvée',
@@ -160,18 +162,20 @@ class HomeScreen extends StatelessWidget {
                           ),
                         );
                       }
-                      return Text('Erreur: ${snapshot.error}');
-                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is ColocationLoaded) {
+                      final colocations = state.colocations;
                       return ListView.builder(
-                        itemCount: snapshot.data!.length,
+                        itemCount: colocations.length,
                         itemBuilder: (context, index) {
-                          final item = snapshot.data![index];
+                          final item = colocations[index];
                           return GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(context, '/colocation/task-list', arguments: {
-                                'colocationId': item.id,
-                              });
-                              print('Clicked on ${item.name}');
+                              Navigator.pushNamed(
+                                  context, '/colocation/task-list',
+                                  arguments: {
+                                    'colocation': item,
+                                  });
                             },
                             child: Padding(
                               padding:
@@ -194,6 +198,8 @@ class HomeScreen extends StatelessWidget {
                           );
                         },
                       );
+                    } else {
+                      return Container();
                     }
                   },
                 ),
@@ -208,7 +214,7 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CreateColocationPage(),
+                    builder: (context) => const CreateColocationPage(),
                   ),
                 );
               },
@@ -223,52 +229,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: Container(
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.green,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              spreadRadius: 5,
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.home),
-              color: Colors.white,
-              onPressed: () {
-                print('clicked on home button');
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.thumbs_up_down),
-              color: Colors.white,
-              onPressed: () {
-                print('clicked on like/dislike button');
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.chat),
-              color: Colors.white,
-              onPressed: () {
-                print('clicked on chat button');
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.person),
-              color: Colors.white,
-              onPressed: () {
-                Navigator.pushNamed(context, '/profile');
-              },
-            ),
-          ],
-        ),
       ),
     );
   }
