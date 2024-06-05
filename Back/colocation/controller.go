@@ -10,6 +10,14 @@ type Controller struct {
 	colocService ColocationService
 }
 
+func (ctl *Controller) GetAllColocations(c *gin.Context) {
+	colocations, err := ctl.colocService.getAllColocations()
+	if err != nil {
+		c.JSON(http.StatusNotFound, err.Error())
+	}
+	c.JSON(http.StatusOK, colocations)
+}
+
 func (ctl *Controller) CreateColocation(c *gin.Context) {
 	var req ColocationCreateRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

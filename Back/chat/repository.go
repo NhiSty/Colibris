@@ -5,7 +5,7 @@ import (
 )
 
 type ChatRepository interface {
-	SaveMessage(message Message) error
+	SaveMessage(message Message) (*Message, error)
 	GetMessages(colocationID string) ([]Message, error)
 }
 
@@ -17,8 +17,9 @@ func NewChatRepository(db *gorm.DB) *GormChatRepository {
 	return &GormChatRepository{db: db}
 }
 
-func (r *GormChatRepository) SaveMessage(message Message) error {
-	return r.db.Create(&message).Error
+func (r *GormChatRepository) SaveMessage(message Message) (*Message, error) {
+	err := r.db.Create(&message).Error
+	return &message, err
 }
 
 func (r *GormChatRepository) GetMessages(colocationID string) ([]Message, error) {

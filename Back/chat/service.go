@@ -1,7 +1,9 @@
 package chat
 
 import (
+	"encoding/json"
 	"github.com/gorilla/websocket"
+	"log"
 	"sync"
 )
 
@@ -35,10 +37,23 @@ func (s *ChatService) BroadcastMessage(colocationID string, message []byte, user
 		ColocationID: colocationID,
 	}
 
-	s.Repo.SaveMessage(msg)
+	savedMsg, err := s.Repo.SaveMessage(msg)
+	if err != nil {
+		log.Printf("Erreur lors de l'enregistrement du message : %v", err)
+		return
+	}
+
+	messageJSON, err := json.Marshal(savedMsg)
+	if err != nil {
+		log.Printf("Erreur lors de la conversion du message en JSON : %v", err)
+		return
+	}
 
 	for _, client := range s.clients[colocationID] {
-		client.Conn.WriteMessage(websocket.TextMessage, message)
+		err := client.Conn.WriteMessage(websocket.TextMessage, messageJSON)
+		if err != nil {
+			log.Printf("Erreur lors de l'envoi du message au client : %v", err)
+		}
 	}
 }
 

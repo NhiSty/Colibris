@@ -13,6 +13,7 @@ func Routes(colocationRoutes *gin.RouterGroup, db *gorm.DB) {
 	colocationController := NewColocController(colocService)
 	AuthMiddleware := middlewares.AuthMiddleware
 	{
+		routes.GET("", AuthMiddleware(), colocationController.GetAllColocations)
 		routes.POST("", AuthMiddleware(), colocationController.CreateColocation)
 		routes.GET("/:id", AuthMiddleware(), colocationController.GetColocationById)
 		routes.GET("/user/:userId", AuthMiddleware(), colocationController.GetAllUserColocations)

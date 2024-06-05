@@ -9,6 +9,7 @@ type ColocationRepository interface {
 	CreateColocation(colocation *Colocation) error
 	GetColocationById(id int) (*Colocation, error)
 	GetAllUserColocations(userId int) ([]Colocation, error) // New method
+	GetAllColocations() ([]Colocation, error)               // New method
 }
 
 type colocationRepository struct {
@@ -29,6 +30,11 @@ func (r *colocationRepository) CreateColocation(colocation *Colocation) error {
 func (r *colocationRepository) GetAllUserColocations(userId int) ([]Colocation, error) {
 	var colocations []Colocation
 	result := r.db.Where("user_id = ?", userId).Find(&colocations)
+	return colocations, result.Error
+}
+func (r *colocationRepository) GetAllColocations() ([]Colocation, error) {
+	var colocations []Colocation
+	result := r.db.Find(&colocations)
 	return colocations, result.Error
 }
 func (r *colocationRepository) AddColocMember(colocation *Colocation) error {
