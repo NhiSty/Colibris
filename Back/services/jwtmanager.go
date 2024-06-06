@@ -8,11 +8,14 @@ import (
 
 var jwtKey = []byte("monSecretTrèsSecret")
 
-func GenerateJWT(userID uint) (string, error) {
+func GenerateJWT(userID uint, firstName, lastName, email string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
 
 	claims["user_id"] = userID
+	claims["first_name"] = firstName
+	claims["last_name"] = lastName
+	claims["email"] = email
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
 	tokenString, err := token.SignedString(jwtKey)
@@ -22,7 +25,6 @@ func GenerateJWT(userID uint) (string, error) {
 
 	return tokenString, nil
 }
-
 func VerifyJWT(tokenString string) (*jwt.Token, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {

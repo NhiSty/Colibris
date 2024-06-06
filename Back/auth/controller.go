@@ -45,7 +45,7 @@ func (ctl *Controller) Login(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
-	token, err := services.GenerateJWT(user.ID)
+	token, err := services.GenerateJWT(user.ID, user.Firstname, user.Lastname, user.Email)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

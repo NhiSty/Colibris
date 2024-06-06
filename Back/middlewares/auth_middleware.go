@@ -36,6 +36,9 @@ func AuthMiddleware() gin.HandlerFunc {
 			userIDFloat64 := uint(claims["user_id"].(float64))
 			userID := int(userIDFloat64)
 			c.Set("userID", userID)
+			c.Set("firstName", claims["first_name"])
+			c.Set("lastName", claims["last_name"])
+			c.Set("email", claims["email"])
 			c.Next()
 		} else {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})

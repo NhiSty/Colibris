@@ -31,6 +31,11 @@ func (c *ChatController) HandleConnections(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID format"})
 		return
 	}
+
+	firstName, _ := ctx.Get("firstName")
+	lastName, _ := ctx.Get("lastName")
+	senderName := firstName.(string) + " " + lastName.(string)
+
 	conn, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -46,7 +51,7 @@ func (c *ChatController) HandleConnections(ctx *gin.Context) {
 		if err != nil {
 			break
 		}
-		c.Service.BroadcastMessage(colocationID, msg, userID)
+		c.Service.BroadcastMessage(colocationID, msg, userID, senderName)
 	}
 }
 
