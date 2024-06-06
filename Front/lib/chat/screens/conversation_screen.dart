@@ -42,7 +42,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   Future<void> _getUserData() async {
     var userData = await decodeToken();
-    print("object $userData");
     setState(() {
       _userId = userData['user_id'];
     });
@@ -110,9 +109,9 @@ class _ConversationScreenState extends State<ConversationScreen> {
     } else if (difference.inDays == 1 && now.day - timestamp.day == 1) {
       return 'Yesterday, ${DateFormat('HH:mm').format(timestamp)}';
     } else if (difference.inDays < 7) {
-      return '${DateFormat('EEEE, HH:mm').format(timestamp)}'; // Day of the week and time
+      return '${DateFormat('EEEE, HH:mm').format(timestamp)}';
     } else {
-      return '${DateFormat('dd MMM yyyy, HH:mm').format(timestamp)}'; // Date and time
+      return '${DateFormat('dd MMM yyyy, HH:mm').format(timestamp)}';
     }
   }
 
@@ -129,40 +128,64 @@ class _ConversationScreenState extends State<ConversationScreen> {
               itemBuilder: (context, index) {
                 final message = _messages[index];
                 final isUserMessage = message.senderId == _userId;
-                return Align(
-                  alignment: isUserMessage
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: isUserMessage
-                          ? Colors.green[100]
-                          : Colors.grey[200],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          message.content,
-                          style: TextStyle(fontSize: 16),
+                final showDateSeparator = index == 0 || _messages[index - 1].createdAt.day != message.createdAt.day;
+
+                return Column(
+                  children: [
+                    if (showDateSeparator)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Text(
+                          DateFormat('dd MMM yyyy').format(message.createdAt),
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),
                         ),
-                        SizedBox(height: 5),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                            _formatTimestamp(message.createdAt.toLocal()), // Convert to local time
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                            ),
+                      ),
+                    Align(
+                      alignment: isUserMessage ? Alignment.centerRight : Alignment.centerLeft,
+                      child: Container(
+                        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+                        margin: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: isUserMessage ? Colors.blue[100] : Colors.grey[200],
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                            bottomLeft: isUserMessage ? Radius.circular(8) : Radius.zero,
+                            bottomRight: isUserMessage ? Radius.zero : Radius.circular(8),
                           ),
                         ),
-                      ],
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              message.senderName,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 3),
+                            Text(
+                              message.content,
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                            const SizedBox(height: 3),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: Text(
+                                _formatTimestamp(message.createdAt.toLocal()),
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 );
               },
             ),
