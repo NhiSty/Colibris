@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:front/dio/dio.dart';
 import 'package:front/website/share/secure_storage.dart';
 
+
 Future<int> login(String email, String password) async {
   Response response;
 
@@ -45,7 +46,7 @@ Future<int> register(
   } on DioException catch (e) {
     log('Dio error!');
     log('Response status: ${e.response!.statusCode}');
-    log('Response data: ${e.response!.data}');
+    print('Response data: ${e.response!.data}');
     return e.response?.statusCode ?? 500;
   }
 }
