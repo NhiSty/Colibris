@@ -24,7 +24,7 @@ func (r *GormChatRepository) SaveMessage(message Message) (*Message, error) {
 
 func (r *GormChatRepository) GetMessages(colocationID string) ([]Message, error) {
 	var messages []Message
-	if err := r.db.Where("colocation_id = ?", colocationID).Find(&messages).Error; err != nil {
+	if err := r.db.Where("colocation_id = ?", colocationID).Order("created_at ASC").Find(&messages).Error; err != nil {
 		return nil, err
 	}
 	return messages, nil

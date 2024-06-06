@@ -31,7 +31,6 @@ func (s *ChatService) BroadcastMessage(colocationID string, message []byte, user
 	s.clientsMu.Lock()
 	defer s.clientsMu.Unlock()
 
-	// Construire le message avec les informations nécessaires
 	msg := Message{
 		Content:      string(message),
 		SenderID:     userID,
@@ -39,14 +38,12 @@ func (s *ChatService) BroadcastMessage(colocationID string, message []byte, user
 		ColocationID: colocationID,
 	}
 
-	// Enregistrer le message dans la base de données
 	savedMsg, err := s.Repo.SaveMessage(msg)
 	if err != nil {
 		log.Printf("Erreur lors de l'enregistrement du message : %v", err)
 		return
 	}
 
-	// Convertir le message enregistré en JSON pour l'envoi
 	messageJSON, err := json.Marshal(savedMsg)
 	if err != nil {
 		log.Printf("Erreur lors de la conversion du message en JSON : %v", err)
