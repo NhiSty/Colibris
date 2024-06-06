@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'auth/login.dart';
 import 'auth/register.dart';
+import 'chat/screens/conversation_list_screen.dart';
 import 'home_screen.dart';
 
 void main() async {
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
         '/home': (context) => HomeScreen(),
+        '/chat': (context) => ConversationListScreen(),
       },
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );

@@ -177,7 +177,7 @@ class HomeScreen extends StatelessWidget {
               icon: Icon(Icons.chat),
               color: Colors.white,
               onPressed: () {
-                print('clicked on chat button');
+                Navigator.pushNamed(context, '/chat');
               },
             ),
             IconButton(
