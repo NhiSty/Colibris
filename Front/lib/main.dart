@@ -11,13 +11,11 @@ import 'package:front/home_screen.dart';
 import 'package:front/invitation/bloc/invitation_bloc.dart';
 import 'package:front/invitation/invitation_create_page.dart';
 import 'package:front/invitation/invitation_list_page.dart';
-import 'package:front/services/user_service.dart';
+import 'package:front/profile/profile_screen.dart';
 import 'package:front/shared.widget/bottom_navigation_bar.dart';
 
-var userData;
 void main() async {
   await dotenv.load(fileName: ".env");
-  userData = await decodeToken();
   runApp(const MyApp());
 }
 
@@ -38,7 +36,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Colobris',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
           useMaterial3: true,
         ),
         home: const HomeScreen(),
@@ -52,9 +50,13 @@ class MyApp extends StatelessWidget {
               ),
           '/create_colocation': (context) => const CreateColocationPage(),
           '/parmetres_colocation': (context) => const ColocationSettingsPage(),
+          '/profile': (context) => const Scaffold(
+                body: ProfileScreen(),
+                bottomNavigationBar: BottomNavigationBarWidget(),
+              ),
         },
         onGenerateRoute: (settings) {
-          final routes = settings.arguments as Map;
+          final routes = settings.arguments as Map<dynamic, dynamic>? ?? {};
           switch (settings.name) {
             case ColocationTasklistScreen.routeName:
               return MaterialPageRoute(
@@ -62,7 +64,7 @@ class MyApp extends StatelessWidget {
                         value: BlocProvider.of<ColocationBloc>(context),
                         child: ColocationTasklistScreen(
                             colocation: routes['colocation'],
-                            userId: userData['user_id']),
+                           ),
                       ),
                   settings: settings);
             case '/invitations':
@@ -73,13 +75,14 @@ class MyApp extends StatelessWidget {
                             invitations: routes['invitations']),
                       ),
                   settings: settings);
-            /* case '/create_invitation':
+            case '/create_invitation':
               return MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
                         value: BlocProvider.of<InvitationBloc>(context),
-                        child: const InvitationCreatePage(),
+                        child: InvitationCreatePage(
+                            colocationId: routes['colocationId']),
                       ),
-                  settings: settings);*/
+                  settings: settings);
           }
           return null;
         },

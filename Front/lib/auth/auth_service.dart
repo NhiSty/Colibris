@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:front/utils/dio.dart';
 import 'package:front/website/share/secure_storage.dart';
 
-
 Future<int> login(String email, String password) async {
   Response response;
 
@@ -15,6 +14,7 @@ Future<int> login(String email, String password) async {
     );
     if (response.data.containsKey('token')) {
       var token = response.data['token'];
+      await deleteToken();
       await saveToken(token);
     } else {
       log('Token not found in the response');

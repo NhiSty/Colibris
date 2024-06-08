@@ -59,7 +59,7 @@ class _InvitationAcceptPageState extends State<InvitationAcceptPage> {
                                   InvitationAccept(
                                       state: 'accepted',
                                       invitationId: widget.invitationId));
-                              Navigator.pop(context);
+                              Navigator.pushNamed(context, '/home');
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green, // Bouton vert
@@ -74,7 +74,7 @@ class _InvitationAcceptPageState extends State<InvitationAcceptPage> {
                                   InvitationReject(
                                       state: 'declined',
                                       invitationId: widget.invitationId));
-                              Navigator.pop(context);
+                              Navigator.pushNamed(context, '/home');
                             }, // Texte blanc
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red, // Bouton rouge
@@ -113,7 +113,7 @@ class InvitationCard extends StatelessWidget {
             const SizedBox(height: 10),
             Center(
               child: Text(
-                "Vous êtes invité à rejoindre la colocation ${colocationData?['Name']}située à ${colocationData?['Address']} ${colocationData?['City']} ${colocationData?['ZipCode']} ${colocationData?['Country']} ! Cette colocation peut-être décrite de la manière suivante : ${colocationData?['Description'] ?? ''} ",
+                "Vous êtes invité à rejoindre la colocation ${colocationData?['Name']} située à ${colocationData?['Address']} ${colocationData?['City']} ${colocationData?['ZipCode']} ${colocationData?['Country']} ! Cette colocation peut-être décrite de la manière suivante : ${colocationData?['Description'] ?? ''} ",
                 style: const TextStyle(color: Colors.white),
               ),
             ),

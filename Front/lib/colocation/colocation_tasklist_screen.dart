@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:front/colocation/colocation.dart';
-import 'package:front/services/user_service.dart';
+
 import 'package:front/shared.widget/bottom_navigation_bar.dart';
+import 'package:front/website/share/secure_storage.dart';
 
 class ColocationTasklistScreen extends StatefulWidget {
   final Colocation colocation;
-  final int userId;
-  const ColocationTasklistScreen(
-      {super.key, required this.colocation, required this.userId});
+
+  const ColocationTasklistScreen({super.key, required this.colocation});
 
   static const routeName = '/colocation/task-list';
 
@@ -17,10 +17,17 @@ class ColocationTasklistScreen extends StatefulWidget {
 }
 
 class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
-  var userData = decodeToken();
+  var userData = {};
   @override
   void initState() {
-    print(widget.userId);
+    fetchUserData() async {
+      var user = await decodeToken();
+      setState(() {
+        userData = user;
+      });
+    }
+
+    fetchUserData();
     super.initState();
   }
 
@@ -48,18 +55,20 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
           ),
           backgroundColor: Colors.green,
           title: Text(
-            'Colocation name . ${widget.colocation.name}',
+            widget.colocation.name,
             style: const TextStyle(color: Colors.white),
           ),
-          actions: widget.colocation.userId == widget.userId
+          actions: widget.colocation.userId == userData['user_id']
               ? [
                   IconButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/create_invitation');
+                        Navigator.pushNamed(context, '/create_invitation',
+                            arguments: {'colocationId': widget.colocation.id});
                       },
                       icon: const Icon(
-                        Icons.settings,
+                        Icons.add,
                         color: Colors.white,
+                        size: 30,
                       ))
                 ]
               : null,

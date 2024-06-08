@@ -26,7 +26,7 @@ Future<List<Invitation>> fetchInvitations() async {
   }
 }
 
-Future<int> createInvitation(String email, int colocId) async {
+Future<dynamic> createInvitation(String email, int colocId) async {
   var headers = await addHeader();
   try {
     var response = await dio.post(
@@ -37,13 +37,12 @@ Future<int> createInvitation(String email, int colocId) async {
       },
       options: Options(headers: headers),
     );
-    print(response.data);
-    return response.statusCode!;
+    return response;
   } on DioException catch (e) {
-    log('Dio error!');
-    log('Response status: ${e.response!.statusCode}');
-    log('Response data: ${e.response!.data}');
-    return e.response?.statusCode ?? 500;
+    print('Dio error!');
+    print('Response status: ${e.response!.statusCode}');
+    print('Response data: ${e.response!.data}');
+    return e.response!.statusCode ?? 500;
   }
 }
 

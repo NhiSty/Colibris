@@ -7,83 +7,114 @@ class BottomNavigationBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final String currentRoute = ModalRoute.of(context)?.settings.name ?? '';
 
-    List<Widget> iconsForRoute(String route) {
-      List<Widget> icons = [];
+    // Define routes and their corresponding icons
+    final Map<String, List<BottomNavigationBarItem>> routeIcons = {
+      '/home': [
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.logout_rounded),
+          label: 'Logout',
+        ),
+      ],
+      '/profile': [
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.logout_rounded),
+          label: 'Logout',
+        ),
+      ],
+      '/colocation/task-list': [
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.task),
+          label: 'Task List',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.chat),
+          label: 'Chat',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.logout_rounded),
+          label: 'Logout',
+        ),
+      ],
+    };
 
-      if (route == '/home') {
-        icons.add(
-          IconButton(
-            icon: const Icon(Icons.home),
-            color: Colors.white,
-            onPressed: () {
-              if (currentRoute != '/home') {
-                Navigator.pushNamed(context, '/home');
-              }
-            },
-          ),
-        );
-        icons.add(
-          IconButton(
-            icon: const Icon(Icons.person),
-            color: Colors.white,
-            onPressed: () {
-              // Add navigation or logic here
-            },
-          ),
-        );
-      } else if (route == '/colocation/task-list') {
-        icons.add(
-          IconButton(
-            icon: const Icon(Icons.home),
-            color: Colors.white,
-            onPressed: () {
-              if (currentRoute != '/home') {
-                Navigator.pushNamed(context, '/home');
-              }
-            },
-          ),
-        );
-        icons.add(
-          IconButton(
-            icon: const Icon(Icons.chat),
-            color: Colors.white,
-            onPressed: () {
-              // Add navigation or logic here
-            },
-          ),
-        );
-        icons.add(
-          IconButton(
-            icon: const Icon(Icons.person),
-            color: Colors.white,
-            onPressed: () {
-              // Add navigation or logic here
-            },
-          ),
-        );
-      }
+    // Default set of routes to display in the BottomNavigationBar
+    final List<BottomNavigationBarItem> defaultIcons = [
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.home),
+        label: 'Home',
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.person),
+        label: 'Profile',
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.logout_rounded),
+        label: 'Logout',
+      ),
+    ];
 
-      return icons;
+    // Define routes in the order they should appear in the BottomNavigationBar
+    final Map<String, List<String>> routeOrder = {
+      '/home': ['/home', '/profile', '/login'],
+      '/colocation/task-list': [
+        '/colocation/task-list',
+        '/home',
+        '/chat',
+        '/profile',
+        '/login'
+      ],
+      '/profile': ['/home', '/profile', '/login'],
+    };
+
+    // Get icons and routes for the current route
+    final icons = routeIcons[currentRoute] ?? defaultIcons;
+    final routes = routeOrder[currentRoute] ?? ['/home', '/profile', '/login'];
+
+    // Find the current index
+    int currentIndex = routes.indexOf(currentRoute);
+    if (currentIndex == -1) {
+      currentIndex = 0; // Default to the first item if current route not found
     }
 
-    final List<Widget> icons = iconsForRoute(currentRoute);
-
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-        color: Colors.green,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            spreadRadius: 5,
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: icons,
-      ),
+    return BottomNavigationBar(
+      items: icons,
+      currentIndex: currentIndex,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.white.withOpacity(0.7),
+      backgroundColor: Colors.green,
+      type: BottomNavigationBarType.fixed,
+      onTap: (index) {
+        if (index >= 0 && index < routes.length) {
+          final newRoute = routes[index];
+          if (newRoute.isNotEmpty && newRoute != currentRoute) {
+            Navigator.pushReplacementNamed(context, newRoute);
+          }
+        }
+      },
     );
   }
 }
