@@ -56,7 +56,8 @@ func (r *invitationRepository) CreateInvitation(invitation *Invitation) error {
 func (r *invitationRepository) GetAllUserInvitation(id int) ([]Invitation, error) {
 	var invitation []Invitation
 
-	result := r.db.Where("user_id = ?", id).Find(&invitation)
+	result := r.db.Where("user_id = ?", id).Where("state = ?", "pending").Find(&invitation)
+
 	if result.Error != nil {
 		return nil, result.Error
 	}
