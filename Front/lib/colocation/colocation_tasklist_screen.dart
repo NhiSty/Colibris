@@ -54,8 +54,9 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
           actions: widget.colocation.userId == widget.userId
               ? [
                   IconButton(
-                      onPressed:
-                          () {}, // todo rediriger sur le screen pour les settings de la colocation
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/create_invitation');
+                      },
                       icon: const Icon(
                         Icons.settings,
                         color: Colors.white,

@@ -4,10 +4,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:front/auth/login.dart';
 import 'package:front/auth/register.dart';
 import 'package:front/colocation/bloc/colocation_bloc.dart';
+import 'package:front/colocation/colocation_parameters.dart';
 import 'package:front/colocation/colocation_tasklist_screen.dart';
 import 'package:front/colocation/create_colocation.dart';
 import 'package:front/home_screen.dart';
 import 'package:front/invitation/bloc/invitation_bloc.dart';
+import 'package:front/invitation/invitation_create_page.dart';
 import 'package:front/invitation/invitation_list_page.dart';
 import 'package:front/services/user_service.dart';
 import 'package:front/shared.widget/bottom_navigation_bar.dart';
@@ -49,6 +51,7 @@ class MyApp extends StatelessWidget {
                 bottomNavigationBar: BottomNavigationBarWidget(),
               ),
           '/create_colocation': (context) => const CreateColocationPage(),
+          '/parmetres_colocation': (context) => const ColocationSettingsPage(),
         },
         onGenerateRoute: (settings) {
           final routes = settings.arguments as Map;
@@ -70,6 +73,13 @@ class MyApp extends StatelessWidget {
                             invitations: routes['invitations']),
                       ),
                   settings: settings);
+            /* case '/create_invitation':
+              return MaterialPageRoute(
+                  builder: (context) => BlocProvider.value(
+                        value: BlocProvider.of<InvitationBloc>(context),
+                        child: const InvitationCreatePage(),
+                      ),
+                  settings: settings);*/
           }
           return null;
         },
