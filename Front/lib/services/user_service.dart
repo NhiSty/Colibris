@@ -1,9 +1,8 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:front/dio/dio.dart';
+import 'package:front/utils/dio.dart';
 import 'package:front/website/share/secure_storage.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 
 class UserService {
   final Dio _dio = dio;
@@ -97,16 +96,7 @@ class UserService {
   }
 }
 
-Future<Map<String, dynamic>> decodeToken() async {
-  var token = await getToken() ?? '';
-  try {
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-    return decodedToken;
-  } catch (e) {
-    print('Failed to decode token: $e');
-    throw Exception('Failed to decode token');
-  }
-}
+
 
 class User {
   final int id;

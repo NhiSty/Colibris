@@ -1,8 +1,8 @@
 import 'dart:developer';
+
 import 'package:dio/dio.dart';
-import 'package:front/colocation/Colocation.dart';
-import 'package:front/dio/dio.dart';
-import 'package:front/services/user_service.dart';
+import 'package:front/colocation/colocation.dart';
+import 'package:front/utils/dio.dart';
 import 'package:front/website/share/secure_storage.dart';
 
 Future<List<Colocation>> fetchColocations() async {
@@ -13,7 +13,7 @@ Future<List<Colocation>> fetchColocations() async {
     var response = await dio.get('/colocations/user/${userData['user_id']}',
         options: Options(headers: headers));
     if (response.statusCode == 200) {
-      List<dynamic> data = response.data['colocations'];
+      List<dynamic> data = response.data['colocations'] ?? [];
 
       return data.map((coloc) => Colocation.fromJson(coloc)).toList();
     } else {
@@ -24,6 +24,25 @@ Future<List<Colocation>> fetchColocations() async {
     log('Response status: ${e.response!.statusCode}');
     log('Response data: ${e.response!.data}');
     throw Exception('Failed to load colocations');
+  }
+}
+
+Future<Map<String, dynamic>> fetchColocation(int colocationId) async {
+  var headers = await addHeader();
+  try {
+    var response = await dio.get('/colocations/$colocationId',
+        options: Options(headers: headers));
+    if (response.statusCode == 200) {
+      print(response);
+      return response.data["result"];
+    } else {
+      throw Exception('Failed to load colocation');
+    }
+  } on DioException catch (e) {
+    log('Dio error!');
+    log('Response status: ${e.response!.statusCode}');
+    log('Response data: ${e.response!.data}');
+    throw Exception('Failed to load colocation');
   }
 }
 

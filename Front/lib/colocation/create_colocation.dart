@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:front/colocation/colocation_service.dart';
 
 class CreateColocationPage extends StatefulWidget {
+  const CreateColocationPage({super.key});
+
   @override
   _CreateColocationPageState createState() => _CreateColocationPageState();
 }
@@ -13,7 +15,7 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
   final _zipcodeController = TextEditingController();
   final _countryController = TextEditingController();
   final _cityController = TextEditingController();
-  bool _colocType = false;
+  bool isPermanent = false;
   final _descriptionController = TextEditingController();
 
   @override
@@ -110,12 +112,12 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                 const SizedBox(height: 10),
                 CheckboxListTile(
                   title: const Text('Colocation permanente'),
-                  value: _colocType,
+                  value: isPermanent,
                   checkColor: Colors.white,
                   activeColor: Colors.green,
                   onChanged: (bool? value) {
                     setState(() {
-                      _colocType = value ?? false;
+                      isPermanent = value ?? false;
                     });
                   },
                 ),
@@ -126,7 +128,7 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                       createColocation(
                         _nameController.text,
                         _descriptionController.text,
-                        _colocType,
+                        isPermanent,
                         _addressController.text,
                         _zipcodeController.text,
                         _countryController.text,

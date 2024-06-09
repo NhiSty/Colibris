@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 const FlutterSecureStorage _storage = FlutterSecureStorage();
 
@@ -21,4 +22,19 @@ Future<Map<String, dynamic>> addHeader() async {
     headers['Authorization'] = 'Bearer $token';
   }
   return headers;
+}
+
+Future<void> deleteToken() async {
+  await _storage.delete(key: 'token');
+}
+
+Future<Map<String, dynamic>> decodeToken() async {
+  var token = await getToken() ?? '';
+  try {
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+    return decodedToken;
+  } catch (e) {
+    print('Failed to decode token: $e');
+    throw Exception('Failed to decode token');
+  }
 }
