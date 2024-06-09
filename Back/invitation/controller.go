@@ -91,7 +91,7 @@ func (ctl *Controller) UpdateInvitation(c *gin.Context) {
 	}
 
 	// verify that the state is valid
-	if req.State != "accepted" && req.State != "refused" {
+	if req.State != "accepted" && req.State != "declined" {
 		c.JSON(http.StatusBadRequest, "invalid state")
 		return
 	}

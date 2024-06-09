@@ -43,8 +43,7 @@ class _InvitationAcceptPageState extends State<InvitationAcceptPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
-                    mainAxisSize:
-                        MainAxisSize.min, // Adjust the height based on children
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -62,7 +61,7 @@ class _InvitationAcceptPageState extends State<InvitationAcceptPage> {
                               Navigator.pushNamed(context, '/home');
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green, // Bouton vert
+                              backgroundColor: Colors.green,
                             ),
                             child: const Text('Accepter',
                                 style: TextStyle(color: Colors.white)),
@@ -75,9 +74,9 @@ class _InvitationAcceptPageState extends State<InvitationAcceptPage> {
                                       state: 'declined',
                                       invitationId: widget.invitationId));
                               Navigator.pushNamed(context, '/home');
-                            }, // Texte blanc
+                            },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red, // Bouton rouge
+                              backgroundColor: Colors.red,
                             ),
                             child: const Text('Refuser',
                                 style: TextStyle(color: Colors.white)),

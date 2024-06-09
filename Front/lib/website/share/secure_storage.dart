@@ -11,6 +11,10 @@ Future<String?> getToken() async {
   return await _storage.read(key: 'token');
 }
 
+Future<void> deleteToken() async {
+  await _storage.delete(key: 'token');
+}
+
 Future<Map<String, dynamic>> addHeader() async {
   String? token = await getToken();
   Map<String, dynamic> headers = {};
@@ -18,10 +22,6 @@ Future<Map<String, dynamic>> addHeader() async {
     headers['Authorization'] = 'Bearer $token';
   }
   return headers;
-}
-
-Future<void> deleteToken() async {
-  await _storage.delete(key: 'token');
 }
 
 Future<Map<String, dynamic>> decodeToken() async {
