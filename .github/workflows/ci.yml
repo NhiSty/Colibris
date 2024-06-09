@@ -1,14 +1,13 @@
 name: Pipeline CI
 
 on:
-  push: {}
+  push: ["main", "dev"]
   pull_request: {}
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    
+
     defaults:
       run:
         working-directory: Back
@@ -20,7 +19,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: '^1.13.1'
+          go-version: "^1.13.1"
 
       - name: Install dependencies
         run: go mod tidy
