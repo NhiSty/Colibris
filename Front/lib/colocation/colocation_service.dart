@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:front/colocation/colocation.dart';
 import 'package:front/utils/dio.dart';
@@ -12,7 +13,7 @@ Future<List<Colocation>> fetchColocations() async {
     var response = await dio.get('/colocations/user/${userData['user_id']}',
         options: Options(headers: headers));
     if (response.statusCode == 200) {
-      List<dynamic> data = response.data['colocations'];
+      List<dynamic> data = response.data['colocations'] ?? [];
 
       return data.map((coloc) => Colocation.fromJson(coloc)).toList();
     } else {
