@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front/services/user_service.dart';
+import 'package:front/website/share/secure_storage.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -124,8 +125,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     textStyle: const TextStyle(fontSize: 18),
+                    foregroundColor: Colors.white,
                   ),
                   child: const Text('Submit'),
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: ElevatedButton(
+                      onPressed: _logout,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                        textStyle: const TextStyle(fontSize: 18),
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text('Logout'),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -133,6 +152,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _logout() async {
+    await deleteToken();
+    if (!mounted) return;
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
 
   Future<void> _submitForm() async {
@@ -155,6 +180,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         final userService = UserService();
         await userService.updateUser(userId, updatedUserData);
+
+        if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

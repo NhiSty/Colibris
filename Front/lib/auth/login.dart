@@ -85,7 +85,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.green,
                   ),
-                  child: const Text('Inscris-toi!'),
+                  child: const Text('Inscris-toi !'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/reset-password');
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.green,
+                  ),
+                  child: const Text('Mot de passe oublié !'),
                 ),
               ],
             ),

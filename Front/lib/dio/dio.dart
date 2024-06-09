@@ -8,6 +8,3 @@ final dio = Dio(
     responseType: ResponseType.json,
   ),
 );
-
-
-// 
