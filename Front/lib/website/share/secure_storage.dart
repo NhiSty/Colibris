@@ -24,10 +24,6 @@ Future<Map<String, dynamic>> addHeader() async {
   return headers;
 }
 
-Future<void> deleteToken() async {
-  await _storage.delete(key: 'token');
-}
-
 Future<Map<String, dynamic>> decodeToken() async {
   var token = await getToken() ?? '';
   try {

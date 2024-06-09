@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:front/auth/login.dart';
 import 'package:front/auth/register.dart';
-import 'package:front/auth/login.dart';
-import 'package:front/auth/register.dart';
 import 'package:front/colocation/bloc/colocation_bloc.dart';
 import 'package:front/colocation/colocation_parameters.dart';
 import 'package:front/colocation/colocation_tasklist_screen.dart';
@@ -16,8 +14,6 @@ import 'package:front/invitation/invitation_list_page.dart';
 import 'package:front/profile/profile_screen.dart';
 import 'package:front/reset-password/reset_password.dart';
 import 'package:front/reset-password/reset_password_form.dart';
-
-import 'home_screen.dart';
 import 'package:front/shared.widget/bottom_navigation_bar.dart';
 
 void main() async {
@@ -60,10 +56,10 @@ class MyApp extends StatelessWidget {
                 body: ProfileScreen(),
                 bottomNavigationBar: BottomNavigationBarWidget(),
               ),
-        '/reset-password': (context) => ResetPasswordScreen(),
-        '/reset-password-form': (context) => ResetPasswordFormScreen(),
-      },
-      onGenerateRoute: (settings) {
+          '/reset-password': (context) => ResetPasswordScreen(),
+          '/reset-password-form': (context) => ResetPasswordFormScreen(),
+        },
+        onGenerateRoute: (settings) {
           final routes = settings.arguments as Map<dynamic, dynamic>? ?? {};
           switch (settings.name) {
             case ColocationTasklistScreen.routeName:
@@ -71,8 +67,8 @@ class MyApp extends StatelessWidget {
                   builder: (context) => BlocProvider.value(
                         value: BlocProvider.of<ColocationBloc>(context),
                         child: ColocationTasklistScreen(
-                            colocation: routes['colocation'],
-                           ),
+                          colocation: routes['colocation'],
+                        ),
                       ),
                   settings: settings);
             case '/invitations':
