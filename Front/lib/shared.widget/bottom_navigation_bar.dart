@@ -7,7 +7,6 @@ class BottomNavigationBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final String currentRoute = ModalRoute.of(context)?.settings.name ?? '';
 
-    // Define routes and their corresponding icons
     final Map<String, List<BottomNavigationBarItem>> routeIcons = {
       '/home': [
         const BottomNavigationBarItem(
@@ -61,7 +60,6 @@ class BottomNavigationBarWidget extends StatelessWidget {
       ],
     };
 
-    // Default set of routes to display in the BottomNavigationBar
     final List<BottomNavigationBarItem> defaultIcons = [
       const BottomNavigationBarItem(
         icon: Icon(Icons.home),
@@ -77,7 +75,6 @@ class BottomNavigationBarWidget extends StatelessWidget {
       ),
     ];
 
-    // Define routes in the order they should appear in the BottomNavigationBar
     final Map<String, List<String>> routeOrder = {
       '/home': ['/home', '/profile', '/login'],
       '/colocation/task-list': [
@@ -90,14 +87,12 @@ class BottomNavigationBarWidget extends StatelessWidget {
       '/profile': ['/home', '/profile', '/login'],
     };
 
-    // Get icons and routes for the current route
     final icons = routeIcons[currentRoute] ?? defaultIcons;
     final routes = routeOrder[currentRoute] ?? ['/home', '/profile', '/login'];
 
-    // Find the current index
     int currentIndex = routes.indexOf(currentRoute);
     if (currentIndex == -1) {
-      currentIndex = 0; // Default to the first item if current route not found
+      currentIndex = 0;
     }
 
     return BottomNavigationBar(

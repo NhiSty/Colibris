@@ -130,34 +130,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: const Text('Submit'),
                 ),
               ),
-              SizedBox(
-                width: double.infinity,
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: ElevatedButton(
-                      onPressed: _logout,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.redAccent,
-                        textStyle: const TextStyle(fontSize: 18),
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text('Logout'),
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  Future<void> _logout() async {
-    await deleteToken();
-    if (!mounted) return;
-    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
 
   Future<void> _submitForm() async {

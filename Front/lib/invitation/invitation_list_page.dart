@@ -3,7 +3,7 @@ import 'package:front/invitation/invitation.dart';
 import 'package:front/invitation/invitation_accept_page.dart';
 
 class InvitationListPage extends StatefulWidget {
-  final List<Invitation> invitations; // List of invitations
+  final List<Invitation> invitations;
 
   const InvitationListPage({super.key, required this.invitations});
 

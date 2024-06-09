@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: const HomeScreen(),
+        debugShowCheckedModeBanner: false,
         initialRoute: '/login',
         routes: {
           '/login': (context) => const LoginScreen(),
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
                 body: ProfileScreen(),
                 bottomNavigationBar: BottomNavigationBarWidget(),
               ),
-          '/reset-password': (context) => ResetPasswordScreen(),
+          '/reset-password': (context) => const ResetPasswordScreen(),
           '/reset-password-form': (context) => ResetPasswordFormScreen(),
         },
         onGenerateRoute: (settings) {
