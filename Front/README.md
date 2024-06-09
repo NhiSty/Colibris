@@ -19,7 +19,6 @@ samples, guidance on mobile development, and a full API reference.
 `flutter run -d chrome lib/main_website.dart`
 =======
 ## Troubleshouting
-
 ### error while testing api on android emulator
 
 ```bash
