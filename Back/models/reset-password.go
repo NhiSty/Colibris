@@ -1,4 +1,4 @@
-package reset_password
+package models
 
 import (
 	"gorm.io/gorm"

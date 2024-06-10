@@ -1,43 +1,41 @@
 package invitations
 
 import (
-	colocMembers "Colibris/colocMember"
-	colocations "Colibris/colocation"
-	"Colibris/users"
+	colocMembers "Colibris/models"
 	"errors"
 	"fmt"
 	"gorm.io/gorm"
 )
 
 type InvitationRepository interface {
-	CreateInvitation(invitation *Invitation) error
-	GetAllUserInvitation(id int) ([]Invitation, error)
-	UpdateInvitation(id int, state string) (*Invitation, error)
-	GetUserById(id int) (*users.User, error)
-	GetUserByEmail(email string) (*users.User, error)
+	CreateInvitation(invitation *colocMembers.Invitation) error
+	GetAllUserInvitation(id int) ([]colocMembers.Invitation, error)
+	UpdateInvitation(id int, state string) (*colocMembers.Invitation, error)
+	GetUserById(id int) (*colocMembers.User, error)
+	GetUserByEmail(email string) (*colocMembers.User, error)
 }
 
 type invitationRepository struct {
 	db *gorm.DB
 }
 
-func (r *invitationRepository) GetUserById(id int) (*users.User, error) {
-	var user users.User
+func (r *invitationRepository) GetUserById(id int) (*colocMembers.User, error) {
+	var user colocMembers.User
 	// print the db column names
 
 	result := r.db.Find(&user, "id = ?", id)
 	return &user, result.Error
 }
 
-func (r *invitationRepository) CreateInvitation(invitation *Invitation) error {
+func (r *invitationRepository) CreateInvitation(invitation *colocMembers.Invitation) error {
 	// Find the colocation
-	var colocation colocations.Colocation
+	var colocation colocMembers.Colocation
 	if err := r.db.Where("id = ?", invitation.ColocationID).First(&colocation).Error; err != nil {
 		return err
 	}
 
 	// Find the user
-	var user users.User
+	var user colocMembers.User
 	if err := r.db.Where("id = ?", invitation.UserID).First(&user).Error; err != nil {
 		return err
 	}
@@ -53,8 +51,8 @@ func (r *invitationRepository) CreateInvitation(invitation *Invitation) error {
 	return r.db.Create(invitation).Error
 }
 
-func (r *invitationRepository) GetAllUserInvitation(id int) ([]Invitation, error) {
-	var invitation []Invitation
+func (r *invitationRepository) GetAllUserInvitation(id int) ([]colocMembers.Invitation, error) {
+	var invitation []colocMembers.Invitation
 
 	result := r.db.Where("user_id = ?", id).Where("state = ?", "pending").Find(&invitation)
 
@@ -64,17 +62,17 @@ func (r *invitationRepository) GetAllUserInvitation(id int) ([]Invitation, error
 	return invitation, nil
 }
 
-func (r *invitationRepository) UpdateInvitation(id int, state string) (*Invitation, error) {
+func (r *invitationRepository) UpdateInvitation(id int, state string) (*colocMembers.Invitation, error) {
 	// Convert state to InvitationState type
-	invitationState := InvitationState(state)
+	invitationState := colocMembers.InvitationState(state)
 
 	// Check if the state is valid
-	if invitationState != Pending && invitationState != Accepted && invitationState != Declined {
+	if invitationState != colocMembers.Pending && invitationState != colocMembers.Accepted && invitationState != colocMembers.Declined {
 		return nil, fmt.Errorf("invalid state: %s", state)
 	}
 
 	// Find the invitation
-	var invitation Invitation
+	var invitation colocMembers.Invitation
 	if err := r.db.Where("id = ?", id).First(&invitation).Error; err != nil {
 		return nil, err
 	}
@@ -86,15 +84,15 @@ func (r *invitationRepository) UpdateInvitation(id int, state string) (*Invitati
 	}
 
 	// If the invitation is accepted, add the user to the colocation
-	if invitationState == Accepted {
+	if invitationState == colocMembers.Accepted {
 		// Find the colocation
-		var colocation colocations.Colocation
+		var colocation colocMembers.Colocation
 		if err := r.db.Where("id = ?", invitation.ColocationID).First(&colocation).Error; err != nil {
 			return nil, err
 		}
 
 		// Find the user using their id
-		var user users.User
+		var user colocMembers.User
 
 		if err := r.db.Where("id = ?", invitation.UserID).First(&user).Error; err != nil {
 			println("error 3 ", invitation.UserID)
@@ -117,8 +115,8 @@ func (r *invitationRepository) UpdateInvitation(id int, state string) (*Invitati
 	return &invitation, nil
 }
 
-func (r *invitationRepository) GetUserByEmail(email string) (*users.User, error) {
-	var user users.User
+func (r *invitationRepository) GetUserByEmail(email string) (*colocMembers.User, error) {
+	var user colocMembers.User
 	result := r.db.Where("email = ?", email).First(&user)
 	return &user, result.Error
 }

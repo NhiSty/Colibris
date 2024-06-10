@@ -1,6 +1,8 @@
 package invitations
 
-import "Colibris/users"
+import (
+	"Colibris/models"
+)
 
 type InvitationService struct {
 	repo InvitationRepository
@@ -10,22 +12,22 @@ func NewInvitationService(repo InvitationRepository) InvitationService {
 	return InvitationService{repo: repo}
 }
 
-func (s *InvitationService) GetAllUserInvitation(id int) ([]Invitation, error) {
+func (s *InvitationService) GetAllUserInvitation(id int) ([]models.Invitation, error) {
 	return s.repo.GetAllUserInvitation(id)
 }
 
-func (s *InvitationService) CreateInvitation(invitation *Invitation) error {
+func (s *InvitationService) CreateInvitation(invitation *models.Invitation) error {
 	return s.repo.CreateInvitation(invitation)
 }
 
-func (s *InvitationService) UpdateInvitation(id int, state string) (*Invitation, error) {
+func (s *InvitationService) UpdateInvitation(id int, state string) (*models.Invitation, error) {
 	return s.repo.UpdateInvitation(id, state)
 }
 
-func (s *InvitationService) GetUserById(id int) (*users.User, error) {
+func (s *InvitationService) GetUserById(id int) (*models.User, error) {
 	return s.repo.GetUserById(id)
 }
 
-func (s *InvitationService) GetUserByEmail(email string) (*users.User, error) {
+func (s *InvitationService) GetUserByEmail(email string) (*models.User, error) {
 	return s.repo.GetUserByEmail(email)
 }

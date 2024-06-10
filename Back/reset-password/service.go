@@ -1,6 +1,7 @@
 package reset_password
 
 import (
+	"Colibris/models"
 	"Colibris/users"
 	"errors"
 	"golang.org/x/crypto/bcrypt"
@@ -37,7 +38,7 @@ func (s *ResetPasswordService) DeleteToken(token string) error {
 	return s.repo.DeleteToken(token)
 }
 
-func (s *ResetPasswordService) ResetPassword(token string, newPassword string) (*users.User, error) {
+func (s *ResetPasswordService) ResetPassword(token string, newPassword string) (*models.User, error) {
 	email, err := s.repo.ValidateToken(token)
 	if err != nil {
 		return nil, err

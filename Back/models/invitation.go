@@ -1,4 +1,4 @@
-package invitations
+package models
 
 import (
 	"database/sql/driver"

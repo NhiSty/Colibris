@@ -1,6 +1,7 @@
 package reset_password
 
 import (
+	"Colibris/models"
 	"errors"
 	"gorm.io/gorm"
 	"math/rand"
@@ -18,7 +19,7 @@ func NewResetPasswordRepository(db *gorm.DB) *ResetPasswordRepository {
 func (repo *ResetPasswordRepository) CreateToken(email string) (string, error) {
 	token := generateToken()
 	expiration := time.Now().Add(2 * time.Minute)
-	resetPasswordToken := ResetPassword{
+	resetPasswordToken := models.ResetPassword{
 		Token:     token,
 		Email:     email,
 		ExpiresAt: expiration,
@@ -31,7 +32,7 @@ func (repo *ResetPasswordRepository) CreateToken(email string) (string, error) {
 }
 
 func (repo *ResetPasswordRepository) ValidateToken(token string) (string, error) {
-	var resetPasswordToken ResetPassword
+	var resetPasswordToken models.ResetPassword
 	result := repo.db.Where("token = ? AND expires_at > ?", token, time.Now()).First(&resetPasswordToken)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return "", errors.New("invalid or expired token")
@@ -40,7 +41,7 @@ func (repo *ResetPasswordRepository) ValidateToken(token string) (string, error)
 }
 
 func (repo *ResetPasswordRepository) DeleteToken(token string) error {
-	return repo.db.Where("token = ?", token).Delete(&ResetPassword{}).Error
+	return repo.db.Where("token = ?", token).Delete(&models.ResetPassword{}).Error
 }
 
 func generateToken() string {

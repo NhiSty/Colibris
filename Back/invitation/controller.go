@@ -1,6 +1,7 @@
 package invitations
 
 import (
+	"Colibris/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -41,7 +42,7 @@ func (ctl *Controller) CreateInvitation(c *gin.Context) {
 
 	}
 
-	invitation := Invitation{
+	invitation := models.Invitation{
 		UserID:       user.ID,
 		ColocationID: req.ColocationID,
 		State:        "pending",

@@ -1,6 +1,7 @@
 package users
 
 import (
+	"Colibris/models"
 	"github.com/go-playground/validator/v10"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
@@ -22,7 +23,7 @@ func NewUserController(repo UserRepository) *UserController {
 }
 
 func (ctrl *UserController) AddUser(c *gin.Context) {
-	var user User
+	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
