@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:front/auth/login.dart';
 import 'package:front/auth/register.dart';
 import 'package:front/colocation/bloc/colocation_bloc.dart';
+import 'package:front/colocation/colocation_members.dart';
 import 'package:front/colocation/colocation_parameters.dart';
 import 'package:front/colocation/colocation_tasklist_screen.dart';
 import 'package:front/colocation/create_colocation.dart';
@@ -52,7 +53,6 @@ class MyApp extends StatelessWidget {
                 bottomNavigationBar: BottomNavigationBarWidget(),
               ),
           '/create_colocation': (context) => const CreateColocationPage(),
-          '/parmetres_colocation': (context) => const ColocationSettingsPage(),
           '/profile': (context) => const Scaffold(
                 body: ProfileScreen(),
                 bottomNavigationBar: BottomNavigationBarWidget(),
@@ -88,8 +88,22 @@ class MyApp extends StatelessWidget {
                             colocationId: routes['colocationId']),
                       ),
                   settings: settings);
+            case '/colocation_manage':
+              return MaterialPageRoute(
+                builder: (context) => ColocationSettingsPage(
+                  colocationId: routes['colocationId'],
+                ),
+              );
+            case '/colocation_members':
+              return MaterialPageRoute(
+                builder: (context) => ColocationMembers(
+                  users: routes['users'],
+                ),
+              );
+
+            default:
+              return null;
           }
-          return null;
         },
       ),
     );

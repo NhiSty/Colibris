@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:front/services/user_service.dart';
+import 'package:front/user/user.dart';
+import 'package:front/user/user_service.dart';
 import 'package:front/website/pages/backoffice/components/pagination_controls.dart';
 import 'package:front/website/pages/backoffice/components/title_and_breadcrumb.dart';
 import 'package:front/website/pages/backoffice/components/user_list.dart';
@@ -22,7 +23,7 @@ class _UserHandlePageState extends State<UserHandlePage> {
 
   void _fetchUsers() {
     setState(() {
-      _futureUsers = UserService().getAllUsers();
+      _futureUsers = getAllUsers();
     });
   }
 

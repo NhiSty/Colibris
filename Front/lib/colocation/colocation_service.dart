@@ -74,3 +74,24 @@ Future<int> createColocation(String name, String description, bool isPermanent,
     return e.response?.statusCode ?? 500;
   }
 }
+
+Future<int> deleteColocation(int colocationId) async {
+  var headers = await addHeader();
+  try {
+    var response = await dio.delete(
+      '/colocations/$colocationId',
+      options: Options(headers: headers),
+    );
+    print(response.data);
+    return response.statusCode!;
+  } on DioException catch (e) {
+    log('Dio error!');
+    log('Response status: ${e.response!.statusCode}');
+    log('Response data: ${e.response!.data}');
+    return e.response?.statusCode ?? 500;
+  }
+}
+
+
+// get All colocation members
+

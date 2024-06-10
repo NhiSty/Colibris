@@ -62,11 +62,11 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
               ? [
                   IconButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/create_invitation',
+                        Navigator.pushNamed(context, '/colocation_manage',
                             arguments: {'colocationId': widget.colocation.id});
                       },
                       icon: const Icon(
-                        Icons.add,
+                        Icons.settings,
                         color: Colors.white,
                         size: 30,
                       ))

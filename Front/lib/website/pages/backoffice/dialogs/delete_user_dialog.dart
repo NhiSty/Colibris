@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:front/services/user_service.dart';
+import 'package:front/user/user.dart';
+import 'package:front/user/user_service.dart';
 import 'package:front/website/share/custom_dialog.dart';
 
 void showDeleteUserDialog(
@@ -19,7 +20,7 @@ void showDeleteUserDialog(
           ),
           TextButton(
             onPressed: () {
-              UserService().deleteUser(user.id).then((value) {
+              deleteUser(user.id).then((value) {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   content: Text('User deleted successfully'),
                 ));
