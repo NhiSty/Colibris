@@ -10,3 +10,13 @@ type ColocationCreateRequest struct {
 	ZipCode     string `json:"zipCode" binding:"required"`
 	Country     string `json:"country" binding:"required"`
 }
+
+type ColocationUpdateRequest struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	IsPermanent bool   `json:"isPermanent"`
+	Address     string `json:"address"`
+	City        string `json:"city"`
+	ZipCode     string `json:"zipCode"`
+	Country     string `json:"country"`
+}

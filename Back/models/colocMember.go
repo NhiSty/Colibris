@@ -1,4 +1,4 @@
-package colocMembers
+package models
 
 import "gorm.io/gorm"
 

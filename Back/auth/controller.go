@@ -1,8 +1,8 @@
 package auth
 
 import (
+	"Colibris/models"
 	"Colibris/services"
-	"Colibris/users"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -21,7 +21,7 @@ func (ctl *Controller) Register(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	user := users.User{
+	user := models.User{
 		Email:     req.Email,
 		Password:  req.Password,
 		Firstname: req.FirstName,
