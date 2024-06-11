@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front/services/user_service.dart';
+import 'package:front/website/share/secure_storage.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -124,6 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     textStyle: const TextStyle(fontSize: 18),
+                    foregroundColor: Colors.white,
                   ),
                   child: const Text('Submit'),
                 ),
@@ -155,6 +157,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         final userService = UserService();
         await userService.updateUser(userId, updatedUserData);
+
+        if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

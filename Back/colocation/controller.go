@@ -61,6 +61,16 @@ func (ctl *Controller) GetColocationById(c *gin.Context) {
 
 func (ctl *Controller) GetAllUserColocations(c *gin.Context) {
 	userId, err := strconv.Atoi(c.Params.ByName("userId"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	userIDFromToken, exists := c.Get("userID")
+	if !exists || userIDFromToken.(uint) != uint(userId) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+		return
+	}
 	colocations, err := ctl.colocService.GetAllUserColocations(userId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())

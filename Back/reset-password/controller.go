@@ -31,7 +31,7 @@ func (ctl *ResetPasswordController) ForgotPassword(c *gin.Context) {
 		return
 	}
 
-	_, err = services.SendResetPasswordEmail("daossama.98@gmail.com", "test", token)
+	_, err = services.SendResetPasswordEmail(req.Email, "test", token)
 
 	c.Status(http.StatusOK)
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front/auth/auth_service.dart';
+import 'package:front/website/share/secure_storage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -85,7 +86,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.green,
                   ),
-                  child: const Text('Inscris-toi!'),
+                  child: const Text('Inscris-toi !'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/reset-password');
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.green,
+                  ),
+                  child: const Text('Mot de passe oublié !'),
                 ),
               ],
             ),
