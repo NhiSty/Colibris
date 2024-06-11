@@ -28,61 +28,63 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
               ),
             ),
           ),
-          body: Container(
-            margin: const EdgeInsets.only(top: 50.0),
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Intitulé de la tâche',
+          body: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.only(top: 50.0),
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Intitulé de la tâche',
+                    ),
                   ),
-                ),
-                const DatePicker(),
-                const TimeRangePicker(),
-                Container(
-                  margin: const EdgeInsets.only(top: 30),
-                  child: const PhotoButton(),
-                ),
-                Align(
-                  heightFactor: 5,
-                  alignment: Alignment.bottomCenter,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Annuler'),
-                          )
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                          child: OutlinedButton(
-                            style: const ButtonStyle(
-                              backgroundColor: WidgetStatePropertyAll(
-                                  Colors.green
-                              )
-                            ),
-                            onPressed: () {}, // TODO faire le submit du form
-                            child: const Text(
-                                'Ajouter',
-                              style: TextStyle(
-                                color: Colors.white
+                  const DatePicker(),
+                  const TimeRangePicker(),
+                  Container(
+                    margin: const EdgeInsets.only(top: 30),
+                    child: const PhotoButton(),
+                  ),
+                  Align(
+                    heightFactor: 5,
+                    alignment: Alignment.bottomCenter,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                            child: OutlinedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Annuler'),
+                            )
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                            child: OutlinedButton(
+                              style: const ButtonStyle(
+                                  backgroundColor: WidgetStatePropertyAll(
+                                      Colors.green
+                                  )
                               ),
-                            ),
-                          )
-                      )
-                    ],
-                  ),
-                )
-              ],
+                              onPressed: () {}, // TODO faire le submit du form
+                              child: const Text(
+                                'Ajouter',
+                                style: TextStyle(
+                                    color: Colors.white
+                                ),
+                              ),
+                            )
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         )

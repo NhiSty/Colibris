@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => HomeScreen(),
-        '/add-new-task': (context) => const AddNewTaskScreen()
+        '/add-new-task': (context) => const AddNewTaskScreen(),
         '/profile': (context) => const ProfileScreen(),
       },
       home: const LoginScreen(),
