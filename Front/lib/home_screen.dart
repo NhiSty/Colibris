@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:front/colocation/Colocation.dart';
-import 'package:front/colocation/colocation_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:front/colocation/bloc/colocation_bloc.dart';
 import 'package:front/colocation/create_colocation.dart';
+import 'package:front/invitation/invitation_list_page.dart';
+import 'package:front/invitation/bloc/invitation_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    context.read<InvitationBloc>().add(FetchInvitations());
+    context.read<ColocationBloc>().add(const FetchColocations());
+
     return Scaffold(
       body: Stack(
         children: [
@@ -32,6 +37,7 @@ class HomeScreen extends StatelessWidget {
                     Expanded(
                       child: Container(
                         alignment: Alignment.center,
+                        padding: const EdgeInsets.only(left: 50.0),
                         child: const Text(
                           'Accueil',
                           style: TextStyle(
@@ -44,13 +50,82 @@ class HomeScreen extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 16.0),
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.circle_notifications,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          print('clicked on notification button');
+                      child: BlocBuilder<InvitationBloc, InvitationState>(
+                        builder: (context, state) {
+                          if (state is InvitationLoading) {
+                            return const CircularProgressIndicator();
+                          } else if (state is InvitationError) {
+                            return IconButton(
+                              icon: const Icon(
+                                Icons.circle_notifications,
+                                color: Colors.white,
+                                size: 38,
+                              ),
+                              onPressed: () {},
+                            );
+                          } else if (state is InvitationLoaded) {
+                            final invitations = state.invitations;
+                            if (invitations.isEmpty) {
+                              return IconButton(
+                                icon: const Icon(
+                                  Icons.circle_notifications,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Vous n\'avez pas de nouvelles invitations'),
+                                    ),
+                                  );
+                                },
+                              );
+                            } else {
+                              return Stack(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.circle_notifications,
+                                      color: Colors.white,
+                                      size: 38,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              InvitationListPage(
+                                            invitations: invitations,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  Positioned(
+                                    top: 2,
+                                    right: 7,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(2),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.red,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Text(
+                                        invitations.length.toString(),
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                          } else {
+                            return Container();
+                          }
                         },
                       ),
                     ),
@@ -67,32 +142,40 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: FutureBuilder<List<Colocation>>(
-                  future: fetchColocations(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                child: BlocBuilder<ColocationBloc, ColocationState>(
+                  builder: (context, state) {
+                    print(state);
+                    if (state is ColocationInitial) {
                       return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Text('Erreur: ${snapshot.error}');
-                    } else if (snapshot.data!.isEmpty) {
-                      return const Center(
-                        child: Text(
-                          'Aucune colocation trouvée',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                    } else if (state is ColocationLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is ColocationError) {
+                      if (state.isDirty) {
+                        return const Center(
+                          child: Text(
+                            'Aucune colocation trouvée',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      );
-                    } else {
+                        );
+                      }
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is ColocationLoaded) {
+                      final colocations = state.colocations;
                       return ListView.builder(
-                        itemCount: snapshot.data!.length,
+                        itemCount: colocations.length,
                         itemBuilder: (context, index) {
-                          final item = snapshot.data![index];
+                          final item = colocations[index];
                           return GestureDetector(
                             onTap: () {
-                              print('Clicked on ${item.name}');
+                              Navigator.pushNamed(
+                                  context, '/colocation/task-list',
+                                  arguments: {
+                                    'colocation': item,
+                                  });
                             },
                             child: Padding(
                               padding:
@@ -115,6 +198,8 @@ class HomeScreen extends StatelessWidget {
                           );
                         },
                       );
+                    } else {
+                      return Container();
                     }
                   },
                 ),
@@ -129,7 +214,8 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CreateColocationPage()),
+                    builder: (context) => const CreateColocationPage(),
+                  ),
                 );
               },
               backgroundColor: Colors.green,
@@ -143,52 +229,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: Container(
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.green,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              spreadRadius: 5,
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: Icon(Icons.home),
-              color: Colors.white,
-              onPressed: () {
-                print('clicked on home button');
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.thumbs_up_down),
-              color: Colors.white,
-              onPressed: () {
-                print('clicked on like/dislike button');
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.chat),
-              color: Colors.white,
-              onPressed: () {
-                print('clicked on chat button');
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.person),
-              color: Colors.white,
-              onPressed: () {
-                Navigator.pushNamed(context, '/profile');
-              },
-            ),
-          ],
-        ),
       ),
     );
   }

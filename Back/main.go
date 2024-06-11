@@ -13,6 +13,7 @@ import (
 	colocations "Colibris/colocation"
 	"Colibris/db"
 	"Colibris/docs"
+	invitations "Colibris/invitation"
 	"Colibris/reset-password"
 	tasks "Colibris/task"
 	"Colibris/users"
@@ -52,6 +53,7 @@ func main() {
 		colocMembers.Routes(v1, database)
 		tasks.Routes(v1, database)
 		reset_password.Routes(v1, database)
+		invitations.Routes(v1, database)
 		v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
 	r.Run(":8080")

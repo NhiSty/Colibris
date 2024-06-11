@@ -3,6 +3,7 @@ package reset_password
 import (
 	"errors"
 	"gorm.io/gorm"
+	"math/rand"
 	"time"
 )
 
@@ -16,7 +17,7 @@ func NewResetPasswordRepository(db *gorm.DB) *ResetPasswordRepository {
 
 func (repo *ResetPasswordRepository) CreateToken(email string) (string, error) {
 	token := generateToken()
-	expiration := time.Now().Add(1 * time.Hour)
+	expiration := time.Now().Add(2 * time.Minute)
 	resetPasswordToken := ResetPassword{
 		Token:     token,
 		Email:     email,
@@ -43,5 +44,11 @@ func (repo *ResetPasswordRepository) DeleteToken(token string) error {
 }
 
 func generateToken() string {
-	return "testOssama"
+	var charset = "0123456789"
+	password := ""
+	for i := 0; i < 6; i++ {
+		randomIndex := rand.Intn(len(charset))
+		password += string(charset[randomIndex])
+	}
+	return password
 }
