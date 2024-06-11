@@ -54,16 +54,16 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const LoginScreen(),
           '/register': (context) => const RegisterScreen(),
           '/home': (context) => const Scaffold(
-                body: HomeScreen(),
-                bottomNavigationBar: BottomNavigationBarWidget(),
-              ),
+            body: HomeScreen(),
+            bottomNavigationBar: BottomNavigationBarWidget(),
+          ),
           '/create_colocation': (context) => const CreateColocationPage(),
           '/parmetres_colocation': (context) => const ColocationSettingsPage(),
-          '/add-new-task': (context) => const AddNewTaskScreen()
-        '/profile': (context) => const Scaffold(
-                body: ProfileScreen(),
-                bottomNavigationBar: BottomNavigationBarWidget(),
-              ),
+          '/add-new-task': (context) => const AddNewTaskScreen(),
+          '/profile': (context) => const Scaffold(
+            body: ProfileScreen(),
+            bottomNavigationBar: BottomNavigationBarWidget(),
+          ),
           '/reset-password': (context) => const ResetPasswordScreen(),
           '/reset-password-form': (context) => ResetPasswordFormScreen(),
         },
@@ -73,27 +73,27 @@ class MyApp extends StatelessWidget {
             case ColocationTasklistScreen.routeName:
               return MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
-                        value: BlocProvider.of<ColocationBloc>(context),
-                        child: ColocationTasklistScreen(
-                          colocation: routes['colocation'],
-                        ),
-                      ),
+                    value: BlocProvider.of<ColocationBloc>(context),
+                    child: ColocationTasklistScreen(
+                      colocation: routes['colocation'],
+                    ),
+                  ),
                   settings: settings);
             case '/invitations':
               return MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
-                        value: BlocProvider.of<InvitationBloc>(context),
-                        child: InvitationListPage(
-                            invitations: routes['invitations']),
-                      ),
+                    value: BlocProvider.of<InvitationBloc>(context),
+                    child: InvitationListPage(
+                        invitations: routes['invitations']),
+                  ),
                   settings: settings);
             case '/create_invitation':
               return MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
-                        value: BlocProvider.of<InvitationBloc>(context),
-                        child: InvitationCreatePage(
-                            colocationId: routes['colocationId']),
-                      ),
+                    value: BlocProvider.of<InvitationBloc>(context),
+                    child: InvitationCreatePage(
+                        colocationId: routes['colocationId']),
+                  ),
                   settings: settings);
           }
           return null;
