@@ -1,7 +1,9 @@
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:front/screen/picture_preview_screen.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'package:path/path.dart' as path;
 
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription>? cameras;
@@ -38,12 +40,15 @@ class _CameraScreenState extends State<CameraScreen> {
     try {
       await _cameraController.setFlashMode(FlashMode.off);
       XFile picture = await _cameraController.takePicture();
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => PicturePreview(picture: picture)
-          )
-      );
+      final File imageFile = File(picture.path);
+      final String fileName = path.basename(imageFile.path);
+      final bytes = await imageFile.readAsBytes();
+      final String base64Image = base64Encode(bytes);
+
+      Navigator.pop(context, {
+        'fileName': fileName,
+        'base64Image': base64Image,
+      });
     } on CameraException catch (e) {
       debugPrint('Error occured while taking picture: $e');
       return null;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:front/screen/add_new_task_screen.dart';
+import 'package:front/task/add_new_task_screen.dart';
 import 'package:front/auth/login.dart';
 import 'package:front/auth/register.dart';
 import 'package:front/colocation/bloc/colocation_bloc.dart';
