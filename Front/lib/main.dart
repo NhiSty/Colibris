@@ -13,11 +13,6 @@ import 'package:front/invitation/bloc/invitation_bloc.dart';
 import 'package:front/invitation/invitation_create_page.dart';
 import 'package:front/invitation/invitation_list_page.dart';
 import 'package:front/profile/profile_screen.dart';
-import 'package:front/screen/add_new_task_screen.dart';
-
-import 'auth/login.dart';
-import 'auth/register.dart';
-import 'home_screen.dart';
 import 'package:front/reset-password/reset_password.dart';
 import 'package:front/reset-password/reset_password_form.dart';
 import 'package:front/shared.widget/bottom_navigation_bar.dart';
@@ -54,16 +49,16 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const LoginScreen(),
           '/register': (context) => const RegisterScreen(),
           '/home': (context) => const Scaffold(
-                body: HomeScreen(),
-                bottomNavigationBar: BottomNavigationBarWidget(),
-              ),
+            body: HomeScreen(),
+            bottomNavigationBar: BottomNavigationBarWidget(),
+          ),
           '/create_colocation': (context) => const CreateColocationPage(),
           '/parmetres_colocation': (context) => const ColocationSettingsPage(),
-          '/add-new-task': (context) => const AddNewTaskScreen()
-        '/profile': (context) => const Scaffold(
-                body: ProfileScreen(),
-                bottomNavigationBar: BottomNavigationBarWidget(),
-              ),
+          '/add-new-task': (context) => const AddNewTaskScreen(),
+          '/profile': (context) => const Scaffold(
+            body: ProfileScreen(),
+            bottomNavigationBar: BottomNavigationBarWidget(),
+          ),
           '/reset-password': (context) => const ResetPasswordScreen(),
           '/reset-password-form': (context) => ResetPasswordFormScreen(),
         },
@@ -73,27 +68,27 @@ class MyApp extends StatelessWidget {
             case ColocationTasklistScreen.routeName:
               return MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
-                        value: BlocProvider.of<ColocationBloc>(context),
-                        child: ColocationTasklistScreen(
-                          colocation: routes['colocation'],
-                        ),
-                      ),
+                    value: BlocProvider.of<ColocationBloc>(context),
+                    child: ColocationTasklistScreen(
+                      colocation: routes['colocation'],
+                    ),
+                  ),
                   settings: settings);
             case '/invitations':
               return MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
-                        value: BlocProvider.of<InvitationBloc>(context),
-                        child: InvitationListPage(
-                            invitations: routes['invitations']),
-                      ),
+                    value: BlocProvider.of<InvitationBloc>(context),
+                    child: InvitationListPage(
+                        invitations: routes['invitations']),
+                  ),
                   settings: settings);
             case '/create_invitation':
               return MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
-                        value: BlocProvider.of<InvitationBloc>(context),
-                        child: InvitationCreatePage(
-                            colocationId: routes['colocationId']),
-                      ),
+                    value: BlocProvider.of<InvitationBloc>(context),
+                    child: InvitationCreatePage(
+                        colocationId: routes['colocationId']),
+                  ),
                   settings: settings);
           }
           return null;
