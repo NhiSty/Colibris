@@ -130,7 +130,41 @@ func (ctrl *UserController) DeleteUserById(c *gin.Context) {
 }
 
 func (ctrl *UserController) GetAllUsers(c *gin.Context) {
-	users, err := ctrl.repo.GetAllUsers()
+	pageParam := c.DefaultQuery("page", "")
+	pageSizeParam := c.DefaultQuery("pageSize", "")
+
+	if pageParam == "" && pageSizeParam == "" {
+		users, total, err := ctrl.repo.GetAllUsers(0, 0)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"total": total, "users": users})
+		return
+	}
+
+	page, err := strconv.Atoi(pageParam)
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	pageSize, err := strconv.Atoi(pageSizeParam)
+	if err != nil || pageSize < 1 {
+		pageSize = 5
+	}
+
+	users, total, err := ctrl.repo.GetAllUsers(page, pageSize)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"total": total, "users": users})
+}
+
+func (ctrl *UserController) SearchUsers(c *gin.Context) {
+	query := c.DefaultQuery("query", "")
+
+	users, err := ctrl.repo.SearchUsers(query)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
