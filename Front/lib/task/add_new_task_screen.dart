@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:front/task/camera_screen.dart';
+import 'package:front/task/task_service.dart';
 import 'package:intl/intl.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
@@ -12,8 +13,10 @@ class AddNewTaskScreen extends StatefulWidget {
 }
 
 class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _timeRangeController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   late String fileName;
   late String base64Image;
@@ -43,7 +46,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       var minutes = '${(Duration(seconds: totalDurationInSeconds))}'.split('.')[0].split(':')[1];
 
       _timeRangeController.text = '$hours:$minutes';
-        });
+    });
   }
 
   @override
@@ -60,136 +63,192 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
             ),
           ),
           body: SingleChildScrollView(
-            child: Container(
-              margin: const EdgeInsets.only(top: 50.0),
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TextField(
-                    controller: _titleController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Intitulé de la tâche',
+            child: Form(
+              key: _formKey,
+              child: Container(
+                margin: const EdgeInsets.only(top: 50.0),
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextFormField(
+                      controller: _titleController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Intitulé de la tâche',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Veuillez entrer un titre';
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  Container(
+                    Container(
                       margin: const EdgeInsets.only(top: 30),
-                      //height: MediaQuery.of(context).size.width / 3,
                       child: Center(
-                          child: TextField(
-                            controller: dateController,
-                            //editing controller of this TextField
-                            decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: "Date" //label text of field
-                            ),
-                            readOnly: true,
-                            //set it true, so that user will not able to edit text
-                            onTap: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(1950),
-                                  //DateTime.now() - not to allow to choose before today.
-                                  lastDate: DateTime(2100));
-
-                              if (pickedDate != null) {
-                                print(
-                                    pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                                String formattedDate =
-                                DateFormat('dd/MM/yyyy').format(pickedDate);
-                                print(
-                                    formattedDate); //formatted date output using intl package =>  2021-03-16
-                                setState(() {
-                                  dateController.text =
-                                      formattedDate; //set output date to TextField value.
-                                });
-                              } else {}
-                            },
-                          ))),
-                   Container(
-                    margin: const EdgeInsets.only(top: 30),
-                    child: Center(
-                      child: TextField(
-                        controller: _timeRangeController,
-                        readOnly: true, // Prevent manual editing
-                        onTap: () async {
-                          TimeRange result = await showTimeRangePicker(
-                            context: context,
-                          );
-                          _onRangeSelected(result);
-                        },
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Temps passé',
+                        child: TextFormField(
+                          maxLines: 3,
+                          minLines: 3,
+                          controller: _descriptionController,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Description',
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Veuillez entrer une description';
+                            }
+                            return null;
+                          },
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 30),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final camera = await availableCameras();
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => CameraScreen(cameras: camera)),
-                        );
-
-                        if (result != null && result['fileName'] != null && result['base64Image'] != null) {
-                          setState(() {
-                            fileName = result['fileName'];
-                            base64Image = result['base64Image'];
-                          });
-                        }
-                      },
-                      child: const Text('Take a Picture'),
-                    ),
-                  ),
-                  Align(
-                    heightFactor: 5,
-                    alignment: Alignment.bottomCenter,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                            child: OutlinedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
+                    Container(
+                        margin: const EdgeInsets.only(top: 30),
+                        //height: MediaQuery.of(context).size.width / 3,
+                        child: Center(
+                            child: TextFormField(
+                              controller: dateController,
+                              //editing controller of this TextField
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Date" //label text of field
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Veuillez sélectionner une date';
+                                }
+                                return null;
                               },
-                              child: const Text('Annuler'),
-                            )
+                              readOnly: true,
+                              //set it true, so that user will not able to edit text
+                              onTap: () async {
+                                DateTime? pickedDate = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(1950),
+                                    //DateTime.now() - not to allow to choose before today.
+                                    lastDate: DateTime(2100));
+
+                                if (pickedDate != null) {
+                                  print(
+                                      pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                                  String formattedDate =
+                                  DateFormat('dd/MM/yyyy').format(pickedDate);
+                                  print(
+                                      formattedDate); //formatted date output using intl package =>  2021-03-16
+                                  setState(() {
+                                    dateController.text =
+                                        formattedDate; //set output date to TextField value.
+                                  });
+                                } else {}
+                              },
+                            ))),
+                    Container(
+                      margin: const EdgeInsets.only(top: 30),
+                      child: Center(
+                        child: TextFormField(
+                          controller: _timeRangeController,
+                          readOnly: true, // Prevent manual editing
+                          onTap: () async {
+                            TimeRange result = await showTimeRangePicker(
+                              context: context,
+                            );
+                            _onRangeSelected(result);
+                          },
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Temps passé',
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Veuillez sélectionner une durée';
+                            }
+                            return null;
+                          },
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                            child: OutlinedButton(
-                              style: const ButtonStyle(
-                                  backgroundColor: WidgetStatePropertyAll(
-                                      Colors.green
-                                  )
-                              ),
-                              onPressed: () {
-                                print('-----Title ----- : ${_titleController.text}');
-                                print('-----Date ----- : ${dateController.text}');
-                                print('-----Duration ----- : ${_timeRangeController.text}');
-                                print('-----Picture name ----- : $fileName');
-                                print('-----Picture base64 ----- : $base64Image');
-                              }, // TODO faire le submit du form
-                              child: const Text(
-                                'Ajouter',
-                                style: TextStyle(
-                                    color: Colors.white
-                                ),
-                              ),
-                            )
-                        )
-                      ],
+                      ),
                     ),
-                  )
-                ],
+                    Container(
+                      margin: const EdgeInsets.only(top: 30),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          final camera = await availableCameras();
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => CameraScreen(cameras: camera)),
+                          );
+
+                          if (result != null && result['fileName'] != null && result['base64Image'] != null) {
+                            setState(() {
+                              fileName = result['fileName'];
+                              base64Image = result['base64Image'];
+                            });
+                          }
+                        },
+                        child: const Text('Take a Picture'),
+                      ),
+                    ),
+                    Align(
+                      heightFactor: 5,
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Annuler'),
+                              )
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                              child: OutlinedButton(
+                                style: const ButtonStyle(
+                                    backgroundColor: WidgetStatePropertyAll(
+                                        Colors.green
+                                    )
+                                ),
+                                onPressed: () async {
+                                  print('-----Title ----- : ${_titleController.text}');
+                                  print('-----Date ----- : ${dateController.text}');
+                                  print('-----Duration ----- : ${_timeRangeController.text}');
+                                  print('-----Picture name ----- : $fileName');
+                                  print('-----Picture base64 ----- : $base64Image');
+
+                                  if (_formKey.currentState!.validate()) {
+                                    var statusCode = await createTask(
+                                        _titleController.text,
+                                        _descriptionController.text,
+                                        dateController.text,
+                                        int.parse(_timeRangeController.text.split(':')[0]) * 60 + int.parse(_timeRangeController.text.split(':')[1]),
+                                        base64Image,
+                                        1
+                                    );
+
+                                    if (statusCode == 201) {
+                                      Navigator.pop(context);
+                                    }
+                                  }
+                                }, // TODO faire le submit du form
+                                child: const Text(
+                                  'Ajouter',
+                                  style: TextStyle(
+                                      color: Colors.white
+                                  ),
+                                ),
+                              )
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
