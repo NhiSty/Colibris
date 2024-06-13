@@ -47,6 +47,14 @@ class ColocationSettingsPage extends StatelessWidget {
       body: ListView(
         children: <Widget>[
           ListTile(
+            title: const Text('Modifier la colocation'),
+            trailing: const Icon(Icons.arrow_forward),
+            onTap: () {
+              Navigator.pushNamed(context, '/create_invitation',
+                  arguments: {'colocationId': colocationId});
+            },
+          ),
+          ListTile(
             title: const Text('Inviter un colocataire'),
             trailing: const Icon(Icons.arrow_forward),
             onTap: () {
