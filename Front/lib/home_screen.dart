@@ -144,7 +144,6 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 child: BlocBuilder<ColocationBloc, ColocationState>(
                   builder: (context, state) {
-                    print(state);
                     if (state is ColocationInitial) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is ColocationLoading) {
@@ -165,41 +164,58 @@ class HomeScreen extends StatelessWidget {
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is ColocationLoaded) {
                       final colocations = state.colocations;
-                      return ListView.builder(
-                        itemCount: colocations.length,
-                        itemBuilder: (context, index) {
-                          final item = colocations[index];
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context, '/colocation/task-list',
-                                  arguments: {
-                                    'colocation': item,
-                                  });
-                            },
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: ListTile(
-                                leading: const Icon(Icons.home),
-                                title: Text(item.name),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        'Créé le : ${DateTime.parse(item.createdAt).toLocal().toString().split(' ')[0]}'),
-                                    Text('Description : ${item.description}'),
-                                    Text('Ville : ${item.city}'),
-                                  ],
-                                ),
-                                trailing: const Icon(Icons.arrow_forward_ios),
-                              ),
+                      if (colocations.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            'Aucune colocation trouvée',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
-                          );
-                        },
-                      );
+                          ),
+                        );
+                      } else {
+                        return ListView.builder(
+                          itemCount: colocations.length,
+                          itemBuilder: (context, index) {
+                            final item = colocations[index];
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, '/colocation/task-list',
+                                    arguments: {
+                                      'colocation': item,
+                                    });
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: ListTile(
+                                  leading: const Icon(Icons.home),
+                                  title: Text(item.name),
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          'Créé le : ${DateTime.parse(item.createdAt).toLocal().toString().split(' ')[0]}'),
+                                      Text('Description : ${item.description}'),
+                                      Text(item.location),
+                                    ],
+                                  ),
+                                  trailing: const Icon(Icons.arrow_forward_ios),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
                     } else {
-                      return Container();
+                      return Container(
+                        alignment: Alignment.center,
+                        child: const Text('Erreur inconnue'),
+                      );
                     }
                   },
                 ),
