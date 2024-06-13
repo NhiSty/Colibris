@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:front/colocation/colocation.dart';
 import 'package:front/task/camera_screen.dart';
 import 'package:front/task/task_service.dart';
 import 'package:intl/intl.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
-  const AddNewTaskScreen({super.key});
+  final Colocation colocation;
+  const AddNewTaskScreen({super.key, required this.colocation});
+
+  static const routeName = '/add-new-task';
 
   @override
   State<AddNewTaskScreen> createState() => _AddNewTaskScreenState();
@@ -14,12 +18,11 @@ class AddNewTaskScreen extends StatefulWidget {
 
 class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _timeRangeController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
-  late String fileName;
-  late String base64Image;
+  final _titleController = TextEditingController();
+  final _timeRangeController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final dateController = TextEditingController();
+  String base64Image = '';
 
   @override
   void initState() {
@@ -79,6 +82,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
+                          print('Veuillez entrer un titre');
                           return 'Veuillez entrer un titre';
                         }
                         return null;
@@ -182,7 +186,6 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
 
                           if (result != null && result['fileName'] != null && result['base64Image'] != null) {
                             setState(() {
-                              fileName = result['fileName'];
                               base64Image = result['base64Image'];
                             });
                           }
@@ -215,12 +218,6 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                                     )
                                 ),
                                 onPressed: () async {
-                                  print('-----Title ----- : ${_titleController.text}');
-                                  print('-----Date ----- : ${dateController.text}');
-                                  print('-----Duration ----- : ${_timeRangeController.text}');
-                                  print('-----Picture name ----- : $fileName');
-                                  print('-----Picture base64 ----- : $base64Image');
-
                                   if (_formKey.currentState!.validate()) {
                                     var statusCode = await createTask(
                                         _titleController.text,
@@ -228,14 +225,20 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                                         dateController.text,
                                         int.parse(_timeRangeController.text.split(':')[0]) * 60 + int.parse(_timeRangeController.text.split(':')[1]),
                                         base64Image,
-                                        1
+                                        widget.colocation.id
                                     );
 
                                     if (statusCode == 201) {
-                                      Navigator.pop(context);
+                                      Navigator.popAndPushNamed(
+                                          context,
+                                          '/colocation/task-list',
+                                          arguments: {
+                                            'colocation': widget.colocation
+                                          }
+                                      );
                                     }
                                   }
-                                }, // TODO faire le submit du form
+                                },
                                 child: const Text(
                                   'Ajouter',
                                   style: TextStyle(

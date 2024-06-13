@@ -16,6 +16,7 @@ import 'package:front/profile/profile_screen.dart';
 import 'package:front/reset-password/reset_password.dart';
 import 'package:front/reset-password/reset_password_form.dart';
 import 'package:front/shared.widget/bottom_navigation_bar.dart';
+import 'package:front/task/bloc/task_bloc.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<ColocationBloc>(
           create: (context) => ColocationBloc(),
         ),
+        BlocProvider<TaskBloc>(
+          create: (context) => TaskBloc(),
+        )
       ],
       child: MaterialApp(
         title: 'Colobris',
@@ -54,7 +58,6 @@ class MyApp extends StatelessWidget {
           ),
           '/create_colocation': (context) => const CreateColocationPage(),
           '/parmetres_colocation': (context) => const ColocationSettingsPage(),
-          '/add-new-task': (context) => const AddNewTaskScreen(),
           '/profile': (context) => const Scaffold(
             body: ProfileScreen(),
             bottomNavigationBar: BottomNavigationBarWidget(),
@@ -88,6 +91,15 @@ class MyApp extends StatelessWidget {
                     value: BlocProvider.of<InvitationBloc>(context),
                     child: InvitationCreatePage(
                         colocationId: routes['colocationId']),
+                  ),
+                  settings: settings);
+            case AddNewTaskScreen.routeName:
+              return MaterialPageRoute(
+                  builder: (context) => BlocProvider.value(
+                    value: BlocProvider.of<TaskBloc>(context),
+                    child: AddNewTaskScreen(
+                      colocation: routes['colocation'],
+                    ),
                   ),
                   settings: settings);
           }
