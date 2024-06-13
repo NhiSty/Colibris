@@ -1,6 +1,8 @@
 package interfaces
 
-import "Colibris/models"
+import (
+	"Colibris/models"
+)
 
 // ColocMemberRepository defines the methods needed from the coloc member repository
 type ColocMemberRepository interface {

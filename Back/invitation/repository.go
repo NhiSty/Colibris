@@ -1,41 +1,41 @@
 package invitations
 
 import (
-	colocMembers "Colibris/models"
+	"Colibris/models"
 	"errors"
 	"fmt"
 	"gorm.io/gorm"
 )
 
 type InvitationRepository interface {
-	CreateInvitation(invitation *colocMembers.Invitation) error
-	GetAllUserInvitation(id int) ([]colocMembers.Invitation, error)
-	UpdateInvitation(id int, state string) (*colocMembers.Invitation, error)
-	GetUserById(id int) (*colocMembers.User, error)
-	GetUserByEmail(email string) (*colocMembers.User, error)
+	CreateInvitation(invitation *models.Invitation) error
+	GetAllUserInvitation(id int) ([]models.Invitation, error)
+	UpdateInvitation(id int, state string) (*models.Invitation, error)
+	GetUserById(id int) (*models.User, error)
+	GetUserByEmail(email string) (*models.User, error)
 }
 
 type invitationRepository struct {
 	db *gorm.DB
 }
 
-func (r *invitationRepository) GetUserById(id int) (*colocMembers.User, error) {
-	var user colocMembers.User
+func (r *invitationRepository) GetUserById(id int) (*models.User, error) {
+	var user models.User
 	// print the db column names
 
 	result := r.db.Find(&user, "id = ?", id)
 	return &user, result.Error
 }
 
-func (r *invitationRepository) CreateInvitation(invitation *colocMembers.Invitation) error {
+func (r *invitationRepository) CreateInvitation(invitation *models.Invitation) error {
 	// Find the colocation
-	var colocation colocMembers.Colocation
+	var colocation models.Colocation
 	if err := r.db.Where("id = ?", invitation.ColocationID).First(&colocation).Error; err != nil {
 		return err
 	}
 
 	// Find the user
-	var user colocMembers.User
+	var user models.User
 	if err := r.db.Where("id = ?", invitation.UserID).First(&user).Error; err != nil {
 		return err
 	}
@@ -51,8 +51,8 @@ func (r *invitationRepository) CreateInvitation(invitation *colocMembers.Invitat
 	return r.db.Create(invitation).Error
 }
 
-func (r *invitationRepository) GetAllUserInvitation(id int) ([]colocMembers.Invitation, error) {
-	var invitation []colocMembers.Invitation
+func (r *invitationRepository) GetAllUserInvitation(id int) ([]models.Invitation, error) {
+	var invitation []models.Invitation
 
 	result := r.db.Where("user_id = ?", id).Where("state = ?", "pending").Find(&invitation)
 
@@ -62,17 +62,17 @@ func (r *invitationRepository) GetAllUserInvitation(id int) ([]colocMembers.Invi
 	return invitation, nil
 }
 
-func (r *invitationRepository) UpdateInvitation(id int, state string) (*colocMembers.Invitation, error) {
+func (r *invitationRepository) UpdateInvitation(id int, state string) (*models.Invitation, error) {
 	// Convert state to InvitationState type
-	invitationState := colocMembers.InvitationState(state)
+	invitationState := models.InvitationState(state)
 
 	// Check if the state is valid
-	if invitationState != colocMembers.Pending && invitationState != colocMembers.Accepted && invitationState != colocMembers.Declined {
+	if invitationState != models.Pending && invitationState != models.Accepted && invitationState != models.Declined {
 		return nil, fmt.Errorf("invalid state: %s", state)
 	}
 
 	// Find the invitation
-	var invitation colocMembers.Invitation
+	var invitation models.Invitation
 	if err := r.db.Where("id = ?", id).First(&invitation).Error; err != nil {
 		return nil, err
 	}
@@ -84,15 +84,15 @@ func (r *invitationRepository) UpdateInvitation(id int, state string) (*colocMem
 	}
 
 	// If the invitation is accepted, add the user to the colocation
-	if invitationState == colocMembers.Accepted {
+	if invitationState == models.Accepted {
 		// Find the colocation
-		var colocation colocMembers.Colocation
+		var colocation models.Colocation
 		if err := r.db.Where("id = ?", invitation.ColocationID).First(&colocation).Error; err != nil {
 			return nil, err
 		}
 
 		// Find the user using their id
-		var user colocMembers.User
+		var user models.User
 
 		if err := r.db.Where("id = ?", invitation.UserID).First(&user).Error; err != nil {
 			println("error 3 ", invitation.UserID)
@@ -100,7 +100,7 @@ func (r *invitationRepository) UpdateInvitation(id int, state string) (*colocMem
 		}
 
 		// Add the user to the colocation's members
-		colocation.ColocMembers = append(colocation.ColocMembers, colocMembers.ColocMember{
+		colocation.ColocMembers = append(colocation.ColocMembers, models.ColocMember{
 			UserID:       user.ID,
 			ColocationID: invitation.ColocationID,
 		})
@@ -115,8 +115,8 @@ func (r *invitationRepository) UpdateInvitation(id int, state string) (*colocMem
 	return &invitation, nil
 }
 
-func (r *invitationRepository) GetUserByEmail(email string) (*colocMembers.User, error) {
-	var user colocMembers.User
+func (r *invitationRepository) GetUserByEmail(email string) (*models.User, error) {
+	var user models.User
 	result := r.db.Where("email = ?", email).First(&user)
 	return &user, result.Error
 }

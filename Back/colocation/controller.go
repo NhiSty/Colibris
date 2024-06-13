@@ -23,10 +23,9 @@ func (ctl *Controller) CreateColocation(c *gin.Context) {
 		UserID:      req.UserId,
 		Description: req.Description,
 		IsPermanent: req.IsPermanent,
-		Address:     req.Address,
-		City:        req.City,
-		ZipCode:     req.ZipCode,
-		Country:     req.Country,
+		Latitude:    req.Latitude,
+		Longitude:   req.Longitude,
+		Location:    req.Location,
 	}
 
 	if err := ctl.colocService.createColocation(&colocation); err != nil {

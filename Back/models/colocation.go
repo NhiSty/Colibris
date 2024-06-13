@@ -10,9 +10,8 @@ type Colocation struct {
 	UserID       uint
 	ColocMembers []ColocMember `gorm:"foreignKey:ColocationID"`
 	Description  string
-	Address      string
-	City         string
-	ZipCode      string
-	Country      string
+	Location     string
+	Latitude     float64
+	Longitude    float64
 	IsPermanent  bool
 }
