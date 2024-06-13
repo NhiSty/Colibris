@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:front/services/user_service.dart';
+import 'package:front/user/user.dart';
+import 'package:front/user/user_service.dart';
 import 'package:front/website/share/custom_dialog.dart';
 
 void showEditUserDialog(
@@ -36,7 +37,7 @@ void showEditUserDialog(
           ),
           TextButton(
             onPressed: () {
-              UserService().updateUser(user.id, {
+              updateUser(user.id, {
                 'firstname': firstNameController.text,
                 'lastname': lastNameController.text,
               }).then((value) {

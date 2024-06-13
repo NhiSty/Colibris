@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:front/services/user_service.dart';
+import 'package:front/user/user.dart';
 import 'package:front/website/pages/backoffice/components/user_list_item.dart';
 
 class UserList extends StatelessWidget {
