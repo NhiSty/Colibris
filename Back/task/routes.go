@@ -16,6 +16,7 @@ func Routes(taskRoutes *gin.RouterGroup, db *gorm.DB) {
 		routes.POST("", AuthMiddleware(), taskController.CreateTask)
 		routes.GET("/:id", AuthMiddleware(), taskController.GetTaskById)
 		routes.GET("/user/:userId", AuthMiddleware(), taskController.GetAllUserTasks)
+		routes.GET("/colocation/:colocationId", AuthMiddleware(), taskController.GetAllCollocationTasks)
 		routes.PATCH("/:id", AuthMiddleware(), taskController.UpdateTask)
 	}
 }

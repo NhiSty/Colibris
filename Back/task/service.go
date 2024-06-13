@@ -20,6 +20,10 @@ func (s *TaskService) GetAllUserTasks(userId uint) ([]Task, error) {
 	return s.repo.GetAllUserTasks(userId)
 }
 
+func (s *TaskService) GetAllColocationTasks(colocationId uint) ([]Task, error) {
+	return s.repo.GetAllColocationTasks(colocationId)
+}
+
 func (s *TaskService) UpdateTask(taskId uint, task *Task) error {
 	return s.repo.UpdateTask(taskId, task)
 }

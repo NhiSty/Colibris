@@ -94,6 +94,32 @@ func (ctl *TaskController) GetAllUserTasks(c *gin.Context) {
 	})
 }
 
+func (ctl *TaskController) GetAllCollocationTasks(c *gin.Context) {
+	// Get collocation id
+	colocationId := c.Params.ByName("colocationId")
+
+	// Convert collocation id to uint
+	id, err := strconv.ParseUint(colocationId, 10, 32)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "Invalid collocation ID")
+		return
+	}
+
+	// Get all tasks of the collocation
+	tasks, taskError := ctl.taskService.GetAllColocationTasks(uint(id))
+
+	if taskError != nil {
+		c.JSON(http.StatusNotFound, taskError.Error())
+		return
+	}
+
+	// Return the tasks
+	c.JSON(http.StatusOK, gin.H{
+		"result": tasks,
+	})
+}
+
 func (ctl *TaskController) UpdateTask(c *gin.Context) {
 
 	// Get task id

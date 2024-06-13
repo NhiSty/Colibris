@@ -5,6 +5,7 @@ import "gorm.io/gorm"
 type TaskRepository interface {
 	GetById(id uint) (*Task, error)
 	GetAllUserTasks(userId uint) ([]Task, error)
+	GetAllColocationTasks(colocationId uint) ([]Task, error)
 	CreateTask(task *Task) error
 	UpdateTask(taskId uint, task *Task) error
 }
@@ -26,6 +27,12 @@ func (r *taskRepository) CreateTask(task *Task) error {
 func (r *taskRepository) GetAllUserTasks(userId uint) ([]Task, error) {
 	var tasks []Task
 	result := r.db.Where("user_id = ?", userId).Find(&tasks)
+	return tasks, result.Error
+}
+
+func (r *taskRepository) GetAllColocationTasks(colocationId uint) ([]Task, error) {
+	var tasks []Task
+	result := r.db.Where("colocation_id = ?", colocationId).Find(&tasks)
 	return tasks, result.Error
 }
 
