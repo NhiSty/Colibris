@@ -54,6 +54,8 @@ class HomePage extends StatelessWidget {
         children: [
           _buildCard(context, 'User', '/backoffice/user',
               'Gérer vos utilisateurs', Icons.person),
+          _buildCard(context, 'Logs', '/backoffice/logs', 'Gérer les logs',
+              Icons.note_alt),
           _buildCard(context, 'Colocation', '/colocation_administration',
               'Gérer vos colocations', Icons.home),
           _buildCard(context, 'ColocMember', '/coloc_member_administration',
