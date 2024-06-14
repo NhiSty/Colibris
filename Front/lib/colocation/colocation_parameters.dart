@@ -50,7 +50,7 @@ class ColocationSettingsPage extends StatelessWidget {
             title: const Text('Modifier la colocation'),
             trailing: const Icon(Icons.arrow_forward),
             onTap: () {
-              Navigator.pushNamed(context, '/create_invitation',
+              Navigator.pushNamed(context, '/colocation_update',
                   arguments: {'colocationId': colocationId});
             },
           ),

@@ -27,6 +27,7 @@ class _InvitationCreatePageState extends State<InvitationCreatePage> {
               controller: _emailController,
               decoration: const InputDecoration(
                 labelText: 'Email',
+                border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16.0),

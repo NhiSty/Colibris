@@ -7,6 +7,7 @@ import 'package:front/colocation/bloc/colocation_bloc.dart';
 import 'package:front/colocation/colocation_members.dart';
 import 'package:front/colocation/colocation_parameters.dart';
 import 'package:front/colocation/colocation_tasklist_screen.dart';
+import 'package:front/colocation/colocation_update.dart';
 import 'package:front/colocation/create_colocation.dart';
 import 'package:front/home_screen.dart';
 import 'package:front/invitation/bloc/invitation_bloc.dart';
@@ -100,7 +101,12 @@ class MyApp extends StatelessWidget {
                   users: routes['users'],
                 ),
               );
-
+            case '/colocation_update':
+              return MaterialPageRoute(
+                builder: (context) => ColocationUpdatePage(
+                  colocationId: routes['colocationId'],
+                ),
+              );
             default:
               return null;
           }
