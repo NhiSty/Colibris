@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:front/colocation/Colocation.dart';
+import 'package:front/colocation/colocation_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/colocation/bloc/colocation_bloc.dart';
 import 'package:front/colocation/create_colocation.dart';

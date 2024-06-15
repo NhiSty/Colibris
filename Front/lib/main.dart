@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:front/task/add_new_task_screen.dart';
 import 'package:front/auth/login.dart';
 import 'package:front/auth/register.dart';
 import 'package:front/colocation/bloc/colocation_bloc.dart';
@@ -17,6 +18,7 @@ import 'package:front/profile/profile_screen.dart';
 import 'package:front/reset-password/reset_password.dart';
 import 'package:front/reset-password/reset_password_form.dart';
 import 'package:front/shared.widget/bottom_navigation_bar.dart';
+import 'package:front/task/bloc/task_bloc.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -36,6 +38,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<ColocationBloc>(
           create: (context) => ColocationBloc(),
         ),
+        BlocProvider<TaskBloc>(
+          create: (context) => TaskBloc(),
+        )
       ],
       child: MaterialApp(
         title: 'Colobris',
@@ -50,14 +55,14 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const LoginScreen(),
           '/register': (context) => const RegisterScreen(),
           '/home': (context) => const Scaffold(
-                body: HomeScreen(),
-                bottomNavigationBar: BottomNavigationBarWidget(),
-              ),
+            body: HomeScreen(),
+            bottomNavigationBar: BottomNavigationBarWidget(),
+          ),
           '/create_colocation': (context) => const CreateColocationPage(),
           '/profile': (context) => const Scaffold(
-                body: ProfileScreen(),
-                bottomNavigationBar: BottomNavigationBarWidget(),
-              ),
+            body: ProfileScreen(),
+            bottomNavigationBar: BottomNavigationBarWidget(),
+          ),
           '/reset-password': (context) => const ResetPasswordScreen(),
           '/reset-password-form': (context) => ResetPasswordFormScreen(),
         },
@@ -67,27 +72,36 @@ class MyApp extends StatelessWidget {
             case ColocationTasklistScreen.routeName:
               return MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
-                        value: BlocProvider.of<ColocationBloc>(context),
-                        child: ColocationTasklistScreen(
-                          colocation: routes['colocation'],
-                        ),
-                      ),
+                    value: BlocProvider.of<ColocationBloc>(context),
+                    child: ColocationTasklistScreen(
+                      colocation: routes['colocation'],
+                    ),
+                  ),
                   settings: settings);
             case '/invitations':
               return MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
-                        value: BlocProvider.of<InvitationBloc>(context),
-                        child: InvitationListPage(
-                            invitations: routes['invitations']),
-                      ),
+                    value: BlocProvider.of<InvitationBloc>(context),
+                    child: InvitationListPage(
+                        invitations: routes['invitations']),
+                  ),
                   settings: settings);
             case '/create_invitation':
               return MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
-                        value: BlocProvider.of<InvitationBloc>(context),
-                        child: InvitationCreatePage(
-                            colocationId: routes['colocationId']),
-                      ),
+                    value: BlocProvider.of<InvitationBloc>(context),
+                    child: InvitationCreatePage(
+                        colocationId: routes['colocationId']),
+                  ),
+                  settings: settings);
+            case AddNewTaskScreen.routeName:
+              return MaterialPageRoute(
+                  builder: (context) => BlocProvider.value(
+                    value: BlocProvider.of<TaskBloc>(context),
+                    child: AddNewTaskScreen(
+                      colocation: routes['colocation'],
+                    ),
+                  ),
                   settings: settings);
             case '/colocation_manage':
               return MaterialPageRoute(
