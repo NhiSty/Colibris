@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"Colibris/logs"
+	"Colibris/model"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"time"
@@ -28,7 +28,7 @@ func LoggerMiddleware(db *gorm.DB) gin.HandlerFunc {
 			logLevel = "ERROR"
 		}
 
-		log := logs.Log{
+		log := model.Log{
 			Method:   method,
 			Path:     path,
 			ClientIP: clientIP,

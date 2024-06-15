@@ -34,8 +34,7 @@ func Migrate(db *gorm.DB) {
 		&model.ResetPassword{},
 		&model.Invitation{},
 		&model.Log{},
-		&model.Tasks{},
-
+		&model.Task{},
 	)
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)

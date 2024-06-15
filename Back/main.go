@@ -12,7 +12,6 @@ package main
 import (
 	"Colibris/db"
 	"Colibris/docs"
-	"Colibris/logs"
 	"Colibris/middleware"
 	"Colibris/route"
 	"github.com/gin-contrib/cors"
@@ -51,8 +50,12 @@ func main() {
 		route.InvitationRoutes(v1, database)
 		route.ColocMemberRoutes(v1, database)
 		route.ColocationRoutes(v1, database)
-		logs.Routes(v1, database)
+		route.LogRoutes(v1, database)
+		route.TaskRoutes(v1, database)
 		v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
-	r.Run(":8080")
+	err := r.Run(":8080")
+	if err != nil {
+		return
+	}
 }

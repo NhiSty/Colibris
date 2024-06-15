@@ -23,7 +23,7 @@ func (s *ColocationService) CreateColocation(colocation *model.Colocation) error
 
 func (s *ColocationService) GetColocationById(id int) (*model.Colocation, error) {
 	var colocation model.Colocation
-	result := s.db.Where("id = ?", id).First(&colocation)
+	result := s.db.Preload("ColocMembers").Where("id = ?", id).First(&colocation)
 	return &colocation, result.Error
 }
 

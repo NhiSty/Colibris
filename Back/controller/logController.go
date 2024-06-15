@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"Colibris/dto"
-	"Colibris/model"
 	"Colibris/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -16,7 +14,7 @@ func NewLogController(service *service.LogService) *LogController {
 	return &LogController{service: service}
 }
 
-func (controller *LogController) CreateLog(c *gin.Context) {
+/*func (controller *LogController) CreateLog(c *gin.Context) {
 	var logDTO dto.LogDTO
 	if err := c.ShouldBindJSON(&logDTO); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -37,9 +35,14 @@ func (controller *LogController) CreateLog(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"status": "log created"})
-}
+} */
 
 func (controller *LogController) GetLogs(c *gin.Context) {
+	// if the user is not an admin, return unauthorized
+	if !service.IsAdmin(c) == false {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
 	logs, err := controller.service.GetLogs()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
