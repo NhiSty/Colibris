@@ -74,6 +74,7 @@ func (ctl *ColocationController) GetColocationById(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
+
 	coloc, err := ctl.colocService.GetColocationById(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
@@ -86,28 +87,30 @@ func (ctl *ColocationController) GetColocationById(c *gin.Context) {
 }
 
 // GetAllUserColocations  fetches all user's colocations from the database
-// @Summary Get all colocations
-// @Description Get all colocations
+// @Summary Get all user's colocations
+// @Description Get all user's colocations
 // @Tags colocations
 // @Accept json
 // @Produce json
 // @Success 200 {array} model.Colocation
-// @Param userId path int true "User ID"
+// @Param id path int true "User ID"
 // @Failure 400 {object} error
-// @Router /colocations [get]
+// @Router /colocations/user/{id} [get]
 // @Security Bearer
 func (ctl *ColocationController) GetAllUserColocations(c *gin.Context) {
-	userId, err := strconv.Atoi(c.Params.ByName("userId"))
+	userId, err := strconv.Atoi(c.Params.ByName("id"))
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
 
 	userIDFromToken, exists := c.Get("userID")
-	if !exists || userIDFromToken.(uint) != uint(userId) {
+	if !exists || userIDFromToken.(uint) != uint(userId) && !service.IsAdmin(c) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
 		return
 	}
+
 	colocations, err := ctl.colocService.GetAllUserColocations(userId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
@@ -151,29 +154,26 @@ func (ctl *ColocationController) UpdateColocation(c *gin.Context) {
 
 	// verify if the user is the owner of the colocation
 	userIDFromToken, exists := c.Get("userID")
-	if !exists {
+	if !exists && !service.IsAdmin(c) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to update this resource here"})
 		return
 	}
 
-	// retrieve the colocation
 	coloc, err := ctl.colocService.GetColocationById(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
 		return
 	}
 
-	if coloc.UserID != userIDFromToken.(uint) {
+	if coloc.UserID != userIDFromToken.(uint) && !service.IsAdmin(c) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to update this resource"})
 		return
 	}
 
-	// check if the user is the owner of the colocation
 	_, err = ctl.colocService.GetColocationById(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
 		return
-
 	}
 	colocUpdates := make(map[string]interface{})
 	if req.Name != "" {
@@ -202,7 +202,7 @@ func (ctl *ColocationController) DeleteColocation(c *gin.Context) {
 
 	// verify if the user is the owner of the colocation
 	userIDFromToken, exists := c.Get("userID")
-	if !exists {
+	if !exists && !service.IsAdmin(c) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to delete this resource here"})
 		return
 	}
@@ -214,7 +214,7 @@ func (ctl *ColocationController) DeleteColocation(c *gin.Context) {
 		return
 	}
 
-	if coloc.UserID != userIDFromToken.(uint) {
+	if coloc.UserID != userIDFromToken.(uint) && !service.IsAdmin(c) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to delete this resource"})
 		return
 	}

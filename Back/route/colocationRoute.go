@@ -17,7 +17,7 @@ func ColocationRoutes(colocationRoutes *gin.RouterGroup, db *gorm.DB) {
 		routes.POST("", AuthMiddleware(), colocationController.CreateColocation)
 		routes.PATCH("/:id", AuthMiddleware(), colocationController.UpdateColocation)
 		routes.GET("/:id", AuthMiddleware(), colocationController.GetColocationById)
-		routes.GET("/user/:userId", AuthMiddleware(), colocationController.GetAllUserColocations)
+		routes.GET("/user/:id", AuthMiddleware(), colocationController.GetAllUserColocations)
 		routes.DELETE("/:id", AuthMiddleware(), colocationController.DeleteColocation)
 
 	}

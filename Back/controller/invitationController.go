@@ -37,15 +37,12 @@ func (ctl *InvitationController) CreateInvitation(c *gin.Context) {
 		c.JSON(http.StatusNotFound, err.Error())
 		return
 	}
-
-	// verify that the user is not inviting himself and that the user is not already in the colocation
 	userIDFromToken, exists := c.Get("userID")
 	if !exists || userIDFromToken.(uint) == user.ID {
 		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to invite yourself"})
 		return
 	}
 
-	// verify that the user is not already in the colocation
 	for _, member := range user.Colocations {
 		for _, colocation := range member.ColocMembers {
 			if colocation.ColocationID == req.ColocationID {
@@ -94,7 +91,7 @@ func (ctl *InvitationController) GetAllUserInvitation(c *gin.Context) {
 	}
 
 	userIDFromToken, exists := c.Get("userID")
-	if !exists || userIDFromToken.(uint) != uint(userId) {
+	if !exists || userIDFromToken.(uint) != uint(userId) && !service.IsAdmin(c) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
 		return
 	}
@@ -127,12 +124,24 @@ func (ctl *InvitationController) UpdateInvitation(c *gin.Context) {
 		return
 	}
 
-	// verify that the state is valid
 	if req.State != "accepted" && req.State != "declined" {
 		c.JSON(http.StatusBadRequest, "invalid state")
 		return
 	}
+	var invitationService = service.NewInvitationService(ctl.invService.GetDB())
+	invitationByID, err := invitationService.GetInvitationById(req.InvitationId)
+	if err != nil {
+		c.JSON(http.StatusNotFound, err.Error())
+		return
 
+	}
+
+	userIDFromToken, exists := c.Get("userID")
+	if !exists || invitationByID.UserID != userIDFromToken && !service.IsAdmin(c) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+		return
+
+	}
 	invitation, err := ctl.invService.UpdateInvitation(int(req.InvitationId), req.State)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())

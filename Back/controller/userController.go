@@ -42,7 +42,7 @@ func (ctrl *UserController) GetUserById(c *gin.Context) {
 	}
 
 	userIDFromToken, exists := c.Get("userID")
-	if !exists || userIDFromToken.(uint) != uint(id) {
+	if !exists || userIDFromToken.(uint) != uint(id) && !service.IsAdmin(c) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
 		return
 	}
@@ -74,7 +74,7 @@ func (ctrl *UserController) UpdateUser(c *gin.Context) {
 	}
 
 	userIDFromToken, exists := c.Get("userID")
-	if !exists || userIDFromToken.(uint) != uint(id) {
+	if !exists || userIDFromToken.(uint) != uint(id) && !service.IsAdmin(c) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to update this resource"})
 		return
 	}
@@ -130,6 +130,12 @@ func (ctrl *UserController) UpdateUser(c *gin.Context) {
 // @Security Bearer
 func (ctrl *UserController) DeleteUserById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
+
+	if !service.IsAdmin(c) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to delete this resource"})
+		return
+	}
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
@@ -153,6 +159,11 @@ func (ctrl *UserController) DeleteUserById(c *gin.Context) {
 // @Security Bearer
 func (ctrl *UserController) GetAllUsers(c *gin.Context) {
 	users, err := ctrl.service.GetAllUsers()
+	if !service.IsAdmin(c) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+		return
+	}
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

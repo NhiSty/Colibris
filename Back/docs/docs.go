@@ -286,6 +286,45 @@ const docTemplate = `{
                         "schema": {}
                     }
                 }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Delete a colocation member",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "colocMembers"
+                ],
+                "summary": "Delete a colocation member",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Colocation member ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    }
+                }
             }
         },
         "/coloc/members/{id}/score": {
@@ -338,90 +377,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/colocMembers/{id}": {
-            "delete": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "description": "Delete a colocation member",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "colocMembers"
-                ],
-                "summary": "Delete a colocation member",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Colocation member ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {}
-                    }
-                }
-            }
-        },
         "/colocations": {
-            "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "description": "Get all colocations",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "colocations"
-                ],
-                "summary": "Get all colocations",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "User ID",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.Colocation"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {}
-                    }
-                }
-            },
             "post": {
                 "security": [
                     {
@@ -455,6 +411,50 @@ const docTemplate = `{
                         "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/dto.ColocationCreateRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/colocations/user/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Get all user's colocations",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "colocations"
+                ],
+                "summary": "Get all user's colocations",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Colocation"
+                            }
                         }
                     },
                     "400": {
@@ -1010,15 +1010,6 @@ const docTemplate = `{
                 "isPermanent": {
                     "type": "boolean"
                 },
-                "latitude": {
-                    "type": "number"
-                },
-                "location": {
-                    "type": "string"
-                },
-                "longitude": {
-                    "type": "number"
-                },
                 "name": {
                     "type": "string"
                 }
@@ -1287,6 +1278,17 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Role": {
+            "type": "string",
+            "enum": [
+                "ROLE_ADMIN",
+                "ROLE_USER"
+            ],
+            "x-enum-varnames": [
+                "ROLE_ADMIN",
+                "ROLE_USER"
+            ]
+        },
         "model.User": {
             "type": "object",
             "properties": {
@@ -1316,6 +1318,9 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
+                },
+                "roles": {
+                    "$ref": "#/definitions/model.Role"
                 },
                 "updatedAt": {
                     "type": "string"

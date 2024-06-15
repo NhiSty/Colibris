@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"log"
 	"os"
 	"sync"
@@ -36,6 +37,16 @@ func Migrate(db *gorm.DB) {
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
+	// Create the admin user if it does not exist
+	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.User{
+		Email: "admin@admin.com",
+		// test123!
+		Password:  "$2a$10$cFrne/rnK4JoEJn.bwdDJetpjbivABHtK/oy2/dYNjs6QUj7Fn0Pi",
+		Firstname: "admin",
+		Lastname:  "admin",
+		Roles:     model.ROLE_ADMIN,
+	})
+
 	fmt.Println("Database migration completed successfully.")
 }
 

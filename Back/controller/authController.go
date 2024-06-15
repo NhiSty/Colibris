@@ -37,6 +37,7 @@ func (ctl *Controller) Register(c *gin.Context) {
 		Password:  req.Password,
 		Firstname: req.FirstName,
 		Lastname:  req.LastName,
+		Roles:     model.ROLE_USER,
 	}
 	if err := ctl.authService.Register(&user); err != nil {
 		c.JSON(http.StatusFailedDependency, gin.H{"error": err.Error()})
@@ -66,7 +67,7 @@ func (ctl *Controller) Login(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
-	token, err := service.GenerateJWT(user.ID)
+	token, err := service.GenerateJWT(user.ID, user.Roles.String())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

@@ -94,3 +94,9 @@ func (s *InvitationService) UpdateInvitation(id int, state string) (*model.Invit
 func (s *InvitationService) GetDB() *gorm.DB {
 	return s.db
 }
+
+func (s *InvitationService) GetInvitationById(id uint) (*model.Invitation, error) {
+	var invitation model.Invitation
+	result := s.db.Where("id = ?", id).First(&invitation)
+	return &invitation, result.Error
+}

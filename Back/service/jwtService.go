@@ -1,19 +1,22 @@
 package service
 
 import (
+	"Colibris/model"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"time"
 )
 
 var jwtKey = []byte("monSecretTrèsSecret")
 
-func GenerateJWT(userID uint) (string, error) {
+func GenerateJWT(userId uint, role string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
 
-	claims["user_id"] = userID
+	claims["user_id"] = userId
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+	claims["role"] = role
 
 	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {
@@ -48,4 +51,20 @@ func DecodeJWT(tokenString string) (jwt.MapClaims, error) {
 		return claims, nil
 	}
 	return nil, fmt.Errorf("Invalid token claims")
+}
+
+func IsAdmin(c *gin.Context) bool {
+	roleFromToken, exists := c.Get("role")
+	if !exists {
+		return false
+	}
+	role, ok := roleFromToken.(string)
+	if !ok {
+		return false
+	}
+	if role != model.ROLE_ADMIN.String() {
+		return false
+
+	}
+	return true
 }

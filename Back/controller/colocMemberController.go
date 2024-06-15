@@ -64,11 +64,24 @@ func (ctl *ColocMemberController) GetColocMemberById(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 	}
+
 	colocMember, err := ctl.colocService.GetColocMemberById(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
+		return
+	}
+	// verify that the user is a member of the colocation
+	userIdFromToken, exists := c.Get("userID")
+	if !exists && !service.IsAdmin(c) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+		return
 	}
 
+	if colocMember.UserID != userIdFromToken && !service.IsAdmin(c) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+		return
+
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"result": colocMember,
 	})
@@ -85,9 +98,18 @@ func (ctl *ColocMemberController) GetColocMemberById(c *gin.Context) {
 // @Router /coloc/members/ [get]
 // @Security Bearer
 func (ctl *ColocMemberController) GetAllColocMembers(c *gin.Context) {
+	if !service.IsAdmin(c) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+		return
+	}
 	colocMembers, err := ctl.colocService.GetAllColocMembers()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if !service.IsAdmin(c) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -111,7 +133,7 @@ func (ctl *ColocMemberController) GetAllColocMembersByColoc(c *gin.Context) {
 	// verify that the user is allowed to access this resource
 	userIdFromToken, exists := c.Get("userID")
 	if !exists {
-		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource ok"})
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource "})
 		return
 	}
 
@@ -130,7 +152,7 @@ func (ctl *ColocMemberController) GetAllColocMembersByColoc(c *gin.Context) {
 	}
 
 	// check if the user is allowed to access this resource
-	if coloc.UserID != userIdFromToken {
+	if coloc.UserID != userIdFromToken && !service.IsAdmin(c) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
 		return
 	}
@@ -189,7 +211,7 @@ func (ctl *ColocMemberController) UpdateColocMemberScore(c *gin.Context) {
 // @Param id path int true "Colocation member ID"
 // @Success 200 {object} string
 // @Failure 400 {object} error
-// @Router /colocMembers/{id} [delete]
+// @Router /coloc/members/{id} [delete]
 // @Security Bearer
 func (ctl *ColocMemberController) DeleteColocMember(c *gin.Context) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
@@ -209,9 +231,9 @@ func (ctl *ColocMemberController) DeleteColocMember(c *gin.Context) {
 
 	}
 
-	var userIdFromToken uint = c.MustGet("userID").(uint)
+	var userIdFromToken = c.MustGet("userID").(uint)
 
-	if coloc.UserID != userIdFromToken {
+	if coloc.UserID != userIdFromToken && !service.IsAdmin(c) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
 		return
 	}

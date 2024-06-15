@@ -45,12 +45,6 @@ definitions:
         type: string
       isPermanent:
         type: boolean
-      latitude:
-        type: number
-      location:
-        type: string
-      longitude:
-        type: number
       name:
         type: string
     type: object
@@ -230,6 +224,14 @@ definitions:
       updatedAt:
         type: string
     type: object
+  model.Role:
+    enum:
+    - ROLE_ADMIN
+    - ROLE_USER
+    type: string
+    x-enum-varnames:
+    - ROLE_ADMIN
+    - ROLE_USER
   model.User:
     properties:
       colocations:
@@ -250,6 +252,8 @@ definitions:
         type: string
       password:
         type: string
+      roles:
+        $ref: '#/definitions/model.Role'
       updatedAt:
         type: string
     type: object
@@ -411,6 +415,31 @@ paths:
       tags:
       - colocMembers
   /coloc/members/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a colocation member
+      parameters:
+      - description: Colocation member ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Delete a colocation member
+      tags:
+      - colocMembers
     get:
       consumes:
       - application/json
@@ -468,60 +497,7 @@ paths:
       summary: Update the score of a colocation member
       tags:
       - colocMembers
-  /colocMembers/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete a colocation member
-      parameters:
-      - description: Colocation member ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-        "400":
-          description: Bad Request
-          schema: {}
-      security:
-      - Bearer: []
-      summary: Delete a colocation member
-      tags:
-      - colocMembers
   /colocations:
-    get:
-      consumes:
-      - application/json
-      description: Get all colocations
-      parameters:
-      - description: User ID
-        in: path
-        name: userId
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/model.Colocation'
-            type: array
-        "400":
-          description: Bad Request
-          schema: {}
-      security:
-      - Bearer: []
-      summary: Get all colocations
-      tags:
-      - colocations
     post:
       consumes:
       - application/json
@@ -603,6 +579,34 @@ paths:
       security:
       - Bearer: []
       summary: Update a colocation by ID
+      tags:
+      - colocations
+  /colocations/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get all user's colocations
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Colocation'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all user's colocations
       tags:
       - colocations
   /invitations:
