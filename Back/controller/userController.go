@@ -162,7 +162,7 @@ func (ctrl *UserController) GetAllUsers(c *gin.Context) {
 	pageSizeParam := c.DefaultQuery("pageSize", "")
 
 	if pageParam == "" && pageSizeParam == "" {
-		users, total, err := ctrl.repo.GetAllUsers(0, 0)
+		users, total, err := ctrl.service.GetAllUsers(0, 0)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -192,7 +192,7 @@ func (ctrl *UserController) GetAllUsers(c *gin.Context) {
 func (ctrl *UserController) SearchUsers(c *gin.Context) {
 	query := c.DefaultQuery("query", "")
 
-	users, err := ctrl.repo.SearchUsers(query)
+	users, err := ctrl.service.SearchUsers(query)
 	if !service.IsAdmin(c) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
 		return

@@ -15,10 +15,20 @@ func NewUserService(db *gorm.DB) *UserService {
 	}
 }
 
-func (s *UserService) GetAllUsers() ([]model.User, error) {
+func (s *UserService) GetAllUsers(page int, pageSize int) ([]model.User, int64, error) {
 	var users []model.User
-	result := s.db.Find(&users)
-	return users, result.Error
+	var total int64
+
+	s.db.Model(&model.User{}).Count(&total)
+
+	if page == 0 || pageSize == 0 {
+		result := s.db.Find(&users)
+		return users, total, result.Error
+	}
+
+	offset := (page - 1) * pageSize
+	result := s.db.Limit(pageSize).Offset(offset).Find(&users)
+	return users, total, result.Error
 }
 
 func (s *UserService) GetUserById(id uint) (*model.User, error) {
@@ -42,6 +52,12 @@ func (s *UserService) UpdateUser(id uint, userUpdates map[string]interface{}) (*
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (s *UserService) SearchUsers(query string) ([]model.User, error) {
+	var users []model.User
+	result := s.db.Where("firstname LIKE ? OR lastname LIKE ? OR email LIKE ?", "%"+query+"%", "%"+query+"%", "%"+query+"%").Find(&users)
+	return users, result.Error
 }
 
 func (s *UserService) DeleteUserById(id uint) error {

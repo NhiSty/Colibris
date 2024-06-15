@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front/auth/auth_service.dart';
+import 'package:front/website/share/secure_storage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -110,7 +111,33 @@ class _LoginPageState extends State<LoginPage> {
       var res = await login(_emailController.text, _passwordController.text);
       if (!mounted) return;
       if (res == 200) {
-        Navigator.pushNamed(context, '/home');
+        var userData = await decodeToken();
+        if (userData['role'] == 'ROLE_ADMIN') {
+          Navigator.pushNamed(context, '/home');
+        } else {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Non autorisé',
+                    style: TextStyle(color: Colors.white)),
+                backgroundColor: Colors.red,
+                content: const Text(
+                    'Vous n\'êtes pas autorisé à accéder à cette page',
+                    style: TextStyle(color: Colors.white)),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('Compris',
+                        style: TextStyle(color: Colors.white)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
       } else {
         showDialog(
           context: context,

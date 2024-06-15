@@ -13,7 +13,7 @@ import (
 	"Colibris/db"
 	"Colibris/docs"
 	"Colibris/logs"
-	"Colibris/middlewares"
+	"Colibris/middleware"
 	"Colibris/route"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -37,7 +37,7 @@ func main() {
 	db.Migrate(database)
 
 	r.Use(cors.New(config))
-	r.Use(middlewares.LoggerMiddleware(database))
+	r.Use(middleware.LoggerMiddleware(database))
 
 	const prefixUrl string = "/api/v1"
 	docs.SwaggerInfo.BasePath = prefixUrl
@@ -51,7 +51,7 @@ func main() {
 		route.InvitationRoutes(v1, database)
 		route.ColocMemberRoutes(v1, database)
 		route.ColocationRoutes(v1, database)
-logs.Routes(v1, database)
+		logs.Routes(v1, database)
 		v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
 	r.Run(":8080")

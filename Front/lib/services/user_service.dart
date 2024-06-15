@@ -7,8 +7,8 @@ import 'package:front/website/share/secure_storage.dart';
 class UserService {
   final Dio _dio = dio;
 
-  // @TODO : mettre les droits
   Future<UserResponse> getAllUsers({int page = 1, int pageSize = 5}) async {
+    var headers = await addHeader();
     try {
       final response = await _dio.get(
         '/users',
@@ -16,6 +16,7 @@ class UserService {
           'page': page,
           'pageSize': pageSize,
         },
+        options: Options(headers: headers),
       );
 
       if (response.statusCode == 200) {
