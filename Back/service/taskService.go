@@ -44,3 +44,7 @@ func (t *TaskService) GetAllColocationTasks(colocationId uint) ([]model.Task, er
 func (t *TaskService) UpdateTask(taskId uint, task *model.Task) error {
 	return t.db.Model(&task).Where("id = ?", taskId).Updates(task).Error
 }
+
+func (t *TaskService) DeleteTask(taskId uint) error {
+	return t.db.Where("id = ?", taskId).Delete(&model.Task{}).Error
+}

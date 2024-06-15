@@ -7,7 +7,7 @@ class Task {
   final String picture;
   final int colocationId;
   final int userId;
-
+  final int pts;
 
   Task({
     required this.id,
@@ -18,6 +18,7 @@ class Task {
     required this.picture,
     required this.colocationId,
     required this.userId,
+    required this.pts,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
@@ -30,6 +31,7 @@ class Task {
       picture: json['Picture'],
       colocationId: json['ColocationID'],
       userId: json['UserID'],
+      pts: json['Pts'],
     );
   }
 }

@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -6,7 +5,8 @@ import 'package:front/task/task.dart';
 import '../utils/dio.dart';
 import '../website/share/secure_storage.dart';
 
-Future<int> createTask(String title, String description, String date, int duration, String picture, int colocationId) async {
+Future<int> createTask(String title, String description, String date,
+    int duration, String picture, int colocationId) async {
   var headers = await addHeader();
   try {
     var userData = await decodeToken();
@@ -52,5 +52,21 @@ Future<List<Task>> fetchTasks(int colocationId) async {
     log('Response status: ${e.response!.statusCode}');
     log('Response data: ${e.response!.data}');
     throw Exception('Failed to fetch tasks');
+  }
+}
+
+Future<int> deleteTask(int taskId) async {
+  var headers = await addHeader();
+  try {
+    var response = await dio.delete(
+      '/tasks/$taskId',
+      options: Options(headers: headers),
+    );
+    return response.statusCode!;
+  } on DioException catch (e) {
+    print('Dio error!');
+    print('Response status: ${e.response!.statusCode}');
+    print('Response data: ${e.response!.data}');
+    throw Exception('Failed to delete task');
   }
 }

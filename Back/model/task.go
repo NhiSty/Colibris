@@ -13,4 +13,5 @@ type Task struct {
 	Picture      string
 	User         User       `gorm:"foreignKey:UserID" json:"-"`
 	Colocation   Colocation `gorm:"foreignKey:ColocationID" json:"-"`
+	Pts          uint       `gorm:"not null"`
 }

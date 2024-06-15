@@ -25,7 +25,7 @@ func (ctl *TaskController) CreateTask(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-
+	pts := uint(float64(req.Duration) * .025)
 	task := model.Task{
 		Title:        req.Title,
 		UserID:       req.UserId,
@@ -34,6 +34,7 @@ func (ctl *TaskController) CreateTask(c *gin.Context) {
 		Date:         req.Date,
 		Duration:     req.Duration,
 		Picture:      req.Picture,
+		Pts:          pts,
 	}
 
 	if err := ctl.service.CreateTask(&task); err != nil {
@@ -166,7 +167,6 @@ func (ctl *TaskController) GetAllCollocationTasks(c *gin.Context) {
 		return
 	}
 
-	// Return the tasks
 	c.JSON(http.StatusOK, gin.H{
 		"result": tasks,
 	})
@@ -193,7 +193,6 @@ func (ctl *TaskController) UpdateTask(c *gin.Context) {
 		return
 	}
 
-	// very that the user is the owner of the task or an admin or the owner of the colocation
 	userIDFromToken, exists := c.Get("userID")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -247,5 +246,58 @@ func (ctl *TaskController) UpdateTask(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"Message": "task updated successfully",
 		"result":  task,
+	})
+}
+
+func (ctl *TaskController) DeleteTask(c *gin.Context) {
+	id, err := strconv.Atoi(c.Params.ByName("id"))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid task ID"})
+		return
+	}
+
+	task, err := ctl.service.GetById(uint(id))
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Task not found"})
+		return
+	}
+
+	userIDFromToken, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	colocationService := service.NewColocationService(ctl.service.GetDB())
+	colocation, colocationErr := colocationService.GetColocationById(int(task.ColocationID))
+
+	if colocationErr != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error 2": "Colocation not found"})
+		return
+	}
+
+	colocationMembers := colocation.ColocMembers
+	isMember := false
+	isOwner := colocation.UserID == userIDFromToken.(uint)
+	for _, member := range colocationMembers {
+		if member.UserID == userIDFromToken.(uint) {
+			isMember = true
+			break
+		}
+	}
+
+	if !isMember && !service.IsAdmin(c) && !isOwner {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+		return
+	}
+
+	if err := ctl.service.DeleteTask(uint(id)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error 1": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"Message": "task deleted successfully",
 	})
 }
