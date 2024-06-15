@@ -9,11 +9,11 @@ import (
 )
 
 type LogController struct {
-	Service *service.LogService
+	service *service.LogService
 }
 
 func NewLogController(service *service.LogService) *LogController {
-	return &LogController{Service: service}
+	return &LogController{service: service}
 }
 
 func (controller *LogController) CreateLog(c *gin.Context) {
@@ -31,7 +31,7 @@ func (controller *LogController) CreateLog(c *gin.Context) {
 		Level:    logDTO.Level,
 		Status:   logDTO.Status,
 	}
-	err := controller.Service.CreateLog(&log)
+	err := controller.service.CreateLog(&log)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -40,7 +40,7 @@ func (controller *LogController) CreateLog(c *gin.Context) {
 }
 
 func (controller *LogController) GetLogs(c *gin.Context) {
-	logs, err := controller.Service.GetLogs()
+	logs, err := controller.service.GetLogs()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
