@@ -59,9 +59,7 @@ jobs:
           echo "$(terraform output -raw public_ip)" > public_ip.txt
 
       - name: Set environment variables from Terraform output
-        run: |
-          echo "PRIVATE_KEY=$(cat terraform/private_key.pem)" >> $GITHUB_ENV
-          echo "PUBLIC_IP=$(cat terraform/public_ip.txt)" >> $GITHUB_ENV
+        run: echo "PUBLIC_IP=`terraform output -raw public_ip`" >> $GITHUB_ENV
 
       - name: Deploy Script to VM
         uses: appleboy/ssh-action@master
