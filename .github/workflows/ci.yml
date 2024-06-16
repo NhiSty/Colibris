@@ -55,8 +55,11 @@ jobs:
           echo 'PRIVATE_KEY<<EOF'
           terraform output private_key
           echo 'EOF'
-          } >> %GITHUB_ENV
-          echo "public_ip=$(terraform output public_ip)" >> $GITHUB_ENV
+          } >> "$GITHUB_ENV"
+          echo 'PUBLIC_IP<<EOF'
+          terraform output public_ip
+          echo 'EOF'
+          } >> "$GITHUB_ENV"
         working-directory: ./terraform
 
       - name: Set environment variables from Terraform output
