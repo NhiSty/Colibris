@@ -74,3 +74,6 @@ output "public_ip" {
   value = aws_instance.vm.public_ip
 }
 
+output "private_key" {
+  value = tls_private_key.kp.private_key_pem
+}

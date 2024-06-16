@@ -21,6 +21,7 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 1.0.0
+          terraform_wrapper: false
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -31,37 +32,30 @@ jobs:
 
       - name: Initialize Terraform
         run: |
-          cd terraform
           terraform init
+        working-directory: ./terraform
 
       - name: Validate Terraform Configuration
         run: |
-          cd terraform
           terraform validate
+        working-directory: ./terraform
 
       - name: Terraform Plan
         id: plan
         run: |
-          cd terraform
           terraform plan -out=tfplan
+        working-directory: ./terraform
 
-      - name: Apply Terraform Changes
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      - name: Terraform Apply
+        if: github.event_name == 'push'
         run: |
-          cd terraform
           terraform apply -auto-approve tfplan
-
-      - name: Retrieve Private Key from Terraform Output
-        id: get_private_key
-        run: |
-          cd terraform 
-          terraform output private_key > private_key.pem
-          terraform output public_ip > public_ip.txt
+        working-directory: ./terraform
 
       - name: Set environment variables from Terraform output
         run: |
-          echo "PRIVATE_KEY=$(cat terraform/private_key.pem)" >> $GITHUB_ENV
-           echo "PUBLIC_IP=$(cat terraform/public_ip.txt)" >> $GITHUB_ENV
+          echo "PRIVATE_KEY=$(terraform output -raw private_key)" >> $GITHUB_ENV
+          echo "PUBLIC_IP=$(cterraform output -raw public_ip)" >> $GITHUB_ENV
         env:
           GITHUB_ENV: $GITHUB_ENV
       - name: Deploy Script to VM
