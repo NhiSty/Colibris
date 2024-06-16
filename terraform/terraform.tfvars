@@ -1,0 +1,6 @@
+default_user        = "ubuntu"
+key_name            = "aws-key-pair"
+region              = "eu-west-3"
+security_group_name = "security_group_vm"
+ami                 = "ami-00ac45f3035ff009e"
+instance_type       = "t2.micro"
