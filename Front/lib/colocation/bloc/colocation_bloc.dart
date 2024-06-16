@@ -16,7 +16,6 @@ class ColocationBloc extends Bloc<ColocationEvent, ColocationState> {
           final colocations = await fetchColocations();
           emit(ColocationLoaded(colocations));
         } catch (error) {
-          print('Failed to fetch colocations: $error');
           emit(ColocationError('Failed to fetch colocations: $error', true));
         }
       } else if (event is ColocationInitial) {

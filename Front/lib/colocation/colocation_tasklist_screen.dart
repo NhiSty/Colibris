@@ -243,7 +243,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
               ),
             ],
           ),
-          bottomNavigationBar: const BottomNavigationBarWidget(),
+          bottomNavigationBar: BottomNavigationBarWidget(widget.colocation.id),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.pushNamed(context, '/add-new-task',

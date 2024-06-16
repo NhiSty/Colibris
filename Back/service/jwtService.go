@@ -10,19 +10,21 @@ import (
 
 var jwtKey = []byte("monSecretTrèsSecret")
 
-func GenerateJWT(userId uint, role string) (string, error) {
+func GenerateJWT(user *model.User) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
 
-	claims["user_id"] = userId
+	claims["user_id"] = user.ID
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-	claims["role"] = role
+	claims["role"] = user.Roles.String()
+	claims["email"] = user.Email
+	claims["first_name"] = user.Firstname
+	claims["last_name"] = user.Lastname
 
 	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {
 		return "", err
 	}
-
 	return tokenString, nil
 }
 

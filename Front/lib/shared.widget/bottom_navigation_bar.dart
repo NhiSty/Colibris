@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BottomNavigationBarWidget extends StatelessWidget {
-  const BottomNavigationBarWidget({super.key});
+  const BottomNavigationBarWidget(this.chatId, {super.key});
+  final int? chatId;
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +106,11 @@ class BottomNavigationBarWidget extends StatelessWidget {
       onTap: (index) {
         if (index >= 0 && index < routes.length) {
           final newRoute = routes[index];
+          print(chatId);
           if (newRoute.isNotEmpty && newRoute != currentRoute) {
-            Navigator.pushReplacementNamed(context, newRoute);
+            Navigator.pushReplacementNamed(context, newRoute, arguments: {
+              'chatId': chatId,
+            });
           }
         }
       },

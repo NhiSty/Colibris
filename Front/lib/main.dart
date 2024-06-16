@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:front/chat/screens/conversation_screen.dart';
 import 'package:front/task/add_new_task_screen.dart';
 import 'package:front/auth/login.dart';
 import 'package:front/auth/register.dart';
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
           useMaterial3: true,
         ),
-        home: const HomeScreen(),
+        home: const LoginScreen(),
         debugShowCheckedModeBanner: false,
         initialRoute: '/login',
         routes: {
@@ -57,12 +58,12 @@ class MyApp extends StatelessWidget {
           '/register': (context) => const RegisterScreen(),
           '/home': (context) => const Scaffold(
                 body: HomeScreen(),
-                bottomNavigationBar: BottomNavigationBarWidget(),
+                bottomNavigationBar: BottomNavigationBarWidget(null),
               ),
           '/create_colocation': (context) => const CreateColocationPage(),
           '/profile': (context) => const Scaffold(
                 body: ProfileScreen(),
-                bottomNavigationBar: BottomNavigationBarWidget(),
+                bottomNavigationBar: BottomNavigationBarWidget(null),
               ),
           '/reset-password': (context) => const ResetPasswordScreen(),
           '/reset-password-form': (context) => ResetPasswordFormScreen(),
@@ -127,6 +128,11 @@ class MyApp extends StatelessWidget {
                 builder: (context) => TaskDetailPage(
                   task: routes['task'],
                 ),
+              );
+            case '/chat':
+              return MaterialPageRoute(
+                builder: (context) =>
+                    ConversationScreen(conversationId: routes['chatId']),
               );
             default:
               return null;
