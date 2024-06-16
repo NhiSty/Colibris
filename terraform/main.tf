@@ -50,18 +50,6 @@ resource "aws_instance" "vm" {
     host        = self.public_ip
   }
 
-  provisioner "file" {
-    source      = "./script.sh"
-    destination = "/tmp/script.sh"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo mv /tmp/script.sh ./",
-      "sudo chmod 777 ./script.sh",
-      "sudo ./script.sh"
-    ]
-  }
 
   tags = {
     Name = "vm"

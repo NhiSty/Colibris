@@ -56,6 +56,9 @@ jobs:
         run: |
           echo "PRIVATE_KEY=$(terraform output -raw private_key)" >> $GITHUB_ENV
           echo "PUBLIC_IP=$(cterraform output -raw public_ip)" >> $GITHUB_ENV
+          echo {{$GITHUB_ENV.private_key}}
+          echo {{$GITHUB_ENV.public_ip}}
+        working-directory: ./terraform
         env:
           GITHUB_ENV: $GITHUB_ENV
       - name: Deploy Script to VM
