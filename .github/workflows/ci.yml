@@ -22,6 +22,12 @@ jobs:
         with:
           terraform_version: 1.0.0
 
+      - name: Configure AWS credentials
+        env:
+          TF_VAR_acces_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          TF_VAR_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: echo "AWS credentials configured"
+
       - name: Initialize Terraform
         run: |
           cd terraform

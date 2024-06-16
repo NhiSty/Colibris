@@ -9,6 +9,14 @@ resource "aws_key_pair" "aws-key-pair" {
 }
 
 
+
+provider "aws" {
+  region     = var.region
+  access_key = var.access_key
+  secret_key = var.secret_key
+}
+
+
 resource "aws_security_group" "security_group_vm" {
   name = var.security_group_name
 
