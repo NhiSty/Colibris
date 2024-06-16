@@ -53,11 +53,13 @@ jobs:
         run: |
           echo "::set-output name=private_key::$(terraform output private_key)"
           echo "::set-output name=public_ip::$(terraform output public_ip)"
+        working-directory: ./terraform
 
       - name: Set environment variables from Terraform output
         run: |
           echo "PRIVATE_KEY=${{ steps.get_private_key.outputs.private_key }}" >> $GITHUB_ENV
           echo "PUBLIC_IP=${{ steps.get_private_key.outputs.public_ip }}" >> $GITHUB_ENV
+        working-directory: ./terraform
 
       - name: Deploy Script to VM
         uses: appleboy/ssh-action@master
