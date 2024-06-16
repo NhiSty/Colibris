@@ -55,15 +55,20 @@ jobs:
         id: get_private_key
         run: |
           cd terraform
-          echo "::set-output name=private_key::$(terraform output -raw private_key_pem)"
-          echo "::set-output name=public_ip::$(terraform output -raw public_ip)"
+          echo "$(terraform output -raw private_key_pem)" > private_key.pem
+          echo "$(terraform output -raw public_ip)" > public_ip.txt
+
+      - name: Set environment variables from Terraform output
+        run: |
+          echo "PRIVATE_KEY=$(cat terraform/private_key.pem)" >> $GITHUB_ENV
+          echo "PUBLIC_IP=$(cat terraform/public_ip.txt)" >> $GITHUB_ENV
 
       - name: Deploy Script to VM
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ steps.get_private_key.outputs.public_ip }}
+          host: ${{ env.PUBLIC_IP }}
           username: ubuntu # Replace with your instance's SSH username
-          key: ${{ steps.get_private_key.outputs.private_key }}
+          key: ${{ env.PRIVATE_KEY }}
           port: 22
           script: |
             sudo mv /tmp/script.sh /home/ubuntu/
