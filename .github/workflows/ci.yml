@@ -67,8 +67,8 @@ jobs:
 
       - name: Set environment variables from Terraform output
         run: |
-          echo "PRIVATE_KEY=${{ steps.get_private_key.outputs.private_key }}" >> $GITHUB_ENV
-          echo "PUBLIC_IP=${{ steps.get_private_key.outputs.public_ip }}" >> $GITHUB_ENV
+          echo {{env.PRIVATE_KEY}}
+          echo {{env.PUBLIC_IP}}
         working-directory: ./terraform
 
       - name: Deploy Script to VM
