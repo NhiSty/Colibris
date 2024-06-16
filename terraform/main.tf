@@ -75,5 +75,6 @@ output "public_ip" {
 }
 
 output "private_key" {
-  value = tls_private_key.kp.private_key_pem
+  value     = tls_private_key.kp.private_key_pem
+  sensitive = true
 }
