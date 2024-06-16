@@ -22,28 +22,34 @@ jobs:
         with:
           terraform_version: 1.0.0
 
-      - name: go to the terraform directory
-        run: cd terraform
-
       - name: Initialize Terraform
-        run: terraform init
+        run: |
+          cd terraform
+          terraform init
 
       - name: Validate Terraform Configuration
-        run: terraform validate
+        run: |
+          cd terraform
+          terraform validate
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -out=tfplan
+        run: |
+          cd terraform
+          terraform plan -out=tfplan
 
       - name: Apply Terraform Changes
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve tfplan
+        run: |
+          cd terraform
+          terraform apply -auto-approve tfplan
 
       - name: Retrieve Private Key from Terraform Output
         id: get_private_key
-        run: echo "name=private_key >> $(terraform output -raw private_key_pem)"
+        run: |
+          cd terraform
+          echo "name=private_key >> $(terraform output -raw private_key_pem)"
 
-      # Example: Use SSH to deploy script to provisioned VM
       - name: Deploy Script to VM
         uses: appleboy/ssh-action@master
         with:
@@ -58,4 +64,6 @@ jobs:
 
       - name: Destroy Infrastructure (Optional)
         if: github.event_name == 'pull_request'
-        run: terraform destroy -auto-approve
+        run: |
+          cd terraform
+          terraform destroy -auto-approve
