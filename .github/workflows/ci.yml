@@ -51,8 +51,8 @@ jobs:
       - name: Retrieve Private Key from Terraform Output
         id: get_private_key
         run: |
-          echo "private_key=$(terraform output -raw private_key)" >> $GITHUB_ENV
-          echo "public_ip=$(terraform output -raw public_ip)" >> $GITHUB_ENV
+          echo "::set-output name=private_key::$(terraform output private_key)"
+          echo "::set-output name=public_ip::$(terraform output public_ip)"
 
       - name: Set environment variables from Terraform output
         run: |
