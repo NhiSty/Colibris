@@ -54,7 +54,7 @@ jobs:
       - name: Retrieve Private Key from Terraform Output
         id: get_private_key
         run: |
-          cd terraform \
+          cd terraform 
           echo "$(terraform output -raw private_key_pem)" > private_key.pem \
           echo "$(terraform output -raw public_ip)" > public_ip.txt
 
