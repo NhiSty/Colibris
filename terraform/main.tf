@@ -37,18 +37,8 @@ resource "aws_instance" "vm" {
   associate_public_ip_address = true
   key_name                    = aws_key_pair.aws-key-pair.key_name
   vpc_security_group_ids      = [aws_security_group.security_group_vm.id]
-
-
-  connection {
-    type        = "ssh"
-    user        = var.default_user
-    private_key = tls_private_key.kp.private_key_pem
-    host        = self.public_ip
-  }
-
-
   tags = {
-    Name = "vm"
+    Name = "terraform-vm"
   }
 }
 
