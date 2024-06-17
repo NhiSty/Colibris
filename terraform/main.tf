@@ -9,7 +9,7 @@ terraform {
 
 
 provider "aws" {
-  region = "us-west-2"
+  region = var.region
 }
 
 resource "tls_private_key" "kp" {

@@ -15,6 +15,7 @@ env:
 
 jobs:
   terraform:
+    needs: terraform-plan
     name: "Terraform Apply"
     runs-on: ubuntu-latest
     permissions:
