@@ -4,10 +4,10 @@ on:
   #push:
   #  branches:
   #    - "feat/cd"
-  pull_request:
-    branches:
-      - main
-      - dev
+  #pull_request:
+  #  branches:
+  #    - main
+  #    - dev
 
 jobs:
   terraform:
