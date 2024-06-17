@@ -1,9 +1,11 @@
 name: "Terraform Apply"
 
+#on:
+#push:
+#branches:
+#- main
 on:
-  push:
-    branches:
-      - main
+  pull_request:
 
 env:
   TF_CLOUD_ORGANIZATION: "nescien"
