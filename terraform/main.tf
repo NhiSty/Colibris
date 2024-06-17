@@ -68,6 +68,7 @@ resource "aws_eip" "ip" {
 resource "aws_vpc" "vpc" {
   enable_dns_support   = true
   enable_dns_hostnames = true
+  ipv4_ipam_pool_id    = aws_vpc_ipv4_ipam_pool.pool.id
 }
 
 resource "aws_subnet" "subnet" {
