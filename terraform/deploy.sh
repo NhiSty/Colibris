@@ -15,28 +15,23 @@ if ! [ -x "$(command -v docker)" ]; then
     sudo apt-get update
 
     sudo apt-get install -y  docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-
     sudo apt install -y git
-
-    # Clonage du référentiel docker-nginx-hello-world
-    git clone https://github.com/NhiSty/Colibris.git
-
-    sudo usermod -aG docker $USER
+    sudo usermod -aG docker "$USER"
  
   exit 1
 fi
 
+if [ -d "Colibris" ]; then
+  echo "Le dossier Colibris existe déjà"
+else
+  git clone https://github.com/NhiSty/Colibris.git
+fi
 
-
-# Accéder au répertoire cloné
 cd Colibris/Back
-mv .env.example .env
+cp .env.example .env
 git checkout feat/cd
-
-sudo docker compose -f docker-nginx-proxy-compose.yml up -d
-sudo docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-
+sudo docker compose -f docker-nginx-proxy-compose.yml up -d --build
+sudo docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 
 
 

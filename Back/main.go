@@ -55,6 +55,16 @@ func main() {
 		route.ChatRoutes(v1, database)
 		v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
+	env := gin.Mode()
+
+	if env == "prod" {
+		gin.SetMode(gin.ReleaseMode)
+		r.Use(gin.Recovery())
+		err := r.Run(":80")
+		if err != nil {
+			return
+		}
+	}
 	err := r.Run(":8080")
 	if err != nil {
 		return

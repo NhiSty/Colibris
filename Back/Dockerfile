@@ -5,7 +5,7 @@ WORKDIR /go/src/app
 
 COPY . .
 RUN go mod tidy
-RUN GOOS=linux go build -ldflags="-s -w -X main.dbHost=localhost" -o ./bin/api ./main.go
+RUN GOOS=linux go build -ldflags="-s -w" -o ./bin/api ./main.go
 
 
 FROM alpine:3.17

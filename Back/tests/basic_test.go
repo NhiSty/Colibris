@@ -2,13 +2,10 @@ package tests
 
 import "testing"
 
-func TestBasicAssertion(t *testing.T) {
-	if 1 != 1 {
-		t.Fatalf("expected 1 to equal 1")
-	}
-}
-func TestBasicFailed(t *testing.T) {
-	if 2 != 1 {
-		t.Fatalf("expected to fail")
+func TestAddPass(t *testing.T) {
+	result := 2 + 3
+	expected := 5
+	if result != expected {
+		t.Errorf("Add(2, 3) = %d; want %d", result, expected)
 	}
 }
