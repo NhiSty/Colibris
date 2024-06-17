@@ -1,3 +1,4 @@
+#cloud-boothook
 #!/bin/bash
 
 chmod +x "$0"
