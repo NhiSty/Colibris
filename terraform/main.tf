@@ -77,13 +77,12 @@ resource "aws_subnet" "subnet" {
 }
 
 resource "aws_instance" "vm" {
-  ami                    = var.ami
-  instance_type          = var.instance_type
-  security_groups        = [aws_security_group.security_group_vm.name]
-  subnet_id              = aws_subnet.subnet.id
-  key_name               = aws_key_pair.aws-key-pair.key_name
-  vpc_security_group_ids = [aws_security_group.security_group_vm.id]
-  user_data              = data.template_file.deploy.rendered
+  ami             = var.ami
+  instance_type   = var.instance_type
+  security_groups = [aws_security_group.security_group_vm.name]
+  subnet_id       = aws_subnet.subnet.id
+  key_name        = aws_key_pair.aws-key-pair.key_name
+  user_data       = data.template_file.deploy.rendered
 
 }
 
