@@ -13,10 +13,22 @@ import (
 
 var dbInstance *gorm.DB
 var once sync.Once
+var dbHost string
+var dbUsername string
+var dbPassword string
+var dbDatabase string
+var dbPort string
 
 func Connect() *gorm.DB {
 	once.Do(func() {
-		dsn := os.Getenv("DB_URL")
+
+		dsn := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v sslmode=disable",
+			os.Getenv("DB_HOST"),
+			os.Getenv("DB_USERNAME"),
+			os.Getenv("DB_PASSWORD"),
+			os.Getenv("DB_DATABASE"),
+			os.Getenv("DB_PORT"),
+		)
 		var err error
 		dbInstance, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		if err != nil {

@@ -1,13 +1,13 @@
 # Run the project in development mode
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.override.yml up
+docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d 
 ```
 
 # Run the project in production mode
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
 # Check the logs
