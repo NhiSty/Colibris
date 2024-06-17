@@ -23,8 +23,30 @@ resource "aws_key_pair" "aws-key-pair" {
 }
 
 
+
+
+data "template_file" "deploy" {
+  template = file("./deploy.sh")
+}
+
+resource "aws_eip" "ip" {
+  instance = aws_instance.vm.id
+  domain   = "vpc"
+
+}
+
+resource "aws_vpc" "vpc" {
+  enable_dns_hostnames = true
+  cidr_block           = "10.0.0.0/16"
+}
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.vpc.id
+}
+
 resource "aws_security_group" "security_group_vm" {
-  name = var.security_group_name
+  name   = var.security_group_name
+  vpc_id = aws_vpc.vpc.id
 
   ingress {
     from_port   = 22
@@ -56,21 +78,6 @@ resource "aws_security_group" "security_group_vm" {
 
 }
 
-data "template_file" "deploy" {
-  template = file("./deploy.sh")
-}
-
-resource "aws_eip" "ip" {
-  instance = aws_instance.vm.id
-  domain   = "vpc"
-}
-
-resource "aws_vpc" "vpc" {
-  enable_dns_support   = true
-  enable_dns_hostnames = true
-  cidr_block           = "10.0.0.0/16"
-}
-
 resource "aws_subnet" "subnet" {
   vpc_id     = aws_vpc.vpc.id
   cidr_block = "10.0.0.0/16"
@@ -83,12 +90,11 @@ resource "aws_instance" "vm" {
   key_name               = aws_key_pair.aws-key-pair.key_name
   vpc_security_group_ids = [aws_security_group.security_group_vm.id]
   user_data              = data.template_file.deploy.rendered
-
 }
 
 
 
 output "public_ip" {
-  value = aws_instance.vm.public_ip
+  value = aws_eip.ip.public_ip
 }
 
