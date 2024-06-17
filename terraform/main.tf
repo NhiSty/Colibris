@@ -59,7 +59,7 @@ resource "aws_security_group" "security_group_vm" {
 }
 
 data "template_file" "deploy" {
-  template = file("/terraform/deploy.sh")
+  template = file("./deploy.sh")
 }
 
 resource "aws_instance" "vm" {
