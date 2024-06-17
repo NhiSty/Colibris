@@ -1,3 +1,17 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+
+provider "aws" {
+  region = "us-west-2"
+}
+
 resource "tls_private_key" "kp" {
   algorithm = "RSA"
   rsa_bits  = 4096
