@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  golang:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: golang
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/app
+    environment:
+      - ENV=development
+    command: ["sh", "-c", "swag init --parseDependency --parseInternal && air -c .air.toml"]
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgres

@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  golang:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: golang
+    environment:
+      - ENV=production
+      - VIRTUAL_HOST=nhisty.live
+      - LETSENCRYPT_HOST=nhisty.live
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: postgres

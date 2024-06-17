@@ -1,48 +1,31 @@
-name: Terraform CI/CD
+name: Pipeline CI
 
 on:
-  #push:
-  #  branches:
-  #    - "feat/cd"
-  pull_request:
+  push:
     branches:
-      - test
-      # - main
-      # - dev
+      - main
+      - dev
+  pull_request: {}
 
 jobs:
-  terraform:
+  build:
     runs-on: ubuntu-latest
+
     defaults:
       run:
-        working-directory: ./terraform
+        working-directory: Back
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
         with:
-          terraform_wrapper: false
-          terraform_version: 1.8.5
+          go-version: "^1.13.1"
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Install dependencies
+        run: go mod tidy
 
-      - name: Initialize Terraform
-        run: terraform init
-
-      - name: Validate Terraform Configuration
-        run: terraform validate
-
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -out=tfplan
-
-      - name: Terraform Apply
-        if: github.event_name == 'push'
-        run: terraform apply -auto-approve tfplan
+      - name: Run tests
+        run: go test -v ./...
