@@ -1,14 +1,11 @@
 package db
 
 import (
-	colocMembers "Colibris/colocMember"
-	colocations "Colibris/colocation"
-	invitations "Colibris/invitation"
-	reset_password "Colibris/reset-password"
-	"Colibris/users"
+	"Colibris/model"
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"log"
 	"os"
 	"sync"
@@ -31,15 +28,28 @@ func Connect() *gorm.DB {
 
 func Migrate(db *gorm.DB) {
 	err := db.AutoMigrate(
-		&users.User{},
-		&colocations.Colocation{},
-		&colocMembers.ColocMember{},
-		&reset_password.ResetPassword{},
-		&invitations.Invitation{},
+		&model.User{},
+		&model.Colocation{},
+		&model.ColocMember{},
+		&model.ResetPassword{},
+		&model.Invitation{},
+		&model.Log{},
+		&model.Task{},
+		&model.Message{},
 	)
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
+	// Create the admin user if it does not exist
+	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.User{
+		Email: "admin@admin.com",
+		// test123!
+		Password:  "$2a$10$cFrne/rnK4JoEJn.bwdDJetpjbivABHtK/oy2/dYNjs6QUj7Fn0Pi",
+		Firstname: "admin",
+		Lastname:  "admin",
+		Roles:     model.ROLE_ADMIN,
+	})
+
 	fmt.Println("Database migration completed successfully.")
 }
 

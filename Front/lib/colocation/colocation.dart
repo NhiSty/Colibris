@@ -8,10 +8,9 @@ class Colocation {
   final dynamic colocMembers;
   final String? description;
   final bool isPermanent;
-  final String address;
-  final String city;
-  final String zipCode;
-  final String country;
+  final String location;
+  final double latitude;
+  final double longitude;
 
   Colocation({
     required this.id,
@@ -23,10 +22,9 @@ class Colocation {
     this.colocMembers,
     this.description,
     required this.isPermanent,
-    required this.address,
-    required this.city,
-    required this.zipCode,
-    required this.country,
+    required this.location,
+    required this.latitude,
+    required this.longitude,
   });
 
   factory Colocation.fromJson(Map<String, dynamic> json) {
@@ -40,10 +38,9 @@ class Colocation {
       colocMembers: json['ColocMembers'],
       description: json['Description'],
       isPermanent: json['IsPermanent'],
-      address: json['Address'],
-      city: json['City'],
-      zipCode: json['ZipCode'],
-      country: json['Country'],
+      location: json['Location'],
+      latitude: json['Latitude'],
+      longitude: json['Longitude'],
     );
   }
 }

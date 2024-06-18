@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:front/colocation/colocation.dart';
 import 'package:front/utils/dio.dart';
 import 'package:front/website/share/secure_storage.dart';
+import 'package:latlong2/latlong.dart';
 
 Future<List<Colocation>> fetchColocations() async {
   var headers = await addHeader();
@@ -20,9 +21,9 @@ Future<List<Colocation>> fetchColocations() async {
       throw Exception('Failed to load colocations 8');
     }
   } on DioException catch (e) {
-    log('Dio error!');
-    log('Response status: ${e.response!.statusCode}');
-    log('Response data: ${e.response!.data}');
+    print('Dio error!');
+    print('Response status: ${e.response!.statusCode}');
+    print('Response data: ${e.response!.data}');
     throw Exception('Failed to load colocations');
   }
 }
@@ -33,7 +34,6 @@ Future<Map<String, dynamic>> fetchColocation(int colocationId) async {
     var response = await dio.get('/colocations/$colocationId',
         options: Options(headers: headers));
     if (response.statusCode == 200) {
-      print(response);
       return response.data["result"];
     } else {
       throw Exception('Failed to load colocation');
@@ -47,7 +47,7 @@ Future<Map<String, dynamic>> fetchColocation(int colocationId) async {
 }
 
 Future<int> createColocation(String name, String description, bool isPermanent,
-    String address, String zipcode, String country, String city) async {
+    LatLng coord, String location) async {
   var headers = await addHeader();
   try {
     var userData = await decodeToken();
@@ -58,11 +58,49 @@ Future<int> createColocation(String name, String description, bool isPermanent,
         'description': description,
         'isPermanent': isPermanent,
         "userId": userData['user_id'],
-        'address': address,
-        'zipCode': zipcode,
-        'country': country,
-        'city': city,
+        "latitude": coord.latitude,
+        "longitude": coord.longitude,
+        "location": location
       },
+      options: Options(headers: headers),
+    );
+    print(response.data);
+    return response.statusCode!;
+  } on DioException catch (e) {
+    log('Dio error!');
+    log('Response status: ${e.response!.statusCode}');
+    log('Response data: ${e.response!.data}');
+    return e.response?.statusCode ?? 500;
+  }
+}
+
+Future<int> updateColocation(
+    int colocationId, String name, String description, bool isPermanent) async {
+  var headers = await addHeader();
+  try {
+    var response = await dio.patch(
+      '/colocations/$colocationId',
+      data: {
+        'name': name,
+        'description': description,
+        'isPermanent': isPermanent,
+      },
+      options: Options(headers: headers),
+    );
+    return response.statusCode!;
+  } on DioException catch (e) {
+    print('Dio error!');
+    print('Response status: ${e.response!.statusCode}');
+    print('Response data: ${e.response!.data}');
+    return e.response?.statusCode ?? 500;
+  }
+}
+
+Future<int> deleteColocation(int colocationId) async {
+  var headers = await addHeader();
+  try {
+    var response = await dio.delete(
+      '/colocations/$colocationId',
       options: Options(headers: headers),
     );
     print(response.data);

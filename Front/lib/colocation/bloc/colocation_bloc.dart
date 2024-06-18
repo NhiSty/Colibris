@@ -21,49 +21,6 @@ class ColocationBloc extends Bloc<ColocationEvent, ColocationState> {
       } else if (event is ColocationInitial) {
         emit(const ColocationInitial());
       }
-      /* else if (event is ColocationCreate) {
-        try {
-          final colocation = createColocation(event.colocation);
-          emit(ColocationCreated(colocation));
-        } catch (error) {
-          emit(ColocationError('Failed to create colocation: $error'));
-        }
-      } else if (event is ColocationDelete) {
-        try {
-          final colocation = deleteColocation(event.colocation);
-          emit(ColocationDeleted(colocation));
-        } catch (error) {
-          emit(ColocationError('Failed to delete colocation: $error'));
-        }
-      } else if (event is ColocationUpdate) {
-        try {
-          final colocation = updateColocation(event.colocation);
-          emit(ColocationUpdated(colocation));
-        } catch (error) {
-          emit(ColocationError('Failed to update colocation: $error'));
-        }
-      } else if (event is ColocationJoin) {
-        try {
-          final colocation = joinColocation(event.colocationId);
-          emit(ColocationJoined(colocation));
-        } catch (error) {
-          emit(ColocationError('Failed to join colocation: $error'));
-        }
-      } else if (event is ColocationLeave) {
-        try {
-          final colocation = leaveColocation(event.colocationId);
-          emit(ColocationLeft(colocation));
-        } catch (error) {
-          emit(ColocationError('Failed to leave colocation: $error'));
-        }
-      } else if (event is ColocationInvite) {
-        try {
-          final colocation = inviteColocation(event.colocationId, event.email);
-          emit(ColocationInvited(colocation));
-        } catch (error) {
-          emit(ColocationError('Failed to invite colocation: $error'));
-        }
-      }*/
     });
   }
 }

@@ -112,7 +112,7 @@ class InvitationCard extends StatelessWidget {
             const SizedBox(height: 10),
             Center(
               child: Text(
-                "Vous êtes invité à rejoindre la colocation ${colocationData?['Name']} située à ${colocationData?['Address']} ${colocationData?['City']} ${colocationData?['ZipCode']} ${colocationData?['Country']} ! Cette colocation peut-être décrite de la manière suivante : ${colocationData?['Description'] ?? ''} ",
+                "Vous êtes invité à rejoindre la colocation ${colocationData?['Name']} située à ${colocationData?['Location']} ! Cette colocation peut-être décrite de la manière suivante : ${colocationData?['Description'] ?? ''} ",
                 style: const TextStyle(color: Colors.white),
               ),
             ),

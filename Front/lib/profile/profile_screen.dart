@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:front/services/user_service.dart';
+import 'package:front/user/user_service.dart';
 import 'package:front/website/share/secure_storage.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -38,8 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       var user = await decodeToken();
       int userId = user['user_id'];
-      final userService = UserService();
-      final userData = await userService.getUserById(userId);
+      final userData = await getUserById(userId);
       setState(() {
         _lastnameController.text = userData['Lastname'] ?? '';
         _firstNameController.text = userData['Firstname'] ?? '';
@@ -155,8 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         var user = await decodeToken();
         int userId = user['user_id'];
 
-        final userService = UserService();
-        await userService.updateUser(userId, updatedUserData);
+        await updateUser(userId, updatedUserData);
 
         if (!mounted) return;
 

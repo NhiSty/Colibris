@@ -26,7 +26,7 @@ class ColocationDelete extends ColocationEvent {
 class ColocationUpdate extends ColocationEvent {
   final Colocation colocation;
 
-  ColocationUpdate(this.colocation);
+  ColocationUpdate(this.colocation, {required colocationId});
 }
 
 class ColocationJoin extends ColocationEvent {

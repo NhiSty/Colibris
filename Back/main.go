@@ -1,21 +1,19 @@
 // @title Swagger Example API
-// @version 1.0
+// @version 2.0
 // @description This is a sample server for a pet store.
 // @termsOfService http://swagger.io/terms/
-
 // @host localhost:8080
-// @BasePath /api/v1
+// @securityDefinitions.apikey Bearer
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
 package main
 
 import (
-	"Colibris/auth"
-	colocMembers "Colibris/colocMember"
-	colocations "Colibris/colocation"
 	"Colibris/db"
 	"Colibris/docs"
-	invitations "Colibris/invitation"
-	"Colibris/reset-password"
-	"Colibris/users"
+	"Colibris/middleware"
+	"Colibris/route"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
@@ -26,7 +24,6 @@ import (
 func main() {
 	r := gin.Default()
 
-	//r.Use(cors.Default())
 	config := cors.Config{
 		AllowOrigins:     []string{"*"}, // Frontend origin
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
@@ -35,10 +32,11 @@ func main() {
 		AllowCredentials: true,
 	}
 
-	r.Use(cors.New(config))
-
 	database := db.Connect()
 	db.Migrate(database)
+
+	r.Use(cors.New(config))
+	r.Use(middleware.LoggerMiddleware(database))
 
 	const prefixUrl string = "/api/v1"
 	docs.SwaggerInfo.BasePath = prefixUrl
@@ -46,13 +44,19 @@ func main() {
 
 	v1 := r.Group(prefixUrl)
 	{
-		auth.Routes(v1, database)
-		users.Routes(v1, database)
-		colocations.Routes(v1, database)
-		colocMembers.Routes(v1, database)
-		reset_password.Routes(v1, database)
-		invitations.Routes(v1, database)
+		route.AuthRoutes(v1, database)
+		route.UserRoutes(v1, database)
+		route.ResetPasswordRoutes(v1, database)
+		route.InvitationRoutes(v1, database)
+		route.ColocMemberRoutes(v1, database)
+		route.ColocationRoutes(v1, database)
+		route.LogRoutes(v1, database)
+		route.TaskRoutes(v1, database)
+		route.ChatRoutes(v1, database)
 		v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
-	r.Run(":8080")
+	err := r.Run(":8080")
+	if err != nil {
+		return
+	}
 }

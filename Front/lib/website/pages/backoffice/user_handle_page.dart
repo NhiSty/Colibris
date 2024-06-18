@@ -1,61 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:front/services/user_service.dart';
-import 'package:front/website/pages/backoffice/components/pagination_controls.dart';
-import 'package:front/website/pages/backoffice/components/title_and_breadcrumb.dart';
-import 'package:front/website/pages/backoffice/components/user_list.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
+import 'package:front/website/pages/backoffice/user/bloc/user_state.dart';
+import 'package:front/website/pages/backoffice/user/components/pagination_controls.dart';
+import 'package:front/website/pages/backoffice/user/components/title_and_breadcrumb.dart';
+import 'package:front/website/pages/backoffice/user/components/user_list.dart';
 
-class UserHandlePage extends StatefulWidget {
+class UserHandlePage extends StatelessWidget {
   const UserHandlePage({super.key});
-
-  @override
-  _UserHandlePageState createState() => _UserHandlePageState();
-}
-
-class _UserHandlePageState extends State<UserHandlePage> {
-  late Future<List<User>> _futureUsers;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchUsers();
-  }
-
-  void _fetchUsers() {
-    setState(() {
-      _futureUsers = UserService().getAllUsers();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TitleAndBreadcrumb(onUpdate: _fetchUsers),
-            const SizedBox(height: 16.0),
-            Expanded(
-              child: FutureBuilder<List<User>>(
-                future: _futureUsers,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text('No users found'));
-                  } else {
-                    return UserList(
-                        users: snapshot.data!, onUpdate: _fetchUsers);
-                  }
-                },
-              ),
-            ),
-            const PaginationControls(),
-          ],
-        ),
+      body: Column(
+        children: [
+          const SizedBox(height: 20),
+          const TitleAndBreadcrumb(),
+          BlocBuilder<UserBloc, UserState>(
+            builder: (context, state) {
+              if (state is UserLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is UserLoaded) {
+                return Expanded(
+                  child: Column(
+                    children: [
+                      Expanded(child: UserList(users: state.users)),
+                      PaginationControls(
+                        currentPage: state.currentPage,
+                        totalUsers: state.totalUsers,
+                        showPagination: state.showPagination,
+                      ),
+                    ],
+                  ),
+                );
+              } else if (state is UserError) {
+                return Center(child: Text(state.message));
+              } else if (state is UserSearchEmpty) {
+                return const Center(
+                    child: Text('No user found with this search'));
+              } else {
+                return const Center(child: Text('No users found'));
+              }
+            },
+          ),
+        ],
       ),
     );
   }

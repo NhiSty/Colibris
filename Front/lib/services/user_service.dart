@@ -7,14 +7,24 @@ import 'package:front/website/share/secure_storage.dart';
 class UserService {
   final Dio _dio = dio;
 
-  Future<List<User>> getAllUsers() async {
+  Future<UserResponse> getAllUsers({int page = 1, int pageSize = 5}) async {
+    var headers = await addHeader();
     try {
-      final response = await _dio.get('/users');
+      final response = await _dio.get(
+        '/users',
+        queryParameters: {
+          'page': page,
+          'pageSize': pageSize,
+        },
+        options: Options(headers: headers),
+      );
 
       if (response.statusCode == 200) {
-        List<User> users =
-            (response.data as List).map((user) => User.fromJson(user)).toList();
-        return users;
+        List<User> users = (response.data['users'] as List)
+            .map((user) => User.fromJson(user))
+            .toList();
+        int total = response.data['total'];
+        return UserResponse(users: users, total: total);
       } else {
         throw Exception('Failed to load users');
       }
@@ -25,6 +35,56 @@ class UserService {
       log('Response status: ${e.response?.statusCode}');
       log('Response data: ${e.response?.data}');
       throw Exception('Failed to load users');
+    }
+  }
+
+  Future<List<User>> searchUsers({required String query}) async {
+    try {
+      final response = await _dio.get(
+        '/users/search',
+        queryParameters: {'query': query},
+      );
+
+      if (response.statusCode == 200) {
+        List<User> users =
+            (response.data as List).map((user) => User.fromJson(user)).toList();
+        return users;
+      } else {
+        throw Exception('Failed to search users');
+      }
+    } on DioException catch (e) {
+      print('Error: ${e.response?.statusCode}');
+      print('Response data: ${e.response?.data}');
+      log('Dio error!');
+      log('Response status: ${e.response?.statusCode}');
+      log('Response data: ${e.response?.data}');
+      throw Exception('Failed to search users');
+    }
+  }
+
+  Future<void> register(
+      String email, String password, String firstName, String lastName) async {
+    try {
+      final response = await _dio.post(
+        '/register',
+        data: {
+          'email': email,
+          'password': password,
+          'firstname': firstName,
+          'lastname': lastName,
+        },
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to register user');
+      }
+    } on DioException catch (e) {
+      print('Error: ${e.response?.statusCode}');
+      print('Response data: ${e.response?.data}');
+      log('Dio error!');
+      log('Response status: ${e.response?.statusCode}');
+      log('Response data: ${e.response?.data}');
+      throw Exception('Failed to register user');
     }
   }
 
@@ -96,7 +156,12 @@ class UserService {
   }
 }
 
+class UserResponse {
+  final List<User> users;
+  final int total;
 
+  UserResponse({required this.users, required this.total});
+}
 
 class User {
   final int id;

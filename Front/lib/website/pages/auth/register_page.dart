@@ -157,16 +157,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void registerUser(
       String email, String password, String firstname, String lastname) async {
-    print('IN register page...');
-
     setState(() {
       _isLoading = true;
     });
-
-    print('avant envoit mail : $email');
-    print('avant envoit password : $password');
-    print('avant envoit firstname : $firstname');
-    print('avant envoit lastame : $lastname');
 
     var response = await register(email, password, firstname, lastname);
 
