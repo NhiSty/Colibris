@@ -21,6 +21,7 @@ import 'package:front/reset-password/reset_password_form.dart';
 import 'package:front/shared.widget/bottom_navigation_bar.dart';
 import 'package:front/task/bloc/task_bloc.dart';
 import 'package:front/task/task_detail.dart';
+import 'package:front/task/update_task_screen.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -134,6 +135,17 @@ class MyApp extends StatelessWidget {
                 builder: (context) =>
                     ConversationScreen(conversationId: routes['chatId']),
               );
+              case UpdateTaskScreen.routeName:
+              return MaterialPageRoute(
+                  builder: (context) => BlocProvider.value(
+                        value: BlocProvider.of<TaskBloc>(context),
+                        child: UpdateTaskScreen(
+                          colocation: routes['colocation'],
+                          task: routes['task'],
+                        ),
+                      ),
+                  settings: settings);
+
             default:
               return null;
           }
