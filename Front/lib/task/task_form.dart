@@ -279,7 +279,7 @@ class _TaskFormState extends State<TaskForm> {
 
                             print('statusCode: $statusCode');
 
-                            if (statusCode == 201) {
+                            if (statusCode == 201 || statusCode == 200) {
                               widget.onSuccessfulSubmit();
                             }
                               /*Navigator.popAndPushNamed(

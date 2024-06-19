@@ -46,7 +46,8 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
       String picture,
       int colocationId,
       ) async {
-    return await createTask( //todo change to updateTask
+    return await updateTask(
+        widget.task.id,
         title,
         description,
         date,
