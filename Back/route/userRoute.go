@@ -15,7 +15,7 @@ func UserRoutes(userRoutes *gin.RouterGroup, db *gorm.DB) {
 	AuthMiddleware := middleware.AuthMiddleware
 
 	{
-		routes.GET("", AuthMiddleware(), userController.GetAllUsers)
+		routes.GET("", AuthMiddleware("ROLE_ADMIN"), userController.GetAllUsers)
 		routes.GET("/:id", AuthMiddleware(), userController.GetUserById)
 		routes.PATCH("/:id", AuthMiddleware(), userController.UpdateUser)
 		routes.DELETE("/:id", userController.DeleteUserById)
