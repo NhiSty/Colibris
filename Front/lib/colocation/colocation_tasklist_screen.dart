@@ -108,7 +108,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                 child: Text(state.message),
                               );
                             } else if (state is TaskLoaded) {
-                              final tasks = state.tasks;
+                              final tasks = state.tasks.reversed.toList();
                               if (tasks.isEmpty) {
                                 return const Center(
                                   child: Text(
