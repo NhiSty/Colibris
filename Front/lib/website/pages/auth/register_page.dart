@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/auth/auth_service.dart';
 
@@ -29,9 +30,10 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Register',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  Text(
+                    'register_title'.tr(),
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.3,
@@ -46,13 +48,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     width: 250,
                     child: TextFormField(
                       controller: _firstNameController,
-                      decoration: const InputDecoration(
-                        labelText: 'First Name',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: 'register_firstname'.tr(),
+                        border: const OutlineInputBorder(),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your first name';
+                          return 'backoffice_register_firstname_error'.tr();
                         }
                         return null;
                       },
@@ -69,7 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your last name';
+                          return 'backoffice_register_lastname_error'.tr();
                         }
                         return null;
                       },
@@ -81,13 +83,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: 'register_email'.tr(),
+                        border: const OutlineInputBorder(),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter an email';
+                          return 'backoffice_register_email_error'.tr();
                         }
                         return null;
                       },
@@ -98,14 +100,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     width: 250,
                     child: TextFormField(
                       controller: _passwordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: 'register_password'.tr(),
+                        border: const OutlineInputBorder(),
                       ),
                       obscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a password';
+                          return 'backoffice_register_password_error'.tr();
                         }
                         return null;
                       },
@@ -130,12 +132,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     child: _isLoading
                         ? const CircularProgressIndicator()
-                        : const Text('S\'inscrire'),
+                        : Text('register_submit'.tr()),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    'Déjà dans nos papiers ?',
-                    style: TextStyle(fontSize: 16),
+                  Text(
+                    'register_already_in_our_paper'.tr(),
+                    style: const TextStyle(fontSize: 16),
                   ),
                   TextButton(
                     onPressed: () {
@@ -144,7 +146,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.green,
                     ),
-                    child: const Text('Se connecter'),
+                    child: Text('backoffice_login_submit'.tr()),
                   ),
                 ],
               ),
@@ -174,8 +176,8 @@ class _RegisterPageState extends State<RegisterPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Registration Successful'),
-            content: const Text('User was successfully created.'),
+            title: Text('register_successful'.tr()),
+            content: Text('register_user_created_successfully'.tr()),
             actions: <Widget>[
               TextButton(
                 onPressed: () {

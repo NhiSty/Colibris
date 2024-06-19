@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,9 +14,9 @@ class HomePage extends StatelessWidget {
           Container(
             color: Colors.blue,
             padding: const EdgeInsets.all(16.0),
-            child: const Text(
-              'BackOffice d\'administration',
-              style: TextStyle(
+            child: Text(
+              'backoffice_title'.tr(),
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,

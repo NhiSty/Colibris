@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/user/user_service.dart';
 import 'package:front/website/share/secure_storage.dart';
@@ -53,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text('profile'.tr()),
         backgroundColor: Colors.green,
       ),
       body: Padding(
@@ -63,16 +64,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
-                'User Settings',
-                style: TextStyle(
+              Text(
+                'user_settings'.tr(),
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 16.0),
               _buildEditableRow(
-                label: 'Lastname',
+                label: 'lastname'.tr(),
                 controller: _lastnameController,
                 isEditing: _isEditingLastName,
                 onEdit: () {
@@ -83,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 16.0),
               _buildEditableRow(
-                label: 'Firstname',
+                label: 'firstname'.tr(),
                 controller: _firstNameController,
                 isEditing: _isEditingFirstName,
                 onEdit: () {
@@ -94,7 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 16.0),
               _buildEditableRow(
-                label: 'Email',
+                label: 'email'.tr(),
                 controller: _emailController,
                 isEditing: _isEditingEmail,
                 onEdit: () {
@@ -105,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 16.0),
               _buildEditableRow(
-                label: 'Password',
+                label: 'password'.tr(),
                 controller: _passwordController,
                 isEditing: _isEditingPassword,
                 obscureText: true,
@@ -126,8 +127,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     textStyle: const TextStyle(fontSize: 18),
                     foregroundColor: Colors.white,
                   ),
-                  child: const Text('Submit'),
+                  child: Text('submit'.tr()),
                 ),
+              ),
+              const SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('🇺🇸', style: TextStyle(fontSize: 32)),
+                  Switch(
+                    value: context.locale == const Locale('fr'),
+                    onChanged: (value) {
+                      setState(() {
+                        context.setLocale(
+                            value ? const Locale('fr') : const Locale('en'));
+                      });
+                    },
+                  ),
+                  const Text('🇫🇷', style: TextStyle(fontSize: 32)),
+                ],
               ),
             ],
           ),
@@ -159,15 +177,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('User profile updated successfully'),
+          SnackBar(
+            content: Text('update_success'.tr()),
           ),
         );
       } catch (e) {
         print('Error updating user data: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to update user profile'),
+          SnackBar(
+            content: Text('update_failure'.tr()),
           ),
         );
       }
@@ -200,7 +218,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   isEditing ? const OutlineInputBorder() : InputBorder.none,
             ),
             validator: (value) {
-              if (label == 'Password') {
+              if (label == 'password'.tr()) {
                 if (isEditing && (value == null || value.isEmpty)) {
                   return 'Please enter a new password';
                 }

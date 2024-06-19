@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/colocation/colocation_service.dart';
 
@@ -35,7 +36,7 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mise à jour Colocation'),
+        title: Text('update_colocation_title'.tr()),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -48,23 +49,23 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
                     children: <Widget>[
                       TextFormField(
                         controller: _nameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Nom',
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: 'update_colocation_name'.tr(),
+                          border: const OutlineInputBorder(),
                         ),
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _descriptionController,
-                        decoration: const InputDecoration(
-                          labelText: 'Description',
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: 'update_colocation_description'.tr(),
+                          border: const OutlineInputBorder(),
                         ),
                         maxLines: 3,
                       ),
                       const SizedBox(height: 16),
                       CheckboxListTile(
-                        title: const Text('Colocation permanente'),
+                        title: Text('update_colocation_permanently'.tr()),
                         value: isPermanent,
                         checkColor: Colors.white,
                         activeColor: Colors.green,
@@ -91,16 +92,18 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
                                     'colocationId': widget.colocationId
                                   });
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Colocation mise à jour'),
+                                SnackBar(
+                                  content: Text(
+                                      'update_colocation_updated_successfully'
+                                          .tr()),
                                   backgroundColor: Colors.green,
                                 ),
                               );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content:
-                                      Text('Erreur lors de la mise à jour'),
+                                SnackBar(
+                                  content: Text(
+                                      'update_colocation_updated_error'.tr()),
                                   backgroundColor: Colors.red,
                                 ),
                               );
@@ -111,10 +114,9 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.green,
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          minimumSize: const Size(
-                              double.infinity, 50), // Bouton en pleine largeur
+                          minimumSize: const Size(double.infinity, 50),
                         ),
-                        child: const Text('Mettre à jour'),
+                        child: Text('update_colocation_update_submit'.tr()),
                       ),
                     ],
                   ),

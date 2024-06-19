@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/reset-password/reset_password_bloc.dart';
@@ -25,7 +26,7 @@ class ResetPasswordFormScreen extends StatelessWidget {
         },
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Change password'),
+            title: Text('forget_password_change_title'.tr()),
             backgroundColor: Colors.green,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
@@ -67,15 +68,16 @@ class ResetPasswordFormScreen extends StatelessWidget {
                             height: 200,
                             width: 200,
                           ),
-                          const Text(
-                            'Changing password',
-                            style: TextStyle(fontSize: 16),
+                          Text(
+                            'forget_password_change_text'.tr(),
+                            style: const TextStyle(fontSize: 16),
                           ),
-                          buildTextFormField(_passwordController, 'Password',
+                          buildTextFormField(_passwordController,
+                              'forget_password_change_new_password'.tr(),
                               obscureText: true),
                           const SizedBox(height: 10),
-                          buildTextFormField(
-                              _passwordConfirmController, 'Confirm password',
+                          buildTextFormField(_passwordConfirmController,
+                              'forget_password_change_confirm_password'.tr(),
                               obscureText: true),
                           const SizedBox(height: 20),
                           ElevatedButton(
@@ -88,7 +90,7 @@ class ResetPasswordFormScreen extends StatelessWidget {
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.green,
                             ),
-                            child: const Text('Change password'),
+                            child: Text('forget_password_change_submit'.tr()),
                           ),
                         ],
                       );
@@ -122,7 +124,7 @@ class ResetPasswordFormScreen extends StatelessWidget {
           return '$label invalide';
         }
         if (label == 'Confirm password' && value != _passwordController.text) {
-          return 'Passwords do not match';
+          return 'forget_password_pwd_not_match'.tr();
         }
         return null;
       },

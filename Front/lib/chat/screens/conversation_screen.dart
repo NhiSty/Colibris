@@ -1,11 +1,12 @@
+import 'dart:convert';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/chat/models/message.dart';
 import 'package:front/chat/services/api_service.dart';
 import 'package:front/chat/services/websocket_service.dart';
 import 'package:front/website/share/secure_storage.dart';
-import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:intl/intl.dart';
 
 class ConversationScreen extends StatefulWidget {
   final int conversationId;
@@ -66,7 +67,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
       try {
         final data = json.decode(message);
         final newMessage = Message.fromJson(data);
-        print("New message: $newMessage");
         setState(() {
           _messages.add(newMessage);
           _scrollToBottom();
@@ -119,7 +119,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Conversation')),
+      appBar: AppBar(title: Text('chat_title'.tr())),
       body: Column(
         children: [
           Expanded(
@@ -212,7 +212,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
                 Expanded(
                   child: TextField(
                     controller: _messageController,
-                    decoration: InputDecoration(hintText: 'Enter a message'),
+                    decoration:
+                        InputDecoration(hintText: 'chat_enter_message'.tr()),
                     onTap: _scrollToBottom,
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigationBarWidget extends StatelessWidget {
@@ -10,69 +11,69 @@ class BottomNavigationBarWidget extends StatelessWidget {
 
     final Map<String, List<BottomNavigationBarItem>> routeIcons = {
       '/home': [
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.home),
+          label: 'navbar_home'.tr(),
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.person),
+          label: 'navbar_profile'.tr(),
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.logout_rounded),
-          label: 'Logout',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.logout_rounded),
+          label: 'navbar_logout'.tr(),
         ),
       ],
       '/profile': [
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.home),
+          label: 'navbar_home'.tr(),
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.person),
+          label: 'navbar_profile'.tr(),
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.logout_rounded),
-          label: 'Logout',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.logout_rounded),
+          label: 'navbar_logout'.tr(),
         ),
       ],
       '/colocation/task-list': [
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.task),
-          label: 'Task List',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.task),
+          label: 'navbar_task_list'.tr(),
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.home),
+          label: 'navbar_home'.tr(),
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.chat),
-          label: 'Chat',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.chat),
+          label: 'navbar_chat'.tr(),
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.person),
+          label: 'navbar_profile'.tr(),
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.logout_rounded),
-          label: 'Logout',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.logout_rounded),
+          label: 'navbar_logout'.tr(),
         ),
       ],
     };
 
     final List<BottomNavigationBarItem> defaultIcons = [
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.home),
-        label: 'Home',
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.home),
+        label: 'navbar_home'.tr(),
       ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.person),
-        label: 'Profile',
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.person),
+        label: 'navbar_profile'.tr(),
       ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.logout_rounded),
-        label: 'Logout',
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.logout_rounded),
+        label: 'navbar_logout'.tr(),
       ),
     ];
 

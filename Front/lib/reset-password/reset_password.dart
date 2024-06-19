@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/reset-password/reset_password_bloc.dart';
@@ -23,7 +24,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       create: (_) => ResetPasswordBloc(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Mot de passe oublié'),
+          title: Text('forget_password_title'.tr()),
           backgroundColor: Colors.green,
         ),
         body: Padding(
@@ -70,15 +71,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         const SizedBox(height: 20),
                         if (state is ResetPasswordInitial ||
                             state is ResetPasswordEmailSent) ...[
-                          const Text(
-                            'Indiquez votre mail pour réinitialiser votre mot de passe',
-                            style: TextStyle(fontSize: 14),
+                          Text(
+                            'forget_password_text'.tr(),
+                            style: const TextStyle(fontSize: 14),
                           ),
                           const SizedBox(height: 20),
                           buildTextFormField(
                             _emailController,
                             Validators.validateEmail,
-                            'Email',
+                            'forget_password_email'.tr(),
                             enabled: !_isEmailSent,
                           ),
                           const SizedBox(height: 20),
@@ -97,20 +98,20 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.green,
                             ),
-                            child: const Text('Envoyer un mail'),
+                            child: Text('forget_password_submit'.tr()),
                           ),
                         ],
                         if (state is ResetPasswordEmailSent) ...[
                           const SizedBox(height: 20),
-                          const Text(
-                            'Code reçu par mail',
-                            style: TextStyle(fontSize: 14),
+                          Text(
+                            'forget_password_received_code_by_mail'.tr(),
+                            style: const TextStyle(fontSize: 14),
                           ),
                           const SizedBox(height: 20),
                           buildTextFormField(
                             _codeController,
                             Validators.validateEmailCode,
-                            'Code',
+                            'forget_password_code'.tr(),
                           ),
                           const SizedBox(height: 20),
                           ElevatedButton(
@@ -122,8 +123,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                     );
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Code invalide'),
+                                  SnackBar(
+                                    content: Text(
+                                        'forget_password_code_invalid'.tr()),
                                   ),
                                 );
                               }
@@ -132,7 +134,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.green,
                             ),
-                            child: const Text('Submit'),
+                            child: Text('forget_password_submit_code'.tr()),
                           ),
                         ],
                       ],

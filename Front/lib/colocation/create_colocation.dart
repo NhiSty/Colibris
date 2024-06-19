@@ -1,6 +1,7 @@
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:dio/dio.dart';
 import 'package:front/colocation/colocation_service.dart';
 import 'package:latlong2/latlong.dart'; // Ensure this import is correct for your LatLng implementation
 
@@ -55,18 +56,18 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
           });
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Aucun résultat trouvé')),
+            SnackBar(content: Text('no_results_found'.tr())),
           );
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Erreur lors de la recherche')),
+          SnackBar(content: Text('error_during_search'.tr())),
         );
       }
     } catch (e) {
       print('Erreur: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erreur lors de la recherche')),
+        SnackBar(content: Text('error_during_search'.tr())),
       );
     }
   }
@@ -75,7 +76,7 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Créer une colocation'),
+        title: Text('create_colocation_title'.tr()),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -88,21 +89,21 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                   controller: _nameController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer un nom';
+                      return 'please_give_name'.tr();
                     }
                     return null;
                   },
-                  decoration: const InputDecoration(
-                    labelText: 'Nom',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: 'create_colocation_name'.tr(),
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _descriptionController,
-                  decoration: const InputDecoration(
-                    labelText: 'Description',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: 'create_colocation_description'.tr(),
+                    border: const OutlineInputBorder(),
                   ),
                   maxLines: 3,
                 ),
@@ -110,7 +111,7 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                 TextFormField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    labelText: 'Rechercher une adresse',
+                    labelText: 'create_colocation_search_address'.tr(),
                     border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.search),
@@ -141,14 +142,14 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                       selectedAddress = value?.placeName;
                     });
                   },
-                  decoration: const InputDecoration(
-                    labelText: 'Sélectionner une adresse',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: 'create_colocation_select_address'.tr(),
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16),
                 CheckboxListTile(
-                  title: const Text('Colocation permanente'),
+                  title: Text('create_colocation_permanently'.tr()),
                   value: isPermanent,
                   checkColor: Colors.white,
                   activeColor: Colors.green,
@@ -174,22 +175,24 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                       if (res == 201) {
                         Navigator.pushNamed(context, '/home');
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Colocation créée avec succès'),
+                          SnackBar(
+                            content: Text(
+                                'create_colocation_created_successfully'.tr()),
                           ),
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Erreur lors de la création'),
+                          SnackBar(
+                            content:
+                                Text('create_colocation_created_error'.tr()),
                           ),
                         );
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                        SnackBar(
                           content: Text(
-                              'Veuillez sélectionner une adresse dans les résultats de recherche'),
+                              'create_colocation_message_select_address'.tr()),
                         ),
                       );
                     }
@@ -201,7 +204,7 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                     minimumSize:
                         const Size(double.infinity, 50), // Full-width button
                   ),
-                  child: const Text('Créer la colocation'),
+                  child: Text('create_colocation_submit'.tr()),
                 ),
               ],
             ),

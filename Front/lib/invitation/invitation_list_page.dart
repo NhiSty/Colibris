@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/invitation/invitation.dart';
 import 'package:front/invitation/invitation_accept_page.dart';
@@ -16,15 +17,15 @@ class _InvitationListPageState extends State<InvitationListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Invitation List'),
+        title: Text('invitation_title'.tr()),
       ),
       body: ListView.builder(
         itemCount: widget.invitations.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: const Text("Invitation à rejoindre une colocation"),
+            title: Text("invitation_to_join_colocation".tr()),
             subtitle: Text(
-                "Invitation reçu le : ${DateTime.parse(widget.invitations[index].createdAt).toLocal().toString().split(' ')[0]}"),
+                "${"invitation_received_at".tr()} ${DateTime.parse(widget.invitations[index].createdAt).toLocal().toString().split(' ')[0]}"),
             onTap: () {
               Navigator.push(
                 context,
