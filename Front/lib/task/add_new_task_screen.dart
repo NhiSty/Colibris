@@ -53,9 +53,13 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
               colocationId: widget.colocation.id,
               submitForm: _submitForm,
               onSuccessfulSubmit: () {
-                Navigator.popAndPushNamed(
-                    context, '/colocation/task-list',
-                    arguments: {'colocation': widget.colocation});
+                Navigator.pop(context, true);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Tâche ajoutée'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
               },
             ),
           ),

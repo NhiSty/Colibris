@@ -129,12 +129,25 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                     return GestureDetector(
                                       child: TaskListItem(
                                         item: item,
-                                        colocation: widget.colocation,
                                         onViewPressed: () {
                                           Navigator.pushNamed(
                                               context, '/task_detail',
                                               arguments: {'task': item});
                                         },
+                                        onEditPressed: item.userId == userData['user_id'] ||
+                                            widget.colocation.userId ==
+                                                userData['user_id']
+                                                  ? () async {
+                                          final result = await Navigator.pushNamed(context, '/update-task',
+                                              arguments: {
+                                                'colocation': widget.colocation,
+                                                'task': item,
+                                              });
+                                          if (result == true) {
+                                            context.read<TaskBloc>().add(
+                                                FetchTasks(widget.colocation.id));
+                                          }
+                                        } : null,
                                         onLikePressed: () {
                                           // Ajoutez ici l'action pour le deuxième bouton
                                         },
@@ -213,11 +226,20 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                     return GestureDetector(
                                         child: TaskListItem(
                                           item: item,
-                                          colocation: widget.colocation,
                                           onViewPressed: () {
                                             Navigator.pushNamed(context, '/task_detail',
                                                 arguments: {'task': item});
                                           },
+                                          onEditPressed: item.userId == userData['user_id'] ||
+                                              widget.colocation.userId ==
+                                                  userData['user_id']
+                                              ? () {
+                                            Navigator.pushNamed(context, '/update-task',
+                                                arguments: {
+                                                  'colocation': widget.colocation,
+                                                  'task': item,
+                                                });
+                                          } : null,
                                           onLikePressed: () {
                                             // Ajoutez ici l'action pour le deuxième bouton
                                           },
@@ -249,9 +271,13 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
               ),
               bottomNavigationBar: BottomNavigationBarWidget(widget.colocation.id),
               floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/add-new-task',
+                onPressed: () async {
+                  final result = await Navigator.pushNamed(context, '/add-new-task',
                       arguments: {'colocation': widget.colocation});
+
+                  if (result == true) {
+                    context.read<TaskBloc>().add(FetchTasks(widget.colocation.id));
+                  }
                 },
                 backgroundColor: Colors.green,
                 child: const Icon(Icons.add, color: Colors.white),
@@ -262,16 +288,16 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
 
 class TaskListItem extends StatelessWidget {
   final item;
-  final Colocation colocation;
   final VoidCallback onViewPressed;
+  final VoidCallback? onEditPressed;
   final VoidCallback onLikePressed;
   final VoidCallback? onDeletePressed;
 
   const TaskListItem({
     super.key,
     required this.item,
-    required this.colocation,
     required this.onViewPressed,
+    this.onEditPressed,
     required this.onLikePressed,
     this.onDeletePressed,
   });
@@ -312,23 +338,18 @@ class TaskListItem extends StatelessWidget {
                               ],
                             )
                         ),
-                        PopupMenuItem(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/update-task',
-                                  arguments: {
-                                    'colocation': colocation,
-                                    'task': item,
-                                  });
-                            },
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.edit_outlined),
-                                SizedBox(width: 10),
-                                Text('Modifier'),
-                              ],
-                            )
-                        ),
+                        if (onEditPressed != null)
+                          PopupMenuItem(
+                              onTap: onEditPressed,
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.edit_outlined),
+                                  SizedBox(width: 10),
+                                  Text('Modifier'),
+                                ],
+                              )
+                          ),
                         PopupMenuItem(
                             onTap: onLikePressed,
                             child: const Row(

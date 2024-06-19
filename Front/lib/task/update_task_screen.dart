@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front/colocation/colocation.dart';
+import 'package:front/colocation/colocation_tasklist_screen.dart';
 import 'package:front/task/task.dart';
 import 'package:front/task/task_form.dart';
 import 'package:front/task/task_service.dart';
@@ -79,9 +80,13 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
               isEditing: true,
               submitForm: _submitForm,
               onSuccessfulSubmit: () {
-                Navigator.popAndPushNamed(
-                    context, '/colocation/task-list',
-                    arguments: {'colocation': widget.colocation});
+                Navigator.pop(context, true);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Colocation mise à jour'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
               },
             ),
           ),
