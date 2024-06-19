@@ -45,7 +45,7 @@ Future<int> updateTask(int taskId, String title, String description, String date
         'description': description,
         'date': date,
         'duration': duration,
-        'picture': picture ?? '',
+        'picture': picture,
         'colocationId': colocationId,
       },
       options: Options(headers: headers),
