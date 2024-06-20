@@ -121,50 +121,57 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                   ),
                                 );
                               } else {
-                                return ListView.builder(
-                                  padding: const EdgeInsets.only(bottom: 80),
-                                  itemCount: tasks.length,
-                                  itemBuilder: (context, index) {
-                                    final item = tasks[index];
-                                    return GestureDetector(
-                                      child: TaskListItem(
-                                        item: item,
-                                        onViewPressed: () {
-                                          Navigator.pushNamed(
-                                              context, '/task_detail',
-                                              arguments: {'task': item});
-                                        },
-                                        onEditPressed: item.userId == userData['user_id'] ||
-                                            widget.colocation.userId ==
-                                                userData['user_id']
-                                                  ? () async {
-                                          final result = await Navigator.pushNamed(context, '/update-task',
-                                              arguments: {
-                                                'colocation': widget.colocation,
-                                                'task': item,
-                                              });
-                                          if (result == true) {
-                                            context.read<TaskBloc>().add(
-                                                FetchTasks(widget.colocation.id));
-                                          }
-                                        } : null,
-                                        onLikePressed: () {
-                                          // Ajoutez ici l'action pour le deuxième bouton
-                                        },
-                                        onDeletePressed:
-                                        item.userId == userData['user_id'] ||
-                                            widget.colocation.userId ==
-                                                userData['user_id']
-                                            ? () async {
-                                          await deleteTask(item.id);
-                                          context.read<TaskBloc>().add(
-                                              FetchTasks(
-                                                  widget.colocation.id));
-                                        }
-                                            : null,
-                                      ),
-                                    );
+                                return RefreshIndicator(
+                                  displacement: 50,
+                                  onRefresh: () async {
+                                    context.read<TaskBloc>().add(
+                                        FetchTasks(widget.colocation.id));
                                   },
+                                    child: ListView.builder(
+                                      padding: const EdgeInsets.only(bottom: 80),
+                                      itemCount: tasks.length,
+                                      itemBuilder: (context, index) {
+                                        final item = tasks[index];
+                                        return GestureDetector(
+                                          child: TaskListItem(
+                                            item: item,
+                                            onViewPressed: () {
+                                              Navigator.pushNamed(
+                                                  context, '/task_detail',
+                                                  arguments: {'task': item});
+                                            },
+                                            onEditPressed: item.userId == userData['user_id'] ||
+                                                widget.colocation.userId ==
+                                                    userData['user_id']
+                                                ? () async {
+                                              final result = await Navigator.pushNamed(context, '/update-task',
+                                                  arguments: {
+                                                    'colocation': widget.colocation,
+                                                    'task': item,
+                                                  });
+                                              if (result == true) {
+                                                context.read<TaskBloc>().add(
+                                                    FetchTasks(widget.colocation.id));
+                                              }
+                                            } : null,
+                                            onLikePressed: () {
+                                              // Ajoutez ici l'action pour le deuxième bouton
+                                            },
+                                            onDeletePressed:
+                                            item.userId == userData['user_id'] ||
+                                                widget.colocation.userId ==
+                                                    userData['user_id']
+                                                ? () async {
+                                              await deleteTask(item.id);
+                                              context.read<TaskBloc>().add(
+                                                  FetchTasks(
+                                                      widget.colocation.id));
+                                            }
+                                                : null,
+                                          ),
+                                        );
+                                      },
+                                    ),
                                 );
                               }
                             } else {
@@ -215,46 +222,53 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                   ),
                                 );
                               } else {
-                                return ListView.builder(
-                                  padding: const EdgeInsets.only(bottom: 80),
-                                  itemCount: tasks.length,
-                                  itemBuilder: (context, index) {
-                                    final item = tasks[index];
-                                    if (item.userId != userData['user_id']) {
-                                      return const SizedBox.shrink();
-                                    }
-                                    return GestureDetector(
-                                        child: TaskListItem(
-                                          item: item,
-                                          onViewPressed: () {
-                                            Navigator.pushNamed(context, '/task_detail',
-                                                arguments: {'task': item});
-                                          },
-                                          onEditPressed: item.userId == userData['user_id'] ||
-                                              widget.colocation.userId ==
-                                                  userData['user_id']
-                                              ? () {
-                                            Navigator.pushNamed(context, '/update-task',
-                                                arguments: {
-                                                  'colocation': widget.colocation,
-                                                  'task': item,
-                                                });
-                                          } : null,
-                                          onLikePressed: () {
-                                            // Ajoutez ici l'action pour le deuxième bouton
-                                          },
-                                          onDeletePressed: item.userId ==
-                                              userData['user_id'] ||
-                                              widget.colocation.userId ==
-                                                  userData['user_id']
-                                              ? () async {
-                                            await deleteTask(item.id);
-                                            context.read<TaskBloc>().add(
-                                                FetchTasks(widget.colocation.id));
-                                          }
-                                              : null,
-                                        ));
+                                return RefreshIndicator(
+                                  displacement: 50,
+                                  onRefresh: () async {
+                                    context.read<TaskBloc>().add(
+                                        FetchTasks(widget.colocation.id));
                                   },
+                                    child: ListView.builder(
+                                      padding: const EdgeInsets.only(bottom: 80),
+                                      itemCount: tasks.length,
+                                      itemBuilder: (context, index) {
+                                        final item = tasks[index];
+                                        if (item.userId != userData['user_id']) {
+                                          return const SizedBox.shrink();
+                                        }
+                                        return GestureDetector(
+                                            child: TaskListItem(
+                                              item: item,
+                                              onViewPressed: () {
+                                                Navigator.pushNamed(context, '/task_detail',
+                                                    arguments: {'task': item});
+                                              },
+                                              onEditPressed: item.userId == userData['user_id'] ||
+                                                  widget.colocation.userId ==
+                                                      userData['user_id']
+                                                  ? () {
+                                                Navigator.pushNamed(context, '/update-task',
+                                                    arguments: {
+                                                      'colocation': widget.colocation,
+                                                      'task': item,
+                                                    });
+                                              } : null,
+                                              onLikePressed: () {
+                                                // Ajoutez ici l'action pour le deuxième bouton
+                                              },
+                                              onDeletePressed: item.userId ==
+                                                  userData['user_id'] ||
+                                                  widget.colocation.userId ==
+                                                      userData['user_id']
+                                                  ? () async {
+                                                await deleteTask(item.id);
+                                                context.read<TaskBloc>().add(
+                                                    FetchTasks(widget.colocation.id));
+                                              }
+                                                  : null,
+                                            ));
+                                      },
+                                    )
                                 );
                               }
                             } else {

@@ -96,8 +96,8 @@ class HomeScreen extends StatelessWidget {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               InvitationListPage(
-                                            invitations: invitations,
-                                          ),
+                                                invitations: invitations,
+                                              ),
                                         ),
                                       );
                                     },
@@ -177,40 +177,46 @@ class HomeScreen extends StatelessWidget {
                           ),
                         );
                       } else {
-                        return ListView.builder(
-                          itemCount: colocations.length,
-                          itemBuilder: (context, index) {
-                            final item = colocations[index];
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, '/colocation/task-list',
-                                    arguments: {
-                                      'colocation': item,
-                                    });
-                              },
-                              child: Padding(
-                                padding:
+                        return RefreshIndicator(
+                            displacement: 50,
+                            onRefresh: () async {
+                              context.read<ColocationBloc>().add(const FetchColocations());
+                            },
+                            child: ListView.builder(
+                              itemCount: colocations.length,
+                              itemBuilder: (context, index) {
+                                final item = colocations[index];
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, '/colocation/task-list',
+                                        arguments: {
+                                          'colocation': item,
+                                        });
+                                  },
+                                  child: Padding(
+                                    padding:
                                     const EdgeInsets.symmetric(vertical: 8.0),
-                                child: ListTile(
-                                  leading: const Icon(Icons.home),
-                                  title: Text(item.name),
-                                  subtitle: Column(
-                                    crossAxisAlignment:
+                                    child: ListTile(
+                                      leading: const Icon(Icons.home),
+                                      title: Text(item.name),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                          '${'colocation_created_at'.tr()}${DateTime.parse(item.createdAt).toLocal().toString().split(' ')[0]}'),
-                                      Text(
-                                          '${'colocation_description'.tr()}${item.description}'),
-                                      Text(item.location),
-                                    ],
+                                        children: [
+                                          Text(
+                                              '${'colocation_created_at'.tr()}${DateTime.parse(item.createdAt).toLocal().toString().split(' ')[0]}'),
+                                          Text(
+                                              '${'colocation_description'.tr()}${item.description}'),
+                                          Text(item.location),
+                                        ],
+                                      ),
+                                      trailing: const Icon(Icons.arrow_forward_ios),
+                                    ),
                                   ),
-                                  trailing: const Icon(Icons.arrow_forward_ios),
-                                ),
-                              ),
-                            );
-                          },
+                                );
+                              },
+                            )
                         );
                       }
                     } else {
