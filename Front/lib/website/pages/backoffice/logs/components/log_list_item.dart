@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/services/log_service.dart';
 
@@ -42,16 +43,17 @@ class LogListItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Method: ${log.method}',
+                          '${'backoffice_logs_method'.tr()} ${log.method}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
-                        Text('Path: ${log.path}'),
-                        Text('Client IP: ${log.clientIp}'),
-                        Text('Date: ${log.date}'),
-                        Text('Time: ${log.time}'),
+                        Text('${'backoffice_logs_path'.tr()} ${log.path}'),
+                        Text(
+                            '${'backoffice_logs_client_ip'.tr()} ${log.clientIp}'),
+                        Text('${'backoffice_logs_user_date'.tr()}${log.date}'),
+                        Text('${'backoffice_logs_user_time'.tr()}${log.time}'),
                       ],
                     ),
                   ),
@@ -59,7 +61,7 @@ class LogListItem extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Status: ${log.level} - ${log.status}',
+                '${'backoffice_logs_status'.tr()} ${log.level} - ${log.status}',
                 style: TextStyle(
                   color: log.level == 'ERROR' ? Colors.red : Colors.blue,
                 ),

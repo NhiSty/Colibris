@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/website/pages/backoffice/user/components/search_bar_and_add_user_button.dart';
 
@@ -10,9 +11,9 @@ class TitleAndBreadcrumb extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(height: 32),
-        const Text(
-          'User Management',
-          style: TextStyle(
+        Text(
+          'backoffice_users_title'.tr(),
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
           ),
@@ -22,22 +23,22 @@ class TitleAndBreadcrumb extends StatelessWidget {
           onTap: () {
             Navigator.pop(context, "/home");
           },
-          child: const MouseRegion(
+          child: MouseRegion(
             cursor: SystemMouseCursors.click,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Home',
-                  style: TextStyle(
+                  'home'.tr(),
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     decoration: TextDecoration.underline,
                     color: Colors.blue,
                   ),
                 ),
                 Text(
-                  ' > User Management',
-                  style: TextStyle(
+                  'backoffice_users_breadcrumb'.tr(),
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),

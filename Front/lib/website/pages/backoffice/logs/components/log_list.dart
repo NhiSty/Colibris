@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/services/log_service.dart';
 import 'package:front/website/pages/backoffice/logs/components/log_list_item.dart';
@@ -12,7 +13,7 @@ class LogList extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     if (logs.isEmpty) {
-      return const Center(child: Text('No logs found'));
+      return Center(child: Text('backoffice_logs_no_log'.tr()));
     }
 
     return ListView.separated(

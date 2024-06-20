@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/services/user_service.dart';
@@ -19,28 +20,30 @@ void showEditUserDialog(BuildContext context, User user) {
         child: BlocListener<UserBloc, UserState>(
           listener: (context, state) {
             if (state is UserLoaded) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('User updated successfully'),
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content:
+                    Text('backoffice_users_user_updated_successfully'.tr()),
               ));
               Navigator.pop(context);
             } else if (state is UserError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Failed to update user: ${state.message}'),
+                content: Text(
+                    '${'backoffice_users_user_updated_error'.tr()} ${state.message}'),
               ));
             }
           },
           child: CustomDialog(
-            title: 'Edit User',
+            title: 'backoffice_users_update_user'.tr(),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: firstNameController,
-                  decoration: const InputDecoration(labelText: 'Firstname'),
+                  decoration: InputDecoration(labelText: 'firstname'.tr()),
                 ),
                 TextField(
                   controller: lastNameController,
-                  decoration: const InputDecoration(labelText: 'Lastname'),
+                  decoration: InputDecoration(labelText: 'lastname'.tr()),
                 ),
               ],
             ),
@@ -49,7 +52,7 @@ void showEditUserDialog(BuildContext context, User user) {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Cancel'),
+                child: Text('cancel'.tr()),
               ),
               TextButton(
                 onPressed: () {
@@ -61,12 +64,12 @@ void showEditUserDialog(BuildContext context, User user) {
                           lastName: lastNameController.text,
                         ));
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Please fill all fields'),
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('fill_all_fields'.tr()),
                     ));
                   }
                 },
-                child: const Text('Save'),
+                child: Text('save'.tr()),
               ),
             ],
           ),

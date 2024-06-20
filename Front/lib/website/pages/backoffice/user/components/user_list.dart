@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/services/user_service.dart';
 import 'package:front/website/pages/backoffice/user/components/user_list_item.dart';
@@ -12,7 +13,7 @@ class UserList extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     if (users.isEmpty) {
-      return const Center(child: Text('No users found'));
+      return Center(child: Text('backoffice_users_no_user'.tr()));
     }
 
     return ListView.separated(
