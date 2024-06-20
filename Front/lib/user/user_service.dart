@@ -11,7 +11,13 @@ final Dio _dio = dio;
 
 Future<List<User>> getAllUsers() async {
   try {
-    final response = await _dio.get('/users');
+    print('-------------->SERKZN TOTO...');
+    var headers = await addHeader();
+
+    final response =
+        await _dio.get('/users', options: Options(headers: headers));
+
+    print('-------------->SERKZN TTITI...');
 
     if (response.statusCode == 200) {
       List<User> users =
@@ -76,8 +82,16 @@ Future<void> deleteUser(int userId) async {
 
 Future<List<User>> findUserInColoc(int colocId) async {
   try {
+    print('-------------->SERKZN 1...');
+
+    var headers = await addHeader();
+
     final users = await getAllUsers();
+    print('-------------->SERKZN 2...');
+
     final colocRes = await fetchColoMembersByColoc(colocId);
+    print('-------------->SERKZN 3...');
+
     if (users.isNotEmpty && colocRes.isNotEmpty) {
       List<ColocMembers> colocMembers = colocRes.map((coloc) => coloc).toList();
 

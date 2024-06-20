@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
@@ -36,10 +37,11 @@ class UserHandlePage extends StatelessWidget {
               } else if (state is UserError) {
                 return Center(child: Text(state.message));
               } else if (state is UserSearchEmpty) {
-                return const Center(
-                    child: Text('No user found with this search'));
+                return Center(
+                    child: Text(
+                        'backoffice_users_user_not_found_after_search'.tr()));
               } else {
-                return const Center(child: Text('No users found'));
+                return Center(child: Text('backoffice_users_no_user'.tr()));
               }
             },
           ),

@@ -1,7 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/colocation/colocation.dart';
-
 import 'package:front/shared.widget/bottom_navigation_bar.dart';
 import 'package:front/task/task_service.dart';
 import 'package:front/website/share/secure_storage.dart';
@@ -44,18 +44,18 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
           length: 2,
           child: Scaffold(
               appBar: AppBar(
-                bottom: const TabBar(
+                bottom:  TabBar(
                   indicatorColor: Colors.white,
                   labelColor: Colors.white,
                   unselectedLabelColor: Colors.white38,
                   tabs: [
                     Tab(
-                      icon: Icon(Icons.done_all),
-                      child: Text('Toutes les tâches'),
+                      icon: constIcon(Icons.done_all),
+                      child: Text('task_all_tasks'.tr()),
                     ),
                     Tab(
-                      icon: Icon(Icons.how_to_reg),
-                      child: Text('Mes tâches'),
+                      icon: constIcon(Icons.how_to_reg),
+                      child: Text('task_my_tasks'.tr()),
                     ),
                   ],
                 ),
@@ -87,10 +87,10 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 20),
-                      const Text(
-                        'Tâches effecutées',
+                       Text(
+                        'task_done_tasks'.tr(),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: constTextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -110,11 +110,11 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                             } else if (state is TaskLoaded) {
                               final tasks = state.tasks.reversed.toList();
                               if (tasks.isEmpty) {
-                                return const Center(
+                                return  Center(
                                   child: Text(
-                                    'Aucune tâche trouvée',
+                                    'task_no_task'.tr(),
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: constTextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -168,8 +168,8 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                 );
                               }
                             } else {
-                              return const Center(
-                                child: Text('Erreur inconnue'),
+                              return  Center(
+                                child: Text('task_unknown_error'.tr()),
                               );
                             }
                           },
@@ -181,10 +181,10 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 20),
-                      const Text(
-                        'Tâches effecutées',
+                       Text(
+                        'task_done_tasks'.tr(),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: constTextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -204,11 +204,11 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                             } else if (state is TaskLoaded) {
                               final tasks = state.tasks;
                               if (tasks.isEmpty) {
-                                return const Center(
+                                return  Center(
                                   child: Text(
-                                    'Aucune tâche trouvée',
+                                    'task_no_task'.tr(),
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: constTextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -258,8 +258,8 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                 );
                               }
                             } else {
-                              return const Center(
-                                child: Text('Erreur inconnue'),
+                              return Center(
+                                child: Text('task_unknown_error'.tr()),
                               );
                             }
                           },

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/auth/auth_service.dart';
 
@@ -21,7 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inscription'),
+        title: Text('register_title'.tr()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -41,18 +42,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   width: 200,
                 ),
                 if (_isLoading) const CircularProgressIndicator(),
-                const Text(
-                  'Inscription',
-                  style: TextStyle(fontSize: 16),
+                Text(
+                  'register_title'.tr(),
+                  style: const TextStyle(fontSize: 16),
                 ),
                 if (!_isLoading) ...[
-                  buildTextFormField(_firstNameController, 'Nom'),
+                  buildTextFormField(
+                      _lastNameController, 'register_lastname'.tr()),
                   const SizedBox(height: 10),
-                  buildTextFormField(_lastNameController, 'Prénom'),
+                  buildTextFormField(
+                      _firstNameController, 'register_firstname'.tr()),
                   const SizedBox(height: 10),
-                  buildTextFormField(_emailController, 'Email'),
+                  buildTextFormField(_emailController, 'register_email'.tr()),
                   const SizedBox(height: 10),
-                  buildTextFormField(_passwordController, 'Mot de passe',
+                  buildTextFormField(
+                      _passwordController, 'register_password'.tr(),
                       obscureText: true),
                   const SizedBox(height: 20),
                   ElevatedButton(
@@ -71,13 +75,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.green,
                     ),
-                    child: const Text('S\'inscrire'),
+                    child: Text('register_submit'.tr()),
                   ),
                 ],
                 const SizedBox(height: 20),
-                const Text(
-                  'Déjà dans nos petit papier ?',
-                  style: TextStyle(fontSize: 16),
+                Text(
+                  'register_already_in_our_paper'.tr(),
+                  style: const TextStyle(fontSize: 16),
                 ),
                 TextButton(
                   onPressed: () {
@@ -86,7 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.green,
                   ),
-                  child: const Text('Connecte-toi !'),
+                  child: Text('register_go_login'.tr()),
                 ),
               ],
             ),
@@ -136,8 +140,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Registration Successful'),
-            content: const Text('User was successfully created.'),
+            title: Text('register_successful'.tr()),
+            content: Text('register_user_created_successfully'.tr()),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -154,8 +158,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Error'),
-            content: Text('Failed to create user. Status code: $response'),
+            title: Text('error'.tr()),
+            content: Text('${'register_error'.tr()} $response'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {

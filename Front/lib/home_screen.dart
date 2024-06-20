@@ -1,9 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/colocation/bloc/colocation_bloc.dart';
 import 'package:front/colocation/create_colocation.dart';
-import 'package:front/invitation/invitation_list_page.dart';
 import 'package:front/invitation/bloc/invitation_bloc.dart';
+import 'package:front/invitation/invitation_list_page.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -38,9 +39,9 @@ class HomeScreen extends StatelessWidget {
                       child: Container(
                         alignment: Alignment.center,
                         padding: const EdgeInsets.only(left: 50.0),
-                        child: const Text(
-                          'Accueil',
-                          style: TextStyle(
+                        child: Text(
+                          'colocation_home'.tr(),
+                          style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -73,9 +74,9 @@ class HomeScreen extends StatelessWidget {
                                 ),
                                 onPressed: () {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
+                                    SnackBar(
                                       content: Text(
-                                          'Vous n\'avez pas de nouvelles invitations'),
+                                          'colocation_no_invitation_yet'.tr()),
                                     ),
                                   );
                                 },
@@ -133,10 +134,10 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 5),
-              const Text(
-                'Co-locations',
+              Text(
+                'colocation_title'.tr(),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -150,11 +151,11 @@ class HomeScreen extends StatelessWidget {
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is ColocationError) {
                       if (state.isDirty) {
-                        return const Center(
+                        return Center(
                           child: Text(
-                            'Aucune colocation trouvée',
+                            'colocation_no_colocation'.tr(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
@@ -165,11 +166,11 @@ class HomeScreen extends StatelessWidget {
                     } else if (state is ColocationLoaded) {
                       final colocations = state.colocations;
                       if (colocations.isEmpty) {
-                        return const Center(
+                        return Center(
                           child: Text(
-                            'Aucune colocation trouvée',
+                            'colocation_no_colocation'.tr(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
@@ -199,8 +200,9 @@ class HomeScreen extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                          'Créé le : ${DateTime.parse(item.createdAt).toLocal().toString().split(' ')[0]}'),
-                                      Text('Description : ${item.description}'),
+                                          '${'colocation_created_at'.tr()}${DateTime.parse(item.createdAt).toLocal().toString().split(' ')[0]}'),
+                                      Text(
+                                          '${'colocation_description'.tr()}${item.description}'),
                                       Text(item.location),
                                     ],
                                   ),
@@ -214,7 +216,7 @@ class HomeScreen extends StatelessWidget {
                     } else {
                       return Container(
                         alignment: Alignment.center,
-                        child: const Text('Erreur inconnue'),
+                        child: Text('colocation_unknown_error'.tr()),
                       );
                     }
                   },

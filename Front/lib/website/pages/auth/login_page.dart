@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/auth/auth_service.dart';
 import 'package:front/website/share/secure_storage.dart';
@@ -44,13 +45,13 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: 'login_email'.tr(),
+                        border: const OutlineInputBorder(),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Email invalide';
+                          return 'email_invalid'.tr();
                         }
                         return null;
                       },
@@ -61,14 +62,14 @@ class _LoginPageState extends State<LoginPage> {
                     width: 250,
                     child: TextFormField(
                       controller: _passwordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Mot de passe',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: 'login_password'.tr(),
+                        border: const OutlineInputBorder(),
                       ),
                       obscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Mot de passe invalide';
+                          return 'login_password_error'.tr();
                         }
                         return null;
                       },
@@ -81,12 +82,12 @@ class _LoginPageState extends State<LoginPage> {
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.green,
                     ),
-                    child: const Text('Connexion'),
+                    child: Text('login_login'.tr()),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    'Pas encore connu de nos services?',
-                    style: TextStyle(fontSize: 16),
+                  Text(
+                    'login_unknown_for_our_service'.tr(),
+                    style: const TextStyle(fontSize: 16),
                   ),
                   TextButton(
                     onPressed: () {
@@ -95,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.green,
                     ),
-                    child: const Text('Inscris-toi'),
+                    child: Text('login_register'.tr()),
                   ),
                 ],
               ),
@@ -119,16 +120,15 @@ class _LoginPageState extends State<LoginPage> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: const Text('Non autorisé',
-                    style: TextStyle(color: Colors.white)),
+                title: Text('backoffice_login_not_authorized'.tr(),
+                    style: const TextStyle(color: Colors.white)),
                 backgroundColor: Colors.red,
-                content: const Text(
-                    'Vous n\'êtes pas autorisé à accéder à cette page',
-                    style: TextStyle(color: Colors.white)),
+                content: Text('backoffice_login_not_authorized_message'.tr(),
+                    style: const TextStyle(color: Colors.white)),
                 actions: <Widget>[
                   TextButton(
-                    child: const Text('Compris',
-                        style: TextStyle(color: Colors.white)),
+                    child: Text('backoffice_understand'.tr(),
+                        style: const TextStyle(color: Colors.white)),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -143,8 +143,8 @@ class _LoginPageState extends State<LoginPage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Erreur'),
-              content: const Text('Email ou mot de passe incorrect'),
+              title: Text('error'.tr()),
+              content: Text('error_email_or_password'.tr()),
               actions: <Widget>[
                 TextButton(
                   child: const Text('OK'),

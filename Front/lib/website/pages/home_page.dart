@@ -1,8 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,18 +16,46 @@ class HomePage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            color: Colors.blue,
-            padding: const EdgeInsets.all(16.0),
-            child: const Text(
-              'BackOffice d\'administration',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+          Stack(
+            children: [
+              Container(
+                color: Colors.blue,
+                padding: const EdgeInsets.all(16.0),
+                child: Center(
+                  child: Text(
+                    'backoffice_title'.tr(),
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
-              textAlign: TextAlign.center,
-            ),
+              Positioned(
+                right: 16.0,
+                top: 16.0,
+                child: Row(
+                  children: [
+                    const Text('🇺🇸', style: TextStyle(fontSize: 32)),
+                    Switch(
+                      value: context.locale == const Locale('fr'),
+                      onChanged: (value) {
+                        setState(() {
+                          context.setLocale(
+                              value ? const Locale('fr') : const Locale('en'));
+                        });
+                      },
+                    ),
+                    const Text(
+                      '🇫🇷',
+                      style: TextStyle(fontSize: 32),
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
           Expanded(
             child: Padding(
@@ -52,22 +86,34 @@ class HomePage extends StatelessWidget {
         mainAxisSpacing: 8,
         crossAxisSpacing: 8,
         children: [
-          _buildCard(context, 'User', '/backoffice/user',
-              'Gérer vos utilisateurs', Icons.person),
-          _buildCard(context, 'Logs', '/backoffice/logs', 'Gérer les logs',
-              Icons.note_alt),
-          _buildCard(context, 'Colocation', '/colocation_administration',
-              'Gérer vos colocations', Icons.home),
-          _buildCard(context, 'ColocMember', '/coloc_member_administration',
-              'Gérer les membres des colocations', Icons.group),
-          _buildCard(context, 'Service', '/service_administration',
-              'Gérer les services des colocations', Icons.build),
           _buildCard(
               context,
-              'AchievedService',
-              '/achieved_service_administration',
-              'Gérer les services réalisés des colocations',
-              Icons.check),
+              'backoffice_homepage_users'.tr(),
+              '/backoffice/user',
+              'backoffice_homepage_users_description'.tr(),
+              Icons.person),
+          _buildCard(
+              context,
+              'backoffice_homepage_logs'.tr(),
+              '/backoffice/logs',
+              'backoffice_homepage_logs_description'.tr(),
+              Icons.note_alt),
+          _buildCard(
+              context,
+              'backoffice_homepage_colocations'.tr(),
+              '/colocation_administration',
+              'backoffice_homepage_colocations_description'.tr(),
+              Icons.home),
+          _buildCard(
+              context,
+              'backoffice_homepage_coloc_members'.tr(),
+              '/coloc_member_administration',
+              'backoffice_homepage_coloc_members_description'.tr(),
+              Icons.group),
+          _buildCard(context, 'backoffice_homepage_messages'.tr(), '/messages',
+              'backoffice_homepage_messages_description'.tr(), Icons.build),
+          _buildCard(context, 'backoffice_homepage_tasks'.tr(), '/tasks',
+              'backoffice_homepage_tasks_description'.tr(), Icons.check),
         ],
       ),
     );

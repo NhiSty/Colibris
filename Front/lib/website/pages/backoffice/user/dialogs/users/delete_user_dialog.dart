@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/services/user_service.dart';
@@ -14,25 +15,27 @@ void showDeleteUserDialog(BuildContext context, User user) {
         child: BlocListener<UserBloc, UserState>(
           listener: (context, state) {
             if (state is UserLoaded) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('User deleted successfully'),
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content:
+                    Text('backoffice_users_user_deleted_successfully'.tr()),
               ));
               Navigator.pop(context);
             } else if (state is UserError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Failed to delete user: ${state.message}'),
+                content: Text(
+                    '${'backoffice_users_user_deleted_error'.tr()} ${state.message}'),
               ));
             }
           },
           child: CustomDialog(
-            title: 'Delete User',
-            content: const Text('Are you sure you want to delete this user?'),
+            title: 'backoffice_users_user_delete'.tr(),
+            content: Text('backoffice_users_user_deleted_confirm'.tr()),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Cancel'),
+                child: Text('cancel'.tr()),
               ),
               TextButton(
                 onPressed: () {
@@ -40,7 +43,7 @@ void showDeleteUserDialog(BuildContext context, User user) {
                       .read<UserBloc>()
                       .add(DeleteUser(id: user.id.toString()));
                 },
-                child: const Text('Delete'),
+                child: Text('delete'.tr()),
               ),
             ],
           ),

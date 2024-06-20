@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/colocation/colocation_service.dart';
 import 'package:front/user/user_service.dart';
@@ -12,18 +13,17 @@ class ColocationSettingsPage extends StatelessWidget {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirmer la suppression'),
-          content: const Text(
-              'Êtes-vous sûr de vouloir supprimer cette colocation ?'),
+          title: Text('confirm_delete'.tr()),
+          content: Text('coloc_settings_delete_colocation_confirm'.tr()),
           actions: <Widget>[
             TextButton(
-              child: const Text('Annuler'),
+              child: Text('cancel'.tr()),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Confirmer'),
+              child: Text('confirm'.tr()),
               onPressed: () async {
                 var res = await deleteColocation(colocationId);
                 if (res == 200) {
@@ -42,12 +42,12 @@ class ColocationSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gestion de la colocation'),
+        title: Text('coloc_settings_title'.tr()),
       ),
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: const Text('Modifier la colocation'),
+            title: Text('coloc_settings_modify_colocation'.tr()),
             trailing: const Icon(Icons.arrow_forward),
             onTap: () {
               Navigator.pushNamed(context, '/colocation_update',
@@ -55,7 +55,7 @@ class ColocationSettingsPage extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text('Inviter un colocataire'),
+            title: Text('coloc_settings_invit_coloc_roommate'.tr()),
             trailing: const Icon(Icons.arrow_forward),
             onTap: () {
               Navigator.pushNamed(context, '/create_invitation',
@@ -63,7 +63,7 @@ class ColocationSettingsPage extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text('Exclure un colocataire'),
+            title: Text('coloc_settings_ban_coloc_roommate'.tr()),
             trailing: const Icon(Icons.arrow_forward),
             onTap: () async {
               var res = await findUserInColoc(colocationId);
@@ -71,14 +71,14 @@ class ColocationSettingsPage extends StatelessWidget {
                 Navigator.pushNamed(context, '/colocation_members',
                     arguments: {'users': res});
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Aucun colocataire à exclure'),
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('coloc_settings_no_roommates_to_ban'.tr()),
                 ));
               }
             },
           ),
           ListTile(
-            title: const Text('Supprimer la colocation'),
+            title: Text('coloc_settings_delete_colocation'.tr()),
             textColor: Colors.red,
             trailing: const Icon(Icons.arrow_forward),
             onTap: () {

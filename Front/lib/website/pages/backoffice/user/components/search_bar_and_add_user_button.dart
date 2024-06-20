@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
@@ -30,7 +31,7 @@ class _SearchBarAndAddUserButtonState extends State<SearchBarAndAddUserButton> {
             child: TextField(
               controller: searchController,
               decoration: InputDecoration(
-                hintText: 'Search user...',
+                hintText: 'backoffice_users_search'.tr(),
                 border: const OutlineInputBorder(),
                 suffixIcon: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -67,7 +68,7 @@ class _SearchBarAndAddUserButtonState extends State<SearchBarAndAddUserButton> {
             onPressed: () {
               showAddUserDialog(context);
             },
-            child: const Text('Add user'),
+            child: Text('backoffice_users_add_user'.tr()),
           ),
         ],
       ),
