@@ -187,8 +187,9 @@ func (ctl *TaskController) UpdateTask(c *gin.Context) {
 		return
 	}
 
-	var task model.Task
-	if _, err := ctl.service.GetById(uint(id)); err != nil {
+	// check if the task exists
+	task, err := ctl.service.GetById(uint(id))
+	if err != nil {
 		c.JSON(http.StatusNotFound, "Task not found")
 		return
 	}
@@ -222,23 +223,26 @@ func (ctl *TaskController) UpdateTask(c *gin.Context) {
 		return
 	}
 
-	if req.Title != nil {
-		task.Title = *req.Title
+	taskUpdate := make(map[string]interface{})
+	if req.Title != "" {
+		taskUpdate["title"] = req.Title
 	}
-	if req.Description != nil {
-		task.Description = *req.Description
+	if req.Description != "" {
+		taskUpdate["description"] = req.Description
 	}
-	if req.Date != nil {
-		task.Date = *req.Date
+	if req.Date != "" {
+		taskUpdate["date"] = req.Date
 	}
-	if req.Duration != nil {
-		task.Duration = *req.Duration
+	if req.Duration != 0 {
+		taskUpdate["duration"] = req.Duration
+		pts := uint(float64(req.Duration) * .025)
+		taskUpdate["pts"] = pts
 	}
-	if req.Picture != nil {
-		task.Picture = *req.Picture
+	if req.Picture != "" {
+		taskUpdate["picture"] = req.Picture
 	}
 
-	if err := ctl.service.UpdateTask(uint(id), &task); err != nil {
+	if _, err := ctl.service.UpdateTask(uint(id), taskUpdate); err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
