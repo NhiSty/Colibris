@@ -17,9 +17,9 @@ class TaskDetailPage extends StatelessWidget {
       appBar: AppBar(
         title: Row(
           children: [
-            Icon(Icons.task, color: Colors.white),
-            SizedBox(width: 10),
-            Text('Détail de la tâche', style: TextStyle(color: Colors.white)),
+            const Icon(Icons.task, color: Colors.white),
+            const SizedBox(width: 10),
+            Text('task_detail'.tr(), style: const TextStyle(color: Colors.white)),
           ],
         ),
         backgroundColor: Colors.green,
@@ -40,9 +40,9 @@ class TaskDetailPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Description:',
-                    style: TextStyle(
+                  Text(
+                    'task_detail_description'.tr(),
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
                       color: Colors.black,
@@ -59,9 +59,9 @@ class TaskDetailPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Date de réalisation:',
-                      style: TextStyle(
+                    Text(
+                      'task_detail_date_realization'.tr(),
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                         color: Colors.black,
@@ -78,9 +78,9 @@ class TaskDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Durée de la tâche :',
-                    style: TextStyle(
+                  Text(
+                    'task_detail_duration'.tr(),
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
                       color: Colors.black,
@@ -97,9 +97,9 @@ class TaskDetailPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Cette tâche à rapporté :',
-                      style: TextStyle(
+                    Text(
+                      'task_detail_points'.tr(),
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 22,
                         color: Colors.black,
@@ -116,9 +116,9 @@ class TaskDetailPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Preuve visuelle:',
-                      style: TextStyle(
+                    Text(
+                      'task_detail_proof_visual'.tr(),
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                         color: Colors.black,
@@ -132,9 +132,9 @@ class TaskDetailPage extends StatelessWidget {
                         height: 300,
                       ),
                     )
-                        : const Text(
-                      'Aucune preuve visuelle fournie',
-                      style: TextStyle(fontSize: 20, color: Colors.black45),
+                        : Text(
+                      'task_detail_no_proof'.tr(),
+                      style: const TextStyle(fontSize: 20, color: Colors.black45),
                     ),
                   ],
                 ),

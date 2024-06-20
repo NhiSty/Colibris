@@ -50,11 +50,11 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                   unselectedLabelColor: Colors.white38,
                   tabs: [
                     Tab(
-                      icon: constIcon(Icons.done_all),
+                      icon: const Icon(Icons.done_all),
                       child: Text('task_all_tasks'.tr()),
                     ),
                     Tab(
-                      icon: constIcon(Icons.how_to_reg),
+                      icon: const Icon(Icons.how_to_reg),
                       child: Text('task_my_tasks'.tr()),
                     ),
                   ],
@@ -90,7 +90,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                        Text(
                         'task_done_tasks'.tr(),
                         textAlign: TextAlign.center,
-                        style: constTextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -114,7 +114,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                   child: Text(
                                     'task_no_task'.tr(),
                                     textAlign: TextAlign.center,
-                                    style: constTextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -184,7 +184,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                        Text(
                         'task_done_tasks'.tr(),
                         textAlign: TextAlign.center,
-                        style: constTextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -208,7 +208,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                   child: Text(
                                     'task_no_task'.tr(),
                                     textAlign: TextAlign.center,
-                                    style: constTextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -329,47 +329,47 @@ class TaskListItem extends StatelessWidget {
                       itemBuilder: (context) => [
                         PopupMenuItem(
                             onTap: onViewPressed,
-                            child: const Row(
+                            child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.remove_red_eye_outlined),
-                                SizedBox(width: 10),
-                                Text('Détails'),
+                                const Icon(Icons.remove_red_eye_outlined),
+                                const SizedBox(width: 10),
+                                Text('task_action_details'.tr()),
                               ],
                             )
                         ),
                         if (onEditPressed != null)
                           PopupMenuItem(
                               onTap: onEditPressed,
-                              child: const Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.edit_outlined),
-                                  SizedBox(width: 10),
-                                  Text('Modifier'),
+                                  const Icon(Icons.edit_outlined),
+                                  const SizedBox(width: 10),
+                                  Text('task_action_edit'.tr()),
                                 ],
                               )
                           ),
                         PopupMenuItem(
                             onTap: onLikePressed,
-                            child: const Row(
+                            child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.thumb_up_outlined),
-                                SizedBox(width: 10),
-                                Text('Voter'),
+                                const Icon(Icons.thumb_up_outlined),
+                                const SizedBox(width: 10),
+                                Text('task_action_like'.tr()),
                               ],
                             )
                         ),
                         if (onDeletePressed != null)
                           PopupMenuItem(
                               onTap: onDeletePressed,
-                              child: const Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.delete_outlined),
-                                  SizedBox(width: 10),
-                                  Text('Supprimer'),
+                                  const Icon(Icons.delete_outlined),
+                                  const SizedBox(width: 10),
+                                  Text('task_action_delete'.tr()),
                                 ],
                               )
                           ),

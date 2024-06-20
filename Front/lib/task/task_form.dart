@@ -1,5 +1,6 @@
 
 import 'package:camera/camera.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:time_range_picker/time_range_picker.dart';
@@ -53,7 +54,6 @@ class _TaskFormState extends State<TaskForm> {
 
   @override
   void initState() {
-    print('widget.isEditing: ${widget.isEditing} ${widget.title} ${widget.timeRange} ${widget.description} ${widget.date} ${widget.image} ${widget.colocationId}');
     if (widget.isEditing) {
       _titleController.text = widget.title!;
       _timeRangeController.text = widget.timeRange!;
@@ -108,14 +108,13 @@ class _TaskFormState extends State<TaskForm> {
           children: [
             TextFormField(
               controller: _titleController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Intitulé de la tâche',
+                labelText: 'task_create_task_name'.tr(),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  print('Veuillez entrer un titre');
-                  return 'Veuillez entrer un titre';
+                  return 'task_create_task_name_error'.tr();
                 }
                 return null;
               },
@@ -127,13 +126,13 @@ class _TaskFormState extends State<TaskForm> {
                   maxLines: 3,
                   minLines: 3,
                   controller: _descriptionController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Description',
+                    labelText: 'task_create_description'.tr(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer une description';
+                      return 'task_create_description_error'.tr();
                     }
                     return null;
                   },
@@ -147,13 +146,13 @@ class _TaskFormState extends State<TaskForm> {
                     child: TextFormField(
                       controller: dateController,
                       //editing controller of this TextField
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: "Date" //label text of field
+                          labelText: "task_create_date".tr() //label text of field
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Veuillez sélectionner une date';
+                          return 'task_create_date_error'.tr();
                         }
                         return null;
                       },
@@ -193,13 +192,13 @@ class _TaskFormState extends State<TaskForm> {
                     );
                     _onRangeSelected(result);
                   },
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Temps passé',
+                    labelText: 'task_create_past_time'.tr(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Veuillez sélectionner une durée';
+                      return 'task_create_duration_error'.tr();
                     }
                     return null;
                   },
@@ -225,7 +224,7 @@ class _TaskFormState extends State<TaskForm> {
                     });
                   }
                 },
-                child: const Text('Take a Picture'),
+                child: Text('task_create_take_picture'.tr()),
               ),
             ),
             Align(
@@ -239,7 +238,7 @@ class _TaskFormState extends State<TaskForm> {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text('Annuler'),
+                        child: Text('cancel'.tr()),
                       )),
                   const SizedBox(
                     width: 10,
@@ -264,34 +263,17 @@ class _TaskFormState extends State<TaskForm> {
                                 widget.colocationId
                             );
 
-                            /*createTask(
-                                _titleController.text,
-                                _descriptionController.text,
-                                dateController.text,
-                                int.parse(_timeRangeController.text
-                                    .split(':')[0]) *
-                                    60 +
-                                    int.parse(_timeRangeController.text
-                                        .split(':')[1]),
-                                base64Image,
-                                widget.colocationId
-                            );*/
-
                             print('statusCode: $statusCode');
 
                             if (statusCode == 201 || statusCode == 200) {
                               widget.onSuccessfulSubmit();
                             }
-                              /*Navigator.popAndPushNamed(
-                                  context, '/colocation/task-list',
-                                  arguments: {'colocation': widget.colocation});
-                            }*/
                           }
                         },
                         child: Text(
                           widget.isEditing
-                              ? 'Modifier'
-                              : 'Ajouter',
+                              ? 'edit'.tr()
+                              : 'add'.tr(),
                           style: const TextStyle(color: Colors.white),
                         ),
                       ))

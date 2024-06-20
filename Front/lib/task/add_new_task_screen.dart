@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/colocation/colocation.dart';
 import 'package:front/task/task_form.dart';
@@ -43,9 +44,9 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.green,
-            title: const Text(
-              'Ajouter une nouvelle tâche',
-              style: TextStyle(color: Colors.white),
+            title: Text(
+              'task_create_title'.tr(),
+              style: const TextStyle(color: Colors.white),
             ),
           ),
           body: SingleChildScrollView(
@@ -55,8 +56,8 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
               onSuccessfulSubmit: () {
                 Navigator.pop(context, true);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Tâche ajoutée'),
+                  SnackBar(
+                    content: Text('task_create_success'.tr()),
                     backgroundColor: Colors.green,
                   ),
                 );

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/colocation/colocation.dart';
 import 'package:front/task/task.dart';
@@ -63,9 +64,9 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.green,
-            title: const Text(
-              'Modifier une tâche',
-              style: TextStyle(color: Colors.white),
+            title: Text(
+              'task_update'.tr(),
+              style: const TextStyle(color: Colors.white),
             ),
           ),
           body: SingleChildScrollView(
@@ -81,8 +82,8 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
               onSuccessfulSubmit: () {
                 Navigator.pop(context, true);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Colocation mise à jour'),
+                  SnackBar(
+                    content: Text('task_update_success'.tr()),
                     backgroundColor: Colors.green,
                   ),
                 );
