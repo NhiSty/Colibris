@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/ColocMembers/colocMembers_service.dart';
 import 'package:front/user/user.dart';
@@ -13,18 +14,17 @@ class ColocationMembers extends StatelessWidget {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirmer la suppression'),
-          content: const Text(
-              'Êtes-vous sûr de vouloir supprimer cette colocation ?'),
+          title: Text('confirm_delete'.tr()),
+          content: Text('ban_roommate_confirm'.tr()),
           actions: <Widget>[
             TextButton(
-              child: const Text('Annuler'),
+              child: Text('cancel'.tr()),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Confirmer'),
+              child: Text('confirm'.tr()),
               onPressed: () async {
                 var res = await deleteColocMember(user.colocMemberId!);
                 if (res == 200) {
@@ -52,10 +52,11 @@ class ColocationMembers extends StatelessWidget {
                 onPressed: () {
                   _showDeleteConfirmationDialog(context, users[index]);
                 },
-                child: Text('Kick', style: TextStyle(color: Colors.white)),
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.red),
-                )),
+                  backgroundColor: WidgetStateProperty.all(Colors.red),
+                ),
+                child: Text('ban_roommate_submit'.tr(),
+                    style: const TextStyle(color: Colors.white))),
           );
         },
       ),

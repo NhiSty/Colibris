@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class TitleAndBreadcrumb extends StatelessWidget {
@@ -9,9 +10,9 @@ class TitleAndBreadcrumb extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(height: 32),
-        const Text(
-          'Logs of application',
-          style: TextStyle(
+        Text(
+          'backoffice_logs_title'.tr(),
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
           ),
@@ -21,22 +22,22 @@ class TitleAndBreadcrumb extends StatelessWidget {
           onTap: () {
             Navigator.pop(context, "/home");
           },
-          child: const MouseRegion(
+          child: MouseRegion(
             cursor: SystemMouseCursors.click,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Home',
-                  style: TextStyle(
+                  'home'.tr(),
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     decoration: TextDecoration.underline,
                     color: Colors.blue,
                   ),
                 ),
                 Text(
-                  ' > Logs',
-                  style: TextStyle(
+                  'backoffice_logs_breadcrumb'.tr(),
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),

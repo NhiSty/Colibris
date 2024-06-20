@@ -1,5 +1,7 @@
-import 'dart:typed_data';
 import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/task/task.dart';
 
@@ -22,9 +24,9 @@ class TaskDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text(
-              'Titre:',
-              style: TextStyle(
+            Text(
+              'task_detail_title'.tr(),
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
                 color: Colors.white,
@@ -35,9 +37,9 @@ class TaskDetailPage extends StatelessWidget {
               style: const TextStyle(fontSize: 20, color: Colors.white),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Description:',
-              style: TextStyle(
+            Text(
+              'task_detail_description'.tr(),
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
                 color: Colors.white,
@@ -47,9 +49,9 @@ class TaskDetailPage extends StatelessWidget {
               task.description,
               style: const TextStyle(fontSize: 20, color: Colors.white),
             ),
-            const Text(
-              'Date de réalisation:',
-              style: TextStyle(
+            Text(
+              'task_detail_date_realization'.tr(),
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
                 color: Colors.white,
@@ -59,9 +61,9 @@ class TaskDetailPage extends StatelessWidget {
               task.date,
               style: const TextStyle(fontSize: 20, color: Colors.white),
             ),
-            const Text(
-              'Durée de la tâche :',
-              style: TextStyle(
+            Text(
+              'task_detail_duration'.tr(),
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
                 color: Colors.white,
@@ -71,21 +73,21 @@ class TaskDetailPage extends StatelessWidget {
               "${(task.duration / 60).toStringAsPrecision(2)} h",
               style: const TextStyle(fontSize: 20, color: Colors.white),
             ),
-            const Text(
-              'Cette tâche à rapporté :',
-              style: TextStyle(
+            Text(
+              'task_detail_points'.tr(),
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
                 color: Colors.white,
               ),
             ),
             Text(
-              "${task.pts} points",
+              task.pts == 1 ? "${task.pts} point" : "${task.pts} points",
               style: const TextStyle(fontSize: 20, color: Colors.white),
             ),
-            const Text(
-              'Preuve visuelle:',
-              style: TextStyle(
+            Text(
+              'task_detail_proof_visual'.tr(),
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
                 color: Colors.white,

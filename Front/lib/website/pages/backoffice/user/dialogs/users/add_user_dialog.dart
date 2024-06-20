@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
@@ -18,38 +19,39 @@ void showAddUserDialog(BuildContext context) {
         child: BlocListener<UserBloc, UserState>(
           listener: (context, state) {
             if (state is UserLoaded) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('User added successfully'),
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('backoffice_users_user_added_successfully'.tr()),
               ));
               Navigator.pop(context);
             } else if (state is UserError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Error while adding user: ${state.message}'),
+                content: Text(
+                    '${'backoffice_users_user_added_error'.tr()} ${state.message}'),
               ));
             }
           },
           child: CustomDialog(
-            title: 'Add user',
+            title: 'backoffice_users_add_user'.tr(),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: firstNameController,
-                  decoration: const InputDecoration(labelText: 'Firstname'),
+                  decoration: InputDecoration(labelText: 'firstname'.tr()),
                 ),
                 TextField(
                   controller: lastNameController,
-                  decoration: const InputDecoration(labelText: 'Lastname'),
+                  decoration: InputDecoration(labelText: 'lastname'.tr()),
                 ),
                 TextField(
                   controller: emailController,
-                  decoration: const InputDecoration(labelText: 'Email'),
+                  decoration: InputDecoration(labelText: 'email'.tr()),
                   keyboardType: TextInputType.emailAddress,
                 ),
                 TextField(
                   controller: passwordController,
                   obscureText: true,
-                  decoration: const InputDecoration(labelText: 'Password'),
+                  decoration: InputDecoration(labelText: 'password'.tr()),
                 ),
               ],
             ),
@@ -58,7 +60,7 @@ void showAddUserDialog(BuildContext context) {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Cancel'),
+                child: Text('cancel'.tr()),
               ),
               TextButton(
                 onPressed: () {
@@ -73,12 +75,12 @@ void showAddUserDialog(BuildContext context) {
                           lastName: lastNameController.text,
                         ));
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Please fill all fields'),
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('fill_all_fields'.tr()),
                     ));
                   }
                 },
-                child: const Text('Add'),
+                child: Text('add'.tr()),
               ),
             ],
           ),

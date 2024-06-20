@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/colocation/colocation_service.dart';
@@ -34,7 +35,7 @@ class _InvitationAcceptPageState extends State<InvitationAcceptPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Invitation Accept Page'),
+        title: Text('invitation_accept_title'.tr()),
       ),
       body: Center(
         child: colocationData == null
@@ -63,8 +64,8 @@ class _InvitationAcceptPageState extends State<InvitationAcceptPage> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green,
                             ),
-                            child: const Text('Accepter',
-                                style: TextStyle(color: Colors.white)),
+                            child: Text('invitation_accept_accept'.tr(),
+                                style: const TextStyle(color: Colors.white)),
                           ),
                           const SizedBox(width: 16),
                           ElevatedButton(
@@ -78,8 +79,8 @@ class _InvitationAcceptPageState extends State<InvitationAcceptPage> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,
                             ),
-                            child: const Text('Refuser',
-                                style: TextStyle(color: Colors.white)),
+                            child: Text('invitation_accept_refuse'.tr(),
+                                style: const TextStyle(color: Colors.white)),
                           ),
                         ],
                       ),
@@ -112,7 +113,7 @@ class InvitationCard extends StatelessWidget {
             const SizedBox(height: 10),
             Center(
               child: Text(
-                "Vous êtes invité à rejoindre la colocation ${colocationData?['Name']} située à ${colocationData?['Location']} ! Cette colocation peut-être décrite de la manière suivante : ${colocationData?['Description'] ?? ''} ",
+                "${"invitation_accept_message1".tr()} ${colocationData?['Name']} ${"invitation_accept_message2".tr()} ${colocationData?['Location']} ${"invitation_accept_message3".tr()} ${colocationData?['Description'] ?? ''} ",
                 style: const TextStyle(color: Colors.white),
               ),
             ),

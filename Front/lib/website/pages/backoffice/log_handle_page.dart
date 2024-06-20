@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/website/pages/backoffice/logs/bloc/log_bloc.dart';
@@ -46,7 +47,7 @@ class _LogPageState extends State<LogPage> {
                 } else if (state is LogError) {
                   return Center(child: Text(state.message));
                 } else {
-                  return const Center(child: Text('No logs found'));
+                  return Center(child: Text('backoffice_logs_no_log'.tr()));
                 }
               },
             ),

@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:front/colocation/colocation.dart';
 import 'package:front/task/camera_screen.dart';
 import 'package:front/task/task_service.dart';
-import 'package:intl/intl.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
@@ -66,9 +66,9 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
         child: Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: const Text(
-          'Ajouter une nouvelle tâche',
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          'task_create_title'.tr(),
+          style: const TextStyle(color: Colors.white),
         ),
       ),
       body: SingleChildScrollView(
@@ -82,14 +82,13 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
               children: [
                 TextFormField(
                   controller: _titleController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Intitulé de la tâche',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: 'task_create_task_name'.tr(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      print('Veuillez entrer un titre');
-                      return 'Veuillez entrer un titre';
+                      return 'task_create_task_name_error'.tr();
                     }
                     return null;
                   },
@@ -101,13 +100,13 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                       maxLines: 3,
                       minLines: 3,
                       controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Description',
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: 'task_create_description'.tr(),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Veuillez entrer une description';
+                          return 'task_create_description_error'.tr();
                         }
                         return null;
                       },
@@ -116,41 +115,31 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                 ),
                 Container(
                     margin: const EdgeInsets.only(top: 30),
-                    //height: MediaQuery.of(context).size.width / 3,
                     child: Center(
                         child: TextFormField(
                       controller: dateController,
-                      //editing controller of this TextField
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Date" //label text of field
-                          ),
+                      decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: "task_create_date".tr()),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Veuillez sélectionner une date';
+                          return 'task_create_date_error'.tr();
                         }
                         return null;
                       },
                       readOnly: true,
-                      //set it true, so that user will not able to edit text
                       onTap: () async {
                         DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
                             firstDate: DateTime(1950),
-                            //DateTime.now() - not to allow to choose before today.
                             lastDate: DateTime(2100));
 
                         if (pickedDate != null) {
-                          print(
-                              pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
                           String formattedDate =
                               DateFormat('dd/MM/yyyy').format(pickedDate);
-                          print(
-                              formattedDate); //formatted date output using intl package =>  2021-03-16
                           setState(() {
-                            dateController.text =
-                                formattedDate; //set output date to TextField value.
+                            dateController.text = formattedDate;
                           });
                         } else {}
                       },
@@ -160,20 +149,20 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                   child: Center(
                     child: TextFormField(
                       controller: _timeRangeController,
-                      readOnly: true, // Prevent manual editing
+                      readOnly: true,
                       onTap: () async {
                         TimeRange result = await showTimeRangePicker(
                           context: context,
                         );
                         _onRangeSelected(result);
                       },
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Temps passé',
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: 'task_create_past_time'.tr(),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Veuillez sélectionner une durée';
+                          return 'task_create_date_error'.tr();
                         }
                         return null;
                       },
@@ -199,7 +188,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                         });
                       }
                     },
-                    child: const Text('Take a Picture'),
+                    child: Text('task_create_take_picture'.tr()),
                   ),
                 ),
                 Align(
@@ -213,16 +202,17 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text('Annuler'),
+                        child: Text('cancel'.tr()),
                       )),
                       const SizedBox(
                         width: 10,
                       ),
                       Expanded(
                           child: OutlinedButton(
-                        style: const ButtonStyle(
-                            backgroundColor:
-                                WidgetStatePropertyAll(Colors.green)),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStateProperty.all(Colors.green),
+                        ),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             var statusCode = await createTask(
@@ -244,9 +234,9 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                             }
                           }
                         },
-                        child: const Text(
-                          'Ajouter',
-                          style: TextStyle(color: Colors.white),
+                        child: Text(
+                          'add'.tr(),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ))
                     ],
