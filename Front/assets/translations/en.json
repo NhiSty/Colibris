@@ -98,6 +98,7 @@
     "task_create_duration_error": "Please select a duration",
     "task_create_past_time": "Time passed",
     "task_create_success": "Task created successfully",
+    "task_create_retake_picture": "Retake picture",
 
   "_commentUpdateTask": "--------> Ecran Modifier une tâche <---------",
   "task_update": "Update task",
