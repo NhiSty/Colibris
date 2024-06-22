@@ -18,7 +18,7 @@ jobs:
           go version
 
       - name: Generate .env file
-        working-directory: /home/ubuntu/tftest
+        working-directory: /home/ubuntu/Colibris/Back
         run: |
           echo "DB_URL=${{ secrets.DB_URL }}" > .env
           echo "MJ_APIKEY_PUBLIC=${{ secrets.MJ_APIKEY_PUBLIC }}" >> .env
@@ -27,16 +27,16 @@ jobs:
 
       - name: Pull latest code
         run: |
-          cd /home/ubuntu/tftest
+          cd /home/ubuntu/Colibris
           git pull origin master
 
       - name: Build application
         run: |
-          cd /home/ubuntu/tftest
+          cd /home/ubuntu/Colibris/Back
           go build -o back
 
       - name: Restart application
         run: |
-          cd /home/ubuntu/tftest
+          cd /home/ubuntu/Colibris/Back
           sudo pkill back || true
           nohup sudo ./back > back.log 2>&1 &
