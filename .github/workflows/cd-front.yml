@@ -24,6 +24,16 @@ jobs:
           echo "API_URL=${{secrets.API_URL}}" > .env
           echo "MAPBOX_KEY=${{secrets.MAPBOX_KEY}}" >> .env
 
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.pub-cache
+            ./Front/.dart_tool
+          key: ${{ runner.os }}-flutter-${{ hashFiles('./Front/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
+            
       - name: Install dependencies
         working-directory: ./Front
         run: flutter pub get
