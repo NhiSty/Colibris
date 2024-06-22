@@ -28,7 +28,7 @@ jobs:
       - name: Pull latest code
         run: |
           cd /home/ubuntu/Colibris
-          git pull origin master
+          git pull origin main
 
       - name: Build application
         run: |
