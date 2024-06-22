@@ -30,7 +30,7 @@ jobs:
 
       - name: Build Flutter Web
         working-directory: ./Front
-        run: flutter build web --web-renderer html --release
+        run: flutter build web --web-renderer html --release -t lib/main_website.dart
 
       - name: Verify aws
         run: aws --version
