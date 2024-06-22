@@ -3,7 +3,7 @@ name: Deploy Go App
 on:
   push:
     branches:
-      - main
+      - feat/pipline_cd
 
 jobs:
   deploy:

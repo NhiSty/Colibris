@@ -3,7 +3,7 @@ name: Deploy Flutter Web App to S3
 on:
   push:
     branches:
-      - main
+      - feat/pipline_cd
 
 jobs:
   build-and-deploy:
