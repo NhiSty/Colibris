@@ -1,0 +1,42 @@
+name: Deploy Go App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        run: |
+          go version
+
+      - name: Generate .env file
+        working-directory: /home/ubuntu/tftest
+        run: |
+          echo "DB_URL=${{ secrets.DB_URL }}" > .env
+          echo "MJ_APIKEY_PUBLIC=${{ secrets.MJ_APIKEY_PUBLIC }}" >> .env
+          echo "MJ_APIKEY_PRIVATE=${{ secrets.MJ_APIKEY_PRIVATE }}" >> .env
+          echo 'Hello="Hello World"' >> .env
+
+      - name: Pull latest code
+        run: |
+          cd /home/ubuntu/tftest
+          git pull origin master
+
+      - name: Build application
+        run: |
+          cd /home/ubuntu/tftest
+          go build -o back
+
+      - name: Restart application
+        run: |
+          cd /home/ubuntu/tftest
+          sudo pkill back || true
+          nohup sudo ./back > back.log 2>&1 &
