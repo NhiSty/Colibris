@@ -1,0 +1,40 @@
+package service
+
+import (
+	"Colibris/model"
+	"gorm.io/gorm"
+)
+
+type VoteService struct {
+	db *gorm.DB
+}
+
+func NewVoteService(db *gorm.DB) VoteService {
+	return VoteService{db: db}
+}
+
+func (v *VoteService) AddVote(vote *model.Vote) error {
+	return v.db.Create(vote).Error
+}
+
+func (v *VoteService) GetVoteById(id int) (*model.Vote, error) {
+	var vote model.Vote
+	result := v.db.Where("id = ?", id).First(&vote)
+	return &vote, result.Error
+}
+
+func (v *VoteService) GetAllVotes() ([]model.Vote, error) {
+	var votes []model.Vote
+	result := v.db.Find(&votes)
+	return votes, result.Error
+}
+
+func (v *VoteService) GetVoteByTaskIdAndUserId(taskId int, userId int) (*model.Vote, error) {
+	var vote model.Vote
+	result := v.db.Where("task_id = ?", taskId).Where("user_id = ?", userId).First(&vote)
+	return &vote, result.Error
+}
+
+func (v *VoteService) GetDB() *gorm.DB {
+	return v.db
+}

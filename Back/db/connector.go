@@ -35,6 +35,7 @@ func Migrate(db *gorm.DB) {
 		&model.Invitation{},
 		&model.Log{},
 		&model.Task{},
+		&model.Vote{},
 		&model.Message{},
 	)
 	if err != nil {
