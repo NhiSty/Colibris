@@ -41,224 +41,269 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
 
     return SafeArea(
         child: DefaultTabController(
-      length: 2,
-      child: Scaffold(
-          appBar: AppBar(
-            bottom: TabBar(
-              indicatorColor: Colors.white,
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.white38,
-              tabs: [
-                Tab(
-                  icon: const Icon(Icons.done_all),
-                  child: Text('task_all_tasks'.tr()),
-                ),
-                Tab(
-                  icon: const Icon(Icons.how_to_reg),
-                  child: Text('task_my_tasks'.tr()),
-                ),
-              ],
-            ),
-            backgroundColor: Colors.green,
-            title: Text(
-              widget.colocation.name,
-              style: const TextStyle(color: Colors.white),
-            ),
-            actions: widget.colocation.userId == userData['user_id']
-                ? [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/colocation_manage',
-                              arguments: {
-                                'colocationId': widget.colocation.id
-                              });
-                        },
-                        icon: const Icon(
-                          Icons.settings,
-                          color: Colors.white,
-                          size: 30,
-                        ))
-                  ]
-                : null,
-          ),
-          body: TabBarView(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 20),
-                  Text(
-                    'task_done_tasks'.tr(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+          length: 2,
+          child: Scaffold(
+              appBar: AppBar(
+                bottom:  TabBar(
+                  indicatorColor: Colors.white,
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.white38,
+                  tabs: [
+                    Tab(
+                      icon: const Icon(Icons.done_all),
+                      child: Text('task_all_tasks'.tr()),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: BlocBuilder<TaskBloc, TaskState>(
-                      builder: (context, state) {
-                        if (state is TaskLoading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (state is TaskError) {
-                          return Center(
-                            child: Text(state.message),
-                          );
-                        } else if (state is TaskLoaded) {
-                          final tasks = state.tasks;
-                          if (tasks.isEmpty) {
-                            return Center(
-                              child: Text(
-                                'task_no_task'.tr(),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            );
-                          } else {
-                            return ListView.builder(
-                              itemCount: tasks.length,
-                              itemBuilder: (context, index) {
-                                final item = tasks[index];
-                                return GestureDetector(
-                                  child: TaskListItem(
-                                    item: item,
-                                    onViewPressed: () {
-                                      Navigator.pushNamed(
-                                          context, '/task_detail',
-                                          arguments: {'task': item});
-                                    },
-                                    onLikePressed: () {
-                                      // Ajoutez ici l'action pour le deuxième bouton
-                                    },
-                                    onDeletePressed:
-                                        item.userId == userData['user_id'] ||
-                                                widget.colocation.userId ==
-                                                    userData['user_id']
-                                            ? () async {
-                                                await deleteTask(item.id);
-                                                context.read<TaskBloc>().add(
-                                                    FetchTasks(
-                                                        widget.colocation.id));
-                                              }
-                                            : null,
+                    Tab(
+                      icon: const Icon(Icons.how_to_reg),
+                      child: Text('task_my_tasks'.tr()),
+                    ),
+                  ],
+                ),
+                backgroundColor: Colors.green,
+                title: Text(
+                  widget.colocation.name,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                actions: widget.colocation.userId == userData['user_id']
+                    ? [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/colocation_manage',
+                            arguments: {
+                              'colocationId': widget.colocation.id
+                            });
+                      },
+                      icon: const Icon(
+                        Icons.settings,
+                        color: Colors.white,
+                        size: 30,
+                      ))
+                ]
+                    : null,
+              ),
+              body: TabBarView(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20),
+                       Text(
+                        'task_done_tasks'.tr(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Expanded(
+                        child: BlocBuilder<TaskBloc, TaskState>(
+                          builder: (context, state) {
+                            if (state is TaskLoading) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (state is TaskError) {
+                              return Center(
+                                child: Text(state.message),
+                              );
+                            } else if (state is TaskLoaded) {
+                              final tasks = state.tasks.reversed.toList();
+                              if (tasks.isEmpty) {
+                                return  Center(
+                                  child: Text(
+                                    'task_no_task'.tr(),
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 );
-                              },
-                            );
-                          }
-                        } else {
-                          return Center(
-                            child: Text('task_unknown_error'.tr()),
-                          );
-                        }
-                      },
-                    ),
-                  )
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 20),
-                  Text(
-                    'task_done_tasks'.tr(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                              } else {
+                                return RefreshIndicator(
+                                  displacement: 50,
+                                  onRefresh: () async {
+                                    context.read<TaskBloc>().add(
+                                        FetchTasks(widget.colocation.id));
+                                  },
+                                    child: ListView.builder(
+                                      padding: const EdgeInsets.only(bottom: 80),
+                                      itemCount: tasks.length,
+                                      itemBuilder: (context, index) {
+                                        final item = tasks[index];
+                                        return GestureDetector(
+                                          child: TaskListItem(
+                                            item: item,
+                                            onViewPressed: () {
+                                              Navigator.pushNamed(
+                                                  context, '/task_detail',
+                                                  arguments: {'task': item});
+                                            },
+                                            onEditPressed: item.userId == userData['user_id'] ||
+                                                widget.colocation.userId ==
+                                                    userData['user_id']
+                                                ? () async {
+                                              final result = await Navigator.pushNamed(context, '/update-task',
+                                                  arguments: {
+                                                    'colocation': widget.colocation,
+                                                    'task': item,
+                                                  });
+                                              if (result == true) {
+                                                context.read<TaskBloc>().add(
+                                                    FetchTasks(widget.colocation.id));
+                                              }
+                                            } : null,
+                                            onLikePressed: () {
+                                              // Ajoutez ici l'action pour le deuxième bouton
+                                            },
+                                            onDeletePressed:
+                                            item.userId == userData['user_id'] ||
+                                                widget.colocation.userId ==
+                                                    userData['user_id']
+                                                ? () async {
+                                              await deleteTask(item.id);
+                                              context.read<TaskBloc>().add(
+                                                  FetchTasks(
+                                                      widget.colocation.id));
+                                            }
+                                                : null,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                );
+                              }
+                            } else {
+                              return  Center(
+                                child: Text('task_unknown_error'.tr()),
+                              );
+                            }
+                          },
+                        ),
+                      )
+                    ],
                   ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: BlocBuilder<TaskBloc, TaskState>(
-                      builder: (context, state) {
-                        if (state is TaskLoading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (state is TaskError) {
-                          return Center(
-                            child: Text(state.message),
-                          );
-                        } else if (state is TaskLoaded) {
-                          final tasks = state.tasks;
-                          if (tasks.isEmpty) {
-                            return Center(
-                              child: Text(
-                                'task_no_task'.tr(),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            );
-                          } else {
-                            return ListView.builder(
-                              itemCount: tasks.length,
-                              itemBuilder: (context, index) {
-                                final item = tasks[index];
-                                if (item.userId != userData['user_id']) {
-                                  return const SizedBox.shrink();
-                                }
-                                return GestureDetector(
-                                    child: TaskListItem(
-                                  item: item,
-                                  onViewPressed: () {
-                                    Navigator.pushNamed(context, '/task_detail',
-                                        arguments: {'task': item});
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20),
+                       Text(
+                        'task_done_tasks'.tr(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Expanded(
+                        child: BlocBuilder<TaskBloc, TaskState>(
+                          builder: (context, state) {
+                            if (state is TaskLoading) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (state is TaskError) {
+                              return Center(
+                                child: Text(state.message),
+                              );
+                            } else if (state is TaskLoaded) {
+                              final tasks = state.tasks;
+                              if (tasks.isEmpty) {
+                                return  Center(
+                                  child: Text(
+                                    'task_no_task'.tr(),
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return RefreshIndicator(
+                                  displacement: 50,
+                                  onRefresh: () async {
+                                    context.read<TaskBloc>().add(
+                                        FetchTasks(widget.colocation.id));
                                   },
-                                  onLikePressed: () {
-                                    // Ajoutez ici l'action pour le deuxième bouton
-                                  },
-                                  onDeletePressed: item.userId ==
-                                              userData['user_id'] ||
-                                          widget.colocation.userId ==
-                                              userData['user_id']
-                                      ? () async {
-                                          await deleteTask(item.id);
-                                          context.read<TaskBloc>().add(
-                                              FetchTasks(widget.colocation.id));
+                                    child: ListView.builder(
+                                      padding: const EdgeInsets.only(bottom: 80),
+                                      itemCount: tasks.length,
+                                      itemBuilder: (context, index) {
+                                        final item = tasks[index];
+                                        if (item.userId != userData['user_id']) {
+                                          return const SizedBox.shrink();
                                         }
-                                      : null,
-                                ));
-                              },
-                            );
-                          }
-                        } else {
-                          return Center(
-                            child: Text('task_unknown_error'.tr()),
-                          );
-                        }
-                      },
-                    ),
-                  )
+                                        return GestureDetector(
+                                            child: TaskListItem(
+                                              item: item,
+                                              onViewPressed: () {
+                                                Navigator.pushNamed(context, '/task_detail',
+                                                    arguments: {'task': item});
+                                              },
+                                              onEditPressed: item.userId == userData['user_id'] ||
+                                                  widget.colocation.userId ==
+                                                      userData['user_id']
+                                                  ? () {
+                                                Navigator.pushNamed(context, '/update-task',
+                                                    arguments: {
+                                                      'colocation': widget.colocation,
+                                                      'task': item,
+                                                    });
+                                              } : null,
+                                              onLikePressed: () {
+                                                // Ajoutez ici l'action pour le deuxième bouton
+                                              },
+                                              onDeletePressed: item.userId ==
+                                                  userData['user_id'] ||
+                                                  widget.colocation.userId ==
+                                                      userData['user_id']
+                                                  ? () async {
+                                                await deleteTask(item.id);
+                                                context.read<TaskBloc>().add(
+                                                    FetchTasks(widget.colocation.id));
+                                              }
+                                                  : null,
+                                            ));
+                                      },
+                                    )
+                                );
+                              }
+                            } else {
+                              return Center(
+                                child: Text('task_unknown_error'.tr()),
+                              );
+                            }
+                          },
+                        ),
+                      )
+                    ],
+                  ),
                 ],
               ),
-            ],
-          ),
-          bottomNavigationBar: BottomNavigationBarWidget(widget.colocation.id),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/add-new-task',
-                  arguments: {'colocation': widget.colocation});
-            },
-            backgroundColor: Colors.green,
-            child: const Icon(Icons.add, color: Colors.white),
-          )),
-    ));
+              bottomNavigationBar: BottomNavigationBarWidget(widget.colocation.id),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () async {
+                  final result = await Navigator.pushNamed(context, '/add-new-task',
+                      arguments: {'colocation': widget.colocation});
+
+                  if (result == true) {
+                    context.read<TaskBloc>().add(FetchTasks(widget.colocation.id));
+                  }
+                },
+                backgroundColor: Colors.green,
+                child: const Icon(Icons.add, color: Colors.white),
+              )),
+        ));
   }
 }
 
 class TaskListItem extends StatelessWidget {
   final item;
   final VoidCallback onViewPressed;
+  final VoidCallback? onEditPressed;
   final VoidCallback onLikePressed;
   final VoidCallback? onDeletePressed;
 
@@ -266,6 +311,7 @@ class TaskListItem extends StatelessWidget {
     super.key,
     required this.item,
     required this.onViewPressed,
+    this.onEditPressed,
     required this.onLikePressed,
     this.onDeletePressed,
   });
@@ -292,21 +338,57 @@ class TaskListItem extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      onPressed: onViewPressed,
-                      icon: const Icon(Icons.remove_red_eye_outlined),
-                    ),
-                    IconButton(
-                      onPressed: onLikePressed,
-                      icon: const Icon(Icons.thumb_up_outlined),
-                    ),
-                    onDeletePressed != null
-                        ? IconButton(
-                            onPressed: onDeletePressed ?? () {},
-                            icon: const Icon(Icons.delete_outlined),
-                          )
-                        : const SizedBox.shrink(),
+                  children:  [
+                    PopupMenuButton(
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                            onTap: onViewPressed,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.remove_red_eye_outlined),
+                                const SizedBox(width: 10),
+                                Text('task_action_details'.tr()),
+                              ],
+                            )
+                        ),
+                        if (onEditPressed != null)
+                          PopupMenuItem(
+                              onTap: onEditPressed,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.edit_outlined),
+                                  const SizedBox(width: 10),
+                                  Text('task_action_edit'.tr()),
+                                ],
+                              )
+                          ),
+                        PopupMenuItem(
+                            onTap: onLikePressed,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.thumb_up_outlined),
+                                const SizedBox(width: 10),
+                                Text('task_action_like'.tr()),
+                              ],
+                            )
+                        ),
+                        if (onDeletePressed != null)
+                          PopupMenuItem(
+                              onTap: onDeletePressed,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.delete_outlined),
+                                  const SizedBox(width: 10),
+                                  Text('task_action_delete'.tr()),
+                                ],
+                              )
+                          ),
+                      ],
+                    )
                   ],
                 ),
               ),

@@ -11,11 +11,11 @@ type TaskCreateRequest struct {
 }
 
 type TaskUpdateRequest struct {
-	Title        *string `json:"title,omitempty"`
-	Description  *string `json:"description,omitempty"`
-	UserID       *uint   `json:"user_id,omitempty"`
-	ColocationID *uint   `json:"colocation_id,omitempty"`
-	Date         *string `json:"date,omitempty"`
-	Duration     *uint   `json:"duration,omitempty"`
-	Picture      *string `json:"picture,omitempty"`
+	Title        string `json:"title,omitempty"`
+	Description  string `json:"description,omitempty"`
+	UserID       uint   `json:"user_id,omitempty"`
+	ColocationID uint   `json:"colocation_id,omitempty"`
+	Date         string `json:"date,omitempty"`
+	Duration     uint   `json:"duration,omitempty"`
+	Picture      string `json:"picture,omitempty"`
 }
