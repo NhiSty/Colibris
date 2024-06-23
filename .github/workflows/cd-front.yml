@@ -3,7 +3,7 @@ name: Deploy Flutter Web App to S3
 on:
   push:
     branches:
-      - feat/pipline_cd
+      - main
 
 jobs:
   build-and-deploy:
@@ -33,7 +33,7 @@ jobs:
           key: ${{ runner.os }}-flutter-${{ hashFiles('./Front/pubspec.yaml') }}
           restore-keys: |
             ${{ runner.os }}-flutter-
-            
+
       - name: Install dependencies
         working-directory: ./Front
         run: flutter pub get
