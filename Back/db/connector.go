@@ -51,6 +51,11 @@ func Migrate(db *gorm.DB) {
 		Roles:     model.ROLE_ADMIN,
 	})
 
+	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.FeatureFlag{
+		Name:  "maintenance",
+		Value: false,
+	})
+
 	fmt.Println("Database migration completed successfully.")
 }
 
