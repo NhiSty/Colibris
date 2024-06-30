@@ -41,6 +41,17 @@ func (v *VoteService) GetVoteByTaskIdAndUserId(taskId int, userId int) (*model.V
 	return &vote, result.Error
 }
 
+func (v *VoteService) UpdateVote(id int, voteUpdates map[string]interface{}) (*model.Vote, error) {
+	var vote model.Vote
+
+	if err := v.db.Model(&vote).Where("id = ?", id).Updates(voteUpdates).Error; err != nil {
+		return nil, err
+	}
+	if err := v.db.Where("id = ?", id).First(&vote).Error; err != nil {
+		return &vote, err
+	}
+}
+
 func (v *VoteService) GetDB() *gorm.DB {
 	return v.db
 }

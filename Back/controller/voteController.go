@@ -88,6 +88,92 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 
 }
 
+func (ctl *VoteController) UpdateVote(c *gin.Context) {
+	var req dto.VoteUpdateRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	taskId, err := strconv.Atoi(c.Params.ByName("taskId"))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	voteId, err := strconv.Atoi(c.Params.ByName("voteId"))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	userIDFromToken, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	vote, err := ctl.voteService.GetVoteById(voteId)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err.Error())
+		return
+	}
+
+	var taskService = service.NewTaskService(ctl.voteService.GetDB())
+	task, err := taskService.GetById(uint(taskId))
+
+	var colocService = service.NewColocationService(ctl.voteService.GetDB())
+	colocations, err := colocService.GetAllUserColocations(int(userIDFromToken.(uint)))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	// Check if task is in the same colocation as the user
+	taskInColocation := false
+	for _, colocation := range colocations {
+		if colocation.ID == task.ColocationID {
+			taskInColocation = true
+			break
+		}
+	}
+
+	if !taskInColocation {
+		c.JSON(http.StatusBadRequest, "You can't vote for a task that is not in your colocation")
+		return
+	}
+
+	if vote.UserID == userIDFromToken {
+		c.JSON(http.StatusBadRequest, "You can't vote for yourself")
+		return
+	}
+
+	voteUpdates := make(map[string]interface{})
+
+	if req.Value != 0 {
+		voteUpdates["value"] = req.Value
+	}
+
+	if _, err := ctl.voteService.UpdateVote(voteId, voteUpdates); err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"Message": "vote updated successfully",
+	})
+}
+
+
+
+
+}
+
 func (ctl *VoteController) GetVotesByTaskId(c *gin.Context) {
 	taskId, err := strconv.Atoi(c.Params.ByName("taskId"))
 
