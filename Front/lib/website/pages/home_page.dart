@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:front/website/pages/auth/login_page.dart';
+import 'package:front/website/share/secure_storage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -53,6 +55,22 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(fontSize: 32),
                     )
                   ],
+                ),
+              ),
+              Positioned(
+                left: 16.0,
+                top: 16.0,
+                child: IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () {
+                    deleteToken();
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
                 ),
               ),
             ],
@@ -114,6 +132,12 @@ class _HomePageState extends State<HomePage> {
               'backoffice_homepage_messages_description'.tr(), Icons.build),
           _buildCard(context, 'backoffice_homepage_tasks'.tr(), '/tasks',
               'backoffice_homepage_tasks_description'.tr(), Icons.check),
+          _buildCard(
+              context,
+              'backoffice_homepage_flipping'.tr(),
+              '/feature-flipping',
+              'backoffice_homepage_flag_description'.tr(),
+              Icons.flag),
         ],
       ),
     );

@@ -192,6 +192,8 @@
     "backoffice_homepage_messages_description": "View messages by shared apartments",
     "backoffice_homepage_tasks": "Tasks",
     "backoffice_homepage_tasks_description": "View tasks by shared apartments",
+    "backoffice_homepage_flipping": "Flipping",
+    "backoffice_homepage_flipping_description": "Handle flipping feature",
 
   "_commentBackOfficeUsers": "--------> Ecran BackOffice Users <---------",
     "backoffice_users_title": "Manage users",

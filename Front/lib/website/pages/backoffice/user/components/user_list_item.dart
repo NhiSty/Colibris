@@ -2,11 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:front/services/user_service.dart';
 import 'package:front/website/pages/backoffice/user/dialogs/users/delete_user_dialog.dart';
 import 'package:front/website/pages/backoffice/user/dialogs/users/edit_user_dialog.dart';
+import 'package:front/website/share/secure_storage.dart';
 
-class UserListItem extends StatelessWidget {
+class UserListItem extends StatefulWidget {
   final User user;
 
-  const UserListItem({super.key, required this.user});
+  UserListItem({super.key, required this.user});
+
+  @override
+  _UserListItemState createState() => _UserListItemState();
+}
+
+class _UserListItemState extends State<UserListItem> {
+  var userData = {};
+
+  @override
+  void initState() {
+    fetchUserData() async {
+      var user = await decodeToken();
+      setState(() {
+        userData = user;
+      });
+    }
+
+    fetchUserData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,28 +59,33 @@ class UserListItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      '${user.firstname} ${user.lastname}',
+                      '${widget.user.firstname} ${widget.user.lastname}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),
-                    Text(user.email),
+                    Text(widget.user.email),
                   ],
                 ),
               ),
               IconButton(
                 icon: Icon(Icons.edit, color: Colors.blue[800]),
                 onPressed: () {
-                  showEditUserDialog(context, user);
+                  showEditUserDialog(context, widget.user);
                 },
               ),
-              IconButton(
-                icon: Icon(Icons.delete, color: Colors.red[800]),
-                onPressed: () {
-                  showDeleteUserDialog(context, user);
-                },
-              ),
+              userData['user_id'] == widget.user.id
+                  ? const SizedBox(width: 16)
+                  : IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.red[800],
+                      ),
+                      onPressed: () {
+                        showDeleteUserDialog(context, widget.user);
+                      },
+                    ),
             ],
           ),
         );

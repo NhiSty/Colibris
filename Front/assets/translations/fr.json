@@ -192,6 +192,8 @@
     "backoffice_homepage_messages_description": "Voir les messages par colocations",
     "backoffice_homepage_tasks": "Tâches",
     "backoffice_homepage_tasks_description": "Gestions des tâches",
+    "backoffice_homepage_flipping": "Flipping",
+    "backoffice_homepage_flipping_description": "Gestion des flips",
 
   "_commentBackOfficeUsers": "--------> Ecran BackOffice Users <---------",
     "backoffice_users_title": "Gestion des utilisateurs",
