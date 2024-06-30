@@ -15,5 +15,6 @@ func VoteRoutes(voteRoutes *gin.RouterGroup, db *gorm.DB) {
 	AuthMiddleware := middleware.AuthMiddleware
 	{
 		routes.POST("", AuthMiddleware(), voteController.AddVote)
+		routes.GET("/:taskId", AuthMiddleware(), voteController.GetVotesByTaskId)
 	}
 }

@@ -29,6 +29,12 @@ func (v *VoteService) GetAllVotes() ([]model.Vote, error) {
 	return votes, result.Error
 }
 
+func (v *VoteService) GetVotesByTaskId(taskId int) ([]model.Vote, error) {
+	var votes []model.Vote
+	result := v.db.Where("task_id = ?", taskId).Find(&votes)
+	return votes, result.Error
+}
+
 func (v *VoteService) GetVoteByTaskIdAndUserId(taskId int, userId int) (*model.Vote, error) {
 	var vote model.Vote
 	result := v.db.Where("task_id = ?", taskId).Where("user_id = ?", userId).First(&vote)

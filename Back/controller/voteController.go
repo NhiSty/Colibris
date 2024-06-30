@@ -6,6 +6,7 @@ import (
 	"Colibris/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 type VoteController struct {
@@ -85,6 +86,24 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 		"Message": "vote added successfully",
 	})
 
+}
+
+func (ctl *VoteController) GetVotesByTaskId(c *gin.Context) {
+	taskId, err := strconv.Atoi(c.Params.ByName("taskId"))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	votes, err := ctl.voteService.GetVotesByTaskId(taskId)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, votes)
 }
 
 func NewVoteController(voteService service.VoteService) *VoteController {
