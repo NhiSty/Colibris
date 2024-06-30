@@ -171,8 +171,7 @@ void showAddColocationDialog(BuildContext context) {
                         const SizedBox(height: 16),
                         ConstrainedBox(
                           constraints: BoxConstraints(
-                            maxHeight:
-                                56.0, // Ensure it does not overflow vertically
+                            maxHeight: 56.0,
                             maxWidth: MediaQuery.of(context).size.width * 0.7,
                           ),
                           child: DropdownButtonFormField<AddressResult>(

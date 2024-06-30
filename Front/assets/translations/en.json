@@ -250,5 +250,12 @@
     "backoffice_colocation_delete_modal_confirm": "Are you sure you want to delete this shared apartment ?",
     "backoffice_colocation_deleted_successfully": "Shared apartment deleted successfully",
     "backoffice_colocation_deleted_error": "Error while deleting shared apartment : ",
-    "backoffice_colocation_colocation_not_found_after_search": "No shared apartment found after search"
+    "backoffice_colocation_colocation_not_found_after_search": "No shared apartment found after search",
+
+  "_commentBackOfficeFlipping": "--------> Ecran BackOffice Flipping <---------",
+    "backoffice_flipping_title": "Handle flipping feature",
+    "backoffice_flipping_breadcrumb": " > Flipping",
+    "backoffice_flipping_description": "Select the feature you want to enable or disable",
+    "backoffice_flipping_fail_load_data": "Failed to load feature flags : ",
+    "backoffice_flipping_fail_update_data": "Failed to update feature flags : "
 }

@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                 left: 16.0,
                 top: 16.0,
                 child: IconButton(
-                  icon: const Icon(Icons.logout),
+                  icon: const Icon(Icons.logout, color: Colors.white),
                   onPressed: () {
                     deleteToken();
                     Navigator.pushAndRemoveUntil(
@@ -136,7 +136,7 @@ class _HomePageState extends State<HomePage> {
               context,
               'backoffice_homepage_flipping'.tr(),
               '/feature-flipping',
-              'backoffice_homepage_flag_description'.tr(),
+              'backoffice_homepage_flipping_description'.tr(),
               Icons.flag),
         ],
       ),

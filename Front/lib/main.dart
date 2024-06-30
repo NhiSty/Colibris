@@ -14,7 +14,7 @@ import 'package:front/colocation/colocation_parameters.dart';
 import 'package:front/colocation/colocation_tasklist_screen.dart';
 import 'package:front/colocation/colocation_update.dart';
 import 'package:front/colocation/create_colocation.dart';
-import 'package:front/featureFlag/FeatureFlag.dart';
+import 'package:front/featureFlag/featureFlag.dart';
 import 'package:front/featureFlag/feature_flag_service.dart';
 import 'package:front/featureFlag/maintenance.dart';
 import 'package:front/home_screen.dart';
@@ -44,7 +44,7 @@ Future<void> initializeFeatureFlags(List<FeatureFlag> flags) async {
 
 bool isFeatureEnabled(String featureName, List<FeatureFlag> flags) {
   var flag = flags.firstWhere((flag) => flag.name == featureName,
-      orElse: () => FeatureFlag(name: featureName, value: false));
+      orElse: () => FeatureFlag(id: -1, name: featureName, value: false));
   return flag.value;
 }
 
@@ -88,7 +88,8 @@ void main() async {
     for (var flag in flags) {
       var previousFlag = previousFlags.firstWhere(
         (previousFlag) => previousFlag.name == flag.name,
-        orElse: () => FeatureFlag(name: flag.name, value: !flag.value),
+        orElse: () =>
+            FeatureFlag(id: flag.id, name: flag.name, value: !flag.value),
       );
       if (flag.value != previousFlag.value) {
         await initializeFeatureFlags(flags);

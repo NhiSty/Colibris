@@ -56,7 +56,6 @@ definitions:
         type: boolean
     required:
     - name
-    - value
     type: object
   dto.FeatureFlagUpdateRequest:
     properties:

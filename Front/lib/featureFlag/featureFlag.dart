@@ -1,18 +1,27 @@
-// create a feature flag class with th property name and value
-
 class FeatureFlag {
+  final int id;
   final String name;
-  final bool value;
+  bool value;
 
   FeatureFlag({
+    required this.id,
     required this.name,
     required this.value,
   });
 
   factory FeatureFlag.fromJson(Map<String, dynamic> json) {
     return FeatureFlag(
-      name: json['Name'],
-      value: json['Value'],
+      id: json['ID'] ?? 0,
+      name: json['Name'] ?? '',
+      value: json['Value'] ?? false,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'ID': id,
+      'Name': name,
+      'Value': value,
+    };
   }
 }

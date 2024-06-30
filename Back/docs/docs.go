@@ -1255,8 +1255,7 @@ const docTemplate = `{
         "dto.FeatureFlagCreateRequest": {
             "type": "object",
             "required": [
-                "name",
-                "value"
+                "name"
             ],
             "properties": {
                 "name": {
