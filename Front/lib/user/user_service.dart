@@ -11,13 +11,9 @@ final Dio _dio = dio;
 
 Future<List<User>> getAllUsers() async {
   try {
-    print('-------------->SERKZN TOTO...');
     var headers = await addHeader();
-
     final response =
         await _dio.get('/users', options: Options(headers: headers));
-
-    print('-------------->SERKZN TTITI...');
 
     if (response.statusCode == 200) {
       List<User> users =
@@ -27,11 +23,7 @@ Future<List<User>> getAllUsers() async {
       throw Exception('Failed to load users');
     }
   } on DioException catch (e) {
-    print('Error: ${e.response?.statusCode}');
-    print('Response data: ${e.response?.data}');
-    log('Dio error!');
-    log('Response status: ${e.response?.statusCode}');
-    log('Response data: ${e.response?.data}');
+    _handleDioError(e);
     throw Exception('Failed to load users');
   }
 }
@@ -39,8 +31,7 @@ Future<List<User>> getAllUsers() async {
 Future<void> updateUser(int userId, Map<String, dynamic> userData) async {
   try {
     var headers = await addHeader();
-
-    final response = await dio.patch('/users/$userId',
+    final response = await _dio.patch('/users/$userId',
         data: userData, options: Options(headers: headers));
 
     if (response.statusCode == 200) {
@@ -49,11 +40,7 @@ Future<void> updateUser(int userId, Map<String, dynamic> userData) async {
       throw Exception('Failed to update user');
     }
   } on DioException catch (e) {
-    print('Error: ${e.response?.statusCode}');
-    print('Response data: ${e.response?.data}');
-    log('Dio error!');
-    log('Response status: ${e.response?.statusCode}');
-    log('Response data: ${e.response?.data}');
+    _handleDioError(e);
     throw Exception('Failed to update user');
   }
 }
@@ -61,7 +48,6 @@ Future<void> updateUser(int userId, Map<String, dynamic> userData) async {
 Future<void> deleteUser(int userId) async {
   try {
     var headers = await addHeader();
-
     final response =
         await _dio.delete('/users/$userId', options: Options(headers: headers));
 
@@ -71,26 +57,17 @@ Future<void> deleteUser(int userId) async {
       throw Exception('Failed to delete user');
     }
   } on DioException catch (e) {
-    print('Error: ${e.response?.statusCode}');
-    print('Response data: ${e.response?.data}');
-    log('Dio error!');
-    log('Response status: ${e.response?.statusCode}');
-    log('Response data: ${e.response?.data}');
+    _handleDioError(e);
     throw Exception('Failed to delete user');
   }
 }
 
 Future<List<User>> findUserInColoc(int colocId) async {
   try {
-    print('-------------->SERKZN 1...');
-
     var headers = await addHeader();
 
     final users = await getAllUsers();
-    print('-------------->SERKZN 2...');
-
     final colocRes = await fetchColoMembersByColoc(colocId);
-    print('-------------->SERKZN 3...');
 
     if (users.isNotEmpty && colocRes.isNotEmpty) {
       List<ColocMembers> colocMembers = colocRes.map((coloc) => coloc).toList();
@@ -114,11 +91,7 @@ Future<List<User>> findUserInColoc(int colocId) async {
     }
     return [];
   } on DioException catch (e) {
-    print('Error: ${e.response?.statusCode}');
-    print('Response data: ${e.response?.data}');
-    log('Dio error!');
-    log('Response status: ${e.response?.statusCode}');
-    log('Response data: ${e.response?.data}');
+    _handleDioError(e);
     throw Exception('Failed to load users');
   }
 }
@@ -126,8 +99,6 @@ Future<List<User>> findUserInColoc(int colocId) async {
 Future<Map<String, dynamic>> getUserById(int userId) async {
   try {
     var headers = await addHeader();
-
-    print('Fetching user data...');
     final response =
         await _dio.get('/users/$userId', options: Options(headers: headers));
 
@@ -137,11 +108,15 @@ Future<Map<String, dynamic>> getUserById(int userId) async {
       throw Exception('Failed to load user data');
     }
   } on DioException catch (e) {
-    print('Error: ${e.response?.statusCode}');
-    print('Response data: ${e.response?.data}');
-    print('Dio error!');
-    print('Response status: ${e.response?.statusCode}');
-    print('Response data: ${e.response?.data}');
+    _handleDioError(e);
     throw Exception('Failed to load user data');
   }
+}
+
+void _handleDioError(DioException e) {
+  log('Dio error!');
+  print('Error: ${e.response?.statusCode}');
+  print('Response data: ${e.response?.data}');
+  log('Response status: ${e.response?.statusCode}');
+  log('Response data: ${e.response?.data}');
 }
