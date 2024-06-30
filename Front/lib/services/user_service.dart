@@ -115,7 +115,6 @@ class UserService {
   Future<void> deleteUser(int userId) async {
     try {
       var headers = await addHeader();
-
       final response = await _dio.delete('/users/$userId',
           options: Options(headers: headers));
 

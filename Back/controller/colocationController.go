@@ -220,8 +220,9 @@ func (ctl *ColocationController) UpdateColocation(c *gin.Context) {
 	if req.Description != "" {
 		colocUpdates["description"] = req.Description
 	}
-	if req.IsPermanent {
-		colocUpdates["isPermanent"] = req.IsPermanent
+
+	if req.IsPermanent == true || req.IsPermanent == false {
+		colocUpdates["is_permanent"] = req.IsPermanent
 	}
 
 	if _, err := ctl.colocService.UpdateColocation(id, colocUpdates); err != nil {

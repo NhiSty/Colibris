@@ -37,7 +37,7 @@ class _SearchBarAndAddUserButtonState extends State<SearchBarAndAddUserButton> {
       focusNode: FocusNode(),
       onKeyEvent: _handleKey,
       child: SizedBox(
-        width: 400,
+        width: 450,
         child: Row(
           children: [
             Expanded(
