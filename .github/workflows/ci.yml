@@ -1,0 +1,34 @@
+name: Pipeline CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Back
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '^1.13.1'
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Run tests
+        run: cd tests && go test -v ./...

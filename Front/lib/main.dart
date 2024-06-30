@@ -1,125 +1,243 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-void main() {
-  runApp(const MyApp());
+import 'package:easy_localization/easy_localization.dart';
+import 'package:feature_flags_toggly/feature_flags_toggly.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:front/auth/login.dart';
+import 'package:front/auth/register.dart';
+import 'package:front/chat/screens/conversation_screen.dart';
+import 'package:front/colocation/bloc/colocation_bloc.dart';
+import 'package:front/colocation/colocation_members.dart';
+import 'package:front/colocation/colocation_parameters.dart';
+import 'package:front/colocation/colocation_tasklist_screen.dart';
+import 'package:front/colocation/colocation_update.dart';
+import 'package:front/colocation/create_colocation.dart';
+import 'package:front/featureFlag/featureFlag.dart';
+import 'package:front/featureFlag/feature_flag_service.dart';
+import 'package:front/featureFlag/maintenance.dart';
+import 'package:front/home_screen.dart';
+import 'package:front/invitation/bloc/invitation_bloc.dart';
+import 'package:front/invitation/invitation_create_page.dart';
+import 'package:front/invitation/invitation_list_page.dart';
+import 'package:front/profile/profile_screen.dart';
+import 'package:front/reset-password/reset_password.dart';
+import 'package:front/reset-password/reset_password_form.dart';
+import 'package:front/shared.widget/bottom_navigation_bar.dart';
+import 'package:front/task/add_new_task_screen.dart';
+import 'package:front/task/bloc/task_bloc.dart';
+import 'package:front/task/task_detail.dart';
+import 'package:front/task/update_task_screen.dart';
+
+final StreamController<List<FeatureFlag>> _featureFlagsController =
+    StreamController<List<FeatureFlag>>.broadcast();
+
+final previousFlags = <FeatureFlag>[];
+Future<void> initializeFeatureFlags(List<FeatureFlag> flags) async {
+  await Toggly.init(
+    flagDefaults: {
+      for (var flag in flags) flag.name: flag.value,
+    },
+  );
+}
+
+bool isFeatureEnabled(String featureName, List<FeatureFlag> flags) {
+  var flag = flags.firstWhere((flag) => flag.name == featureName,
+      orElse: () => FeatureFlag(id: -1, name: featureName, value: false));
+  return flag.value;
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  await dotenv.load(fileName: ".env");
+
+  var initialFlags = await fetchFeatureFlags();
+  await initializeFeatureFlags(initialFlags);
+  previousFlags.addAll(initialFlags);
+
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('fr')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: StreamBuilder<List<FeatureFlag>>(
+        stream: _featureFlagsController.stream,
+        initialData: initialFlags,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return MyApp(
+              featureFlag: snapshot.data!,
+            );
+          } else {
+            return const CircularProgressIndicator();
+          }
+        },
+      ),
+    ),
+  );
+
+  Stream<int> periodicStream =
+      Stream.periodic(const Duration(seconds: 5), (count) => count);
+
+  periodicStream.listen((event) async {
+    var flags = await fetchFeatureFlags();
+
+    // verify for each flag if the value has changed
+    for (var flag in flags) {
+      var previousFlag = previousFlags.firstWhere(
+        (previousFlag) => previousFlag.name == flag.name,
+        orElse: () =>
+            FeatureFlag(id: flag.id, name: flag.name, value: !flag.value),
+      );
+      if (flag.value != previousFlag.value) {
+        await initializeFeatureFlags(flags);
+        previousFlags.clear();
+        previousFlags.addAll(flags);
+        _featureFlagsController.add(flags);
+        break;
+      }
+    }
+  });
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.featureFlag});
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  final List<FeatureFlag> featureFlag;
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<InvitationBloc>(
+          create: (context) => InvitationBloc(),
         ),
+        BlocProvider<ColocationBloc>(
+          create: (context) => ColocationBloc(),
+        ),
+        BlocProvider<TaskBloc>(
+          create: (context) => TaskBloc(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Colobris',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+          useMaterial3: true,
+        ),
+        home: isFeatureEnabled('maintenance', featureFlag)
+            ? const MaintenanceScreen()
+            : const LoginScreen(),
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        routes: {
+          '/login': (context) => const LoginScreen(),
+          '/register': (context) => const RegisterScreen(),
+          '/home': (context) => const Scaffold(
+                body: HomeScreen(),
+                bottomNavigationBar: BottomNavigationBarWidget(null),
+              ),
+          '/create_colocation': (context) => const CreateColocationPage(),
+          '/profile': (context) => const Scaffold(
+                body: ProfileScreen(),
+                bottomNavigationBar: BottomNavigationBarWidget(null),
+              ),
+          '/reset-password': (context) => const ResetPasswordScreen(),
+          '/reset-password-form': (context) => ResetPasswordFormScreen(),
+        },
+        onGenerateRoute: (settings) {
+          final routes = settings.arguments as Map<dynamic, dynamic>? ?? {};
+          switch (settings.name) {
+            case ColocationTasklistScreen.routeName:
+              return MaterialPageRoute(
+                builder: (context) => BlocProvider.value(
+                  value: BlocProvider.of<ColocationBloc>(context),
+                  child: ColocationTasklistScreen(
+                    colocation: routes['colocation'],
+                  ),
+                ),
+                settings: settings,
+              );
+            case '/invitations':
+              return MaterialPageRoute(
+                builder: (context) => BlocProvider.value(
+                  value: BlocProvider.of<InvitationBloc>(context),
+                  child: InvitationListPage(
+                    invitations: routes['invitations'],
+                  ),
+                ),
+                settings: settings,
+              );
+            case '/create_invitation':
+              return MaterialPageRoute(
+                builder: (context) => BlocProvider.value(
+                  value: BlocProvider.of<InvitationBloc>(context),
+                  child: InvitationCreatePage(
+                    colocationId: routes['colocationId'],
+                  ),
+                ),
+                settings: settings,
+              );
+            case AddNewTaskScreen.routeName:
+              return MaterialPageRoute(
+                builder: (context) => BlocProvider.value(
+                  value: BlocProvider.of<TaskBloc>(context),
+                  child: AddNewTaskScreen(
+                    colocation: routes['colocation'],
+                  ),
+                ),
+                settings: settings,
+              );
+            case '/colocation_manage':
+              return MaterialPageRoute(
+                builder: (context) => ColocationSettingsPage(
+                  colocationId: routes['colocationId'],
+                ),
+              );
+            case '/colocation_members':
+              return MaterialPageRoute(
+                builder: (context) => ColocationMembers(
+                  users: routes['users'],
+                ),
+              );
+            case '/colocation_update':
+              return MaterialPageRoute(
+                builder: (context) => ColocationUpdatePage(
+                  colocationId: routes['colocationId'],
+                ),
+              );
+            case '/task_detail':
+              return MaterialPageRoute(
+                builder: (context) => TaskDetailPage(
+                  task: routes['task'],
+                ),
+              );
+            case '/chat':
+              return MaterialPageRoute(
+                builder: (context) => ConversationScreen(
+                  conversationId: routes['chatId'],
+                ),
+              );
+            case UpdateTaskScreen.routeName:
+              return MaterialPageRoute(
+                  builder: (context) => BlocProvider.value(
+                        value: BlocProvider.of<TaskBloc>(context),
+                        child: UpdateTaskScreen(
+                          colocation: routes['colocation'],
+                          task: routes['task'],
+                        ),
+                      ),
+                  settings: settings);
+
+            default:
+              return null;
+          }
+        },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

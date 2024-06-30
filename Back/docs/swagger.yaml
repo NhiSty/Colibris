@@ -1,0 +1,1050 @@
+definitions:
+  dto.ColocMemberCreateRequest:
+    properties:
+      colocationId:
+        type: integer
+      userId:
+        type: integer
+    required:
+    - colocationId
+    - userId
+    type: object
+  dto.ColocMemberScoreUpdateRequest:
+    properties:
+      score:
+        type: number
+    required:
+    - score
+    type: object
+  dto.ColocationCreateRequest:
+    properties:
+      description:
+        type: string
+      isPermanent:
+        type: boolean
+      latitude:
+        type: number
+      location:
+        type: string
+      longitude:
+        type: number
+      name:
+        type: string
+      userId:
+        type: integer
+    required:
+    - latitude
+    - location
+    - longitude
+    - name
+    - userId
+    type: object
+  dto.ColocationUpdateRequest:
+    properties:
+      description:
+        type: string
+      isPermanent:
+        type: boolean
+      name:
+        type: string
+    type: object
+  dto.FeatureFlagCreateRequest:
+    properties:
+      name:
+        type: string
+      value:
+        type: boolean
+    required:
+    - name
+    type: object
+  dto.FeatureFlagUpdateRequest:
+    properties:
+      name:
+        type: string
+      value:
+        type: boolean
+    type: object
+  dto.ForgotPasswordRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  dto.InvitationCreateRequest:
+    properties:
+      colocationId:
+        type: integer
+      email:
+        type: string
+    required:
+    - colocationId
+    - email
+    type: object
+  dto.InvitationUpdateRequest:
+    properties:
+      invitationId:
+        type: integer
+      state:
+        type: string
+    required:
+    - invitationId
+    - state
+    type: object
+  dto.ResetPasswordRequest:
+    properties:
+      new_password:
+        type: string
+      token:
+        type: string
+    required:
+    - new_password
+    - token
+    type: object
+  dto.UpdateUserDTO:
+    properties:
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    type: object
+  dto.UserLoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dto.UserRegistrationRequest:
+    properties:
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - firstname
+    - lastname
+    - password
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  model.ColocMember:
+    properties:
+      colocationID:
+        type: integer
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      score:
+        type: number
+      updatedAt:
+        type: string
+      userID:
+        type: integer
+    type: object
+  model.Colocation:
+    properties:
+      colocMembers:
+        items:
+          $ref: '#/definitions/model.ColocMember'
+        type: array
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      id:
+        type: integer
+      isPermanent:
+        type: boolean
+      latitude:
+        type: number
+      location:
+        type: string
+      longitude:
+        type: number
+      name:
+        type: string
+      updatedAt:
+        type: string
+      userID:
+        type: integer
+    type: object
+  model.FeatureFlag:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+      value:
+        type: boolean
+    type: object
+  model.Invitation:
+    properties:
+      colocationID:
+        type: integer
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      sender:
+        type: integer
+      state:
+        $ref: '#/definitions/model.InvitationState'
+      updatedAt:
+        type: string
+      userID:
+        type: integer
+    type: object
+  model.InvitationState:
+    enum:
+    - pending
+    - accepted
+    - declined
+    type: string
+    x-enum-varnames:
+    - Pending
+    - Accepted
+    - Declined
+  model.ResetPassword:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      expiresAt:
+        type: string
+      id:
+        type: integer
+      token:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  model.Role:
+    enum:
+    - ROLE_ADMIN
+    - ROLE_USER
+    type: string
+    x-enum-varnames:
+    - ROLE_ADMIN
+    - ROLE_USER
+  model.User:
+    properties:
+      colocations:
+        items:
+          $ref: '#/definitions/model.Colocation'
+        type: array
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      firstname:
+        type: string
+      id:
+        type: integer
+      lastname:
+        type: string
+      password:
+        type: string
+      roles:
+        $ref: '#/definitions/model.Role'
+      updatedAt:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server for a pet store.
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "2.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user
+      parameters:
+      - description: User object
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserLoginRequest'
+        "400":
+          description: Bad Request
+          schema: {}
+      summary: Login a user
+      tags:
+      - auth
+  /auth/me:
+    get:
+      consumes:
+      - application/json
+      description: Get user information
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get user information
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user
+      parameters:
+      - description: User object
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserRegistrationRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.UserRegistrationRequest'
+        "400":
+          description: Bad Request
+          schema: {}
+      summary: Register a new user
+      tags:
+      - auth
+  /auth/reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Reset password
+      parameters:
+      - description: Reset token
+        in: path
+        name: token
+        required: true
+        type: string
+      - description: New password
+        in: body
+        name: newPassword
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResetPassword'
+        "400":
+          description: Bad Request
+          schema: {}
+      summary: Reset password
+      tags:
+      - auth
+  /backend/fp:
+    get:
+      consumes:
+      - application/json
+      description: Get all feature flags
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.FeatureFlag'
+            type: array
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all feature flags
+      tags:
+      - featureFlags
+    post:
+      consumes:
+      - application/json
+      description: Create a new feature flag
+      parameters:
+      - description: Feature flag object
+        in: body
+        name: featureFlag
+        required: true
+        schema:
+          $ref: '#/definitions/dto.FeatureFlagCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.FeatureFlagCreateRequest'
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Create a new feature flag
+      tags:
+      - featureFlags
+  /backend/fp/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a feature flag
+      parameters:
+      - description: Feature flag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Delete a feature flag
+      tags:
+      - featureFlags
+    get:
+      consumes:
+      - application/json
+      description: Get a feature flag by ID
+      parameters:
+      - description: Feature flag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.FeatureFlag'
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get a feature flag by ID
+      tags:
+      - featureFlags
+    put:
+      consumes:
+      - application/json
+      description: Update a feature flag
+      parameters:
+      - description: Feature flag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Feature flag object
+        in: body
+        name: featureFlag
+        required: true
+        schema:
+          $ref: '#/definitions/dto.FeatureFlagUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FeatureFlagUpdateRequest'
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Update a feature flag
+      tags:
+      - featureFlags
+  /coloc/members:
+    post:
+      consumes:
+      - application/json
+      description: Create a new colocation member
+      parameters:
+      - description: Colocation member object
+        in: body
+        name: colocMember
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ColocMemberCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.ColocMemberCreateRequest'
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Create a new colocation member
+      tags:
+      - colocMembers
+  /coloc/members/:
+    get:
+      consumes:
+      - application/json
+      description: Get all colocation members
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.ColocMember'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all colocation members
+      tags:
+      - colocMembers
+  /coloc/members/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a colocation member
+      parameters:
+      - description: Colocation member ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Delete a colocation member
+      tags:
+      - colocMembers
+    get:
+      consumes:
+      - application/json
+      description: Get a colocation member by ID
+      parameters:
+      - description: Colocation member ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ColocMember'
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get a colocation member by ID
+      tags:
+      - colocMembers
+  /coloc/members/{id}/score:
+    put:
+      consumes:
+      - application/json
+      description: Update the score of a colocation member
+      parameters:
+      - description: Colocation member ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Score object
+        in: body
+        name: score
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ColocMemberScoreUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ColocMemberScoreUpdateRequest'
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Update the score of a colocation member
+      tags:
+      - colocMembers
+  /colocations:
+    get:
+      consumes:
+      - application/json
+      description: Get all colocations
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Colocation'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all colocations
+      tags:
+      - colocations
+    post:
+      consumes:
+      - application/json
+      description: Create a new colocation
+      parameters:
+      - description: Colocation object
+        in: body
+        name: colocation
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ColocationCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.ColocationCreateRequest'
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Create a new colocation
+      tags:
+      - colocations
+  /colocations/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a colocation by ID
+      parameters:
+      - description: Colocation ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Colocation'
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get a colocation by ID
+      tags:
+      - colocations
+    patch:
+      consumes:
+      - application/json
+      description: Update a colocation by ID
+      parameters:
+      - description: Colocation ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Colocation object
+        in: body
+        name: colocationUpdates
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ColocationUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ColocationUpdateRequest'
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Update a colocation by ID
+      tags:
+      - colocations
+  /colocations/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get all user's colocations
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Colocation'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all user's colocations
+      tags:
+      - colocations
+  /invitations:
+    patch:
+      consumes:
+      - application/json
+      description: Update an invitation
+      parameters:
+      - description: Invitation object
+        in: body
+        name: invitation
+        required: true
+        schema:
+          $ref: '#/definitions/dto.InvitationUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.InvitationUpdateRequest'
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Update an invitation
+      tags:
+      - invitations
+    post:
+      consumes:
+      - application/json
+      description: Create a new invitation
+      parameters:
+      - description: Invitation object
+        in: body
+        name: invitation
+        required: true
+        schema:
+          $ref: '#/definitions/dto.InvitationCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.InvitationCreateRequest'
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Create a new invitation
+      tags:
+      - invitations
+  /invitations/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get all invitations
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Invitation'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all invitations
+      tags:
+      - invitations
+  /reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Reset the user's password
+      parameters:
+      - description: User object
+        in: body
+        name: resetPassword
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ResetPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+      summary: Reset the user's password
+      tags:
+      - reset-password
+  /reset-password/ask/{token}:
+    get:
+      consumes:
+      - application/json
+      description: Check if the reset token is valid
+      parameters:
+      - description: Reset token
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          schema: {}
+      summary: Check if the reset token is valid
+      tags:
+      - reset-password
+  /reset-password/forgot:
+    post:
+      consumes:
+      - application/json
+      description: Send a reset password link to the user's email
+      parameters:
+      - description: User object
+        in: body
+        name: userUpdates
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ForgotPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+      summary: Send a reset password link to the user's email
+      tags:
+      - reset-password
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all users
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema: {}
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Delete a user by ID
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Get a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get a user by ID
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: Update a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User object
+        in: body
+        name: userUpdates
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
+          schema: {}
+      summary: Update a user by ID
+      tags:
+      - users
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
