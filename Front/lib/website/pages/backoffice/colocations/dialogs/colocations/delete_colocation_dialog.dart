@@ -1,20 +1,20 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/services/user_service.dart';
-import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
-import 'package:front/website/pages/backoffice/user/bloc/user_state.dart';
+import 'package:front/colocation/colocation.dart';
+import 'package:front/website/pages/backoffice/colocations/bloc/colocation_bloc.dart';
+import 'package:front/website/pages/backoffice/colocations/bloc/colocation_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
 
-void showDeleteUserDialog(BuildContext context, User user) {
+void showDeleteColocationDialog(BuildContext context, Colocation coloc) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return BlocProvider.value(
-        value: BlocProvider.of<UserBloc>(context),
-        child: BlocListener<UserBloc, UserState>(
+        value: BlocProvider.of<ColocationBloc>(context),
+        child: BlocListener<ColocationBloc, ColocationState>(
           listener: (context, state) {
-            if (state is UserLoaded) {
+            if (state is ColocationLoaded) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Container(
                   padding: const EdgeInsets.all(16),
@@ -23,11 +23,11 @@ void showDeleteUserDialog(BuildContext context, User user) {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child:
-                      Text('backoffice_users_user_deleted_successfully'.tr()),
+                      Text('backoffice_colocation_deleted_successfully'.tr()),
                 ),
               ));
               Navigator.pop(context);
-            } else if (state is UserError) {
+            } else if (state is ColocationError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Container(
                   padding: const EdgeInsets.all(16),
@@ -35,16 +35,16 @@ void showDeleteUserDialog(BuildContext context, User user) {
                     color: Colors.red,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Text('backoffice_users_user_deleted_error'.tr()),
+                  child: Text('backoffice_colocation_deleted_error'.tr()),
                 ),
               ));
             }
           },
           child: CustomDialog(
-            title: 'backoffice_users_user_delete'.tr(),
+            title: 'backoffice_colocation_delete_modal_title'.tr(),
             height: 50.0,
             width: 150.0,
-            content: Text('backoffice_users_user_deleted_confirm'.tr()),
+            content: Text('backoffice_colocation_delete_modal_confirm'.tr()),
             actions: [
               TextButton(
                 onPressed: () {
@@ -55,8 +55,8 @@ void showDeleteUserDialog(BuildContext context, User user) {
               TextButton(
                 onPressed: () {
                   context
-                      .read<UserBloc>()
-                      .add(DeleteUser(id: user.id.toString()));
+                      .read<ColocationBloc>()
+                      .add(DeleteColocation(id: coloc.id));
                 },
                 child: Text('delete'.tr()),
               ),

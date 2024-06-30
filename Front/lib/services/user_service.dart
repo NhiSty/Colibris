@@ -39,10 +39,12 @@ class UserService {
   }
 
   Future<List<User>> searchUsers({required String query}) async {
+    var headers = await addHeader();
     try {
       final response = await _dio.get(
         '/users/search',
         queryParameters: {'query': query},
+        options: Options(headers: headers),
       );
 
       if (response.statusCode == 200) {
@@ -135,8 +137,6 @@ class UserService {
   Future<Map<String, dynamic>> getUserById(int userId) async {
     try {
       var headers = await addHeader();
-
-      print('Fetching user data...');
       final response =
           await _dio.get('/users/$userId', options: Options(headers: headers));
 

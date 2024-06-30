@@ -20,18 +20,33 @@ void showAddUserDialog(BuildContext context) {
           listener: (context, state) {
             if (state is UserLoaded) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('backoffice_users_user_added_successfully'.tr()),
+                content: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text('backoffice_users_user_added_successfully'.tr()),
+                ),
               ));
               Navigator.pop(context);
             } else if (state is UserError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(
-                    '${'backoffice_users_user_added_error'.tr()} ${state.message}'),
+                content: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text('backoffice_users_user_added_error'.tr()),
+                ),
               ));
             }
           },
           child: CustomDialog(
             title: 'backoffice_users_add_user'.tr(),
+            height: 200.0,
+            width: 250.0,
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -76,7 +91,14 @@ void showAddUserDialog(BuildContext context) {
                         ));
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('fill_all_fields'.tr()),
+                      content: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text('fill_all_fields'.tr()),
+                      ),
                     ));
                   }
                 },

@@ -219,5 +219,20 @@
     "backoffice_logs_client_ip": "Client IP: ",
     "backoffice_logs_user_date": "Date: ",
     "backoffice_logs_user_time": "Time: ",
-    "backoffice_logs_status": "Status: "
+    "backoffice_logs_status": "Status: ",
+
+  "_commentBackOfficeColocation": "--------> Ecran BackOffice Colocation <---------",
+    "backoffice_colocation_title": "Manage shared apartments",
+    "backoffice_colocation_breadcrumb": " > Shared apartments",
+    "backoffice_colocation_no_colocation": "No shared apartment found",
+    "backoffice_colocation_owned_by": "Owned by ",
+    "backoffice_colocation_error_loading_owner_info": "Error while loading owner info",
+    "backoffice_colocation_no_description": "No description",
+    "backoffice_colocation_search": "Search shared apartment ...",
+    "backoffice_colocation_add_colocation": "Add shared apartment",
+    "backoffice_colocation_delete_modal_title": "Delete shared apartment",
+    "backoffice_colocation_delete_modal_confirm": "Are you sure you want to delete this shared apartment ?",
+    "backoffice_colocation_deleted_successfully": "Shared apartment deleted successfully",
+    "backoffice_colocation_deleted_error": "Error while deleting shared apartment : ",
+    "backoffice_colocation_colocation_not_found_after_search": "No shared apartment found after search"
 }

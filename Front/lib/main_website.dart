@@ -2,10 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:front/services/colocation_service.dart';
 import 'package:front/services/log_service.dart';
 import 'package:front/services/user_service.dart';
 import 'package:front/website/pages/auth/login_page.dart';
 import 'package:front/website/pages/auth/register_page.dart';
+import 'package:front/website/pages/backoffice/colocation_handle_page.dart';
+import 'package:front/website/pages/backoffice/colocations/bloc/colocation_bloc.dart';
 import 'package:front/website/pages/backoffice/log_handle_page.dart';
 import 'package:front/website/pages/backoffice/logs/bloc/log_bloc.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
@@ -41,6 +44,11 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               LogBloc(logService: LogService())..add(FetchLogs()),
         ),
+        BlocProvider<ColocationBloc>(
+          create: (context) =>
+              ColocationBloc(colocationService: ColocationService())
+                ..add(LoadColocations()),
+        ),
       ],
       child: MaterialApp(
         title: 'BackOffice administration',
@@ -59,6 +67,7 @@ class MyApp extends StatelessWidget {
           '/home': (context) => const HomePage(),
           '/backoffice/user': (context) => const UserHandlePage(),
           '/backoffice/logs': (context) => const LogPage(),
+          '/backoffice/colocations': (context) => const ColocationHandlePage(),
         },
       ),
     );

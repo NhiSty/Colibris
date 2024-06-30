@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
           _buildCard(
               context,
               'backoffice_homepage_colocations'.tr(),
-              '/colocation_administration',
+              '/backoffice/colocations',
               'backoffice_homepage_colocations_description'.tr(),
               Icons.home),
           _buildCard(
