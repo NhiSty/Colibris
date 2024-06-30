@@ -2,18 +2,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
-import 'package:front/website/pages/backoffice/user/dialogs/users/add_user_dialog.dart';
+import 'package:front/website/pages/backoffice/colocations/bloc/colocation_bloc.dart';
+import 'package:front/website/pages/backoffice/colocations/dialogs/colocations/add_colocation_dialog.dart';
 
-class SearchBarAndAddUserButton extends StatefulWidget {
-  const SearchBarAndAddUserButton({super.key});
+class SearchBarAndAddColocationButton extends StatefulWidget {
+  const SearchBarAndAddColocationButton({Key? key}) : super(key: key);
 
   @override
-  _SearchBarAndAddUserButtonState createState() =>
-      _SearchBarAndAddUserButtonState();
+  _SearchBarAndAddColocationButtonState createState() =>
+      _SearchBarAndAddColocationButtonState();
 }
 
-class _SearchBarAndAddUserButtonState extends State<SearchBarAndAddUserButton> {
+class _SearchBarAndAddColocationButtonState
+    extends State<SearchBarAndAddColocationButton> {
   TextEditingController searchController = TextEditingController();
 
   @override
@@ -26,7 +27,7 @@ class _SearchBarAndAddUserButtonState extends State<SearchBarAndAddUserButton> {
     if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.enter) {
       final query = searchController.text;
       if (query.isNotEmpty) {
-        context.read<UserBloc>().add(SearchUsers(query: query));
+        context.read<ColocationBloc>().add(SearchColocations(query: query));
       }
     }
   }
@@ -44,7 +45,7 @@ class _SearchBarAndAddUserButtonState extends State<SearchBarAndAddUserButton> {
               child: TextField(
                 controller: searchController,
                 decoration: InputDecoration(
-                  hintText: 'backoffice_users_search'.tr(),
+                  hintText: 'backoffice_colocation_search'.tr(),
                   border: const OutlineInputBorder(),
                   suffixIcon: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -53,7 +54,7 @@ class _SearchBarAndAddUserButtonState extends State<SearchBarAndAddUserButton> {
                         icon: const Icon(Icons.clear),
                         onPressed: () {
                           searchController.clear();
-                          context.read<UserBloc>().add(ClearSearch());
+                          context.read<ColocationBloc>().add(ClearSearch());
                         },
                       ),
                       IconButton(
@@ -62,8 +63,8 @@ class _SearchBarAndAddUserButtonState extends State<SearchBarAndAddUserButton> {
                           final query = searchController.text;
                           if (query.isNotEmpty) {
                             context
-                                .read<UserBloc>()
-                                .add(SearchUsers(query: query));
+                                .read<ColocationBloc>()
+                                .add(SearchColocations(query: query));
                           }
                         },
                       ),
@@ -79,9 +80,9 @@ class _SearchBarAndAddUserButtonState extends State<SearchBarAndAddUserButton> {
             const SizedBox(width: 16.0),
             ElevatedButton(
               onPressed: () {
-                showAddUserDialog(context);
+                showAddColocationDialog(context);
               },
-              child: Text('backoffice_users_add_user'.tr()),
+              child: Text('backoffice_colocation_add_colocation'.tr()),
             ),
           ],
         ),

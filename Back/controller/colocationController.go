@@ -13,6 +13,10 @@ type ColocationController struct {
 	colocService service.ColocationService
 }
 
+func NewColocationController(colocService service.ColocationService) *ColocationController {
+	return &ColocationController{colocService: colocService}
+}
+
 // CreateColocation allows to create a new colocation
 // @Summary Create a new colocation
 // @Description Create a new colocation
@@ -52,10 +56,6 @@ func (ctl *ColocationController) CreateColocation(c *gin.Context) {
 	})
 }
 
-func NewColocController(colocService service.ColocationService) *ColocationController {
-	return &ColocationController{colocService: colocService}
-}
-
 // GetColocationById fetches a colocation by its ID
 // @Summary Get a colocation by ID
 // @Description Get a colocation by ID
@@ -68,7 +68,6 @@ func NewColocController(colocService service.ColocationService) *ColocationContr
 // @Router /colocations/{id} [get]
 // @Security Bearer
 func (ctl *ColocationController) GetColocationById(c *gin.Context) {
-
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -86,7 +85,52 @@ func (ctl *ColocationController) GetColocationById(c *gin.Context) {
 	})
 }
 
-// GetAllUserColocations  fetches all user's colocations from the database
+// GetAllColocations fetches all colocations from the database with pagination
+// @Summary Get all colocations
+// @Description Get all colocations
+// @Tags colocations
+// @Accept json
+// @Produce json
+// @Success 200 {array} model.Colocation
+// @Failure 400 {object} error
+// @Router /colocations [get]
+// @Security Bearer
+func (ctl *ColocationController) GetAllColocations(c *gin.Context) {
+	pageParam := c.DefaultQuery("page", "")
+	pageSizeParam := c.DefaultQuery("pageSize", "")
+
+	if pageParam == "" && pageSizeParam == "" {
+		colocations, total, err := ctl.colocService.GetAllColocations(0, 0)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"total": total, "colocations": colocations})
+		return
+	}
+
+	page, err := strconv.Atoi(pageParam)
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	pageSize, err := strconv.Atoi(pageSizeParam)
+	if err != nil || pageSize < 1 {
+		pageSize = 5
+	}
+
+	colocations, total, err := ctl.colocService.GetAllColocations(page, pageSize)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"total":       total,
+		"colocations": colocations,
+	})
+}
+
+// GetAllUserColocations fetches all user's colocations from the database
 // @Summary Get all user's colocations
 // @Description Get all user's colocations
 // @Tags colocations
@@ -145,7 +189,6 @@ func (ctl *ColocationController) UpdateColocation(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	// check if the colocation exists
 	_, err = ctl.colocService.GetColocationById(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
@@ -170,17 +213,16 @@ func (ctl *ColocationController) UpdateColocation(c *gin.Context) {
 		return
 	}
 
-	_, err = ctl.colocService.GetColocationById(id)
-	if err != nil {
-		c.JSON(http.StatusNotFound, err.Error())
-		return
-	}
 	colocUpdates := make(map[string]interface{})
 	if req.Name != "" {
 		colocUpdates["name"] = req.Name
 	}
 	if req.Description != "" {
 		colocUpdates["description"] = req.Description
+	}
+
+	if req.IsPermanent == true || req.IsPermanent == false {
+		colocUpdates["is_permanent"] = req.IsPermanent
 	}
 
 	if _, err := ctl.colocService.UpdateColocation(id, colocUpdates); err != nil {
@@ -227,4 +269,19 @@ func (ctl *ColocationController) DeleteColocation(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"Message": "colocation deleted successfully",
 	})
+}
+
+func (ctl *ColocationController) SearchColocations(c *gin.Context) {
+	query := c.DefaultQuery("query", "")
+
+	colocations, err := ctl.colocService.SearchColocations(query)
+	if !service.IsAdmin(c) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+		return
+	}
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, colocations)
 }

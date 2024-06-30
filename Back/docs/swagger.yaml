@@ -56,7 +56,6 @@ definitions:
         type: boolean
     required:
     - name
-    - value
     type: object
   dto.FeatureFlagUpdateRequest:
     properties:
@@ -660,6 +659,27 @@ paths:
       tags:
       - colocMembers
   /colocations:
+    get:
+      consumes:
+      - application/json
+      description: Get all colocations
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Colocation'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all colocations
+      tags:
+      - colocations
     post:
       consumes:
       - application/json
