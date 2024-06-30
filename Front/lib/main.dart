@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:feature_flags_toggly/feature_flags_toggly.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -11,6 +14,9 @@ import 'package:front/colocation/colocation_parameters.dart';
 import 'package:front/colocation/colocation_tasklist_screen.dart';
 import 'package:front/colocation/colocation_update.dart';
 import 'package:front/colocation/create_colocation.dart';
+import 'package:front/featureFlag/FeatureFlag.dart';
+import 'package:front/featureFlag/feature_flag_service.dart';
+import 'package:front/featureFlag/maintenance.dart';
 import 'package:front/home_screen.dart';
 import 'package:front/invitation/bloc/invitation_bloc.dart';
 import 'package:front/invitation/invitation_create_page.dart';
@@ -24,23 +30,81 @@ import 'package:front/task/bloc/task_bloc.dart';
 import 'package:front/task/task_detail.dart';
 import 'package:front/task/update_task_screen.dart';
 
+final StreamController<List<FeatureFlag>> _featureFlagsController =
+    StreamController<List<FeatureFlag>>.broadcast();
+
+final previousFlags = <FeatureFlag>[];
+Future<void> initializeFeatureFlags(List<FeatureFlag> flags) async {
+  await Toggly.init(
+    flagDefaults: {
+      for (var flag in flags) flag.name: flag.value,
+    },
+  );
+}
+
+bool isFeatureEnabled(String featureName, List<FeatureFlag> flags) {
+  var flag = flags.firstWhere((flag) => flag.name == featureName,
+      orElse: () => FeatureFlag(name: featureName, value: false));
+  return flag.value;
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await dotenv.load(fileName: ".env");
 
+  var initialFlags = await fetchFeatureFlags();
+  await initializeFeatureFlags(initialFlags);
+  previousFlags.addAll(initialFlags);
+
   runApp(
     EasyLocalization(
-      supportedLocales: [Locale('en'), Locale('fr')],
+      supportedLocales: const [Locale('en'), Locale('fr')],
       path: 'assets/translations',
-      fallbackLocale: Locale('en'),
-      child: const MyApp(),
+      fallbackLocale: const Locale('en'),
+      child: StreamBuilder<List<FeatureFlag>>(
+        stream: _featureFlagsController.stream,
+        initialData: initialFlags,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return MyApp(
+              featureFlag: snapshot.data!,
+            );
+          } else {
+            return const CircularProgressIndicator();
+          }
+        },
+      ),
     ),
   );
+
+  Stream<int> periodicStream =
+      Stream.periodic(const Duration(seconds: 5), (count) => count);
+
+  periodicStream.listen((event) async {
+    var flags = await fetchFeatureFlags();
+
+    // verify for each flag if the value has changed
+    for (var flag in flags) {
+      var previousFlag = previousFlags.firstWhere(
+        (previousFlag) => previousFlag.name == flag.name,
+        orElse: () => FeatureFlag(name: flag.name, value: !flag.value),
+      );
+      if (flag.value != previousFlag.value) {
+        await initializeFeatureFlags(flags);
+        previousFlags.clear();
+        previousFlags.addAll(flags);
+        _featureFlagsController.add(flags);
+        break;
+      }
+    }
+  });
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.featureFlag});
+
+  final List<FeatureFlag> featureFlag;
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +126,13 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
           useMaterial3: true,
         ),
-        home: const LoginScreen(),
+        home: isFeatureEnabled('maintenance', featureFlag)
+            ? const MaintenanceScreen()
+            : const LoginScreen(),
         debugShowCheckedModeBanner: false,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
-        initialRoute: '/login',
         routes: {
           '/login': (context) => const LoginScreen(),
           '/register': (context) => const RegisterScreen(),
@@ -156,7 +221,7 @@ class MyApp extends StatelessWidget {
                   conversationId: routes['chatId'],
                 ),
               );
-              case UpdateTaskScreen.routeName:
+            case UpdateTaskScreen.routeName:
               return MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
                         value: BlocProvider.of<TaskBloc>(context),

@@ -37,6 +37,7 @@ func Migrate(db *gorm.DB) {
 		&model.Task{},
 		&model.Vote{},
 		&model.Message{},
+		&model.FeatureFlag{},
 	)
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
@@ -49,6 +50,11 @@ func Migrate(db *gorm.DB) {
 		Firstname: "admin",
 		Lastname:  "admin",
 		Roles:     model.ROLE_ADMIN,
+	})
+
+	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.FeatureFlag{
+		Name:  "maintenance",
+		Value: false,
 	})
 
 	fmt.Println("Database migration completed successfully.")
