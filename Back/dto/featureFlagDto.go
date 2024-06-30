@@ -2,7 +2,7 @@ package dto
 
 type FeatureFlagCreateRequest struct {
 	Name  string `json:"name" binding:"required"`
-	Value bool   `json:"value" binding:"required"`
+	Value bool   `json:"value"`
 }
 
 type FeatureFlagUpdateRequest struct {
