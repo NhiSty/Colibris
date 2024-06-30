@@ -48,6 +48,23 @@ definitions:
       name:
         type: string
     type: object
+  dto.FeatureFlagCreateRequest:
+    properties:
+      name:
+        type: string
+      value:
+        type: boolean
+    required:
+    - name
+    - value
+    type: object
+  dto.FeatureFlagUpdateRequest:
+    properties:
+      name:
+        type: string
+      value:
+        type: boolean
+    type: object
   dto.ForgotPasswordRequest:
     properties:
       email:
@@ -177,6 +194,21 @@ definitions:
         type: string
       userID:
         type: integer
+    type: object
+  model.FeatureFlag:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+      value:
+        type: boolean
     type: object
   model.Invitation:
     properties:
@@ -365,6 +397,136 @@ paths:
       summary: Reset password
       tags:
       - auth
+  /backend/fp:
+    get:
+      consumes:
+      - application/json
+      description: Get all feature flags
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.FeatureFlag'
+            type: array
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all feature flags
+      tags:
+      - featureFlags
+    post:
+      consumes:
+      - application/json
+      description: Create a new feature flag
+      parameters:
+      - description: Feature flag object
+        in: body
+        name: featureFlag
+        required: true
+        schema:
+          $ref: '#/definitions/dto.FeatureFlagCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.FeatureFlagCreateRequest'
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Create a new feature flag
+      tags:
+      - featureFlags
+  /backend/fp/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a feature flag
+      parameters:
+      - description: Feature flag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Delete a feature flag
+      tags:
+      - featureFlags
+    get:
+      consumes:
+      - application/json
+      description: Get a feature flag by ID
+      parameters:
+      - description: Feature flag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.FeatureFlag'
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get a feature flag by ID
+      tags:
+      - featureFlags
+    put:
+      consumes:
+      - application/json
+      description: Update a feature flag
+      parameters:
+      - description: Feature flag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Feature flag object
+        in: body
+        name: featureFlag
+        required: true
+        schema:
+          $ref: '#/definitions/dto.FeatureFlagUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FeatureFlagUpdateRequest'
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Update a feature flag
+      tags:
+      - featureFlags
   /coloc/members:
     post:
       consumes:

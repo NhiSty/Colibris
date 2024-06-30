@@ -33,6 +33,33 @@ Future<int> createTask(String title, String description, String date,
   }
 }
 
+Future<int> updateTask(int taskId, String title, String description, String date,
+    int duration, String picture, int colocationId) async {
+  var headers = await addHeader();
+  try {
+    print('task values: $taskId, $title, $description, $date, $duration, $picture, $colocationId');
+    var response = await dio.put(
+      '/tasks/$taskId',
+      data: {
+        'title': title,
+        'description': description,
+        'date': date,
+        'duration': duration,
+        'picture': picture,
+        'colocationId': colocationId,
+      },
+      options: Options(headers: headers),
+    );
+    return response.statusCode!;
+  } on DioException catch (e) {
+    log('Dio error!');
+    log('error: ${e.response}');
+    log('Response status: ${e.response!.statusCode}');
+    log('Response data: ${e.response!.data}');
+    throw Exception('Failed to update task');
+  }
+}
+
 Future<List<Task>> fetchTasks(int colocationId) async {
   var headers = await addHeader();
   try {

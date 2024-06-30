@@ -53,6 +53,7 @@ func main() {
 		route.LogRoutes(v1, database)
 		route.TaskRoutes(v1, database)
 		route.ChatRoutes(v1, database)
+		route.FeatureFlagRoutes(v1, database)
 		v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
 	err := r.Run(":8080")
