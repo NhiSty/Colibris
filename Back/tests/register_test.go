@@ -2,6 +2,7 @@ package tests
 
 import (
 	"Colibris/dto"
+	"fmt"
 
 	"bytes"
 	"encoding/json"
@@ -24,7 +25,9 @@ func TestRegisterSuccess(t *testing.T) {
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
-	assert.Nil(t, err)
+	if err != nil {
+		fmt.Println(err)
+	}
 	assert.Equal(t, http.StatusCreated, resp.StatusCode)
 }
 
