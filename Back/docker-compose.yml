@@ -1,8 +1,6 @@
 services:
   golang:
     container_name: golang
-    tty: true
-    stdin_open: true
     build:
       context: .
       dockerfile: Dockerfile
