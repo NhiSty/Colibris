@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:front/auth/auth_service.dart';
 import 'package:front/website/share/secure_storage.dart';
 
@@ -18,93 +19,90 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Text(
-                    'Colibri',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.3,
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    child: Image.asset(
-                      'assets/images/login_page.png',
-                      fit: BoxFit.contain,
+      body: KeyboardListener(
+        focusNode: FocusNode(),
+        onKeyEvent: _handleKey,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text(
+                      'Colibri',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: 250,
-                    child: TextFormField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        labelText: 'login_email'.tr(),
-                        border: const OutlineInputBorder(),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      child: Image.asset(
+                        'assets/images/login_page.png',
+                        fit: BoxFit.contain,
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'email_invalid'.tr();
-                        }
-                        return null;
-                      },
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    width: 250,
-                    child: TextFormField(
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                        labelText: 'login_password'.tr(),
-                        border: const OutlineInputBorder(),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: 250,
+                      child: TextFormField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          labelText: 'login_email'.tr(),
+                          border: const OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'email_invalid'.tr();
+                          }
+                          return null;
+                        },
                       ),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'login_password_error'.tr();
-                        }
-                        return null;
-                      },
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: loginClick,
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.green,
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: 250,
+                      child: TextFormField(
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                          labelText: 'login_password'.tr(),
+                          border: const OutlineInputBorder(),
+                        ),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'login_password_error'.tr();
+                          }
+                          return null;
+                        },
+                      ),
                     ),
-                    child: Text('login_login'.tr()),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'login_unknown_for_our_service'.tr(),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/register');
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.green,
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: loginClick,
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.green,
+                      ),
+                      child: Text('login_login'.tr()),
                     ),
-                    child: Text('login_register'.tr()),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  void _handleKey(KeyEvent event) {
+    if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.enter) {
+      loginClick();
+    }
   }
 
   loginClick() async {

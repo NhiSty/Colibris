@@ -27,6 +27,21 @@ func (s *ColocationService) GetColocationById(id int) (*model.Colocation, error)
 	return &colocation, result.Error
 }
 
+func (s *ColocationService) GetAllColocations(page int, pageSize int) ([]model.Colocation, int64, error) {
+	var colocations []model.Colocation
+	var total int64
+
+	s.db.Model(&model.Colocation{}).Count(&total)
+	if page == 0 || pageSize == 0 {
+		result := s.db.Find(&colocations)
+		return colocations, total, result.Error
+	}
+
+	offset := (page - 1) * pageSize
+	result := s.db.Limit(pageSize).Offset(offset).Find(&colocations)
+	return colocations, total, result.Error
+}
+
 func (s *ColocationService) GetAllUserColocations(userId int) ([]model.Colocation, error) {
 	var colocations []model.Colocation
 	result := s.db.Preload("ColocMembers").Find(&colocations)
@@ -66,4 +81,11 @@ func (s *ColocationService) UpdateColocation(id int, colocationUpdates map[strin
 
 func (s *ColocationService) DeleteColocation(id int) error {
 	return s.db.Delete(&model.Colocation{}, id).Error
+}
+
+func (s *ColocationService) SearchColocations(query string) ([]model.Colocation, error) {
+	var colocations []model.Colocation
+
+	result := s.db.Where("name LIKE ? OR description LIKE ?", "%"+query+"%", "%"+query+"%").Find(&colocations)
+	return colocations, result.Error
 }

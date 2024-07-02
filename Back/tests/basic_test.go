@@ -7,8 +7,3 @@ func TestBasicAssertion(t *testing.T) {
 		t.Fatalf("expected 1 to equal 1")
 	}
 }
-func TestBasicFailed(t *testing.T) {
-	if 2 != 1 {
-		t.Fatalf("expected to fail")
-	}
-}

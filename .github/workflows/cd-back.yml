@@ -1,0 +1,42 @@
+name: Deploy Go App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        run: |
+          go version
+
+      - name: Generate .env file
+        working-directory: /home/ubuntu/Colibris/Back
+        run: |
+          echo "DB_URL=${{ secrets.DB_URL }}" > .env
+          echo "MJ_APIKEY_PUBLIC=${{ secrets.MJ_APIKEY_PUBLIC }}" >> .env
+          echo "MJ_APIKEY_PRIVATE=${{ secrets.MJ_APIKEY_PRIVATE }}" >> .env
+          echo 'Hello="Hello World"' >> .env
+
+      - name: Pull latest code
+        run: |
+          cd /home/ubuntu/Colibris
+          git pull origin main
+
+      - name: Build application
+        run: |
+          cd /home/ubuntu/Colibris/Back
+          go build -o back
+
+      - name: Restart application
+        run: |
+          cd /home/ubuntu/Colibris/Back
+          sudo pkill back || true
+          nohup sudo ./back > back.log 2>&1 &

@@ -16,19 +16,34 @@ void showDeleteUserDialog(BuildContext context, User user) {
           listener: (context, state) {
             if (state is UserLoaded) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content:
-                    Text('backoffice_users_user_deleted_successfully'.tr()),
+                content: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child:
+                      Text('backoffice_users_user_deleted_successfully'.tr()),
+                ),
               ));
               Navigator.pop(context);
             } else if (state is UserError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(
-                    '${'backoffice_users_user_deleted_error'.tr()} ${state.message}'),
+                content: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text('backoffice_users_user_deleted_error'.tr()),
+                ),
               ));
             }
           },
           child: CustomDialog(
             title: 'backoffice_users_user_delete'.tr(),
+            height: 50.0,
+            width: 150.0,
             content: Text('backoffice_users_user_deleted_confirm'.tr()),
             actions: [
               TextButton(
