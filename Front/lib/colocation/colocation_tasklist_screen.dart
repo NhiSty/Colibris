@@ -87,7 +87,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 20),
-                       Text(
+                      Text(
                         'task_done_tasks'.tr(),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
@@ -127,51 +127,53 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                     context.read<TaskBloc>().add(
                                         FetchTasks(widget.colocation.id));
                                   },
-                                    child: ListView.builder(
-                                      padding: const EdgeInsets.only(bottom: 80),
-                                      itemCount: tasks.length,
-                                      itemBuilder: (context, index) {
-                                        final item = tasks[index];
-                                        return GestureDetector(
-                                          child: TaskListItem(
-                                            item: item,
-                                            onViewPressed: () {
-                                              Navigator.pushNamed(
-                                                  context, '/task_detail',
-                                                  arguments: {'task': item});
-                                            },
-                                            onEditPressed: item.userId == userData['user_id'] ||
-                                                widget.colocation.userId ==
-                                                    userData['user_id']
-                                                ? () async {
-                                              final result = await Navigator.pushNamed(context, '/update-task',
-                                                  arguments: {
-                                                    'colocation': widget.colocation,
-                                                    'task': item,
-                                                  });
-                                              if (result == true) {
-                                                context.read<TaskBloc>().add(
-                                                    FetchTasks(widget.colocation.id));
-                                              }
-                                            } : null,
-                                            onLikePressed: () {
-                                              // Ajoutez ici l'action pour le deuxième bouton
-                                            },
-                                            onDeletePressed:
-                                            item.userId == userData['user_id'] ||
-                                                widget.colocation.userId ==
-                                                    userData['user_id']
-                                                ? () async {
-                                              await deleteTask(item.id);
+                                  child: ListView.builder(
+                                    padding: const EdgeInsets.only(bottom: 80),
+                                    itemCount: tasks.length,
+                                    itemBuilder: (context, index) {
+                                      final item = tasks[index];
+                                      return GestureDetector(
+                                        child: TaskListItem(
+                                          item: item,
+                                          onViewPressed: () {
+                                            Navigator.pushNamed(
+                                                context, '/task_detail',
+                                                arguments: {'task': item});
+                                          },
+                                          onEditPressed: item.userId == userData['user_id'] ||
+                                              widget.colocation.userId ==
+                                                  userData['user_id']
+                                              ? () async {
+                                            final result = await Navigator.pushNamed(context, '/update-task',
+                                                arguments: {
+                                                  'colocation': widget.colocation,
+                                                  'task': item,
+                                                });
+                                            if (result == true) {
                                               context.read<TaskBloc>().add(
-                                                  FetchTasks(
-                                                      widget.colocation.id));
+                                                  FetchTasks(widget.colocation.id));
                                             }
-                                                : null,
-                                          ),
-                                        );
-                                      },
-                                    ),
+                                          } : null,
+                                          onLikePressed: item.userId == userData['user_id']
+                                              ? () {
+                                            // Ajoutez ici l'action pour le deuxième bouton
+                                          }
+                                              : null,
+                                          onDeletePressed:
+                                          item.userId == userData['user_id'] ||
+                                              widget.colocation.userId ==
+                                                  userData['user_id']
+                                              ? () async {
+                                            await deleteTask(item.id);
+                                            context.read<TaskBloc>().add(
+                                                FetchTasks(
+                                                    widget.colocation.id));
+                                          }
+                                              : null,
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 );
                               }
                             } else {
@@ -188,7 +190,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 20),
-                       Text(
+                      Text(
                         'task_done_tasks'.tr(),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
@@ -223,11 +225,11 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                 );
                               } else {
                                 return RefreshIndicator(
-                                  displacement: 50,
-                                  onRefresh: () async {
-                                    context.read<TaskBloc>().add(
-                                        FetchTasks(widget.colocation.id));
-                                  },
+                                    displacement: 50,
+                                    onRefresh: () async {
+                                      context.read<TaskBloc>().add(
+                                          FetchTasks(widget.colocation.id));
+                                    },
                                     child: ListView.builder(
                                       padding: const EdgeInsets.only(bottom: 80),
                                       itemCount: tasks.length,
@@ -253,9 +255,11 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                                       'task': item,
                                                     });
                                               } : null,
-                                              onLikePressed: () {
+                                              onLikePressed: item.userId != userData['user_id']
+                                                  ? () {
                                                 // Ajoutez ici l'action pour le deuxième bouton
-                                              },
+                                              }
+                                                  : null,
                                               onDeletePressed: item.userId ==
                                                   userData['user_id'] ||
                                                   widget.colocation.userId ==
@@ -304,7 +308,7 @@ class TaskListItem extends StatelessWidget {
   final item;
   final VoidCallback onViewPressed;
   final VoidCallback? onEditPressed;
-  final VoidCallback onLikePressed;
+  final VoidCallback? onLikePressed;
   final VoidCallback? onDeletePressed;
 
   const TaskListItem({
@@ -315,6 +319,39 @@ class TaskListItem extends StatelessWidget {
     required this.onLikePressed,
     this.onDeletePressed,
   });
+
+  void _showDialog(BuildContext context, VoidCallback onLikePressed) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Donne ton avis'),
+          content: const Text('Es-tu satisfait de la tâche effectuée par l\'un de tes coloc ?'),
+          actionsAlignment: MainAxisAlignment.spaceBetween,
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(150, 50),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Icon(Icons.thumb_up, color: Colors.green,),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(150, 50),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Icon(Icons.thumb_down, color: Colors.red,),
+            )
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -364,17 +401,20 @@ class TaskListItem extends StatelessWidget {
                                 ],
                               )
                           ),
-                        PopupMenuItem(
-                            onTap: onLikePressed,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.thumb_up_outlined),
-                                const SizedBox(width: 10),
-                                Text('task_action_like'.tr()),
-                              ],
-                            )
-                        ),
+                        if(onLikePressed != null)
+                          PopupMenuItem(
+                              onTap: () {
+                                _showDialog(context, onLikePressed!);
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.thumb_up_outlined),
+                                  const SizedBox(width: 10),
+                                  Text('task_action_like'.tr()),
+                                ],
+                              )
+                          ),
                         if (onDeletePressed != null)
                           PopupMenuItem(
                               onTap: onDeletePressed,
