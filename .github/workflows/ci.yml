@@ -31,6 +31,8 @@ jobs:
         run: |
           sleep 5
           docker-compose logs golang
+          docker-compose logs postgres
+        
 
 
       - name: Run tests inside the container
