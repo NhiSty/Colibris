@@ -27,9 +27,18 @@ jobs:
         run: docker compose up -d
         if: success()
 
+      - name: Wait for the golang service to be ready
+        run: |
+          echo "Waiting for golang service to be ready..."
+          while ! docker exec golang curl -sSf http://localhost:8080/health; do
+            echo "Waiting for golang service..."
+            sleep 5
+          done
+        if: success()
+
       - name: Run tests inside the container
         run: |
           docker exec golang go test tests/utils.go tests/register_test.go
           docker exec golang go test tests/utils.go tests/login_test.go
           docker exec golang go test tests/utils.go tests/colocation_test.go
-          
+        if: success()

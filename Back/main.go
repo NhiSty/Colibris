@@ -55,6 +55,9 @@ func main() {
 		route.ChatRoutes(v1, database)
 		route.FeatureFlagRoutes(v1, database)
 		v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+		v1.GET("health", func(c *gin.Context) {
+			c.JSON(200, gin.H{"message": "ok"})
+		})
 
 	}
 	err := r.Run(":8080")
