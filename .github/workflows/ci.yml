@@ -37,7 +37,7 @@ jobs:
 
       - name: Run tests inside the container
         run: |
-          docker exec golang go test tests/utils.go tests/register_test.go
-          docker exec golang go test tests/utils.go tests/login_test.go
-          docker exec golang go test tests/utils.go tests/colocation_test.go
-        if: success()
+          docker-compose exec golang go test tests/utils.go tests/register_test.go
+          docker-compose exec golang go test tests/utils.go tests/login_test.go
+          docker-compose exec golang go test tests/utils.go tests/colocation_test.go
+
