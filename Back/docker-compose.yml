@@ -8,6 +8,8 @@ services:
       - "8080:8080"
     volumes:
       - ./:/app
+    environment:
+      - DB_URL="host=postgres user=postgres password=postgres dbname=postgres port=5432 sslmode=disable"
   postgres:
     image: postgres:13
     container_name: postgres

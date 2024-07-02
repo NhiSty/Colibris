@@ -29,7 +29,7 @@ jobs:
 
       - name: Check golang container logs
         run: |
-          sleep 5
+          sleep 15
           docker-compose logs golang
           docker-compose logs postgres
         
