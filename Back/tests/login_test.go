@@ -1,4 +1,4 @@
-package login
+package tests
 
 import (
 	"Colibris/dto"
@@ -8,8 +8,6 @@ import (
 	"net/http"
 	"testing"
 )
-
-var baseURL = "http://localhost:8080/api/v1"
 
 func TestLoginSuccess(t *testing.T) {
 	payload := dto.UserLoginRequest{

@@ -1,4 +1,4 @@
-package register
+package tests
 
 import (
 	"Colibris/dto"
@@ -9,8 +9,6 @@ import (
 	"net/http"
 	"testing"
 )
-
-var baseURL = "http://localhost:8080/api/v1"
 
 func TestRegisterSuccess(t *testing.T) {
 	payload := dto.UserRegistrationRequest{

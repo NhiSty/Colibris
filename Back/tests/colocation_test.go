@@ -1,8 +1,7 @@
-package colocation
+package tests
 
 import (
 	"Colibris/dto"
-	"Colibris/tests"
 	"bytes"
 	"encoding/json"
 	"github.com/stretchr/testify/assert"
@@ -10,11 +9,9 @@ import (
 	"testing"
 )
 
-var baseURL = "http://localhost:8080/api/v1"
-
 func TestCreateColocationSuccess(t *testing.T) {
 
-	token := tests.LogAsUser()
+	token := LogAsUser()
 	payload := dto.ColocationCreateRequest{
 		Name:        "Colocation 1",
 		Description: "Description of colocation 1",
@@ -37,7 +34,7 @@ func TestCreateColocationSuccess(t *testing.T) {
 }
 
 func TestGetColocationSuccess(t *testing.T) {
-	token := tests.LogAsUser()
+	token := LogAsUser()
 	req, _ := http.NewRequest("GET", baseURL+"/colocations/1", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 
@@ -48,7 +45,7 @@ func TestGetColocationSuccess(t *testing.T) {
 }
 
 func TestGetCollocationFailure(t *testing.T) {
-	token := tests.LogAsUser()
+	token := LogAsUser()
 	req, _ := http.NewRequest("GET", baseURL+"/colocations/100", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 
@@ -60,7 +57,7 @@ func TestGetCollocationFailure(t *testing.T) {
 
 func TestUpdateColocationSuccess(t *testing.T) {
 
-	token := tests.LogAsUser()
+	token := LogAsUser()
 	payload := dto.ColocationUpdateRequest{
 		Name:        "Colocation 1 updated ",
 		Description: "Description of colocation 1 updated",
@@ -79,7 +76,7 @@ func TestUpdateColocationSuccess(t *testing.T) {
 }
 
 func TestUpdateColocationFailure(t *testing.T) {
-	token := tests.LogAsUser()
+	token := LogAsUser()
 	payload := dto.ColocationUpdateRequest{
 		Name:        "Colocation 1 updated ",
 		Description: "Description of colocation 1 updated",
@@ -98,7 +95,7 @@ func TestUpdateColocationFailure(t *testing.T) {
 }
 
 func TestUpdateColocationForbidden(t *testing.T) {
-	token := tests.LogAsUser2()
+	token := LogAsUser2()
 	payload := dto.ColocationUpdateRequest{
 		Name:        "Colocation 1 updated ",
 		Description: "Description of colocation 1 updated",

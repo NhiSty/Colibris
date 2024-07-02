@@ -25,11 +25,11 @@ jobs:
 
       - name: Run the docker-compose
         run: docker compose up -d
-        working-directory: Back
         if: success()
 
       - name: Run tests inside the container
         run: |
-          docker exec golang go test ./tests/register_test.go
-          docker exec golang go test ./tests/login_test.go
-          docker exec golang go test ./tests/colocation_test.go
+          docker exec golang go test tests/utils.go tests/register_test.go
+          docker exec golang go test tests/utils.go tests/login_test.go
+          docker exec golang go test tests/utils.go tests/colocation_test.go
+          
