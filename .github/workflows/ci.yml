@@ -23,14 +23,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: '^1.13.1'
-
-      - name: Install dependencies
-        run: go mod tidy
-
       - name: Run the docker-compose
         run: docker compose up -d
         if: success()
