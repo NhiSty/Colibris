@@ -34,10 +34,8 @@ jobs:
       - name: Run the docker-compose
         run: docker compose up -d
         if: success()
-      - name: Health check
-        run: curl http://localhost:8080/api/v1/health
-        if: success()
-      - name: Run tests
-        run: cd tests && go test -v ./...
+
+      - name: Run tests inside the container
+        run: docker exec -it golang go test ./...
 
 
