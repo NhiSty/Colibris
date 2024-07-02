@@ -27,10 +27,16 @@ jobs:
         run: docker compose up -d
         if: success()
 
+      - name: Check golang container logs
+        run: docker-compose logs golang
+
+      - name: Inspect running processes in golang container
+        run: docker-compose exec golang ps aux
+
       - name: Wait for the golang service to be ready
         run: |
           echo "Waiting for golang service to be ready..."
-          while ! docker exec golang curl -sSf http://localhost:8080/api/v1/health; do
+          while ! curl -sSf http://localhost:8080/api/v1/health; do
             echo "Waiting for golang service..."
             sleep 5
           done
