@@ -29,5 +29,3 @@ jobs:
 
       - name: Run tests inside the container
         run: docker exec -it golang go test ./...
-
-

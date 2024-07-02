@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   golang:
     container_name: golang
@@ -10,7 +9,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./:/app
+      - ./:/Back
   postgres:
     image: postgres:13
     container_name: postgres
