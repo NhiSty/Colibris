@@ -32,6 +32,7 @@ jobs:
           sleep 5
           docker-compose logs golang
 
+
       - name: Run tests inside the container
         run: |
           docker exec golang go test tests/utils.go tests/register_test.go
