@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-var baseURL = "http://golang:8080/api/v1"
+var baseURL = "http://localhost:8080/api/v1"
 
 func LogAsUser() string {
 	token := login("test@gmail.com", "test123!")
