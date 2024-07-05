@@ -29,6 +29,7 @@ import 'package:front/task/add_new_task_screen.dart';
 import 'package:front/task/bloc/task_bloc.dart';
 import 'package:front/task/task_detail.dart';
 import 'package:front/task/update_task_screen.dart';
+import 'package:front/vote/bloc/vote_bloc.dart';
 
 final StreamController<List<FeatureFlag>> _featureFlagsController =
     StreamController<List<FeatureFlag>>.broadcast();
@@ -120,6 +121,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<TaskBloc>(
           create: (context) => TaskBloc(),
         ),
+        BlocProvider<VoteBloc>(
+            create: (context) => VoteBloc()
+        )
       ],
       child: MaterialApp(
         title: 'Colobris',

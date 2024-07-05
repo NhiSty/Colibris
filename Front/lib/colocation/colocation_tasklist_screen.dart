@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/colocation/colocation.dart';
 import 'package:front/shared.widget/bottom_navigation_bar.dart';
 import 'package:front/task/task_service.dart';
+import 'package:front/vote/bloc/vote_bloc.dart';
 import 'package:front/website/share/secure_storage.dart';
 
 import '../task/bloc/task_bloc.dart';
@@ -39,6 +40,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<TaskBloc>().add(FetchTasks(widget.colocation.id));
+    context.read<VoteBloc>().add(FetchUserVote(widget.colocation.userId));
 
     return SafeArea(
         child: DefaultTabController(
@@ -127,6 +129,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                   onRefresh: () async {
                                     context.read<TaskBloc>().add(
                                         FetchTasks(widget.colocation.id));
+                                    context.read<VoteBloc>().add(FetchUserVote(widget.colocation.userId));
                                   },
                                   child: ListView.builder(
                                     padding: const EdgeInsets.only(bottom: 80),
@@ -155,7 +158,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                                   FetchTasks(widget.colocation.id));
                                             }
                                           } : null,
-                                          onLikePressed: item.userId == userData['user_id']
+                                          onLikePressed: item.userId != userData['user_id']
                                               ? () {
                                             // Ajoutez ici l'action pour le deuxième bouton
                                           }
@@ -230,6 +233,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                     onRefresh: () async {
                                       context.read<TaskBloc>().add(
                                           FetchTasks(widget.colocation.id));
+                                      context.read<VoteBloc>().add(FetchUserVote(widget.colocation.userId));
                                     },
                                     child: ListView.builder(
                                       padding: const EdgeInsets.only(bottom: 80),

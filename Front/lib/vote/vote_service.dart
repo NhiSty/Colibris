@@ -31,13 +31,13 @@ Future<List<Vote>> fetchUserVotes() async {
   var userData = await decodeToken();
   try {
     var response = await dio.get(
-      '/votes/${userData['user_id']}',
+      '/votes/users/${userData['user_id']}',
       options: Options(headers: headers),
     );
     if (response.statusCode == 200) {
-      List<dynamic> data = response.data['result'] ?? [];
+      List<dynamic> data = response.data['votes'] ?? [];
 
-      return data.map((coloc) => Vote.fromJson(coloc)).toList();
+      return data.map((vote) => Vote.fromJson(vote)).toList();
     } else {
       throw Exception('Failed to load votes for user ${userData['user_id']}');
     }
