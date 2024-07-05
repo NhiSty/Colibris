@@ -169,11 +169,6 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 	})
 }
 
-
-
-
-}
-
 func (ctl *VoteController) GetVotesByTaskId(c *gin.Context) {
 	taskId, err := strconv.Atoi(c.Params.ByName("taskId"))
 
@@ -190,6 +185,32 @@ func (ctl *VoteController) GetVotesByTaskId(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, votes)
+}
+
+func (ctl *VoteController) GetVotesByUserId(c *gin.Context) {
+	userId, err := strconv.Atoi(c.Params.ByName("userId"))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	userIDFromToken, exists := c.Get("userID")
+	if !exists || userIDFromToken.(uint) != uint(userId) && !service.IsAdmin(c) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+		return
+	}
+
+	votes, err := ctl.voteService.GetVotesByUserId(userId)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"votes": votes,
+	})
 }
 
 func NewVoteController(voteService service.VoteService) *VoteController {
