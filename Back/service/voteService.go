@@ -29,10 +29,35 @@ func (v *VoteService) GetAllVotes() ([]model.Vote, error) {
 	return votes, result.Error
 }
 
+func (v *VoteService) GetVotesByTaskId(taskId int) ([]model.Vote, error) {
+	var votes []model.Vote
+	result := v.db.Where("task_id = ?", taskId).Find(&votes)
+	return votes, result.Error
+}
+
 func (v *VoteService) GetVoteByTaskIdAndUserId(taskId int, userId int) (*model.Vote, error) {
 	var vote model.Vote
 	result := v.db.Where("task_id = ?", taskId).Where("user_id = ?", userId).First(&vote)
 	return &vote, result.Error
+}
+
+func (v *VoteService) GetVotesByUserId(userId int) ([]model.Vote, error) {
+	var votes []model.Vote
+	result := v.db.Where("user_id = ?", userId).Find(&votes)
+	return votes, result.Error
+}
+
+func (v *VoteService) UpdateVote(id int, voteUpdates map[string]interface{}) (*model.Vote, error) {
+	var vote model.Vote
+
+	if err := v.db.Model(&vote).Where("id = ?", id).Updates(voteUpdates).Error; err != nil {
+		return nil, err
+	}
+	if err := v.db.Where("id = ?", id).First(&vote).Error; err != nil {
+		return &vote, err
+	}
+
+	return &vote, nil
 }
 
 func (v *VoteService) GetDB() *gorm.DB {
