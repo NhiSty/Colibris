@@ -582,6 +582,39 @@ const docTemplate = `{
             }
         },
         "/colocations": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Get all colocations",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "colocations"
+                ],
+                "summary": "Get all colocations",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Colocation"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -1222,8 +1255,7 @@ const docTemplate = `{
         "dto.FeatureFlagCreateRequest": {
             "type": "object",
             "required": [
-                "name",
-                "value"
+                "name"
             ],
             "properties": {
                 "name": {

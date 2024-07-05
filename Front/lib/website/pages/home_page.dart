@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:front/website/pages/auth/login_page.dart';
+import 'package:front/website/share/secure_storage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -55,6 +57,22 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
+              Positioned(
+                left: 16.0,
+                top: 16.0,
+                child: IconButton(
+                  icon: const Icon(Icons.logout, color: Colors.white),
+                  onPressed: () {
+                    deleteToken();
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                ),
+              ),
             ],
           ),
           Expanded(
@@ -101,7 +119,7 @@ class _HomePageState extends State<HomePage> {
           _buildCard(
               context,
               'backoffice_homepage_colocations'.tr(),
-              '/colocation_administration',
+              '/backoffice/colocations',
               'backoffice_homepage_colocations_description'.tr(),
               Icons.home),
           _buildCard(
@@ -114,6 +132,12 @@ class _HomePageState extends State<HomePage> {
               'backoffice_homepage_messages_description'.tr(), Icons.build),
           _buildCard(context, 'backoffice_homepage_tasks'.tr(), '/tasks',
               'backoffice_homepage_tasks_description'.tr(), Icons.check),
+          _buildCard(
+              context,
+              'backoffice_homepage_flipping'.tr(),
+              '/feature-flipping',
+              'backoffice_homepage_flipping_description'.tr(),
+              Icons.flag),
         ],
       ),
     );

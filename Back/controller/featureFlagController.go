@@ -142,7 +142,7 @@ func (c *FeatureFlagController) UpdateFeatureFlag(ctx *gin.Context) {
 
 	flag, err := c.featureFlagService.GetFeatureFlagByID(uint(id))
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "record not found"})
 		return
 	}
 
