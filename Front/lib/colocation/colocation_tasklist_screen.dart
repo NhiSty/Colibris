@@ -160,7 +160,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                           } : null,
                                           onLikePressed: item.userId != userData['user_id']
                                               ? () {
-                                            // Ajoutez ici l'action pour le deuxième bouton
+                                            // on laisse vide pcq géré direct dans task_list_item
                                           }
                                               : null,
                                           onDeletePressed:
@@ -262,7 +262,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                               } : null,
                                               onLikePressed: item.userId != userData['user_id']
                                                   ? () {
-                                                // Ajoutez ici l'action pour le deuxième bouton
+                                                // on laisse vide pcq géré direct dans task_list_item
                                               }
                                                   : null,
                                               onDeletePressed: item.userId ==

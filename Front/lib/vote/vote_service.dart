@@ -5,7 +5,7 @@ import 'package:front/vote/vote.dart';
 import '../utils/dio.dart';
 import '../website/share/secure_storage.dart';
 
-Future<int> addVote(String taskId, int value) async {
+Future<int> addVote(int taskId, int value) async {
   var headers = await addHeader();
   try {
     var response = await dio.post(
@@ -46,5 +46,26 @@ Future<List<Vote>> fetchUserVotes() async {
     log('Response status: ${e.response!.statusCode}');
     log('Response data: ${e.response!.data}');
     throw Exception('Failed to fetch votes for user ${userData['user_id']}');
+  }
+}
+
+Future<int> updateVote(int voteId, int value) async {
+  var headers = await addHeader();
+
+  try {
+    var response = await dio.put(
+      '/votes/$voteId',
+      options: Options(headers: headers),
+      data: {
+        'value': value
+      }
+    );
+    return response.statusCode!;
+
+  } on DioException catch (e) {
+    log('Dio error!');
+    log('Response status: ${e.response!.statusCode}');
+    log('Response data: ${e.response!.data}');
+    throw Exception('Failed to update vote with id : $voteId');
   }
 }

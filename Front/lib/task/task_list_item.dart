@@ -2,12 +2,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:front/task/task.dart';
 import 'package:front/vote/bloc/vote_bloc.dart';
+import 'package:front/vote/vote_service.dart';
 
-import '../vote/vote.dart';
+import '../vote/vote_dialog.dart';
 
 class TaskListItem extends StatelessWidget {
-  final item;
+  final Task item;
   final VoidCallback onViewPressed;
   final VoidCallback? onEditPressed;
   final VoidCallback? onLikePressed;
@@ -21,39 +23,6 @@ class TaskListItem extends StatelessWidget {
     required this.onLikePressed,
     this.onDeletePressed,
   });
-
-  void _showDialog(BuildContext context, VoidCallback onLikePressed) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Donne ton avis'),
-          content: const Text('Es-tu satisfait de la tâche effectuée par l\'un de tes coloc ?'),
-          actionsAlignment: MainAxisAlignment.spaceBetween,
-          actions: <Widget>[
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(150, 50),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Icon(Icons.thumb_up, color: Colors.green,),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(150, 50),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Icon(Icons.thumb_down, color: Colors.red,),
-            )
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +62,7 @@ class TaskListItem extends StatelessWidget {
                             // Assuming `item` has an ID or some identifier to match with votes
                             final voteIndex = votes.indexWhere((vote) => vote.taskId == item.id);
                             final vote = voteIndex != -1 ? votes.elementAt(voteIndex) : null;
+                            final taskIsAlreadyVoted = vote != null;
 
                             return PopupMenuButton(
                               itemBuilder: (context) =>
@@ -126,32 +96,9 @@ class TaskListItem extends StatelessWidget {
                                         showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text('Donne ton avis'),
-                                              content: const Text('Es-tu satisfait de la tâche effectuée par l\'un de tes coloc ?'),
-                                              actionsAlignment: MainAxisAlignment.spaceBetween,
-                                              actions: <Widget>[
-                                                ElevatedButton(
-                                                  style: ElevatedButton.styleFrom(
-                                                    minimumSize: const Size(150, 50),
-                                                  ),
-                                                  onPressed: vote?.value != 1
-                                                      ? () {
-                                                    Navigator.of(context).pop();
-                                                  } : null,
-                                                  child: const Icon(Icons.thumb_up, color: Colors.green,),
-                                                ),
-                                                ElevatedButton(
-                                                  style: ElevatedButton.styleFrom(
-                                                    minimumSize: const Size(150, 50),
-                                                  ),
-                                                  onPressed: vote?.value != -1
-                                                      ? () {
-                                                    Navigator.of(context).pop();
-                                                  } : null,
-                                                  child: const Icon(Icons.thumb_down, color: Colors.red,),
-                                                )
-                                              ],
+                                            return VoteDialog(
+                                              taskId: item.id,
+                                              vote: vote,
                                             );
                                           },
                                         );
