@@ -96,13 +96,6 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		return
 	}
 
-	taskId, err := strconv.Atoi(c.Params.ByName("taskId"))
-
-	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
-		return
-	}
-
 	voteId, err := strconv.Atoi(c.Params.ByName("voteId"))
 
 	if err != nil {
@@ -110,9 +103,10 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		return
 	}
 
+	// verify if the user is the owner of the colocation
 	userIDFromToken, exists := c.Get("userID")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, "Unauthorized")
+	if !exists && !service.IsAdmin(c) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Unauthorized"})
 		return
 	}
 
@@ -123,8 +117,13 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		return
 	}
 
+	if vote.UserID != userIDFromToken.(uint) && !service.IsAdmin(c) {
+		c.JSON(http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	var taskService = service.NewTaskService(ctl.voteService.GetDB())
-	task, err := taskService.GetById(uint(taskId))
+	task, err := taskService.GetById(vote.TaskID)
 
 	var colocService = service.NewColocationService(ctl.voteService.GetDB())
 	colocations, err := colocService.GetAllUserColocations(int(userIDFromToken.(uint)))
@@ -148,7 +147,7 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		return
 	}
 
-	if vote.UserID == userIDFromToken {
+	if task.UserID == userIDFromToken {
 		c.JSON(http.StatusBadRequest, "You can't vote for yourself")
 		return
 	}
