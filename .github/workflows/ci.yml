@@ -27,17 +27,11 @@ jobs:
         run: docker compose up -d
         if: success()
 
-      - name: Check golang container logs
-        run: |
-          sleep 15
-          docker-compose logs golang
-          docker-compose logs postgres
-        
-
-
       - name: Run tests inside the container
         run: |
           docker-compose exec -T golang go test tests/utils.go tests/register_test.go
           docker-compose exec -T golang go test tests/utils.go tests/login_test.go
           docker-compose exec -T golang go test tests/utils.go tests/colocation_test.go
+          docker-compose exec -T golang go test tests/utils.go tests/featureFlag_test.go
+          docker-compose exec -T golang go test tests/utils.go tests/colocMember_test.go
 
