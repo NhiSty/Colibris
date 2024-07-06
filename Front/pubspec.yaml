@@ -52,6 +52,7 @@ dependencies:
     sdk: flutter
   easy_localization: ^3.0.7
   feature_flags_toggly: ^1.0.5
+  mapbox_gl: ^0.16.0
 
 dev_dependencies:
   flutter_test:

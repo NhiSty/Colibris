@@ -257,5 +257,18 @@
     "backoffice_flipping_breadcrumb": " > Maintenance",
     "backoffice_flipping_description": "Gestion des fonctionnalités à passer en maintenance",
     "backoffice_flipping_fail_load_data": "Erreur lors du chargement des fonctionnalités : ",
-    "backoffice_flipping_fail_update_data": "Erreur lors de la mise à jour de la fonctionnalité : "
+    "backoffice_flipping_fail_update_data": "Erreur lors de la mise à jour de la fonctionnalité : ",
+
+  "_commentBackOfficeColocMember": "--------> Ecran BackOffice coloc Member <---------",
+    "backoffice_colocMember_title": "Gestion des membres par colocations",
+    "backoffice_colocMember_breadcrumb": " > Gestion membres par colocations",
+    "backoffice_colocMember_user_field": "Utilisateur : ",
+    "backoffice_colocMember_owner_field": "Propriétaire : ",
+    "backoffice_colocMember_colocation_field": "Colocation : ",
+    "backoffice_colocMember_joined_date_field": "Rejoint le : ",
+    "backoffice_colocMember_score_field": "Score : ",
+    "backoffice_colocMember_search_coloc_members": "Rechercher un membre de colocation",
+    "backoffice_colocMember_add_coloc_member": "Ajouter un colocataire",
+    "backoffice_colocMember_no_coloc_member_found": "Aucun membre de colocation trouvé",
+    "backoffice_colocMember_maps_title_colocation": "Carte de : "
 }

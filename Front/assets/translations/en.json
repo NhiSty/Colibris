@@ -257,5 +257,18 @@
     "backoffice_flipping_breadcrumb": " > Flipping",
     "backoffice_flipping_description": "Select the feature you want to enable or disable",
     "backoffice_flipping_fail_load_data": "Failed to load feature flags : ",
-    "backoffice_flipping_fail_update_data": "Failed to update feature flags : "
+    "backoffice_flipping_fail_update_data": "Failed to update feature flags : ",
+
+  "_commentBackOfficeColocMember": "--------> Ecran BackOffice coloc Member <---------",
+    "backoffice_colocMember_title": "Members by shared apartments",
+    "backoffice_colocMember_breadcrumb": " > Members by shared apartments",
+    "backoffice_colocMember_user_field": "User : ",
+    "backoffice_colocMember_owner_field": "Owned by : ",
+    "backoffice_colocMember_colocation_field": "Shared apartment : ",
+    "backoffice_colocMember_joined_date_field": "Joined at : ",
+    "backoffice_colocMember_score_field": "Score : ",
+    "backoffice_colocMember_search_coloc_members": "Search coloc members ...",
+    "backoffice_colocMember_add_coloc_member": "Add member in coloc",
+    "backoffice_colocMember_no_coloc_member_found": "No coloc member found",
+    "backoffice_colocMember_maps_title_colocation": "Map of : "
 }

@@ -2,10 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:front/services/colocMember_service.dart';
 import 'package:front/services/colocation_service.dart';
 import 'package:front/services/log_service.dart';
 import 'package:front/services/user_service.dart';
 import 'package:front/website/pages/auth/login_page.dart';
+import 'package:front/website/pages/backoffice/colocMember_handle_page.dart';
+import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
 import 'package:front/website/pages/backoffice/colocation_handle_page.dart';
 import 'package:front/website/pages/backoffice/colocations/bloc/colocation_bloc.dart';
 import 'package:front/website/pages/backoffice/feature_toggle_page.dart';
@@ -49,6 +52,11 @@ class MyApp extends StatelessWidget {
               ColocationBloc(colocationService: ColocationService())
                 ..add(LoadColocations()),
         ),
+        BlocProvider<ColocMemberBloc>(
+          create: (context) =>
+              ColocMemberBloc(colocMemberService: ColocMemberService())
+                ..add(LoadColocMembers()),
+        ),
       ],
       child: MaterialApp(
         title: 'BackOffice administration',
@@ -68,6 +76,8 @@ class MyApp extends StatelessWidget {
           '/backoffice/logs': (context) => const LogPage(),
           '/backoffice/colocations': (context) => const ColocationHandlePage(),
           '/feature-flipping': (context) => const FeatureTogglePage(),
+          '/backoffice/coloc-members': (context) =>
+              const ColocMemberHandlePage(),
         },
       ),
     );
