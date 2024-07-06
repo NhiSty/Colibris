@@ -8,23 +8,27 @@ class ColocMemberService {
   final Map<int, dynamic> _userCache = {};
   final Map<int, dynamic> _colocationCache = {};
 
-  Future<ColocMemberResponse> getAllColocMembers(
-      {int page = 1, int pageSize = 5}) async {
+  Future<ColocMemberResponse> getAllColocMembers({
+    int page = 1,
+    int pageSize = 5,
+    String? query,
+  }) async {
     try {
       var headers = await addHeader();
-
       final response = await dio.get(
-        '/coloc/members',
+        query != null && query.isNotEmpty
+            ? '/coloc/members/search'
+            : '/coloc/members',
         queryParameters: {
           'page': page,
           'pageSize': pageSize,
+          if (query != null && query.isNotEmpty) 'query': query,
         },
         options: Options(headers: headers),
       );
 
       if (response.statusCode == 200) {
         List<dynamic> rawColocMembers = response.data['colocMembers'];
-
         List<ColocMembers> colocMembers =
             rawColocMembers.map((json) => ColocMembers.fromJson(json)).toList();
 

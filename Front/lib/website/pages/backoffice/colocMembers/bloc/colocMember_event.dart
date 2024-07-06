@@ -9,3 +9,11 @@ class LoadColocMembers extends ColocMemberEvent {
 
   LoadColocMembers({this.page = 1, this.pageSize = 5});
 }
+
+class SearchColocMembers extends ColocMemberEvent {
+  final String query;
+  final int page;
+  final int pageSize;
+
+  SearchColocMembers({required this.query, this.page = 1, this.pageSize = 5});
+}

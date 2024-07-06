@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
 
 class SearchBarAndAddColocMemberButton extends StatefulWidget {
   const SearchBarAndAddColocMemberButton({super.key});
@@ -24,7 +26,7 @@ class _SearchBarAndAddColocMemberButtonState
     if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.enter) {
       final query = searchController.text;
       if (query.isNotEmpty) {
-        //context.read<ColocMemberBloc>().add(SearchColocMembers(query: query));
+        context.read<ColocMemberBloc>().add(SearchColocMembers(query: query));
       }
     }
   }
@@ -50,8 +52,10 @@ class _SearchBarAndAddColocMemberButtonState
                       IconButton(
                         icon: const Icon(Icons.clear),
                         onPressed: () {
-                          //searchController.clear();
-                          //context.read<ColocMemberBloc>().add(ClearSearch());
+                          searchController.clear();
+                          context
+                              .read<ColocMemberBloc>()
+                              .add(LoadColocMembers());
                         },
                       ),
                       IconButton(
@@ -59,9 +63,9 @@ class _SearchBarAndAddColocMemberButtonState
                         onPressed: () {
                           final query = searchController.text;
                           if (query.isNotEmpty) {
-                            //context
-                            //    .read<ColocMemberBloc>()
-                            //  .add(SearchColocMembers(query: query));
+                            context
+                                .read<ColocMemberBloc>()
+                                .add(SearchColocMembers(query: query));
                           }
                         },
                       ),
@@ -75,15 +79,12 @@ class _SearchBarAndAddColocMemberButtonState
               ),
             ),
             const SizedBox(width: 16.0),
-
-            /*
             ElevatedButton(
               onPressed: () {
-                showAddColocMemberDialog(context);
+                // showAddColocMemberDialog(context);
               },
               child: Text('backoffice_colocMember_add_coloc_member'.tr()),
             ),
-            */
           ],
         ),
       ),

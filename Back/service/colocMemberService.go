@@ -78,9 +78,20 @@ func (s *ColocMemberService) SearchColocMembers(query string, page int, pageSize
 	var colocMembers []model.ColocMember
 	var total int64
 
-	s.db.Model(&model.ColocMember{}).Where("user_id LIKE ? OR colocation_id LIKE ?", "%"+query+"%", "%"+query+"%").Count(&total)
+	query = "%" + query + "%"
+
+	s.db.Model(&model.ColocMember{}).
+		Joins("LEFT JOIN users ON users.id = coloc_members.user_id").
+		Joins("LEFT JOIN colocations ON colocations.id = coloc_members.colocation_id").
+		Where("users.firstname LIKE ? OR users.lastname LIKE ? OR colocations.name LIKE ?", query, query, query).
+		Count(&total)
+
 	offset := (page - 1) * pageSize
-	result := s.db.Where("user_id LIKE ? OR colocation_id LIKE ?", "%"+query+"%", "%"+query+"%").Limit(pageSize).Offset(offset).Find(&colocMembers)
+	result := s.db.Joins("LEFT JOIN users ON users.id = coloc_members.user_id").
+		Joins("LEFT JOIN colocations ON colocations.id = coloc_members.colocation_id").
+		Where("users.firstname LIKE ? OR users.lastname LIKE ? OR colocations.name LIKE ?", query, query, query).
+		Limit(pageSize).Offset(offset).Find(&colocMembers)
+
 	return colocMembers, total, result.Error
 }
 
