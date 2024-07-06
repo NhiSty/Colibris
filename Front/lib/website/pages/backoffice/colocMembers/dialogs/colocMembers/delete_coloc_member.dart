@@ -55,7 +55,7 @@ void showDeleteColocMemberDialog(BuildContext context, int colocMemberId) {
                 onPressed: () {
                   context
                       .read<ColocMemberBloc>()
-                      .add(DeleteColocMember(colcoMemberId: colocMemberId));
+                      .add(DeleteColocMember(colocMemberId: colocMemberId));
                 },
                 child: Text('delete'.tr()),
               ),

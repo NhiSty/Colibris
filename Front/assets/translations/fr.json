@@ -16,6 +16,7 @@
   "fill_all_fields": "Veuillez remplir tous les champs",
   "maintenance": "Nous sommes en maintenance, veuillez réessayer plus tard",
   "maintenance_work": "Nous travaillons actuellement sur le site, veuillez réessayer plus tard",
+  "score_must_be_positive": "Le score doit être positif",
 
   "_commentHome": "--------> Ecran profil utilisateur <---------",
   "home": "Accueil",
@@ -279,5 +280,8 @@
     "backoffice_colocMember_user_deleted_successfully": "Colocataire supprimé avec succès",
     "backoffice_colocMember_user_deleted_error": "Erreur lors de la suppression du colocataire : ",
     "backoffice_colocMember_user_delete": "Supprimer le colocataire",
-    "backoffice_colocMember_user_deleted_confirm": "Êtes-vous sûr de vouloir supprimer ce colocataire ?"
+    "backoffice_colocMember_user_deleted_confirm": "Êtes-vous sûr de vouloir supprimer ce colocataire ?",
+    "backoffice_colocMember_update_user": "Modifier le score",
+    "backoffice_colocMember_score_updated_successfully": "Score modifié avec succès",
+    "backoffice_colocMember_score_updated_error": "Erreur lors de la modification du score : "
 }

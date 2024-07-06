@@ -213,6 +213,25 @@ class ColocMemberService {
       throw Exception('Failed to load colocations');
     }
   }
+
+  Future<void> updateColocMemberScore(int colocMemberId, int newScore) async {
+    try {
+      var headers = await addHeader();
+      final response = await dio.put(
+        '/coloc/members/$colocMemberId/score',
+        data: {'score': newScore},
+        options: Options(headers: headers),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to update colocation member score');
+      }
+    } on DioException catch (e) {
+      print('Error: ${e.response?.statusCode}');
+      print('Response data: ${e.response?.data}');
+      throw Exception('Failed to update colocation member score');
+    }
+  }
 }
 
 class ColocMemberDetail {

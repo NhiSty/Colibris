@@ -16,6 +16,7 @@
   "fill_all_fields": "Please fill all fields",
   "maintenance": "We are in maintenance mode",
   "maintenance_work": "Our team is currently working on some improvements. Please check back later.",
+  "score_must_be_positive": "Score must be positive",
 
   "_commentHome": "--------> Ecran profil utilisateur <---------",
   "home": "Home",
@@ -70,7 +71,7 @@
   "invit_colocation_title": "Invit a roommate",
   "invit_colocation_email": "Email",
   "invit_colocation_submit": "Send invitation",
-  "invit_colocation_user_already_here": "User already in colocation",
+  "invit_colocation_user_already_here": "User already in shared apartment",
   "invit_colocation_user_not_found": "User not found",
   "invit_colocation_invitation_sent": "Invitation sent",
 
@@ -268,9 +269,9 @@
     "backoffice_colocMember_colocation_field": "Shared apartment : ",
     "backoffice_colocMember_joined_date_field": "Joined at : ",
     "backoffice_colocMember_score_field": "Score : ",
-    "backoffice_colocMember_search_coloc_members": "Search coloc members ...",
-    "backoffice_colocMember_add_coloc_member": "Add member in coloc",
-    "backoffice_colocMember_no_coloc_member_found": "No coloc member found",
+    "backoffice_colocMember_search_coloc_members": "Search shared appartment members ...",
+    "backoffice_colocMember_add_coloc_member": "Add member in shared appartment",
+    "backoffice_colocMember_no_coloc_member_found": "No shared appartment member found",
     "backoffice_colocMember_maps_title_colocation": "Map of : ",
     "backoffice_colocMember_select_user_in_add_modal": "Select User",
     "backoffice_colocMember_select_colocation_in_add_modal": "Select Shared apartment",
@@ -279,6 +280,10 @@
     "backoffice_colocMember_user_deleted_successfully": "User in shared apartment deleted successfully",
     "backoffice_colocMember_user_deleted_error": "Error while deleting user in shared apartment : ",
     "backoffice_colocMember_user_delete": "Delete user in shared apartment",
-    "backoffice_colocMember_user_deleted_confirm": "Are you sure you want to delete this user in shared apartment ?"
+    "backoffice_colocMember_user_deleted_confirm": "Are you sure you want to delete this user in shared apartment ?",
+    "backoffice_colocMember_update_user": "Edit score",
+    "backoffice_colocMember_score_updated_successfully": "Score updated successfully",
+    "backoffice_colocMember_score_updated_error": "Error while updating score : "
+
 
 }

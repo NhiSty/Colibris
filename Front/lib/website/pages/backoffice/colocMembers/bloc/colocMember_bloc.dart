@@ -79,19 +79,6 @@ class ColocMemberBloc extends Bloc<ColocMemberEvent, ColocMemberState> {
       }
     });
 
-    on<DeleteColocMember>((event, emit) async {
-      try {
-        await colocMemberService.deleteColocMember(event.colcoMemberId);
-        emit(ColocMemberDeleted(
-            message: 'Colocation member deleted successfully'));
-        add(LoadColocMembers());
-      } catch (e, stacktrace) {
-        print('DeleteColocMember error: $e');
-        print('Stacktrace: $stacktrace');
-        emit(ColocMemberError(message: e.toString()));
-      }
-    });
-
     on<LoadAllUsers>((event, emit) async {
       emit(UsersLoading());
       try {
@@ -124,6 +111,33 @@ class ColocMemberBloc extends Bloc<ColocMemberEvent, ColocMemberState> {
         emit(UsersAndColocationsLoaded(users, colocations));
       } catch (e, stacktrace) {
         print('LoadAllUsersAndColocations error: $e');
+        print('Stacktrace: $stacktrace');
+        emit(ColocMemberError(message: e.toString()));
+      }
+    });
+
+    on<UpdateColocMemberScore>((event, emit) async {
+      try {
+        await colocMemberService.updateColocMemberScore(
+            event.colocMemberId, event.newScore);
+        emit(ColocMemberAdded(
+            message: 'Colocation member score updated successfully'));
+        add(LoadColocMembers());
+      } catch (e, stacktrace) {
+        print('UpdateColocMemberScore error: $e');
+        print('Stacktrace: $stacktrace');
+        emit(ColocMemberError(message: e.toString()));
+      }
+    });
+
+    on<DeleteColocMember>((event, emit) async {
+      try {
+        await colocMemberService.deleteColocMember(event.colocMemberId);
+        emit(ColocMemberAdded(
+            message: 'Colocation member deleted successfully'));
+        add(LoadColocMembers());
+      } catch (e, stacktrace) {
+        print('DeleteColocMember error: $e');
         print('Stacktrace: $stacktrace');
         emit(ColocMemberError(message: e.toString()));
       }
