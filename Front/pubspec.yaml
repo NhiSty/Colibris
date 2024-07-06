@@ -52,7 +52,6 @@ dependencies:
     sdk: flutter
   easy_localization: ^3.0.7
   feature_flags_toggly: ^1.0.5
-  mapbox_gl: ^0.16.0
 
 dev_dependencies:
   flutter_test:
@@ -82,6 +81,11 @@ flutter:
     - assets/translations/fr.json
     #   - images/a_dot_ham.jpeg
     - .env
+
+flutter_web:
+  dependencies:
+    mapbox_gl: ^0.16.0
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
