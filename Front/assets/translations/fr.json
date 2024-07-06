@@ -6,6 +6,7 @@
   "confirm": "Confirmer",
   "delete": "Supprimer",
   "save": "Enregistrer",
+  "close": "Fermer",
   "no_result_found": "Aucun résultat trouvé",
   "error_during_search": "Erreur lors de la recherche",
   "please_give_name": "Veuillez donner un nom",
@@ -270,5 +271,9 @@
     "backoffice_colocMember_search_coloc_members": "Rechercher un membre de colocation",
     "backoffice_colocMember_add_coloc_member": "Ajouter un colocataire",
     "backoffice_colocMember_no_coloc_member_found": "Aucun membre de colocation trouvé",
-    "backoffice_colocMember_maps_title_colocation": "Carte de : "
+    "backoffice_colocMember_maps_title_colocation": "Carte de : ",
+    "backoffice_colocMember_select_user_in_add_modal": "Choisi un utilisateur",
+    "backoffice_colocMember_select_colocation_in_add_modal": "Choisi une colocation",
+    "backoffice_colocMember_please_select_user_in_add_modal": "Sélectionner un utilisateur",
+    "backoffice_colocMember_please_select_colocation_in_add_modal": "Sélectionner une colocation"
 }

@@ -17,3 +17,16 @@ class SearchColocMembers extends ColocMemberEvent {
 
   SearchColocMembers({required this.query, this.page = 1, this.pageSize = 5});
 }
+
+class AddColocMember extends ColocMemberEvent {
+  final int userId;
+  final int colocationId;
+
+  AddColocMember({required this.userId, required this.colocationId});
+}
+
+class LoadAllUsers extends ColocMemberEvent {}
+
+class LoadAllColocations extends ColocMemberEvent {}
+
+class LoadAllUsersAndColocations extends ColocMemberEvent {}

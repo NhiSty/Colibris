@@ -6,6 +6,7 @@
   "confirm": "Confirm",
   "delete": "Delete",
   "save": "Save",
+  "close": "Close",
   "no_result_found": "No result found",
   "error_during_search": "Error during search",
   "please_give_name": "Please give a name",
@@ -270,5 +271,9 @@
     "backoffice_colocMember_search_coloc_members": "Search coloc members ...",
     "backoffice_colocMember_add_coloc_member": "Add member in coloc",
     "backoffice_colocMember_no_coloc_member_found": "No coloc member found",
-    "backoffice_colocMember_maps_title_colocation": "Map of : "
+    "backoffice_colocMember_maps_title_colocation": "Map of : ",
+    "backoffice_colocMember_select_user_in_add_modal": "Select User",
+    "backoffice_colocMember_select_colocation_in_add_modal": "Select Shared apartment",
+    "backoffice_colocMember_please_select_user_in_add_modal": "Please select a user",
+    "backoffice_colocMember_please_select_colocation_in_add_modal": "Please select a shared apartment"
 }

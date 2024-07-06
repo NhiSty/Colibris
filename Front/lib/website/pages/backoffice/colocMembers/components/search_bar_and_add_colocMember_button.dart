@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
+import 'package:front/website/pages/backoffice/colocMembers/dialogs/colocMembers/add_coloc_member_dialog.dart';
 
 class SearchBarAndAddColocMemberButton extends StatefulWidget {
   const SearchBarAndAddColocMemberButton({super.key});
@@ -81,7 +82,7 @@ class _SearchBarAndAddColocMemberButtonState
             const SizedBox(width: 16.0),
             ElevatedButton(
               onPressed: () {
-                // showAddColocMemberDialog(context);
+                showAddColocMemberDialog(context);
               },
               child: Text('backoffice_colocMember_add_coloc_member'.tr()),
             ),

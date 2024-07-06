@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:front/ColocMembers/colocMembers.dart';
+import 'package:front/services/user_service.dart';
 import 'package:front/utils/dio.dart';
 import 'package:front/website/share/secure_storage.dart';
 import 'package:intl/intl.dart';
@@ -136,6 +137,60 @@ class ColocMemberService {
       print('Error: ${e.response?.statusCode}');
       print('Response data: ${e.response?.data}');
       throw Exception('Failed to load coloc members');
+    }
+  }
+
+  Future<void> addColocMember(int userId, int colocationId) async {
+    try {
+      var headers = await addHeader();
+      final response = await dio.post(
+        '/coloc/members',
+        data: {
+          'userId': userId,
+          'colocationId': colocationId,
+        },
+        options: Options(headers: headers),
+      );
+
+      if (response.statusCode != 201) {
+        throw Exception('Failed to create colocation member');
+      }
+    } on DioException catch (e) {
+      print('Error: ${e.response?.statusCode}');
+      print('Response data: ${e.response?.data}');
+      throw Exception('Failed to create colocation member');
+    }
+  }
+
+  Future<List<dynamic>> getAllUsers() async {
+    var headers = await addHeader();
+    final response = await dio.get(
+      '/users',
+      options: Options(headers: headers),
+    );
+
+    if (response.statusCode == 200) {
+      List<User> users = (response.data['users'] as List)
+          .map((user) => User.fromJson(user))
+          .toList();
+
+      return users;
+    } else {
+      throw Exception('Failed to load users');
+    }
+  }
+
+  Future<List<dynamic>> getAllColocations() async {
+    var headers = await addHeader();
+    final response = await dio.get(
+      '/colocations',
+      options: Options(headers: headers),
+    );
+
+    if (response.statusCode == 200) {
+      return response.data['colocations'];
+    } else {
+      throw Exception('Failed to load colocations');
     }
   }
 }
