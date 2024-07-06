@@ -275,5 +275,10 @@
     "backoffice_colocMember_select_user_in_add_modal": "Select User",
     "backoffice_colocMember_select_colocation_in_add_modal": "Select Shared apartment",
     "backoffice_colocMember_please_select_user_in_add_modal": "Please select a user",
-    "backoffice_colocMember_please_select_colocation_in_add_modal": "Please select a shared apartment"
+    "backoffice_colocMember_please_select_colocation_in_add_modal": "Please select a shared apartment",
+    "backoffice_colocMember_user_deleted_successfully": "User in shared apartment deleted successfully",
+    "backoffice_colocMember_user_deleted_error": "Error while deleting user in shared apartment : ",
+    "backoffice_colocMember_user_delete": "Delete user in shared apartment",
+    "backoffice_colocMember_user_deleted_confirm": "Are you sure you want to delete this user in shared apartment ?"
+
 }

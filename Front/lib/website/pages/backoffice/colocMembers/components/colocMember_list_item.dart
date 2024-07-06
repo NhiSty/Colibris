@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/services/colocMember_service.dart';
+import 'package:front/website/pages/backoffice/colocMembers/dialogs/colocMembers/delete_coloc_member.dart';
 import 'package:front/website/pages/backoffice/colocMembers/dialogs/colocMembers/map_modal.dart';
 
 class ColocMemberListItem extends StatelessWidget {
@@ -151,7 +152,7 @@ class ColocMemberListItem extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red),
                     onPressed: () {
-                      // Handle delete action
+                      showDeleteColocMemberDialog(context, colocMember.id);
                     },
                   ),
                   IconButton(

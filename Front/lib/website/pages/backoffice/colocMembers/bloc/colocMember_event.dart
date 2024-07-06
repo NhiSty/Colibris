@@ -25,6 +25,12 @@ class AddColocMember extends ColocMemberEvent {
   AddColocMember({required this.userId, required this.colocationId});
 }
 
+class DeleteColocMember extends ColocMemberEvent {
+  final int colcoMemberId;
+
+  DeleteColocMember({required this.colcoMemberId});
+}
+
 class LoadAllUsers extends ColocMemberEvent {}
 
 class LoadAllColocations extends ColocMemberEvent {}

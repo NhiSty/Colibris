@@ -275,5 +275,9 @@
     "backoffice_colocMember_select_user_in_add_modal": "Choisi un utilisateur",
     "backoffice_colocMember_select_colocation_in_add_modal": "Choisi une colocation",
     "backoffice_colocMember_please_select_user_in_add_modal": "Sélectionner un utilisateur",
-    "backoffice_colocMember_please_select_colocation_in_add_modal": "Sélectionner une colocation"
+    "backoffice_colocMember_please_select_colocation_in_add_modal": "Sélectionner une colocation",
+    "backoffice_colocMember_user_deleted_successfully": "Colocataire supprimé avec succès",
+    "backoffice_colocMember_user_deleted_error": "Erreur lors de la suppression du colocataire : ",
+    "backoffice_colocMember_user_delete": "Supprimer le colocataire",
+    "backoffice_colocMember_user_deleted_confirm": "Êtes-vous sûr de vouloir supprimer ce colocataire ?"
 }

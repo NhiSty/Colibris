@@ -60,37 +60,38 @@ class ColocMemberService {
 
         List<ColocMemberDetail> colocMemberDetails = [];
 
-        for (var coloc in colocMembers) {
-          if (!_colocationCache.containsKey(coloc.colocationId)) {
+        for (var colocMember in colocMembers) {
+          if (!_colocationCache.containsKey(colocMember.colocationId)) {
             try {
               final colocationResponse = await dio.get(
-                '/colocations/${coloc.colocationId}',
+                '/colocations/${colocMember.colocationId}',
                 options: Options(headers: headers),
               );
 
               if (colocationResponse.statusCode == 200) {
-                _colocationCache[coloc.colocationId] = colocationResponse.data;
+                _colocationCache[colocMember.colocationId] =
+                    colocationResponse.data;
               } else {
                 print(
-                    'Failed to load colocation data for colocationId ${coloc.colocationId}, status code: ${colocationResponse.statusCode}');
+                    'Failed to load colocation data for colocationId ${colocMember.colocationId}, status code: ${colocationResponse.statusCode}');
               }
             } on DioException catch (e) {
               if (e.response?.statusCode == 404) {
                 print(
-                    'Colocation data for colocationId ${coloc.colocationId} not found (404).');
+                    'Colocation data for colocationId ${colocMember.colocationId} not found (404).');
               } else {
                 print(
-                    'Error loading colocation data for colocationId ${coloc.colocationId}: ${e.response?.statusCode}');
+                    'Error loading colocation data for colocationId ${colocMember.colocationId}: ${e.response?.statusCode}');
                 print('Response data: ${e.response?.data}');
               }
             } catch (e) {
               print(
-                  'Unexpected error loading colocation data for colocationId ${coloc.colocationId}: $e');
+                  'Unexpected error loading colocation data for colocationId ${colocMember.colocationId}: $e');
             }
           }
 
-          final user = _userCache[coloc.userId];
-          final colocation = _colocationCache[coloc.colocationId];
+          final user = _userCache[colocMember.userId];
+          final colocation = _colocationCache[colocMember.colocationId];
 
           if (user != null &&
               colocation != null &&
@@ -100,12 +101,13 @@ class ColocMemberService {
 
             if (owner != null) {
               final colocationDetail = ColocMemberDetail(
+                id: colocMember.id,
                 userFirstname: user['Firstname'],
                 userLastname: user['Lastname'],
                 ownerFirstname: owner['Firstname'],
                 ownerLastname: owner['Lastname'],
-                joinedAt: coloc.createdAt,
-                score: coloc.score,
+                joinedAt: colocMember.createdAt,
+                score: colocMember.score,
                 colocationName: colocation['result']['Name'],
                 colocationAddress: colocation['result']['Location'],
                 latitude: colocation['result']['Latitude'],
@@ -118,7 +120,7 @@ class ColocMemberService {
             }
           } else {
             print(
-                'Colocation data for colocationId ${coloc.colocationId} is incomplete or deleted.');
+                'Colocation data for colocationId ${colocMember.colocationId} is incomplete or deleted.');
           }
         }
 
@@ -162,6 +164,24 @@ class ColocMemberService {
     }
   }
 
+  Future<void> deleteColocMember(int colocMemberId) async {
+    try {
+      var headers = await addHeader();
+      final response = await dio.delete(
+        '/coloc/members/$colocMemberId',
+        options: Options(headers: headers),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to delete colocation member');
+      }
+    } on DioException catch (e) {
+      print('Error: ${e.response?.statusCode}');
+      print('Response data: ${e.response?.data}');
+      throw Exception('Failed to delete colocation member');
+    }
+  }
+
   Future<List<dynamic>> getAllUsers() async {
     var headers = await addHeader();
     final response = await dio.get(
@@ -196,6 +216,7 @@ class ColocMemberService {
 }
 
 class ColocMemberDetail {
+  final int id;
   final String userFirstname;
   final String userLastname;
   final String ownerFirstname;
@@ -208,6 +229,7 @@ class ColocMemberDetail {
   final double longitude;
 
   ColocMemberDetail({
+    required this.id,
     required this.userFirstname,
     required this.userLastname,
     required this.ownerFirstname,

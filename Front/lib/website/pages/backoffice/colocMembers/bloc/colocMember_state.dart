@@ -38,6 +38,12 @@ class ColocMemberAdded extends ColocMemberState {
   ColocMemberAdded({required this.message});
 }
 
+class ColocMemberDeleted extends ColocMemberState {
+  final String message;
+
+  ColocMemberDeleted({required this.message});
+}
+
 class UsersLoading extends ColocMemberState {}
 
 class UsersLoaded extends ColocMemberState {

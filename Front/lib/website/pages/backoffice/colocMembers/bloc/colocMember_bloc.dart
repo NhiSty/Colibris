@@ -79,6 +79,19 @@ class ColocMemberBloc extends Bloc<ColocMemberEvent, ColocMemberState> {
       }
     });
 
+    on<DeleteColocMember>((event, emit) async {
+      try {
+        await colocMemberService.deleteColocMember(event.colcoMemberId);
+        emit(ColocMemberDeleted(
+            message: 'Colocation member deleted successfully'));
+        add(LoadColocMembers());
+      } catch (e, stacktrace) {
+        print('DeleteColocMember error: $e');
+        print('Stacktrace: $stacktrace');
+        emit(ColocMemberError(message: e.toString()));
+      }
+    });
+
     on<LoadAllUsers>((event, emit) async {
       emit(UsersLoading());
       try {
