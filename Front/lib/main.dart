@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:feature_flags_toggly/feature_flags_toggly.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -30,6 +32,7 @@ import 'package:front/task/bloc/task_bloc.dart';
 import 'package:front/task/task_detail.dart';
 import 'package:front/task/update_task_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:front/utils/firebase.dart';
 import 'firebase_options.dart';
 
 final StreamController<List<FeatureFlag>> _featureFlagsController =
@@ -50,11 +53,28 @@ bool isFeatureEnabled(String featureName, List<FeatureFlag> flags) {
   return flag.value;
 }
 
+void onMessage(RemoteMessage message) {
+  print('Message en premier plan reçu: ${message.notification?.title}');
+  // Affichez une boîte de dialogue ou mettez à jour l'état de l'application ici
+}
+
+void onMessageOpenedApp(RemoteMessage message) {
+  print('Message cliqué!: ${message.notification?.title}');
+  // Naviguez vers un écran spécifique ou mettez à jour l'état de l'application ici
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseClient firebaseClient = FirebaseClient();
+  await firebaseClient.requestPermission();
+  firebaseClient.initializeListeners(onMessage, onMessageOpenedApp);
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
+
   await EasyLocalization.ensureInitialized();
   await dotenv.load(fileName: ".env");
 
@@ -246,3 +266,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
