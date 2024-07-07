@@ -15,15 +15,27 @@ type FirebaseClient struct {
 	client *messaging.Client
 }
 
-// NewFirebaseClient initializes and returns a FirebaseClient
 func NewFirebaseClient() (*FirebaseClient, error) {
-	serviceAccountKeyFilePath := "./utils/serviceAccountKey.json"
-
-	if _, err := os.Stat(serviceAccountKeyFilePath); os.IsNotExist(err) {
-		return nil, fmt.Errorf("service account key file does not exist at path: %s", serviceAccountKeyFilePath)
+	serviceAccountKey := os.Getenv("GOOGLE_APPLICATION_CREDENTIALS_CONTENTS")
+	if serviceAccountKey == "" {
+		return nil, fmt.Errorf("environment variable GOOGLE_APPLICATION_CREDENTIALS_CONTENTS is not set")
 	}
 
-	opt := option.WithCredentialsFile(serviceAccountKeyFilePath)
+	// Write the service account key to a temporary file
+	tmpFile, err := os.CreateTemp("", "serviceAccountKey-*.json")
+	if err != nil {
+		return nil, fmt.Errorf("error creating temporary file: %v", err)
+	}
+	defer os.Remove(tmpFile.Name()) // Clean up the file afterwards
+
+	if _, err := tmpFile.Write([]byte(serviceAccountKey)); err != nil {
+		return nil, fmt.Errorf("error writing to temporary file: %v", err)
+	}
+	if err := tmpFile.Close(); err != nil {
+		return nil, fmt.Errorf("error closing temporary file: %v", err)
+	}
+
+	opt := option.WithCredentialsFile(tmpFile.Name())
 	app, err := firebase.NewApp(context.Background(), nil, opt)
 	if err != nil {
 		return nil, fmt.Errorf("error initializing app: %v", err)
