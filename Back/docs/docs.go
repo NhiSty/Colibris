@@ -1592,6 +1592,9 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
+                "fcmToken": {
+                    "type": "string"
+                },
                 "firstname": {
                     "type": "string"
                 },

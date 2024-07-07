@@ -275,6 +275,8 @@ definitions:
         $ref: '#/definitions/gorm.DeletedAt'
       email:
         type: string
+      fcmToken:
+        type: string
       firstname:
         type: string
       id:

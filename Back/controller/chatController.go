@@ -3,11 +3,11 @@ package controller
 import (
 	"Colibris/model"
 	"Colibris/service"
-	"fmt"
+	"Colibris/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"log"
 	"net/http"
-	"reflect"
 )
 
 type ChatController struct {
@@ -33,8 +33,6 @@ func (c *ChatController) HandleConnections(ctx *gin.Context) {
 	}
 	userID := int(userIDFromToken.(uint))
 
-	fmt.Println("HEREEEEEEEEEEE", userID, reflect.TypeOf(userIDFromToken))
-
 	firstName, _ := ctx.Get("firstName")
 	lastName, _ := ctx.Get("lastName")
 	senderName := firstName.(string) + " " + lastName.(string)
@@ -54,12 +52,29 @@ func (c *ChatController) HandleConnections(ctx *gin.Context) {
 	client := &model.Client{Conn: conn, ColocationID: colocationID}
 	c.Service.RegisterClient(client)
 
+	firebaseClient, err := utils.NewFirebaseClient()
+	if err != nil {
+		log.Printf("error initializing Firebase client: %v\n", err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to initialize Firebase client"})
+		return
+	}
+
 	for {
 		_, msg, err := conn.ReadMessage()
 		if err != nil {
 			break
 		}
+
 		c.Service.BroadcastMessage(colocationID, msg, userID, senderName)
+
+		title := "Nouveau message dans la colocation"
+		body := string(msg)
+		topic := "room_colocation_" + colocationID
+
+		err = firebaseClient.SendNotification(title, body, senderName, colocationID, topic)
+		if err != nil {
+			log.Printf("error sending notification: %v\n", err)
+		}
 	}
 }
 
