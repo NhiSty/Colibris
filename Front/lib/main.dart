@@ -29,6 +29,8 @@ import 'package:front/task/add_new_task_screen.dart';
 import 'package:front/task/bloc/task_bloc.dart';
 import 'package:front/task/task_detail.dart';
 import 'package:front/task/update_task_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 final StreamController<List<FeatureFlag>> _featureFlagsController =
     StreamController<List<FeatureFlag>>.broadcast();
@@ -50,6 +52,9 @@ bool isFeatureEnabled(String featureName, List<FeatureFlag> flags) {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await EasyLocalization.ensureInitialized();
   await dotenv.load(fileName: ".env");
 
