@@ -60,8 +60,18 @@ void onMessage(RemoteMessage message) {
 
 void onMessageOpenedApp(RemoteMessage message) {
   print('Message cliqué!: ${message.notification?.title}');
-  // Naviguez vers un écran spécifique ou mettez à jour l'état de l'application ici
+  String? colocationIdStr = message.data['colocationID'];
+  int colocationId = int.tryParse(colocationIdStr!) ?? 0;
+
+  if (colocationId != 0) {
+    Navigator.pushNamed(
+      navigatorKey.currentContext!,
+      '/chat',
+      arguments: {'chatId' : colocationId},
+    );
+  }
 }
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -135,6 +145,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
+
       providers: [
         BlocProvider<InvitationBloc>(
           create: (context) => InvitationBloc(),
@@ -147,6 +158,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         title: 'Colobris',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),

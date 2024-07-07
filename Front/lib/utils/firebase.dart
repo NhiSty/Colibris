@@ -51,4 +51,22 @@ class FirebaseClient {
       }
     });
   }
+
+  Future<void> subscribeToTopic(String topic) async {
+    try {
+      await _firebaseMessaging.subscribeToTopic(topic);
+      print('Subscribed to topic: $topic');
+    } catch (e) {
+      print('Error subscribing to topic: $e');
+    }
+  }
+
+  Future<void> unsubscribeFromTopic(String topic) async {
+    try {
+      await _firebaseMessaging.unsubscribeFromTopic(topic);
+      print('Unsubscribed from topic: $topic');
+    } catch (e) {
+      print('Error unsubscribing from topic: $e');
+    }
+  }
 }
