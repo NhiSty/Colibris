@@ -112,6 +112,29 @@ class UserService {
     }
   }
 
+  Future<void> updateUserRole(int userId, Map<String, dynamic> userData) async {
+    try {
+      var headers = await addHeader();
+
+      final response = await dio.patch('/users/$userId/update_role',
+          data: userData, options: Options(headers: headers));
+
+      if (response.statusCode == 200) {
+        log('User updated successfully');
+      } else {
+        throw Exception('Failed to update user');
+      }
+    } on DioException catch (e) {
+      print('Error: ${e.response?.statusCode}');
+      print('Response data: ${e.response?.data}');
+      log('Dio error!');
+      log('Response status: ${e.response?.statusCode}');
+      log('Response data: ${e.response?.data}');
+      throw Exception('Failed to update user');
+    }
+  }
+
+
   Future<void> deleteUser(int userId) async {
     try {
       var headers = await addHeader();
@@ -167,12 +190,14 @@ class User {
   final String email;
   final String firstname;
   final String lastname;
+  final String roles;
 
   User({
     required this.id,
     required this.email,
     required this.firstname,
     required this.lastname,
+    required this.roles,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -181,6 +206,7 @@ class User {
       email: json['Email'],
       firstname: json['Firstname'],
       lastname: json['Lastname'],
+      roles: json['Roles'],
     );
   }
 }

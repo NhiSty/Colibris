@@ -12,6 +12,7 @@
   "email_required": "Email is required",
   "email_invalid": "Email is invalid",
   "error": "Error",
+  "select_role": "Select role",
   "fill_all_fields": "Please fill all fields",
   "maintenance": "We are in maintenance mode",
   "maintenance_work": "Our team is currently working on some improvements. Please check back later.",
