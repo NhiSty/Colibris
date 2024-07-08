@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 type VoteController struct {
@@ -68,6 +69,13 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 	// Check if the user is not voting for himself
 	if task.UserID == userIDFromToken {
 		c.JSON(http.StatusBadRequest, "You can't vote for yourself")
+		return
+	}
+
+	var limitDate = time.Now().AddDate(0, 0, -3)
+
+	if task.CreatedAt.Before(limitDate) {
+		c.JSON(http.StatusBadRequest, "No voting on tasks over 3 days old.")
 		return
 	}
 
@@ -152,6 +160,13 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		return
 	}
 
+	var limitDate = time.Now().AddDate(0, 0, -3)
+
+	if task.CreatedAt.Before(limitDate) {
+		c.JSON(http.StatusBadRequest, "No voting on tasks over 3 days old.")
+		return
+	}
+
 	voteUpdates := make(map[string]interface{})
 
 	if req.Value != 0 {
@@ -174,6 +189,10 @@ func (ctl *VoteController) GetVotesByTaskId(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
+	}
+
+	if !service.IsAdmin(c) {
+		c.JSON(http.StatusUnauthorized, "Unauthorized")
 	}
 
 	votes, err := ctl.voteService.GetVotesByTaskId(taskId)
