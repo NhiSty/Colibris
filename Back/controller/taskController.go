@@ -5,6 +5,7 @@ import (
 	"Colibris/model"
 	"Colibris/service"
 	"github.com/gin-gonic/gin"
+	"math"
 	"net/http"
 	"strconv"
 )
@@ -25,7 +26,7 @@ func (ctl *TaskController) CreateTask(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	pts := uint(float64(req.Duration) * .025)
+	pts := float64(req.Duration) * .025
 	task := model.Task{
 		Title:        req.Title,
 		UserID:       req.UserId,
@@ -34,7 +35,7 @@ func (ctl *TaskController) CreateTask(c *gin.Context) {
 		Date:         req.Date,
 		Duration:     req.Duration,
 		Picture:      req.Picture,
-		Pts:          pts,
+		Pts:          math.Round(pts),
 	}
 
 	if err := ctl.service.CreateTask(&task); err != nil {
@@ -235,8 +236,8 @@ func (ctl *TaskController) UpdateTask(c *gin.Context) {
 	}
 	if req.Duration != 0 {
 		taskUpdate["duration"] = req.Duration
-		pts := uint(float64(req.Duration) * .025)
-		taskUpdate["pts"] = pts
+		pts := float64(req.Duration) * .025
+		taskUpdate["pts"] = math.Round(pts)
 	}
 	if req.Picture != "" {
 		taskUpdate["picture"] = req.Picture

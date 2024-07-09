@@ -12,6 +12,7 @@ type ColocMemberService struct {
 type ColocMemberRepository interface {
 	CreateColocMember(colocMember *model.ColocMember) error
 	GetColocMemberById(id int) (*model.ColocMember, error)
+	GetColocMemberByUserId(userId int) (*model.ColocMember, error)
 	GetAllColocMembers() ([]model.ColocMember, error)
 	UpdateColocMemberScore(id int, newScore float32) error
 	GetColocationById(id int) (*model.Colocation, error)
@@ -30,6 +31,12 @@ func (s *ColocMemberService) CreateColocMember(colocMember *model.ColocMember) e
 func (s *ColocMemberService) GetColocMemberById(id int) (*model.ColocMember, error) {
 	var colocMember model.ColocMember
 	result := s.db.Where("id = ?", id).First(&colocMember)
+	return &colocMember, result.Error
+}
+
+func (s *ColocMemberService) GetColocMemberByUserId(userId int) (*model.ColocMember, error) {
+	var colocMember model.ColocMember
+	result := s.db.Where("user_id = ?", userId).First(&colocMember)
 	return &colocMember, result.Error
 }
 

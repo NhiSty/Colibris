@@ -52,6 +52,33 @@ func Migrate(db *gorm.DB) {
 		Roles:     model.ROLE_ADMIN,
 	})
 
+	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.User{
+		Email: "user1@mail.com",
+		// test123!
+		Password:  "$2a$10$cFrne/rnK4JoEJn.bwdDJetpjbivABHtK/oy2/dYNjs6QUj7Fn0Pi",
+		Firstname: "John",
+		Lastname:  "Doe",
+		Roles:     model.ROLE_USER,
+	})
+
+	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.User{
+		Email: "user2@mail.com",
+		// test123!
+		Password:  "$2a$10$cFrne/rnK4JoEJn.bwdDJetpjbivABHtK/oy2/dYNjs6QUj7Fn0Pi",
+		Firstname: "Johnny",
+		Lastname:  "Doe",
+		Roles:     model.ROLE_USER,
+	})
+
+	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.User{
+		Email: "user3@mail.com",
+		// test123!
+		Password:  "$2a$10$cFrne/rnK4JoEJn.bwdDJetpjbivABHtK/oy2/dYNjs6QUj7Fn0Pi",
+		Firstname: "Johnny haly",
+		Lastname:  "Doe",
+		Roles:     model.ROLE_USER,
+	})
+
 	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.FeatureFlag{
 		Name:  "maintenance",
 		Value: false,
