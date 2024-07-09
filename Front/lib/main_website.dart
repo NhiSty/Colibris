@@ -11,7 +11,6 @@ import 'package:front/website/pages/backoffice/colocMember_handle_page.dart';
 import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
 import 'package:front/website/pages/backoffice/colocation_handle_page.dart';
 import 'package:front/website/pages/backoffice/colocations/bloc/colocation_bloc.dart';
-import 'package:front/website/pages/backoffice/conversation_handle_page.dart';
 import 'package:front/website/pages/backoffice/feature_toggle_page.dart';
 import 'package:front/website/pages/backoffice/log_handle_page.dart';
 import 'package:front/website/pages/backoffice/logs/bloc/log_bloc.dart';
@@ -43,16 +42,16 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<UserBloc>(
           create: (context) =>
-          UserBloc(userService: UserService())..add(LoadUsers()),
+              UserBloc(userService: UserService())..add(LoadUsers()),
         ),
         BlocProvider<LogBloc>(
           create: (context) =>
-          LogBloc(logService: LogService())..add(FetchLogs()),
+              LogBloc(logService: LogService())..add(FetchLogs()),
         ),
         BlocProvider<ColocationBloc>(
           create: (context) =>
-          ColocationBloc(colocationService: ColocationService())
-            ..add(LoadColocations()),
+              ColocationBloc(colocationService: ColocationService())
+                ..add(LoadColocations()),
         ),
         BlocProvider<ColocMemberBloc>(
           create: (context) =>
@@ -77,7 +76,6 @@ class MyApp extends StatelessWidget {
           '/backoffice/user': (context) => const UserHandlePage(),
           '/backoffice/logs': (context) => const LogPage(),
           '/backoffice/colocations': (context) => const ColocationHandlePage(),
-          '/backoffice/messages': (context) => const ConversationHandlePage(),
           '/feature-flipping': (context) => const FeatureTogglePage(),
           '/backoffice/coloc-members': (context) =>
               const ColocMemberHandlePage(),
