@@ -55,27 +55,27 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 	}
 
 	if !taskInColocation {
-		c.JSON(http.StatusBadRequest, "You can't vote for a task that is not in your colocation")
+		c.JSON(http.StatusBadRequest, "error_votingTaskCantVoteForTaskNotInYourColocation")
 		return
 	}
 
 	// Check if the task is already voted
 	_, err = ctl.voteService.GetVoteByTaskIdAndUserId(int(req.TaskID), int(userIDFromToken.(uint)))
 	if err == nil {
-		c.JSON(http.StatusBadRequest, "This task is already voted by you")
+		c.JSON(http.StatusBadRequest, "error_votingTaskAlreadyVoted")
 		return
 	}
 
 	// Check if the user is not voting for himself
 	if task.UserID == userIDFromToken {
-		c.JSON(http.StatusBadRequest, "You can't vote for yourself")
+		c.JSON(http.StatusBadRequest, "error_votingTaskCantVoteForYourself")
 		return
 	}
 
 	var limitDate = time.Now().AddDate(0, 0, -3)
 
 	if task.CreatedAt.Before(limitDate) {
-		c.JSON(http.StatusBadRequest, "No voting on tasks over 3 days old.")
+		c.JSON(http.StatusUnprocessableEntity, "error_votingTaskOver3DaysOld")
 		return
 	}
 
@@ -151,19 +151,19 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 	}
 
 	if !taskInColocation {
-		c.JSON(http.StatusBadRequest, "You can't vote for a task that is not in your colocation")
+		c.JSON(http.StatusBadRequest, "error_votingTaskCantVoteForTaskNotInYourColocation")
 		return
 	}
 
 	if task.UserID == userIDFromToken {
-		c.JSON(http.StatusBadRequest, "You can't vote for yourself")
+		c.JSON(http.StatusBadRequest, "error_votingTaskCantVoteForYourself")
 		return
 	}
 
 	var limitDate = time.Now().AddDate(0, 0, -3)
 
 	if task.CreatedAt.Before(limitDate) {
-		c.JSON(http.StatusBadRequest, "No voting on tasks over 3 days old.")
+		c.JSON(http.StatusUnprocessableEntity, "error_votingTaskOver3DaysOld")
 		return
 	}
 
