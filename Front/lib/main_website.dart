@@ -63,36 +63,30 @@ class MyApp extends StatelessWidget {
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         initialRoute: '/login',
+        routes: {
+          '/login': (context) => const LoginPage(),
+          '/home': (context) => const HomePage(),
+          '/backoffice/user': (context) => const UserHandlePage(),
+          '/backoffice/logs': (context) => const LogPage(),
+          '/backoffice/colocations': (context) => const ColocationHandlePage(),
+          '/backoffice/messages': (context) => const ConversationHandlePage(),
+          '/feature-flipping': (context) => const FeatureTogglePage(),
+        },
         onGenerateRoute: (settings) {
           print('Generating route for: ${settings.name}');
           final Uri uri = Uri.parse(settings.name ?? '');
+
           if (uri.pathSegments.length == 4 &&
               uri.pathSegments[0] == 'backoffice' &&
               uri.pathSegments[1] == 'colocations' &&
               uri.pathSegments[3] == 'messages') {
             final colocationId = uri.pathSegments[2];
             return MaterialPageRoute(
-              builder: (context) => MessagesHandlePage(colocationId: int.parse(colocationId)),
+              builder: (context) =>
+                  MessagesHandlePage(colocationId: int.parse(colocationId)),
             );
           }
-          switch (settings.name) {
-            case '/login':
-              return MaterialPageRoute(builder: (context) => const LoginPage());
-            case '/home':
-              return MaterialPageRoute(builder: (context) => const HomePage());
-            case '/backoffice/user':
-              return MaterialPageRoute(builder: (context) => const UserHandlePage());
-            case '/backoffice/logs':
-              return MaterialPageRoute(builder: (context) => const LogPage());
-            case '/backoffice/colocations':
-              return MaterialPageRoute(builder: (context) => const ColocationHandlePage());
-            case '/backoffice/messages':
-              return MaterialPageRoute(builder: (context) => const ConversationHandlePage());
-            case '/feature-flipping':
-              return MaterialPageRoute(builder: (context) => const FeatureTogglePage());
-            default:
-              return MaterialPageRoute(builder: (context) => const HomePage());
-          }
+          return null;
         },
       ),
     );
