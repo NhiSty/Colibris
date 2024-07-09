@@ -28,9 +28,8 @@ jobs:
 
       - name: docker compose ps
         run: |
-            sleep 25
+          sleep 25
           docker compose ps
-        if: success()
 
       - name: Run tests inside the container
         run: |
