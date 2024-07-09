@@ -1,4 +1,5 @@
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/vote/vote.dart';
 import 'package:front/vote/vote_service.dart';
@@ -33,16 +34,20 @@ class _VoteDialogState extends State<VoteDialog> {
     super.initState();
   }
 
-  Future<void> _voteTask(int taskId, int? voteId, bool liked) async {
+  Future<dynamic> _voteTask(int taskId, int? voteId, bool liked) async {
     setState(() {
       buttonIsLoading = liked ? 'like' : 'dislike';
     });
     final likeValue = liked ? 1 : -1;
+    dynamic response;
+
     if (voteId != null) {
-      await updateVote(voteId, likeValue);
+      response = await updateVote(voteId, likeValue);
+      return response;
 
     } else {
-      await addVote(taskId, likeValue);
+      response = await addVote(taskId, likeValue);
+      return response;
     }
   }
 
@@ -53,8 +58,8 @@ class _VoteDialogState extends State<VoteDialog> {
     final taskId = widget.taskId;
 
     return AlertDialog(
-      title: const Text('Donne ton avis'),
-      content: const Text('Es-tu satisfait de la tâche effectuée par l\'un de tes coloc ?'),
+      title: Text('give_your_opinion'.tr()),
+      content: Text('are_you_satisfied_with_the_work_done_by_one_of_your_flatmates'.tr()),
       actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: <Widget>[
         ElevatedButton(
@@ -63,12 +68,30 @@ class _VoteDialogState extends State<VoteDialog> {
           ),
           onPressed: vote?.value != 1
               ? () async {
-            await _voteTask(taskId, vote?.id, true);
+            var response = await _voteTask(taskId, vote?.id, true);
             context.read<VoteBloc>().add(FetchUserVote(userId));
-            setState(() {
-              buttonIsLoading = '';
-            });
-            Navigator.of(context).pop();
+
+            if (response['statusCode'] == 201 || response['statusCode'] == 200) {
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('your_opinion_has_been_taken_into_account'.tr()),
+                ),
+              );
+              setState(() {
+                buttonIsLoading = '';
+              });
+            } else if (response['statusCode'] == 422) {
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${response['data']}'.tr()),
+                ),
+              );
+              setState(() {
+                buttonIsLoading = '';
+              });
+            }
           } : null,
             child: buttonIsLoading == 'like'
                 ? const CircularProgressIndicator()
@@ -80,12 +103,31 @@ class _VoteDialogState extends State<VoteDialog> {
           ),
           onPressed: vote?.value != -1
               ? () async {
-            await _voteTask(taskId, vote?.id, false);
+            var response = await _voteTask(taskId, vote?.id, false);
             context.read<VoteBloc>().add(FetchUserVote(userId));
-            setState(() {
-              buttonIsLoading = '';
-            });
-            Navigator.of(context).pop();
+
+            if (response['statusCode'] == 201 || response['statusCode'] == 200) {
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                      'your_opinion_has_been_taken_into_account'.tr()),
+                ),
+              );
+              setState(() {
+                buttonIsLoading = '';
+              });
+            } else if (response['statusCode'] == 422) {
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${response['data']}'.tr()),
+                ),
+              );
+              setState(() {
+                buttonIsLoading = '';
+              });
+            }
           } : null,
           child: buttonIsLoading == 'dislike'
               ? const CircularProgressIndicator()
