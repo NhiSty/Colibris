@@ -4,7 +4,6 @@ import (
 	"Colibris/dto"
 	"Colibris/model"
 	"Colibris/service"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -64,7 +63,7 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 		}
 	}
 
-	if !taskInColocation {
+	if !taskInColocation && !service.IsAdmin(c) {
 		c.JSON(http.StatusBadRequest, "error_votingTaskCantVoteForTaskNotInYourColocation")
 		return
 	}
@@ -84,7 +83,7 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 
 	var limitDate = time.Now().AddDate(0, 0, -3)
 
-	if task.CreatedAt.Before(limitDate) {
+	if task.CreatedAt.Before(limitDate) && !service.IsAdmin(c) {
 		c.JSON(http.StatusUnprocessableEntity, "error_votingTaskOver3DaysOld")
 		return
 	}
@@ -127,18 +126,13 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 	var percentagePositiveVotes = (positiveVotes / len(votes)) * 100
 	var percentageNegativeVotes = (negativeVotes / len(votes)) * 100
 
-	fmt.Println("percentagePositiveVotes: %f", percentagePositiveVotes)
-	fmt.Println("percentageNegativeVotes: %f", percentageNegativeVotes)
-
 	// if more than 50% of votes are positive, the task is validated and the score of the colocMember is incremented, but only one time
 	if percentagePositiveVotes > 50 && task.Validate == false {
-		fmt.Println("task validated, score: %f", colocMemberNewScore)
 		taskWithNewValidation["validate"] = true
 		colocMemberNewScore += float32(task.Pts)
 	} else if percentageNegativeVotes >= 50 && task.Validate == true {
 		taskWithNewValidation["validate"] = false
 		colocMemberNewScore = colocMemberNewScore - float32(task.Pts)
-		fmt.Printf("task not validated, score: %f", colocMemberNewScore)
 	}
 
 	if err := colocMemberService.UpdateColocMemberScore(int(colocMember.ID), colocMemberNewScore); err != nil {
@@ -220,7 +214,7 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		}
 	}
 
-	if !taskInColocation {
+	if !taskInColocation && !service.IsAdmin(c) {
 		c.JSON(http.StatusBadRequest, "error_votingTaskCantVoteForTaskNotInYourColocation")
 		return
 	}
@@ -232,7 +226,7 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 
 	var limitDate = time.Now().AddDate(0, 0, -3)
 
-	if task.CreatedAt.Before(limitDate) {
+	if task.CreatedAt.Before(limitDate) && !service.IsAdmin(c) {
 		c.JSON(http.StatusUnprocessableEntity, "error_votingTaskOver3DaysOld")
 		return
 	}
@@ -275,18 +269,13 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 	var percentagePositiveVotes = (positiveVotes / len(votes)) * 100
 	var percentageNegativeVotes = (negativeVotes / len(votes)) * 100
 
-	fmt.Println("percentagePositiveVotes: %f", percentagePositiveVotes)
-	fmt.Println("percentageNegativeVotes: %f", percentageNegativeVotes)
-
 	// if more than 50% of votes are positive, the task is validated and the score of the colocMember is incremented, but only one time
 	if percentagePositiveVotes > 50 && task.Validate == false {
-		fmt.Println("task validated, score: %f", colocMemberNewScore)
 		taskWithNewValidation["validate"] = true
 		colocMemberNewScore += float32(task.Pts)
 	} else if percentageNegativeVotes >= 50 && task.Validate == true {
 		taskWithNewValidation["validate"] = false
 		colocMemberNewScore = colocMemberNewScore - float32(task.Pts)
-		fmt.Printf("task not validated, score: %f", colocMemberNewScore)
 	}
 
 	if err := colocMemberService.UpdateColocMemberScore(int(colocMember.ID), colocMemberNewScore); err != nil {
@@ -312,8 +301,40 @@ func (ctl *VoteController) GetVotesByTaskId(c *gin.Context) {
 		return
 	}
 
-	if !service.IsAdmin(c) {
+	userIDFromToken, exists := c.Get("userID")
+
+	if !exists && !service.IsAdmin(c) {
 		c.JSON(http.StatusUnauthorized, "Unauthorized")
+	}
+
+	var taskService = service.NewTaskService(ctl.voteService.GetDB())
+	task, err := taskService.GetById(uint(taskId))
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err.Error())
+		return
+	}
+
+	var colocService = service.NewColocationService(ctl.voteService.GetDB())
+	colocations, err := colocService.GetAllUserColocations(int(userIDFromToken.(uint)))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	// Check if task is in the same colocation as the user
+	taskInColocation := false
+	for _, colocation := range colocations {
+		if colocation.ID == task.ColocationID {
+			taskInColocation = true
+			break
+		}
+	}
+
+	if !taskInColocation && !service.IsAdmin(c) {
+		c.JSON(http.StatusBadRequest, "You can't access this resource")
+		return
 	}
 
 	votes, err := ctl.voteService.GetVotesByTaskId(taskId)
@@ -323,7 +344,9 @@ func (ctl *VoteController) GetVotesByTaskId(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, votes)
+	c.JSON(http.StatusOK, gin.H{
+		"votes": votes,
+	})
 }
 
 func (ctl *VoteController) GetVotesByUserId(c *gin.Context) {
