@@ -87,6 +87,8 @@
   "task_action_edit": "Modifier",
   "task_action_like": "Voter",
   "task_action_delete": "Supprimer",
+  "task_no_vote": "Aucun vote",
+  "task_satisfaction_rate": "Taux de satisfaction",
   "give_your_opinion": "Donnez votre avis",
   "are_you_satisfied_with_the_work_done_by_one_of_your_flatmates": "Êtes-vous satisfait de la tâche effectuée par l'un de vos colocataires ?",
   "your_opinion_has_been_taken_into_account": "Votre avis a été pris en compte",
