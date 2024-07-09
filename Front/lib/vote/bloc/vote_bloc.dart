@@ -8,21 +8,31 @@ import '../vote_service.dart';
 part 'vote_state.dart';
 part 'vote_event.dart';
 
-class VoteBloc extends Bloc<VoteEvent, VoteState> {
-  VoteBloc() : super(const VoteInitial()) {
-    on<VoteEvent>((event, emit) async {
-      if (event is FetchUserVote) {
-        emit(const VoteLoading());
+class VoteBloc extends Bloc<VoteEvent, CompositeVoteState> {
+  VoteBloc() : super(const CompositeVoteState()) {
+    on<FetchUserVote>(_onFetchUserVote);
+    on<FetchVotesByTaskId>(_onFetchVotesByTaskId);
+  }
 
-        try {
-          final votes = await fetchUserVotes();
-          emit(VoteLoaded(votes));
-        } catch (error) {
-          emit(VoteError('Failed to fetch votes: $error', true));
-        }
-      } else if (event is VoteInitial) {
-        emit(const VoteInitial());
-      }
-    });
+  Future<void> _onFetchUserVote(FetchUserVote event, Emitter<CompositeVoteState> emit) async {
+    emit(state.copyWith(voteByUserState: const VoteByUserLoading()));
+
+    try {
+      final votes = await fetchUserVotes();
+      emit(state.copyWith(voteByUserState: VoteByUserLoaded(votes)));
+    } catch (error) {
+      emit(state.copyWith(voteByUserState: VoteByUserError('Failed to fetch votes: $error', true)));
+    }
+  }
+
+  Future<void> _onFetchVotesByTaskId(FetchVotesByTaskId event, Emitter<CompositeVoteState> emit) async {
+    emit(state.copyWith(voteByTaskIdState: const VoteByTaskIdLoading()));
+
+    try {
+      final votes = await fetchVotesByTaskId(event.taskId);
+      emit(state.copyWith(voteByTaskIdState: VoteByTaskIdLoaded(votes)));
+    } catch (error) {
+      emit(state.copyWith(voteByTaskIdState: VoteByTaskIdError('Failed to fetch votes: $error')));
+    }
   }
 }

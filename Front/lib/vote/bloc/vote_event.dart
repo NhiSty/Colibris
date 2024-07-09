@@ -15,6 +15,14 @@ class FetchUserVote extends VoteEvent {
   List<Object> get props => [userId];
 }
 
+class FetchVotesByTaskId extends VoteEvent {
+  final int taskId;
+  const FetchVotesByTaskId(this.taskId);
+
+  @override
+  List<Object> get props => [taskId];
+}
+
 class AddVote extends VoteEvent {
   final Vote vote;
 

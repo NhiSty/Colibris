@@ -7,25 +7,65 @@ sealed class VoteState extends Equatable {
   List<Object> get props => [];
 }
 
-final class VoteInitial extends VoteState {
-  const VoteInitial();
+class CompositeVoteState extends Equatable {
+  final VoteState voteByUserState;
+  final VoteState voteByTaskIdState;
+
+  const CompositeVoteState({
+    this.voteByUserState = const VoteByUserInitial(),
+    this.voteByTaskIdState = const VoteByTaskIdLoading(),
+  });
+
+  CompositeVoteState copyWith({
+    VoteState? voteByUserState,
+    VoteState? voteByTaskIdState,
+  }) {
+    return CompositeVoteState(
+      voteByUserState: voteByUserState ?? this.voteByUserState,
+      voteByTaskIdState: voteByTaskIdState ?? this.voteByTaskIdState,
+    );
+  }
+
+  @override
+  List<Object> get props => [voteByUserState, voteByTaskIdState];
 }
 
-final class VoteLoading extends VoteState {
-  const VoteLoading();
+
+final class VoteByUserInitial extends VoteState {
+  const VoteByUserInitial();
 }
 
-final class VoteLoaded extends VoteState {
+final class VoteByUserLoading extends VoteState {
+  const VoteByUserLoading();
+}
+
+final class VoteByUserLoaded extends VoteState {
   final List<Vote> votes;
 
-  const VoteLoaded(this.votes);
+  const VoteByUserLoaded(this.votes);
 }
 
-final class VoteError extends VoteState {
+final class VoteByTaskIdLoading extends VoteState {
+  const VoteByTaskIdLoading();
+}
+
+final class VoteByTaskIdLoaded extends VoteState {
+  final List<Vote> votes;
+
+  const VoteByTaskIdLoaded(this.votes);
+}
+
+final class VoteByTaskIdError extends VoteState {
+  final String message;
+
+  const VoteByTaskIdError(this.message);
+}
+
+final class VoteByUserError extends VoteState {
   final String message;
   final bool isDirty;
 
-  const VoteError(
+  const VoteByUserError(
     this.message,
     this.isDirty,
   );

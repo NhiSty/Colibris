@@ -60,6 +60,29 @@ Future<List<Vote>> fetchUserVotes() async {
   }
 }
 
+// fetch all vote by task id
+Future<List<Vote>> fetchVotesByTaskId(int taskId) async {
+  var headers = await addHeader();
+  try {
+    var response = await dio.get(
+      '/votes/tasks/$taskId',
+      options: Options(headers: headers),
+    );
+    if (response.statusCode == 200) {
+      List<dynamic> data = response.data['votes'] ?? [];
+
+      return data.map((vote) => Vote.fromJson(vote)).toList();
+    } else {
+      throw Exception('Failed to load votes for task with id $taskId');
+    }
+  } on DioException catch (e) {
+    log('Dio error!');
+    log('Response status: ${e.response!.statusCode}');
+    log('Response data: ${e.response!.data}');
+    throw Exception('Failed to fetch votes for task with id $taskId');
+  }
+}
+
 Future<dynamic> updateVote(int voteId, int value) async {
   var headers = await addHeader();
 
