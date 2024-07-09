@@ -34,6 +34,12 @@ func (s *ColocMemberService) GetColocMemberById(id int) (*model.ColocMember, err
 	return &colocMember, result.Error
 }
 
+func (s *ColocMemberService) GetColocMemberByUserId(userId int) (*model.ColocMember, error) {
+	var colocMember model.ColocMember
+	result := s.db.Where("user_id = ?", userId).First(&colocMember)
+	return &colocMember, result.Error
+}
+
 func (s *ColocMemberService) GetAllColocMembers(page int, pageSize int) ([]model.ColocMember, int64, error) {
 	var colocMembers []model.ColocMember
 	var total int64

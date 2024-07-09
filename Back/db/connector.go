@@ -27,9 +27,7 @@ func Connect() *gorm.DB {
 }
 
 func Migrate(db *gorm.DB) {
-
-	// delete all tables
-	err := db.Migrator().DropTable(
+	err := db.AutoMigrate(
 		&model.User{},
 		&model.Colocation{},
 		&model.ColocMember{},
@@ -37,21 +35,7 @@ func Migrate(db *gorm.DB) {
 		&model.Invitation{},
 		&model.Log{},
 		&model.Task{},
-		&model.Message{},
-		&model.FeatureFlag{},
-	)
-	if err != nil {
-		return
-	}
-
-	err = db.AutoMigrate(
-		&model.User{},
-		&model.Colocation{},
-		&model.ColocMember{},
-		&model.ResetPassword{},
-		&model.Invitation{},
-		&model.Log{},
-		&model.Task{},
+		&model.Vote{},
 		&model.Message{},
 		&model.FeatureFlag{},
 	)

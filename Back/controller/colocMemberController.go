@@ -192,21 +192,16 @@ func (ctl *ColocMemberController) GetAllColocMembersByColoc(c *gin.Context) {
 	for _, colocMember := range colocMembers {
 		for _, user := range users {
 			if colocMember.UserID == user.ID {
-				if userIdFromToken == user.ID {
-					continue
-				} else {
-					var userData = dto.UserInColoc{
-						ID:            user.ID,
-						Email:         user.Email,
-						FirstName:     user.Firstname,
-						LastName:      user.Lastname,
-						Score:         int(colocMember.Score),
-						ColocMemberID: colocMember.ID,
-					}
-
-					usersInColoc = append(usersInColoc, userData)
-
+				var userData = dto.UserInColoc{
+					ID:            user.ID,
+					Email:         user.Email,
+					FirstName:     user.Firstname,
+					LastName:      user.Lastname,
+					Score:         int(colocMember.Score),
+					ColocMemberID: colocMember.ID,
 				}
+				usersInColoc = append(usersInColoc, userData)
+
 			}
 		}
 	}
