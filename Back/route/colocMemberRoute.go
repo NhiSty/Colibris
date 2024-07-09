@@ -22,6 +22,6 @@ func ColocMemberRoutes(colocMemberRoutes *gin.RouterGroup, db *gorm.DB) {
 		routes.GET("", AuthMiddleware(), colocMemberController.GetAllColocMembers)
 		routes.PUT("/:id/score", AuthMiddleware(), colocMemberController.UpdateColocMemberScore)
 		routes.DELETE("/:id", AuthMiddleware(), colocMemberController.DeleteColocMember)
-
+		routes.GET("/search", AuthMiddleware("ROLE_ADMIN"), colocMemberController.SearchColocMembers)
 	}
 }

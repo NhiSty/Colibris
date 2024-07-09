@@ -5,6 +5,7 @@ class User {
   final String lastname;
   int? colocMemberId;
   int? colocationId;
+  int? score;
 
   User({
     required this.id,
@@ -13,6 +14,7 @@ class User {
     required this.lastname,
     this.colocMemberId,
     this.colocationId,
+    this.score,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class User {
       lastname: json['Lastname'],
       colocMemberId: json['ColocMemberID'],
       colocationId: json['ColocationID'],
+      score: json['Score'],
     );
   }
 }

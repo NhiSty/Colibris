@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:feature_flags_toggly/feature_flags_toggly.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,6 +12,7 @@ import 'package:front/auth/register.dart';
 import 'package:front/chat/screens/conversation_screen.dart';
 import 'package:front/colocation/bloc/colocation_bloc.dart';
 import 'package:front/colocation/colocation_members.dart';
+import 'package:front/colocation/colocation_members_list.dart';
 import 'package:front/colocation/colocation_parameters.dart';
 import 'package:front/colocation/colocation_tasklist_screen.dart';
 import 'package:front/colocation/colocation_update.dart';
@@ -29,6 +32,10 @@ import 'package:front/task/add_new_task_screen.dart';
 import 'package:front/task/bloc/task_bloc.dart';
 import 'package:front/task/task_detail.dart';
 import 'package:front/task/update_task_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:front/utils/firebase.dart';
+import 'firebase_options.dart';
+import 'package:front/vote/bloc/vote_bloc.dart';
 
 final StreamController<List<FeatureFlag>> _featureFlagsController =
     StreamController<List<FeatureFlag>>.broadcast();
@@ -48,8 +55,38 @@ bool isFeatureEnabled(String featureName, List<FeatureFlag> flags) {
   return flag.value;
 }
 
+void onMessage(RemoteMessage message) {
+  print('Message en premier plan reçu: ${message.notification?.title}');
+  // Affichez une boîte de dialogue ou mettez à jour l'état de l'application ici
+}
+
+void onMessageOpenedApp(RemoteMessage message) {
+  print('Message cliqué!: ${message.notification?.title}');
+  String? colocationIdStr = message.data['colocationID'];
+  int colocationId = int.tryParse(colocationIdStr!) ?? 0;
+
+  if (colocationId != 0) {
+    Navigator.pushNamed(
+      navigatorKey.currentContext!,
+      '/chat',
+      arguments: {'chatId' : colocationId},
+    );
+  }
+}
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseClient firebaseClient = FirebaseClient();
+  await firebaseClient.requestPermission();
+  firebaseClient.initializeListeners(onMessage, onMessageOpenedApp);
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
+
   await EasyLocalization.ensureInitialized();
   await dotenv.load(fileName: ".env");
 
@@ -84,7 +121,6 @@ void main() async {
   periodicStream.listen((event) async {
     var flags = await fetchFeatureFlags();
 
-    // verify for each flag if the value has changed
     for (var flag in flags) {
       var previousFlag = previousFlags.firstWhere(
         (previousFlag) => previousFlag.name == flag.name,
@@ -120,8 +156,12 @@ class MyApp extends StatelessWidget {
         BlocProvider<TaskBloc>(
           create: (context) => TaskBloc(),
         ),
+        BlocProvider<VoteBloc>(
+            create: (context) => VoteBloc()
+        )
       ],
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         title: 'Colobris',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
@@ -129,18 +169,22 @@ class MyApp extends StatelessWidget {
         ),
         home: isFeatureEnabled('maintenance', featureFlag)
             ? const MaintenanceScreen()
-            : const LoginScreen(),
+            : const HomeScreen(),
+        initialRoute: '/login',
         debugShowCheckedModeBanner: false,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         routes: {
-          '/login': (context) => const LoginScreen(),
+          '/login': (context) =>
+              const PopScope(canPop: false, child: LoginScreen()),
           '/register': (context) => const RegisterScreen(),
-          '/home': (context) => const Scaffold(
+          '/home': (context) => const PopScope(
+              canPop: false,
+              child: Scaffold(
                 body: HomeScreen(),
                 bottomNavigationBar: BottomNavigationBarWidget(null),
-              ),
+              )),
           '/create_colocation': (context) => const CreateColocationPage(),
           '/profile': (context) => const Scaffold(
                 body: ProfileScreen(),
@@ -201,6 +245,12 @@ class MyApp extends StatelessWidget {
             case '/colocation_members':
               return MaterialPageRoute(
                 builder: (context) => ColocationMembers(
+                  users: routes['users'],
+                ),
+              );
+            case '/colocation_members_list':
+              return MaterialPageRoute(
+                builder: (context) => ColocationMembersList(
                   users: routes['users'],
                 ),
               );
