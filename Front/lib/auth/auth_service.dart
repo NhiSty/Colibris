@@ -106,3 +106,22 @@ Future<int?> resetPasswordWithCode(String password, String email_code) async {
     throw Exception('Failed to reset password');
   }
 }
+
+Future<int?> addFcmToken(String token) async {
+  var headers = await addHeader();
+  try {
+    var response = await dio.patch("/users/add-fcm-token", options: Options(headers: headers), data: {
+      "fcm_token": token
+    });
+    if (response.statusCode == 200) {
+      return response.statusCode;
+    } else {
+      return 500;
+    }
+  } on DioException catch (e) {
+    print('Dio error!');
+    print('Response status: ${e.response!.statusCode}');
+    print('Response data: ${e.response!.data}');
+    throw Exception('Failed to load feature flags');
+  }
+}

@@ -52,6 +52,9 @@ dependencies:
     sdk: flutter
   easy_localization: ^3.0.7
   feature_flags_toggly: ^1.0.5
+  firebase_messaging: ^15.0.2
+  firebase_core: ^3.1.1
+  firebase_analytics: ^11.1.0
 
 dev_dependencies:
   flutter_test:
