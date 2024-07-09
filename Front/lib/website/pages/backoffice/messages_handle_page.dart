@@ -24,6 +24,7 @@ class _MessagesHandlePageState extends State<MessagesHandlePage> {
   final ApiService apiService = ApiService();
   final ScrollController _scrollController = ScrollController();
   late int _userId;
+  int? _hoveredMessageIndex;
 
   @override
   void initState() {
@@ -81,11 +82,18 @@ class _MessagesHandlePageState extends State<MessagesHandlePage> {
       _channel.stream.listen((message) {
         try {
           final data = json.decode(message);
-          final newMessage = Message.fromJson(data);
-          setState(() {
-            _messages.add(newMessage);
-            _scrollToBottom();
-          });
+          if (data["type"] == "delete") {
+            final messageId = data["messageID"];
+            setState(() {
+              _messages.removeWhere((msg) => msg.id == messageId);
+            });
+          } else {
+            final newMessage = Message.fromJson(data);
+            setState(() {
+              _messages.add(newMessage);
+              _scrollToBottom();
+            });
+          }
         } catch (e) {
           print("WebSocket message error: $e");
         }
@@ -101,11 +109,16 @@ class _MessagesHandlePageState extends State<MessagesHandlePage> {
 
   void _sendMessage() {
     if (_messageController.text.isNotEmpty) {
-      _channel.sink.add(_messageController.text);
+      final message = json.encode({
+        "type": "message",
+        "content": _messageController.text,
+      });
+      _channel.sink.add(message);
       _messageController.clear();
       _scrollToBottom();
     }
   }
+
 
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -118,6 +131,19 @@ class _MessagesHandlePageState extends State<MessagesHandlePage> {
       }
     });
   }
+
+  void _deleteMessage(int index) {
+    final message = _messages[index];
+    final deleteCommand = json.encode({
+      "type": "delete",
+      "messageID": message.id,
+    });
+    _channel.sink.add(deleteCommand);
+    setState(() {
+      _messages.removeAt(index);
+    });
+  }
+
 
   String _formatTimestamp(DateTime timestamp) {
     final now = DateTime.now();
@@ -150,75 +176,93 @@ class _MessagesHandlePageState extends State<MessagesHandlePage> {
                 final showDateSeparator = index == 0 ||
                     _messages[index - 1].createdAt.day != message.createdAt.day;
 
-                return Column(
-                  children: [
-                    if (showDateSeparator)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          DateFormat('dd MMM yyyy').format(message.createdAt),
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey),
-                        ),
-                      ),
-                    Align(
-                      alignment: isUserMessage
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
-                      child: Container(
-                        constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width * 0.75),
-                        margin:
-                        EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: isUserMessage
-                              ? Colors.blue[100]
-                              : Colors.grey[200],
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            topRight: Radius.circular(8),
-                            bottomLeft: isUserMessage
-                                ? Radius.circular(8)
-                                : Radius.zero,
-                            bottomRight: isUserMessage
-                                ? Radius.zero
-                                : Radius.circular(8),
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              message.senderName,
-                              style: const TextStyle(
+                return MouseRegion(
+                  onEnter: (_) => setState(() {
+                    _hoveredMessageIndex = index;
+                  }),
+                  onExit: (_) => setState(() {
+                    _hoveredMessageIndex = null;
+                  }),
+                  child: Column(
+                    children: [
+                      if (showDateSeparator)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            DateFormat('dd MMM yyyy').format(message.createdAt),
+                            style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
-                              ),
+                                color: Colors.grey),
+                          ),
+                        ),
+                      Align(
+                        alignment: isUserMessage
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                        child: Container(
+                          constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width * 0.75),
+                          margin: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: isUserMessage
+                                ? Colors.blue[100]
+                                : Colors.grey[200],
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              topRight: Radius.circular(8),
+                              bottomLeft:
+                              isUserMessage ? Radius.circular(8) : Radius.zero,
+                              bottomRight:
+                              isUserMessage ? Radius.zero : Radius.circular(8),
                             ),
-                            SizedBox(height: 3),
-                            Text(
-                              message.content,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                            const SizedBox(height: 3),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: Text(
-                                _formatTimestamp(message.createdAt.toLocal()),
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.grey[600],
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      message.senderName,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 3),
+                                    Text(
+                                      message.content,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                    const SizedBox(height: 3),
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Text(
+                                        _formatTimestamp(
+                                            message.createdAt.toLocal()),
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                          ],
+                              if (_hoveredMessageIndex == index)
+                                IconButton(
+                                  icon: Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () => _deleteMessage(index),
+                                ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               },
             ),

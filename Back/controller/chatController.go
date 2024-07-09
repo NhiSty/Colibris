@@ -3,6 +3,7 @@ package controller
 import (
 	"Colibris/model"
 	"Colibris/service"
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -43,6 +44,10 @@ func (c *ChatController) HandleConnections(ctx *gin.Context) {
 	senderName := firstName.(string) + " " + lastName.(string)
 
 	colocationIdToInt, err := strconv.ParseUint(colocationID, 10, 32)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid colocation ID"})
+		return
+	}
 
 	isMember, err := c.ColocMemberService.IsMemberOfColocation(userID, uint(colocationIdToInt))
 	if err != nil {
@@ -50,6 +55,7 @@ func (c *ChatController) HandleConnections(ctx *gin.Context) {
 		return
 	}
 	if !isMember {
+		fmt.Println("You  are not a member of this colocace")
 		ctx.JSON(http.StatusForbidden, gin.H{"error": "You are not a member of this colocation"})
 		return
 	}
@@ -59,12 +65,7 @@ func (c *ChatController) HandleConnections(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	defer func(conn *websocket.Conn) {
-		err := conn.Close()
-		if err != nil {
-			return
-		}
-	}(conn)
+	defer conn.Close()
 
 	client := &model.Client{Conn: conn, ColocationID: colocationID}
 	c.Service.RegisterClient(client)
@@ -127,12 +128,39 @@ func (c *ChatController) HandleAdminConnections(ctx *gin.Context) {
 
 		for {
 			_, msg, err := conn.ReadMessage()
-			updatedMessage := fmt.Sprintf("⚠️ Message d'un administrateur: %s", string(msg))
-
 			if err != nil {
 				break
 			}
-			c.Service.BroadcastMessage(colocationID, []byte(updatedMessage), int(userID), senderName)
+
+			// Log the raw message
+			fmt.Println("Received message:", string(msg))
+
+			var message map[string]interface{}
+			if err := json.Unmarshal(msg, &message); err != nil {
+				fmt.Println("Error unmarshalling message:", err)
+				continue
+			}
+
+			if messageType, ok := message["type"].(string); ok {
+				if messageType == "delete" {
+					if messageID, ok := message["messageID"].(float64); ok {
+						err := c.Service.DeleteMessage(colocationID, int(messageID))
+						if err == nil {
+							c.Service.BroadcastDeleteMessage(colocationID, int(messageID))
+						} else {
+							fmt.Println("Error deleting message:", err)
+						}
+					}
+				} else {
+					content, ok := message["content"].(string)
+					if !ok {
+						fmt.Println("Invalid message content")
+						continue
+					}
+					updatedMessage := fmt.Sprintf("⚠️ Message d'un administrateur: %s", content)
+					c.Service.BroadcastMessage(colocationID, []byte(updatedMessage), int(userID), senderName)
+				}
+			}
 		}
 	} else {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
