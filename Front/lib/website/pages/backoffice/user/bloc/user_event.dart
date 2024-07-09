@@ -44,6 +44,13 @@ class EditUser extends UserEvent {
   });
 }
 
+class UpdateUserRole extends UserEvent {
+  final String id;
+  final String roles;
+
+  UpdateUserRole({required this.id, required this.roles});
+}
+
 class DeleteUser extends UserEvent {
   final String id;
 

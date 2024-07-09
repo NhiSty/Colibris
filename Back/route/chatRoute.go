@@ -11,12 +11,14 @@ import (
 func ChatRoutes(chatRoutes *gin.RouterGroup, db *gorm.DB) {
 
 	chatService := service.NewChatService(db)
-	chatController := controller.NewChatController(chatService)
+	colocMemberService := service.NewColocMemberService(db)
+	chatController := controller.NewChatController(chatService, &colocMemberService)
 	authMiddleware := middleware.AuthMiddleware
 
 	routes := chatRoutes.Group("chat")
 	{
 		routes.GET("/colocations/:colocation_id/messages", authMiddleware(), chatController.GetMessages)
 		routes.GET("/colocations/:colocation_id/ws", authMiddleware(), chatController.HandleConnections)
+		routes.GET("/colocations/:colocation_id/admin/ws", chatController.HandleAdminConnections)
 	}
 }

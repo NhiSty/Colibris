@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:front/colocation/colocation_service.dart';
-import 'package:latlong2/latlong.dart'; // Ensure this import is correct for your LatLng implementation
+import 'package:latlong2/latlong.dart';
 
 class AddressResult {
   final String placeName;
@@ -34,8 +34,7 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
       final apiKey = dotenv.env['MAPBOX_KEY']!;
       final url =
           'https://api.mapbox.com/geocoding/v5/mapbox.places/$query.json?access_token=$apiKey';
-      final response =
-          await Dio().get(url); // Use Dio directly for network request
+      final response = await Dio().get(url);
 
       if (response.statusCode == 200) {
         final features = response.data['features'];
@@ -127,8 +126,7 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                     return DropdownMenuItem<AddressResult>(
                       value: result,
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width *
-                            0.7, // Adjust this width as necessary
+                        width: MediaQuery.of(context).size.width * 0.7,
                         child: Text(
                           result.placeName,
                           overflow: TextOverflow.ellipsis,
@@ -201,8 +199,7 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.green,
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    minimumSize:
-                        const Size(double.infinity, 50), // Full-width button
+                    minimumSize: const Size(double.infinity, 50),
                   ),
                   child: Text('create_colocation_submit'.tr()),
                 ),

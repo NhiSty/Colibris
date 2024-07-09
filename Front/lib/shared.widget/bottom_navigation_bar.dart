@@ -107,9 +107,8 @@ class BottomNavigationBarWidget extends StatelessWidget {
       onTap: (index) {
         if (index >= 0 && index < routes.length) {
           final newRoute = routes[index];
-          print(chatId);
           if (newRoute.isNotEmpty && newRoute != currentRoute) {
-            Navigator.pushReplacementNamed(context, newRoute, arguments: {
+            Navigator.pushNamed(context, newRoute, arguments: {
               'chatId': chatId,
             });
           }

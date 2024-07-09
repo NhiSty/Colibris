@@ -120,6 +120,32 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
     });
 
+    on<UpdateUserRole>((event, emit) async {
+      emit(UserLoading());
+      try {
+        await userService.updateUserRole(
+          int.parse(event.id),
+          {
+            'roles': event.roles
+          },
+        );
+        final response = await userService.getAllUsers();
+        final users = response.users;
+        final totalUsers = response.total;
+        emit(UserLoaded(
+          users: users,
+          currentPage: 1,
+          totalUsers: totalUsers,
+          showPagination: true,
+        ));
+      } catch (e, stacktrace) {
+        print('EditUser error: $e');
+        print('Stacktrace: $stacktrace');
+        emit(UserError(message: e.toString()));
+      }
+    });
+
+
     on<DeleteUser>((event, emit) async {
       emit(UserLoading());
       try {
