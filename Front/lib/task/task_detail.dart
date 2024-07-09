@@ -3,7 +3,10 @@ import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/task/task.dart';
+
+import '../vote/bloc/vote_bloc.dart';
 
 class TaskDetailPage extends StatelessWidget {
   final Task task;
@@ -12,6 +15,7 @@ class TaskDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<VoteBloc>().add(FetchVotesByTaskId(task.id));
     Uint8List? bytes = task.picture != "" ? base64Decode(task.picture) : null;
     return Scaffold(
       appBar: AppBar(
@@ -111,7 +115,75 @@ class TaskDetailPage extends StatelessWidget {
                     ),
                   ]
               ),
-              const SizedBox(height: 40),
+              BlocBuilder<VoteBloc, CompositeVoteState>(
+                  builder: (context, state) {
+                    if (state.voteByTaskIdState is VoteByTaskIdLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state.voteByTaskIdState is VoteByTaskIdError) {
+                      return Center(
+                        child: Text((state.voteByTaskIdState as VoteByTaskIdError).message),
+                      );
+                    } else if (state.voteByTaskIdState is VoteByTaskIdLoaded) {
+                      final votes = (state.voteByTaskIdState as VoteByTaskIdLoaded).votes;
+                      if ((votes.length) > 0) {
+                        return Column(
+                          children: [
+                            const SizedBox(height: 20),
+                            Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'task_satisfaction_rate'.tr(),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  // percentage of satisfaction, with no comma
+                                  Text(
+                                    "${(votes.where((vote) => vote.value == 1).length / votes.length * 100).toStringAsFixed(2)} %",
+                                    style: const TextStyle(fontSize: 20, color: Colors.black),
+                                  ),
+                                ]
+                            ),
+                            const SizedBox(height: 40),
+                          ],
+                        );
+                      } else {
+                        return Column(
+                          children: [
+                            const SizedBox(height: 20),
+                            Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'task_satisfaction_rate'.tr(),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Text(
+                                    "task_no_vote".tr(),
+                                    style: const TextStyle(fontSize: 20, color: Colors.black),
+                                  ),
+                                ]
+                            ),
+                            const SizedBox(height: 40),
+                          ],
+                        );
+                      }
+                    } else {
+                      return const SizedBox(height: 40);
+                    }
+                  }
+              ),
               Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,

@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/task/task.dart';
 import 'package:front/vote/bloc/vote_bloc.dart';
-import 'package:front/vote/vote_service.dart';
-
 import '../vote/vote_dialog.dart';
 
 class TaskListItem extends StatelessWidget {
@@ -47,18 +45,18 @@ class TaskListItem extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children:  [
-                    BlocBuilder<VoteBloc, VoteState>(
+                    BlocBuilder<VoteBloc, CompositeVoteState>(
                         builder: (context, state) {
-                          if (state is VoteLoading) {
+                          if (state.voteByUserState is VoteByUserLoading) {
                             return const Center(
                               child: CircularProgressIndicator(),
                             );
-                          } else if (state is VoteError) {
+                          } else if (state.voteByUserState is VoteByUserError) {
                             return Center(
-                              child: Text(state.message),
+                              child: Text((state.voteByUserState as VoteByUserError).message),
                             );
-                          } else if (state is VoteLoaded) {
-                            final votes = state.votes;
+                          } else if (state.voteByUserState is VoteByUserLoaded) {
+                            final votes = (state.voteByUserState as VoteByUserLoaded).votes;
                             // Assuming `item` has an ID or some identifier to match with votes
                             final voteIndex = votes.indexWhere((vote) => vote.taskId == item.id);
                             final vote = voteIndex != -1 ? votes.elementAt(voteIndex) : null;
