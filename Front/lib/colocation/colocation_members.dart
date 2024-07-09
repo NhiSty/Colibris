@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/ColocMembers/colocMembers_service.dart';
 import 'package:front/user/user.dart';
+import 'package:front/website/share/secure_storage.dart';
 
 class ColocationMembers extends StatelessWidget {
   final List<User> users;
@@ -49,8 +50,30 @@ class ColocationMembers extends StatelessWidget {
           return ListTile(
             title: Text(users[index].email),
             trailing: ElevatedButton(
-                onPressed: () {
-                  _showDeleteConfirmationDialog(context, users[index]);
+                onPressed: () async {
+                  var userData = await decodeToken();
+
+                  if (userData['user_id'] == users[index].id) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('ban_roommate_error'.tr()),
+                          content: Text('ban_roommate_error_msg'.tr()),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('ok'.tr()),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    _showDeleteConfirmationDialog(context, users[index]);
+                  }
                 },
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all(Colors.red),

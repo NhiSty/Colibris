@@ -28,4 +28,9 @@ class ColocMembers {
       score: json['Score'],
     );
   }
+
+  @override
+  String toString() {
+    return 'ColocMembers{id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, userId: $userId, colocationId: $colocationId, score: $score}';
+  }
 }

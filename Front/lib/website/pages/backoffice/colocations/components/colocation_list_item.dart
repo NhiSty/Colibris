@@ -114,6 +114,15 @@ class ColocationListItem extends StatelessWidget {
                 ),
               ),
               IconButton(
+                icon: Icon(Icons.message, color: Colors.green[800]),
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/backoffice/colocations/${colocation.id}/messages',
+                  );
+                },
+              ),
+              IconButton(
                 icon: Icon(Icons.edit, color: Colors.blue[800]),
                 onPressed: () {
                   showEditColocationDialog(context, colocation);

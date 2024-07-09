@@ -1,6 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:front/auth/auth_service.dart';
+import 'package:front/utils/firebase.dart';
+import 'package:front/website/share/secure_storage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,6 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  FirebaseClient firebaseClient = FirebaseClient();
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +114,9 @@ class _LoginScreenState extends State<LoginScreen> {
       var res = await login(_emailController.text, _passwordController.text);
       if (!mounted) return;
       if (res == 200) {
+        final token  = await firebaseClient.getFcmToken();
+
+        await addFcmToken(token as String);
         Navigator.pushNamed(context, '/home');
       } else {
         showDialog(

@@ -13,5 +13,6 @@ type Task struct {
 	Picture      string
 	User         User       `gorm:"foreignKey:UserID" json:"-"`
 	Colocation   Colocation `gorm:"foreignKey:ColocationID" json:"-"`
-	Pts          uint       `gorm:"not null"`
+	Pts          float64    `gorm:"not null"`
+	Validate     bool       `gorm:"not null"`
 }

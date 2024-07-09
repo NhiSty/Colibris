@@ -47,6 +47,21 @@ class ColocationSettingsPage extends StatelessWidget {
       body: ListView(
         children: <Widget>[
           ListTile(
+            title: Text('coloc_member'.tr()),
+            trailing: const Icon(Icons.arrow_forward),
+            onTap: () async {
+              var res = await findUserInColoc(colocationId);
+              if (res.isNotEmpty) {
+                Navigator.pushNamed(context, '/colocation_members_list',
+                    arguments: {'users': res});
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('coloc_settings_no_roommates'.tr()),
+                ));
+              }
+            },
+          ),
+          ListTile(
             title: Text('coloc_settings_modify_colocation'.tr()),
             trailing: const Icon(Icons.arrow_forward),
             onTap: () {

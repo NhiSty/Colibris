@@ -27,7 +27,7 @@ type FeatureFlagController struct {
 func (c *FeatureFlagController) CreateFeatureFlag(ctx *gin.Context) {
 
 	if !service.IsAdmin(ctx) {
-		ctx.JSON(http.StatusUnauthorized, "You are not authorized to create a feature flag")
+		ctx.JSON(http.StatusForbidden, "You are not authorized to create a feature flag")
 		return
 	}
 
@@ -66,7 +66,7 @@ func (c *FeatureFlagController) GetFeatureFlags(ctx *gin.Context) {
 
 	flags, err := c.featureFlagService.GetFeatureFlags()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, err.Error())
+		ctx.JSON(http.StatusNotFound, err.Error())
 		return
 	}
 
@@ -95,6 +95,7 @@ func (c *FeatureFlagController) GetFeatureFlagByID(ctx *gin.Context) {
 		return
 
 	}
+
 	id, err := strconv.Atoi(ctx.Params.ByName("id"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err.Error())
@@ -103,7 +104,7 @@ func (c *FeatureFlagController) GetFeatureFlagByID(ctx *gin.Context) {
 
 	flag, err := c.featureFlagService.GetFeatureFlagByID(uint(id))
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, err.Error())
+		ctx.JSON(http.StatusNotFound, err.Error())
 		return
 	}
 	ctx.JSON(http.StatusOK, flag)
@@ -142,7 +143,7 @@ func (c *FeatureFlagController) UpdateFeatureFlag(ctx *gin.Context) {
 
 	flag, err := c.featureFlagService.GetFeatureFlagByID(uint(id))
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "record not found"})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "record not found"})
 		return
 	}
 
@@ -184,7 +185,7 @@ func (c *FeatureFlagController) DeleteFeatureFlag(ctx *gin.Context) {
 
 	flag, err := c.featureFlagService.GetFeatureFlagByID(uint(id))
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, err.Error())
+		ctx.JSON(http.StatusNotFound, err.Error())
 		return
 	}
 

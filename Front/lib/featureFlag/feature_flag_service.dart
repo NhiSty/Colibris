@@ -16,7 +16,7 @@ Future<List<FeatureFlag>> fetchFeatureFlags() async {
       throw Exception('Failed to load feature flags');
     }
   } on DioException catch (e) {
-    print('Dio error!');
+    print('Dio error! $e');
     print('Response status: ${e.response!.statusCode}');
     print('Response data: ${e.response!.data}');
     throw Exception('Failed to load feature flags');

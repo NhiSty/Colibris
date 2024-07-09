@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:front/chat/models/message.dart';
 import 'package:front/chat/services/api_service.dart';
 import 'package:front/chat/services/websocket_service.dart';
+import 'package:front/utils/firebase.dart';
 import 'package:front/website/share/secure_storage.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -24,6 +25,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
   final ApiService apiService = ApiService();
   final ScrollController _scrollController = ScrollController();
   late int _userId;
+  FirebaseClient firebaseClient = FirebaseClient();
+
 
   @override
   void initState() {
@@ -31,6 +34,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
     _getUserData();
     _fetchMessages();
     _connectToWebSocket();
+    final roomId = widget.conversationId;
+    firebaseClient.subscribeToTopic("room_colocation_$roomId");
   }
 
   @override
@@ -66,11 +71,18 @@ class _ConversationScreenState extends State<ConversationScreen> {
     _channel.stream.listen((message) {
       try {
         final data = json.decode(message);
-        final newMessage = Message.fromJson(data);
-        setState(() {
-          _messages.add(newMessage);
-          _scrollToBottom();
-        });
+        if (data["type"] == "delete") {
+          final messageId = data["messageID"];
+          setState(() {
+            _messages.removeWhere((msg) => msg.id == messageId);
+          });
+        } else {
+          final newMessage = Message.fromJson(data);
+          setState(() {
+            _messages.add(newMessage);
+            _scrollToBottom();
+          });
+        }
       } catch (e) {
         print("WebSocket message error: $e");
       }
@@ -88,6 +100,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
       _scrollToBottom();
     }
   }
+
 
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
