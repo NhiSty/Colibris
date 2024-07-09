@@ -13,6 +13,7 @@
   "email_required": "Veuillez renseigner un email",
   "email_invalid": "Email invalide",
   "error": "Erreur",
+  "select_role": "Selectioner le role",
   "fill_all_fields": "Veuillez remplir tous les champs",
   "maintenance": "Nous sommes en maintenance, veuillez réessayer plus tard",
   "maintenance_work": "Nous travaillons actuellement sur le site, veuillez réessayer plus tard",

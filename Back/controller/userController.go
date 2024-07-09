@@ -253,3 +253,33 @@ func (ctrl *UserController) AddFcmToken(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, updatedUser)
 }
+
+func (ctrl *UserController) UpdateRoleUser(c *gin.Context) {
+
+	type RoleUpdateRequest struct {
+		Roles string `json:"roles" binding:"required"`
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	var req RoleUpdateRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	userUpdates := make(map[string]interface{})
+	userUpdates["roles"] = req.Roles
+
+	updatedUser, err := ctrl.service.UpdateUser(uint(id), userUpdates)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, updatedUser)
+
+}
