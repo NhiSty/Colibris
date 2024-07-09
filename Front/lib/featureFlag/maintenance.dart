@@ -25,7 +25,6 @@ class MaintenanceContent extends StatelessWidget {
         Container(
           color: Colors.black.withOpacity(0.7),
         ),
-        // Maintenance message
         Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),

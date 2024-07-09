@@ -85,7 +85,6 @@ void main() async {
   periodicStream.listen((event) async {
     var flags = await fetchFeatureFlags();
 
-    // verify for each flag if the value has changed
     for (var flag in flags) {
       var previousFlag = previousFlags.firstWhere(
         (previousFlag) => previousFlag.name == flag.name,

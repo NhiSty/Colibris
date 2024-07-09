@@ -527,6 +527,36 @@ paths:
       tags:
       - featureFlags
   /coloc/members:
+    get:
+      consumes:
+      - application/json
+      description: Get all colocation members
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.ColocMember'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all colocation members
+      tags:
+      - colocMembers
     post:
       consumes:
       - application/json
@@ -551,28 +581,6 @@ paths:
       security:
       - Bearer: []
       summary: Create a new colocation member
-      tags:
-      - colocMembers
-  /coloc/members/:
-    get:
-      consumes:
-      - application/json
-      description: Get all colocation members
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/model.ColocMember'
-            type: array
-        "400":
-          description: Bad Request
-          schema: {}
-      security:
-      - Bearer: []
-      summary: Get all colocation members
       tags:
       - colocMembers
   /coloc/members/{id}:
@@ -656,6 +664,70 @@ paths:
       security:
       - Bearer: []
       summary: Update the score of a colocation member
+      tags:
+      - colocMembers
+  /coloc/members/colocation/{colocId}:
+    get:
+      consumes:
+      - application/json
+      description: Get all colocation members by colocation
+      parameters:
+      - description: Colocation ID
+        in: path
+        name: colocId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.ColocMember'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all colocation members by colocation
+      tags:
+      - colocMembers
+  /coloc/members/search:
+    get:
+      consumes:
+      - application/json
+      description: Search colocation members
+      parameters:
+      - description: Search query
+        in: query
+        name: query
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.ColocMember'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Search colocation members
       tags:
       - colocMembers
   /colocations:

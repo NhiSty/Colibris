@@ -6,6 +6,7 @@
   "confirm": "Confirm",
   "delete": "Delete",
   "save": "Save",
+  "close": "Close",
   "no_result_found": "No result found",
   "error_during_search": "Error during search",
   "please_give_name": "Please give a name",
@@ -16,6 +17,7 @@
   "maintenance": "We are in maintenance mode",
   "maintenance_work": "Our team is currently working on some improvements. Please check back later.",
   "coloc_member": "Colocation member",
+  "score_must_be_positive": "Score must be positive",
 
   "_commentHome": "--------> Ecran profil utilisateur <---------",
   "home": "Home",
@@ -71,7 +73,7 @@
   "invit_colocation_title": "Invit a roommate",
   "invit_colocation_email": "Email",
   "invit_colocation_submit": "Send invitation",
-  "invit_colocation_user_already_here": "User already in colocation",
+  "invit_colocation_user_already_here": "User already in shared apartment",
   "invit_colocation_user_not_found": "User not found",
   "invit_colocation_invitation_sent": "Invitation sent",
 
@@ -259,5 +261,30 @@
   "backoffice_flipping_breadcrumb": " > Flipping",
   "backoffice_flipping_description": "Select the feature you want to enable or disable",
   "backoffice_flipping_fail_load_data": "Failed to load feature flags : ",
-  "backoffice_flipping_fail_update_data": "Failed to update feature flags : "
+  "backoffice_flipping_fail_update_data": "Failed to update feature flags : ",
+
+  "_commentBackOfficeColocMember": "--------> Ecran BackOffice coloc Member <---------",
+    "backoffice_colocMember_title": "Members by shared apartments",
+    "backoffice_colocMember_breadcrumb": " > Members by shared apartments",
+    "backoffice_colocMember_user_field": "User : ",
+    "backoffice_colocMember_owner_field": "Owned by : ",
+    "backoffice_colocMember_colocation_field": "Shared apartment : ",
+    "backoffice_colocMember_joined_date_field": "Joined at : ",
+    "backoffice_colocMember_score_field": "Score : ",
+    "backoffice_colocMember_search_coloc_members": "Search shared appartment members ...",
+    "backoffice_colocMember_add_coloc_member": "Add member in shared appartment",
+    "backoffice_colocMember_no_coloc_member_found": "No shared appartment member found",
+    "backoffice_colocMember_maps_title_colocation": "Map of : ",
+    "backoffice_colocMember_select_user_in_add_modal": "Select User",
+    "backoffice_colocMember_select_colocation_in_add_modal": "Select Shared apartment",
+    "backoffice_colocMember_please_select_user_in_add_modal": "Please select a user",
+    "backoffice_colocMember_please_select_colocation_in_add_modal": "Please select a shared apartment",
+    "backoffice_colocMember_user_deleted_successfully": "User in shared apartment deleted successfully",
+    "backoffice_colocMember_user_deleted_error": "Error while deleting user in shared apartment : ",
+    "backoffice_colocMember_user_delete": "Delete user in shared apartment",
+    "backoffice_colocMember_user_deleted_confirm": "Are you sure you want to delete this user in shared apartment ?",
+    "backoffice_colocMember_update_user": "Edit score",
+    "backoffice_colocMember_score_updated_successfully": "Score updated successfully",
+    "backoffice_colocMember_score_updated_error": "Error while updating score : "
+
 }
