@@ -17,6 +17,7 @@ type ColocMemberRepository interface {
 	GetColocationById(id int) (*model.Colocation, error)
 	GetAllColocMembersByColoc(colocationId int) ([]model.ColocMember, error)
 	DeleteColocMember(id int) error
+	IsMemberOfColocation(userID uint, colocationID uint) (bool, error)
 }
 
 func NewColocMemberService(db *gorm.DB) ColocMemberService {
@@ -57,6 +58,14 @@ func (s *ColocMemberService) GetAllColocMembersByColoc(colocationId int) ([]mode
 
 func (s *ColocMemberService) DeleteColocMember(id int) error {
 	return s.db.Delete(&model.ColocMember{}, id).Error
+}
+
+func (s *ColocMemberService) IsMemberOfColocation(userID int, colocationID uint) (bool, error) {
+	var count int64
+	result := s.db.Model(&model.ColocMember{}).
+		Where("user_id = ? AND colocation_id = ?", userID, colocationID).
+		Count(&count)
+	return count > 0, result.Error
 }
 
 func (s *ColocMemberService) GetDB() *gorm.DB {
