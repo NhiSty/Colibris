@@ -12,7 +12,7 @@ class TitleAndBreadcrumb extends StatelessWidget {
         const SizedBox(height: 16),
         GestureDetector(
           onTap: () {
-            Navigator.pop(context, "/home");
+            Navigator.pushNamed(context, "/home");
           },
           child: MouseRegion(
             cursor: SystemMouseCursors.click,

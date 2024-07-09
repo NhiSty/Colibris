@@ -64,32 +64,16 @@ Future<void> deleteUser(int userId) async {
 
 Future<List<User>> findUserInColoc(int colocId) async {
   try {
-    var headers = await addHeader();
+    final res = await fetchColoMembersByColoc(colocId);
 
-    final users = await getAllUsers();
-    final colocRes = await fetchColoMembersByColoc(colocId);
-
-    if (users.isNotEmpty && colocRes.isNotEmpty) {
-      List<ColocMembers> colocMembers = colocRes.map((coloc) => coloc).toList();
-
-      List<User> usersInColoc = users.where((user) {
-        return colocMembers.any((colocMember) {
-          return colocMember.userId == user.id;
-        });
-      }).toList();
-
-      for (var user in usersInColoc) {
-        for (var colocMember in colocMembers) {
-          if (colocMember.userId == user.id) {
-            user.colocMemberId = colocMember.id;
-            user.colocationId = colocMember.colocationId;
-          }
-        }
-      }
-
-      return usersInColoc;
+    if (res.statusCode == 200) {
+      print(res.data["result"]);
+      List<dynamic> data = res.data["result"];
+      List<User> users = data.map((user) => User.fromJson(user)).toList();
+      return users;
+    } else {
+      throw Exception('Failed to load users');
     }
-    return [];
   } on DioException catch (e) {
     _handleDioError(e);
     throw Exception('Failed to load users');

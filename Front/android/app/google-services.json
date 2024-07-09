@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "181795601522",
+    "project_id": "last-challenge-28301",
+    "storage_bucket": "last-challenge-28301.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181795601522:android:15feb24fd7165e1b5196eb",
+        "android_client_info": {
+          "package_name": "com.example.front"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhsXqyRHCqHoyc3nP0bGC8lE90R5oF500"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

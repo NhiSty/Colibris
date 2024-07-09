@@ -226,3 +226,30 @@ func (ctrl *UserController) GetUserByEmail(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, user)
 }
+
+func (ctrl *UserController) AddFcmToken(c *gin.Context) {
+	userIDFromToken, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to update this resource"})
+		return
+	}
+
+	var requestBody struct {
+		FcmToken string `json:"fcm_token" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	userUpdates := map[string]interface{}{
+		"fcm_token": requestBody.FcmToken,
+	}
+
+	updatedUser, err := ctrl.service.UpdateUser(userIDFromToken.(uint), userUpdates)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, updatedUser)
+}

@@ -22,13 +22,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: '^1.13.1'
+      - name: Run the docker-compose
+        run: docker compose up -d
+        if: success()
 
-      - name: Install dependencies
-        run: go mod tidy
+      - name: Run tests inside the container
+        run: |
+          sleep 25
+          docker-compose exec -T golang go test tests/utils.go tests/register_test.go
+          docker-compose exec -T golang go test tests/utils.go tests/login_test.go
+          docker-compose exec -T golang go test tests/utils.go tests/colocation_test.go
+          docker-compose exec -T golang go test tests/utils.go tests/featureFlag_test.go
+          docker-compose exec -T golang go test tests/utils.go tests/colocMember_test.go
+          docker-compose exec -T golang go test tests/utils.go tests/invitation_test.go
 
-      - name: Run tests
-        run: cd tests && go test -v ./...
