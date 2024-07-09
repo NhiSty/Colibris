@@ -60,7 +60,6 @@ class TaskListItem extends StatelessWidget {
                             // Assuming `item` has an ID or some identifier to match with votes
                             final voteIndex = votes.indexWhere((vote) => vote.taskId == item.id);
                             final vote = voteIndex != -1 ? votes.elementAt(voteIndex) : null;
-                            final taskIsAlreadyVoted = vote != null;
 
                             return PopupMenuButton(
                               itemBuilder: (context) =>
