@@ -252,6 +252,15 @@
     "backoffice_colocation_deleted_error": "Error while deleting shared apartment : ",
     "backoffice_colocation_colocation_not_found_after_search": "No shared apartment found after search",
 
+  "_commentBackOfficeChat": "--------> Ecran BackOffice Chat <---------",
+    "backoffice_chat_title": "Manage conversations",
+    "backoffice_chat_breadcrumb": " > Chats",
+    "backoffice_chat_no_chat": "No conversation found",
+    "backoffice_chat_owned_by": "Owned by ",
+    "backoffice_chat_error_loading_owner_info": "Error while loading owner info",
+    "backoffice_chat_no_description": "No description",
+    "backoffice_chat_search": "Conversation ...",
+
   "_commentBackOfficeFlipping": "--------> Ecran BackOffice Flipping <---------",
     "backoffice_flipping_title": "Handle flipping feature",
     "backoffice_flipping_breadcrumb": " > Flipping",

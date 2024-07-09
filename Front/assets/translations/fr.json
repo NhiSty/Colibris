@@ -252,6 +252,15 @@
     "backoffice_colocation_deleted_error": "Erreur lors de la suppression de la colocation : ",
     "backoffice_colocation_colocation_not_found_after_search": "Aucune colocation trouvé avec cette recherche",
 
+  "_commentBackOfficeChat": "--------> Ecran BackOffice Colocation <---------",
+    "backoffice_chat_title": "Gestion des chats",
+  "backoffice_chat_breadcrumb": " > Chats",
+    "backoffice_chat_no_chat": "Aucune chat trouvée",
+    "backoffice_chat_owned_by": "De ",
+    "backoffice_chat_error_loading_owner_info": "Erreur lors du chargement des informations du propriétaire",
+    "backoffice_chat_no_description": "Aucune descrption",
+    "backoffice_chat_search": "Recherche chat",
+
   "_commentBackOfficeFlipping": "--------> Ecran BackOffice Flipping <---------",
     "backoffice_flipping_title": "Maintenance",
     "backoffice_flipping_breadcrumb": " > Maintenance",
