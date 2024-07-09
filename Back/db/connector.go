@@ -27,7 +27,24 @@ func Connect() *gorm.DB {
 }
 
 func Migrate(db *gorm.DB) {
-	err := db.AutoMigrate(
+
+	// delete all tables
+	err := db.Migrator().DropTable(
+		&model.User{},
+		&model.Colocation{},
+		&model.ColocMember{},
+		&model.ResetPassword{},
+		&model.Invitation{},
+		&model.Log{},
+		&model.Task{},
+		&model.Message{},
+		&model.FeatureFlag{},
+	)
+	if err != nil {
+		return
+	}
+
+	err = db.AutoMigrate(
 		&model.User{},
 		&model.Colocation{},
 		&model.ColocMember{},
@@ -41,6 +58,7 @@ func Migrate(db *gorm.DB) {
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
+
 	// Create the admin user if it does not exist
 	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.User{
 		Email: "admin@admin.com",
@@ -49,6 +67,15 @@ func Migrate(db *gorm.DB) {
 		Firstname: "admin",
 		Lastname:  "admin",
 		Roles:     model.ROLE_ADMIN,
+	})
+
+	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.User{
+		Email: "test@gmail.com",
+		// test123!
+		Password:  "$2a$10$cFrne/rnK4JoEJn.bwdDJetpjbivABHtK/oy2/dYNjs6QUj7Fn0Pi",
+		Firstname: "user",
+		Lastname:  "user",
+		Roles:     model.ROLE_USER,
 	})
 
 	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.FeatureFlag{
