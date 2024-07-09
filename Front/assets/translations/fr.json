@@ -87,6 +87,13 @@
   "task_action_edit": "Modifier",
   "task_action_like": "Voter",
   "task_action_delete": "Supprimer",
+  "give_your_opinion": "Donnez votre avis",
+  "are_you_satisfied_with_the_work_done_by_one_of_your_flatmates": "Êtes-vous satisfait de la tâche effectuée par l'un de vos colocataires ?",
+  "your_opinion_has_been_taken_into_account": "Votre avis a été pris en compte",
+  "error_votingTaskOver3DaysOld": "Vote fermé, la tâche à plus de 3 jours",
+  "error_votingTaskAlreadyVoted": "Vous avez déjà voté pour cette tâche",
+  "error_votingTaskCantVoteForYourself": "Vous ne pouvez pas voter pour vous-même",
+  "error_votingTaskCantVoteForTaskNotInYourColocation": "Vous ne pouvez pas voter pour une tâche qui n'est pas dans votre colocation",
 
   "_commentAddTask": "--------> Ecran Ajout tache <---------",
   "task_create_title": "Ajouter une nouvelle tâche",

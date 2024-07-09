@@ -87,6 +87,13 @@
   "task_action_edit": "Edit",
   "task_action_like": "Vote",
   "task_action_delete": "Delete",
+  "give_your_opinion": "Give your opinion",
+  "are_you_satisfied_with_the_work_done_by_one_of_your_flatmates": "Are you satisfied with the work done by one of your flatmates?",
+  "your_opinion_has_been_taken_into_account": "Your opinion has been taken into account",
+  "error_votingTaskOver3DaysOld": "No voting on tasks over 3 days old.",
+  "error_votingTaskAlreadyVoted": "You have already voted for this task.",
+  "error_votingTaskCantVoteForYourself": "You can't vote for yourself",
+  "error_votingTaskCantVoteForTaskNotInYourColocation": "You can't vote for a task that is not in your shared apartment",
 
   "_commentAddTask": "--------> Ecran Ajout tache <---------",
   "task_create_title": "Add new task",

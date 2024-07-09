@@ -5,7 +5,7 @@ import 'package:front/vote/vote.dart';
 import '../utils/dio.dart';
 import '../website/share/secure_storage.dart';
 
-Future<int> addVote(int taskId, int value) async {
+Future<dynamic> addVote(int taskId, int value) async {
   var headers = await addHeader();
   try {
     var response = await dio.post(
@@ -16,9 +16,20 @@ Future<int> addVote(int taskId, int value) async {
       },
       options: Options(headers: headers),
     );
-    print(response.data);
-    return response.statusCode!;
+
+    return {
+      'statusCode': response.statusCode,
+      'data': response.data,
+    };
   } on DioException catch (e) {
+
+    if (e.response?.statusCode == 422) {
+      return {
+        'statusCode': 422,
+        'data': e.response?.data,
+      };
+    }
+
     log('Dio error!');
     log('Response status: ${e.response!.statusCode}');
     log('Response data: ${e.response!.data}');
@@ -49,7 +60,7 @@ Future<List<Vote>> fetchUserVotes() async {
   }
 }
 
-Future<int> updateVote(int voteId, int value) async {
+Future<dynamic> updateVote(int voteId, int value) async {
   var headers = await addHeader();
 
   try {
@@ -60,12 +71,16 @@ Future<int> updateVote(int voteId, int value) async {
         'value': value
       }
     );
-    return response.statusCode!;
+    return {
+      'statusCode': response.statusCode,
+      'data': response.data,
+    };
 
   } on DioException catch (e) {
     log('Dio error!');
     log('Response status: ${e.response!.statusCode}');
     log('Response data: ${e.response!.data}');
+
     throw Exception('Failed to update vote with id : $voteId');
   }
 }
