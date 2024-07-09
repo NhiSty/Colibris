@@ -129,18 +129,22 @@ class MyApp extends StatelessWidget {
         ),
         home: isFeatureEnabled('maintenance', featureFlag)
             ? const MaintenanceScreen()
-            : const LoginScreen(),
+            : const HomeScreen(),
+        initialRoute: '/login',
         debugShowCheckedModeBanner: false,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         routes: {
-          '/login': (context) => const LoginScreen(),
+          '/login': (context) =>
+              const PopScope(canPop: false, child: LoginScreen()),
           '/register': (context) => const RegisterScreen(),
-          '/home': (context) => const Scaffold(
+          '/home': (context) => const PopScope(
+              canPop: false,
+              child: Scaffold(
                 body: HomeScreen(),
                 bottomNavigationBar: BottomNavigationBarWidget(null),
-              ),
+              )),
           '/create_colocation': (context) => const CreateColocationPage(),
           '/profile': (context) => const Scaffold(
                 body: ProfileScreen(),
