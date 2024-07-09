@@ -71,11 +71,18 @@ class _ConversationScreenState extends State<ConversationScreen> {
     _channel.stream.listen((message) {
       try {
         final data = json.decode(message);
-        final newMessage = Message.fromJson(data);
-        setState(() {
-          _messages.add(newMessage);
-          _scrollToBottom();
-        });
+        if (data["type"] == "delete") {
+          final messageId = data["messageID"];
+          setState(() {
+            _messages.removeWhere((msg) => msg.id == messageId);
+          });
+        } else {
+          final newMessage = Message.fromJson(data);
+          setState(() {
+            _messages.add(newMessage);
+            _scrollToBottom();
+          });
+        }
       } catch (e) {
         print("WebSocket message error: $e");
       }
@@ -93,6 +100,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
       _scrollToBottom();
     }
   }
+
 
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -14,6 +14,7 @@ import 'package:front/website/pages/backoffice/colocations/bloc/colocation_bloc.
 import 'package:front/website/pages/backoffice/feature_toggle_page.dart';
 import 'package:front/website/pages/backoffice/log_handle_page.dart';
 import 'package:front/website/pages/backoffice/logs/bloc/log_bloc.dart';
+import 'package:front/website/pages/backoffice/messages_handle_page.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
 import 'package:front/website/pages/backoffice/user_handle_page.dart';
 import 'package:front/website/pages/home_page.dart';
@@ -78,6 +79,22 @@ class MyApp extends StatelessWidget {
           '/feature-flipping': (context) => const FeatureTogglePage(),
           '/backoffice/coloc-members': (context) =>
               const ColocMemberHandlePage(),
+        },
+        onGenerateRoute: (settings) {
+          print('Generating route for: ${settings.name}');
+          final Uri uri = Uri.parse(settings.name ?? '');
+
+          if (uri.pathSegments.length == 4 &&
+              uri.pathSegments[0] == 'backoffice' &&
+              uri.pathSegments[1] == 'colocations' &&
+              uri.pathSegments[3] == 'messages') {
+            final colocationId = uri.pathSegments[2];
+            return MaterialPageRoute(
+              builder: (context) =>
+                  MessagesHandlePage(colocationId: int.parse(colocationId)),
+            );
+          }
+          return null;
         },
       ),
     );

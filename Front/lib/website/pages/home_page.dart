@@ -128,8 +128,6 @@ class _HomePageState extends State<HomePage> {
               '/backoffice/coloc-members',
               'backoffice_homepage_coloc_members_description'.tr(),
               Icons.group),
-          _buildCard(context, 'backoffice_homepage_messages'.tr(), '/messages',
-              'backoffice_homepage_messages_description'.tr(), Icons.build),
           _buildCard(context, 'backoffice_homepage_tasks'.tr(), '/tasks',
               'backoffice_homepage_tasks_description'.tr(), Icons.check),
           _buildCard(
