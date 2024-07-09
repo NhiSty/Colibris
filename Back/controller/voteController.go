@@ -4,6 +4,7 @@ import (
 	"Colibris/dto"
 	"Colibris/model"
 	"Colibris/service"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -25,6 +26,15 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 	userIDFromToken, exists := c.Get("userID")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	// Recover colocMember by userId
+	var colocMemberService = service.NewColocMemberService(ctl.voteService.GetDB())
+	colocMember, err := colocMemberService.GetColocMemberByUserId(int(userIDFromToken.(uint)))
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err.Error())
 		return
 	}
 
@@ -90,6 +100,57 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 		return
 	}
 
+	// Get all votes by taskId
+	votes, err := ctl.voteService.GetVotesByTaskId(int(req.TaskID))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	var positiveVotes = 0
+	var negativeVotes = 0
+
+	// make percentage of votes positive (1) and negative (-1)
+
+	for _, vote := range votes {
+		if vote.Value == 1 {
+			positiveVotes += 1
+		} else {
+			negativeVotes += 1
+		}
+
+	}
+
+	var colocMemberNewScore = colocMember.Score
+	var taskWithNewValidation = make(map[string]interface{})
+
+	var percentagePositiveVotes = (positiveVotes / len(votes)) * 100
+	var percentageNegativeVotes = (negativeVotes / len(votes)) * 100
+
+	fmt.Println("percentagePositiveVotes: %f", percentagePositiveVotes)
+	fmt.Println("percentageNegativeVotes: %f", percentageNegativeVotes)
+
+	// if more than 50% of votes are positive, the task is validated and the score of the colocMember is incremented, but only one time
+	if percentagePositiveVotes > 50 && task.Validate == false {
+		fmt.Println("task validated, score: %f", colocMemberNewScore)
+		taskWithNewValidation["validate"] = true
+		colocMemberNewScore += float32(task.Pts)
+	} else if percentageNegativeVotes >= 50 && task.Validate == true {
+		taskWithNewValidation["validate"] = false
+		colocMemberNewScore = colocMemberNewScore - float32(task.Pts)
+		fmt.Printf("task not validated, score: %f", colocMemberNewScore)
+	}
+
+	if err := colocMemberService.UpdateColocMemberScore(int(colocMember.ID), colocMemberNewScore); err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if _, err := taskService.UpdateTask(req.TaskID, taskWithNewValidation); err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
 	c.JSON(http.StatusCreated, gin.H{
 		"Message": "vote added successfully",
 	})
@@ -115,6 +176,15 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 	userIDFromToken, exists := c.Get("userID")
 	if !exists && !service.IsAdmin(c) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	// Recover colocMember by userId
+	var colocMemberService = service.NewColocMemberService(ctl.voteService.GetDB())
+	colocMember, err := colocMemberService.GetColocMemberByUserId(int(userIDFromToken.(uint)))
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err.Error())
 		return
 	}
 
@@ -174,6 +244,57 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 	}
 
 	if _, err := ctl.voteService.UpdateVote(voteId, voteUpdates); err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	// Get all votes by taskId
+	votes, err := ctl.voteService.GetVotesByTaskId(int(task.ID))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	var positiveVotes = 0
+	var negativeVotes = 0
+
+	// make percentage of votes positive (1) and negative (-1)
+
+	for _, vote := range votes {
+		if vote.Value == 1 {
+			positiveVotes += 1
+		} else {
+			negativeVotes += 1
+		}
+
+	}
+
+	var colocMemberNewScore = colocMember.Score
+	var taskWithNewValidation = make(map[string]interface{})
+
+	var percentagePositiveVotes = (positiveVotes / len(votes)) * 100
+	var percentageNegativeVotes = (negativeVotes / len(votes)) * 100
+
+	fmt.Println("percentagePositiveVotes: %f", percentagePositiveVotes)
+	fmt.Println("percentageNegativeVotes: %f", percentageNegativeVotes)
+
+	// if more than 50% of votes are positive, the task is validated and the score of the colocMember is incremented, but only one time
+	if percentagePositiveVotes > 50 && task.Validate == false {
+		fmt.Println("task validated, score: %f", colocMemberNewScore)
+		taskWithNewValidation["validate"] = true
+		colocMemberNewScore += float32(task.Pts)
+	} else if percentageNegativeVotes >= 50 && task.Validate == true {
+		taskWithNewValidation["validate"] = false
+		colocMemberNewScore = colocMemberNewScore - float32(task.Pts)
+		fmt.Printf("task not validated, score: %f", colocMemberNewScore)
+	}
+
+	if err := colocMemberService.UpdateColocMemberScore(int(colocMember.ID), colocMemberNewScore); err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if _, err := taskService.UpdateTask(task.ID, taskWithNewValidation); err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
