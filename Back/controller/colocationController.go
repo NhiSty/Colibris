@@ -266,7 +266,7 @@ func (ctl *ColocationController) DeleteColocation(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusNoContent, gin.H{
 		"Message": "colocation deleted successfully",
 	})
 }
