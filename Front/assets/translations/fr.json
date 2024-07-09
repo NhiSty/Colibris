@@ -15,6 +15,7 @@
   "fill_all_fields": "Veuillez remplir tous les champs",
   "maintenance": "Nous sommes en maintenance, veuillez réessayer plus tard",
   "maintenance_work": "Nous travaillons actuellement sur le site, veuillez réessayer plus tard",
+  "coloc_member": "Membre de la colocation",
 
   "_commentHome": "--------> Ecran profil utilisateur <---------",
   "home": "Accueil",
@@ -43,6 +44,7 @@
   "coloc_settings_delete_colocation": "Supprimer la colocation",
   "coloc_settings_delete_colocation_confirm": "Êtes-vous sûr de vouloir supprimer cette colocation ?",
   "coloc_settings_no_roommates_to_ban": "Aucun colocataire à exclure",
+  "coloc_settings_no_roommates": "Aucun colocataire trouvé",
 
   "_commentCreateColocation": "--------> Ecran cree colocation <---------",
   "create_colocation_title": "Créer une colocation",

@@ -10,6 +10,7 @@ import 'package:front/auth/register.dart';
 import 'package:front/chat/screens/conversation_screen.dart';
 import 'package:front/colocation/bloc/colocation_bloc.dart';
 import 'package:front/colocation/colocation_members.dart';
+import 'package:front/colocation/colocation_members_list.dart';
 import 'package:front/colocation/colocation_parameters.dart';
 import 'package:front/colocation/colocation_tasklist_screen.dart';
 import 'package:front/colocation/colocation_update.dart';
@@ -205,6 +206,12 @@ class MyApp extends StatelessWidget {
             case '/colocation_members':
               return MaterialPageRoute(
                 builder: (context) => ColocationMembers(
+                  users: routes['users'],
+                ),
+              );
+            case '/colocation_members_list':
+              return MaterialPageRoute(
+                builder: (context) => ColocationMembersList(
                   users: routes['users'],
                 ),
               );

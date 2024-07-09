@@ -162,8 +162,42 @@ func (ctl *ColocMemberController) GetAllColocMembersByColoc(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
+
+	userServce := service.NewUserService(ctl.colocService.GetDB())
+	users, _, err := userServce.GetAllUsers(0, 0)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	usersInColoc := make([]dto.UserInColoc, 0)
+
+	// Find the user in the list of users
+
+	for _, colocMember := range colocMembers {
+		for _, user := range users {
+			if colocMember.UserID == user.ID {
+				if userIdFromToken == user.ID {
+					continue
+				} else {
+					var userData = dto.UserInColoc{
+						ID:            user.ID,
+						Email:         user.Email,
+						FirstName:     user.Firstname,
+						LastName:      user.Lastname,
+						Score:         int(colocMember.Score),
+						ColocMemberID: colocMember.ID,
+					}
+
+					usersInColoc = append(usersInColoc, userData)
+
+				}
+			}
+		}
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"colocMembers": colocMembers,
+		"result": usersInColoc,
 	})
 }
 
