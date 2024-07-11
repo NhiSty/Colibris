@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class BottomNavigationBarWidget extends StatelessWidget {
   const BottomNavigationBarWidget(this.chatId, {super.key});
@@ -108,7 +109,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
         if (index >= 0 && index < routes.length) {
           final newRoute = routes[index];
           if (newRoute.isNotEmpty && newRoute != currentRoute) {
-            Navigator.pushNamed(context, newRoute, arguments: {
+            context.push(newRoute, extra: {
               'chatId': chatId,
             });
           }

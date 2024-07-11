@@ -5,12 +5,13 @@ import 'package:front/services/user_service.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 void showEditUserDialog(BuildContext context, User user) {
   TextEditingController firstNameController =
-  TextEditingController(text: user.firstname);
+      TextEditingController(text: user.firstname);
   TextEditingController lastNameController =
-  TextEditingController(text: user.lastname);
+      TextEditingController(text: user.lastname);
 
   String selectedRole = user.roles;
 
@@ -30,10 +31,10 @@ void showEditUserDialog(BuildContext context, User user) {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child:
-                  Text('backoffice_users_user_updated_successfully'.tr()),
+                      Text('backoffice_users_user_updated_successfully'.tr()),
                 ),
               ));
-              Navigator.pop(context);
+              context.pop();
             } else if (state is UserError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Container(
@@ -74,9 +75,9 @@ void showEditUserDialog(BuildContext context, User user) {
                     onPressed: (index) {
                       String newRole = index == 0 ? 'ROLE_USER' : 'ROLE_ADMIN';
                       context.read<UserBloc>().add(UpdateUserRole(
-                        id: user.id.toString(),
-                        roles: newRole,
-                      ));
+                            id: user.id.toString(),
+                            roles: newRole,
+                          ));
                       selectedRole = newRole; // Update the local selectedRole
                     },
                     children: [
@@ -99,7 +100,7 @@ void showEditUserDialog(BuildContext context, User user) {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: Text('cancel'.tr()),
               ),

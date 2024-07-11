@@ -2,10 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/reset-password/reset_password_bloc.dart';
+import 'package:front/reset-password/reset_password_form.dart';
 import 'package:front/validators.dart';
+import 'package:go_router/go_router.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
+  static const routeName = "/reset-password";
 
   @override
   _ResetPasswordScreenState createState() => _ResetPasswordScreenState();
@@ -38,15 +41,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(state.message)),
                     );
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/login', (route) => false);
+                    context.go('/login');
                   } else if (state is ResetPasswordEmailSent) {
                     setState(() {
                       _isEmailSent = true;
                     });
                   } else if (state is ResetPasswordCodeVerified) {
-                    Navigator.pushNamed(context, '/reset-password-form',
-                        arguments: state.code);
+                    context.push(ResetPasswordFormScreen.routeName,
+                        extra: state.code);
                   }
                 },
                 builder: (context, state) {

@@ -11,7 +11,9 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 class MessagesHandlePage extends StatefulWidget {
   final int colocationId;
 
-  MessagesHandlePage({required this.colocationId});
+  const MessagesHandlePage({super.key, required this.colocationId});
+
+  static const routeName = "/backoffice/colocations/messages";
 
   @override
   _MessagesHandlePageState createState() => _MessagesHandlePageState();
@@ -55,7 +57,7 @@ class _MessagesHandlePageState extends State<MessagesHandlePage> {
   Future<void> _fetchMessages() async {
     try {
       List<Message> messages =
-      await apiService.getMessages(widget.colocationId);
+          await apiService.getMessages(widget.colocationId);
       setState(() {
         _messages = messages;
         _scrollToBottom();
@@ -72,9 +74,10 @@ class _MessagesHandlePageState extends State<MessagesHandlePage> {
 
       if (dotenv.env['ENVIRONMENT'] == 'prod') {
         url =
-        'wss://back.colibris.live/api/v1/chat/colocations/${widget.colocationId}/admin/ws?token=$token';
+            'wss://back.colibris.live/api/v1/chat/colocations/${widget.colocationId}/admin/ws?token=$token';
       } else {
-        url = 'ws://localhost:8080/api/v1/chat/colocations/${widget.colocationId}/admin/ws?token=$token';
+        url =
+            'ws://localhost:8080/api/v1/chat/colocations/${widget.colocationId}/admin/ws?token=$token';
       }
 
       _channel = WebSocketChannel.connect(Uri.parse(url));
@@ -119,7 +122,6 @@ class _MessagesHandlePageState extends State<MessagesHandlePage> {
     }
   }
 
-
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
@@ -143,7 +145,6 @@ class _MessagesHandlePageState extends State<MessagesHandlePage> {
       _messages.removeAt(index);
     });
   }
-
 
   String _formatTimestamp(DateTime timestamp) {
     final now = DateTime.now();
@@ -202,8 +203,10 @@ class _MessagesHandlePageState extends State<MessagesHandlePage> {
                             : Alignment.centerLeft,
                         child: Container(
                           constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width * 0.75),
-                          margin: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                              maxWidth:
+                                  MediaQuery.of(context).size.width * 0.75),
+                          margin:
+                              EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: isUserMessage
@@ -212,10 +215,12 @@ class _MessagesHandlePageState extends State<MessagesHandlePage> {
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(8),
                               topRight: Radius.circular(8),
-                              bottomLeft:
-                              isUserMessage ? Radius.circular(8) : Radius.zero,
-                              bottomRight:
-                              isUserMessage ? Radius.zero : Radius.circular(8),
+                              bottomLeft: isUserMessage
+                                  ? Radius.circular(8)
+                                  : Radius.zero,
+                              bottomRight: isUserMessage
+                                  ? Radius.zero
+                                  : Radius.circular(8),
                             ),
                           ),
                           child: Row(
@@ -275,7 +280,7 @@ class _MessagesHandlePageState extends State<MessagesHandlePage> {
                   child: TextField(
                     controller: _messageController,
                     decoration:
-                    InputDecoration(hintText: 'chat_enter_message'.tr()),
+                        InputDecoration(hintText: 'chat_enter_message'.tr()),
                     onTap: _scrollToBottom,
                   ),
                 ),

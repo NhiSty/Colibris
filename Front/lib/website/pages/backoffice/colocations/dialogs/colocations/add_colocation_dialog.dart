@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:front/website/pages/backoffice/colocations/bloc/colocation_bloc.dart';
 import 'package:front/website/pages/backoffice/colocations/bloc/colocation_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
+import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
 class AddressResult {
@@ -43,7 +44,7 @@ void showAddColocationDialog(BuildContext context) {
                   child: Text('create_colocation_created_successfully'.tr()),
                 ),
               ));
-              Navigator.pop(context);
+              context.pop();
             } else if (state is ColocationError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Container(
@@ -217,7 +218,7 @@ void showAddColocationDialog(BuildContext context) {
                 actions: [
                   TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      context.pop();
                     },
                     child: Text('cancel'.tr()),
                   ),

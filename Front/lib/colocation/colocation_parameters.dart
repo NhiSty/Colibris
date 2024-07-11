@@ -1,11 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:front/colocation/colocation_members.dart';
+import 'package:front/colocation/colocation_members_list.dart';
 import 'package:front/colocation/colocation_service.dart';
+import 'package:front/colocation/colocation_update.dart';
+import 'package:front/home_screen.dart';
+import 'package:front/invitation/invitation_create_page.dart';
 import 'package:front/user/user_service.dart';
+import 'package:go_router/go_router.dart';
 
 class ColocationSettingsPage extends StatelessWidget {
   const ColocationSettingsPage({super.key, required this.colocationId});
   final int colocationId;
+  static const routeName = "/colocation-manage";
 
   Future<void> _showDeleteConfirmationDialog(BuildContext context) async {
     return showDialog<void>(
@@ -19,7 +26,7 @@ class ColocationSettingsPage extends StatelessWidget {
             TextButton(
               child: Text('cancel'.tr()),
               onPressed: () {
-                Navigator.of(context).pop();
+                context.pop();
               },
             ),
             TextButton(
@@ -28,7 +35,7 @@ class ColocationSettingsPage extends StatelessWidget {
                 var res = await deleteColocation(colocationId);
                 if (res == 200) {
                   if (!context.mounted) return;
-                  Navigator.pushNamed(context, '/home');
+                  context.push(HomeScreen.routeName);
                 }
               },
             ),
@@ -52,8 +59,8 @@ class ColocationSettingsPage extends StatelessWidget {
             onTap: () async {
               var res = await findUserInColoc(colocationId);
               if (res.isNotEmpty) {
-                Navigator.pushNamed(context, '/colocation_members_list',
-                    arguments: {'users': res});
+                context.push(ColocationMembersList.routeName,
+                    extra: {'users': res});
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('coloc_settings_no_roommates'.tr()),
@@ -65,16 +72,16 @@ class ColocationSettingsPage extends StatelessWidget {
             title: Text('coloc_settings_modify_colocation'.tr()),
             trailing: const Icon(Icons.arrow_forward),
             onTap: () {
-              Navigator.pushNamed(context, '/colocation_update',
-                  arguments: {'colocationId': colocationId});
+              context.push(ColocationUpdatePage.routeName,
+                  extra: {'colocationId': colocationId});
             },
           ),
           ListTile(
             title: Text('coloc_settings_invit_coloc_roommate'.tr()),
             trailing: const Icon(Icons.arrow_forward),
             onTap: () {
-              Navigator.pushNamed(context, '/create_invitation',
-                  arguments: {'colocationId': colocationId});
+              context.push(InvitationCreatePage.routeName,
+                  extra: {'colocationId': colocationId});
             },
           ),
           ListTile(
@@ -83,8 +90,9 @@ class ColocationSettingsPage extends StatelessWidget {
             onTap: () async {
               var res = await findUserInColoc(colocationId);
               if (res.isNotEmpty) {
-                Navigator.pushNamed(context, '/colocation_members',
-                    arguments: {'users': res});
+                context.push(ColocationMembers.routeName,
+                    extra: {'users': res});
+                
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('coloc_settings_no_roommates_to_ban'.tr()),

@@ -5,6 +5,7 @@ import 'package:front/website/share/secure_storage.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+  static const routeName = "/profile";
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();

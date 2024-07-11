@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
 import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 void showAddColocMemberDialog(BuildContext context) {
   context.read<ColocMemberBloc>().add(LoadAllUsersAndColocations());
@@ -46,7 +47,7 @@ class _AddColocMemberDialogState extends State<AddColocMemberDialog> {
               content: Text(state.message),
               backgroundColor: Colors.green,
             ));
-            Navigator.of(context).pop();
+            context.pop();
           } else if (state is ColocMemberError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(state.message),
@@ -124,7 +125,7 @@ class _AddColocMemberDialogState extends State<AddColocMemberDialog> {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            context.pop();
           },
           child: Text('cancel'.tr()),
         ),

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
 import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 void showEditColocMemberDialog(
     BuildContext context, int colocMemberId, double score) {
@@ -30,7 +31,7 @@ void showEditColocMemberDialog(
                       'backoffice_colocMember_score_updated_successfully'.tr()),
                 ),
               ));
-              Navigator.pop(context);
+              context.pop();
             } else if (state is ColocMemberError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Container(
@@ -66,7 +67,7 @@ void showEditColocMemberDialog(
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: Text('cancel'.tr()),
               ),

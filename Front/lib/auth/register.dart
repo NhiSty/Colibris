@@ -1,12 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/auth/auth_service.dart';
+import 'package:front/auth/login.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
+  static const routeName = "/register";
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -68,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           _firstNameController.text,
                           _lastNameController.text,
                         );
-                        Navigator.pushNamed(context, '/login');
+                        context.push(LoginScreen.routeName);
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -85,7 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/login');
+                    context.push(LoginScreen.routeName);
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.green,
@@ -145,7 +148,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  context.pop();
                 },
                 child: const Text('OK'),
               ),
@@ -163,7 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  context.pop();
                 },
                 child: const Text('OK'),
               ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:front/colocation/colocation.dart';
 import 'package:front/task/task_form.dart';
 import 'package:front/task/task_service.dart';
+import 'package:go_router/go_router.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   final Colocation colocation;
@@ -21,49 +22,43 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   }
 
   Future<int> _submitForm(
-      String title,
-      String description,
-      String date,
-      int duration,
-      String picture,
-      int colocationId,
-      ) async {
+    String title,
+    String description,
+    String date,
+    int duration,
+    String picture,
+    int colocationId,
+  ) async {
     return await createTask(
-        title,
-        description,
-        date,
-        duration,
-        picture,
-        colocationId
-    );
+        title, description, date, duration, picture, colocationId);
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.green,
-            title: Text(
-              'task_create_title'.tr(),
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-          body: SingleChildScrollView(
-            child: TaskForm(
-              colocationId: widget.colocation.id,
-              submitForm: _submitForm,
-              onSuccessfulSubmit: () {
-                Navigator.pop(context, true);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('task_create_success'.tr()),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-              },
-            ),
-          ),
-        ));
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        title: Text(
+          'task_create_title'.tr(),
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: TaskForm(
+          colocationId: widget.colocation.id,
+          submitForm: _submitForm,
+          onSuccessfulSubmit: () {
+            context.pop(true);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('task_create_success'.tr()),
+                backgroundColor: Colors.green,
+              ),
+            );
+          },
+        ),
+      ),
+    ));
   }
 }

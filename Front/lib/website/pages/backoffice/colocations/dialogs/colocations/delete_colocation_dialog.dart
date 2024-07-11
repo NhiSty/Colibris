@@ -5,6 +5,7 @@ import 'package:front/colocation/colocation.dart';
 import 'package:front/website/pages/backoffice/colocations/bloc/colocation_bloc.dart';
 import 'package:front/website/pages/backoffice/colocations/bloc/colocation_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 void showDeleteColocationDialog(BuildContext context, Colocation coloc) {
   showDialog(
@@ -26,7 +27,7 @@ void showDeleteColocationDialog(BuildContext context, Colocation coloc) {
                       Text('backoffice_colocation_deleted_successfully'.tr()),
                 ),
               ));
-              Navigator.pop(context);
+              context.pop();
             } else if (state is ColocationError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Container(
@@ -48,7 +49,7 @@ void showDeleteColocationDialog(BuildContext context, Colocation coloc) {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: Text('cancel'.tr()),
               ),

@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/invitation/invitation_service.dart';
+import 'package:go_router/go_router.dart';
 
 class InvitationCreatePage extends StatefulWidget {
   const InvitationCreatePage({super.key, required this.colocationId});
   final int colocationId;
+  static const routeName = "/create-invitation";
 
   @override
   _InvitationCreatePageState createState() => _InvitationCreatePageState();
@@ -67,7 +69,7 @@ class _InvitationCreatePageState extends State<InvitationCreatePage> {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text('invit_colocation_invitation_sent'.tr()),
                         backgroundColor: Colors.green));
-                    Navigator.pop(context);
+                    context.pop();
                   }
                 },
                 style: ButtonStyle(

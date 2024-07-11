@@ -2,11 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/colocation/colocation_service.dart';
+import 'package:front/home_screen.dart';
 import 'package:front/invitation/bloc/invitation_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class InvitationAcceptPage extends StatefulWidget {
   final int colocationId;
   final int invitationId;
+
+  static const routeName = "/invitation/accept";
 
   const InvitationAcceptPage(
       {super.key, required this.colocationId, required this.invitationId});
@@ -59,7 +63,7 @@ class _InvitationAcceptPageState extends State<InvitationAcceptPage> {
                                   InvitationAccept(
                                       state: 'accepted',
                                       invitationId: widget.invitationId));
-                              Navigator.pushNamed(context, '/home');
+                              context.push(HomeScreen.routeName);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green,
@@ -74,7 +78,7 @@ class _InvitationAcceptPageState extends State<InvitationAcceptPage> {
                                   InvitationReject(
                                       state: 'declined',
                                       invitationId: widget.invitationId));
-                              Navigator.pushNamed(context, '/home');
+                              context.push(HomeScreen.routeName);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,

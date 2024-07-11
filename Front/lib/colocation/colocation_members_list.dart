@@ -5,6 +5,7 @@ class ColocationMembersList extends StatelessWidget {
   final List<User> users;
 
   const ColocationMembersList({super.key, required this.users});
+  static const routeName = "/colocation-members-list"; 
 
   @override
   Widget build(BuildContext context) {

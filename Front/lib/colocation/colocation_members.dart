@@ -1,13 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/ColocMembers/colocMembers_service.dart';
+import 'package:front/colocation/colocation_parameters.dart';
 import 'package:front/user/user.dart';
 import 'package:front/website/share/secure_storage.dart';
+import 'package:go_router/go_router.dart';
 
 class ColocationMembers extends StatelessWidget {
   final List<User> users;
 
   const ColocationMembers({super.key, required this.users});
+  static const routeName = "/colocation-members";
 
   Future<void> _showDeleteConfirmationDialog(BuildContext context, user) async {
     return showDialog<void>(
@@ -21,7 +24,7 @@ class ColocationMembers extends StatelessWidget {
             TextButton(
               child: Text('cancel'.tr()),
               onPressed: () {
-                Navigator.of(context).pop();
+                context.pop();
               },
             ),
             TextButton(
@@ -30,8 +33,8 @@ class ColocationMembers extends StatelessWidget {
                 var res = await deleteColocMember(user.colocMemberId!);
                 if (res == 200) {
                   if (!context.mounted) return;
-                  Navigator.pushNamed(context, '/colocation_manage',
-                      arguments: {'colocationId': user.colocationId});
+                  context.push(ColocationSettingsPage.routeName,
+                      extra: {'colocationId': user.colocationId});
                 }
               },
             ),
@@ -64,7 +67,7 @@ class ColocationMembers extends StatelessWidget {
                             TextButton(
                               child: Text('ok'.tr()),
                               onPressed: () {
-                                Navigator.of(context).pop();
+                                context.pop();
                               },
                             ),
                           ],

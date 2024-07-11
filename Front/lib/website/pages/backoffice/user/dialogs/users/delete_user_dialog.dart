@@ -5,6 +5,7 @@ import 'package:front/services/user_service.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 void showDeleteUserDialog(BuildContext context, User user) {
   showDialog(
@@ -26,7 +27,7 @@ void showDeleteUserDialog(BuildContext context, User user) {
                       Text('backoffice_users_user_deleted_successfully'.tr()),
                 ),
               ));
-              Navigator.pop(context);
+              context.pop();
             } else if (state is UserError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Container(
@@ -48,7 +49,7 @@ void showDeleteUserDialog(BuildContext context, User user) {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: Text('cancel'.tr()),
               ),

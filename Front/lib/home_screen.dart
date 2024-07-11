@@ -2,12 +2,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/colocation/bloc/colocation_bloc.dart';
+import 'package:front/colocation/colocation_tasklist_screen.dart';
 import 'package:front/colocation/create_colocation.dart';
 import 'package:front/invitation/bloc/invitation_bloc.dart';
 import 'package:front/invitation/invitation_list_page.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  static const routeName = "/home";
 
   @override
   Widget build(BuildContext context) {
@@ -91,15 +95,10 @@ class HomeScreen extends StatelessWidget {
                                       size: 38,
                                     ),
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              InvitationListPage(
-                                                invitations: invitations,
-                                              ),
-                                        ),
-                                      );
+                                      context.push(InvitationListPage.routeName,
+                                          extra: {
+                                            'invitations': invitations,
+                                          });
                                     },
                                   ),
                                   Positioned(
@@ -180,7 +179,9 @@ class HomeScreen extends StatelessWidget {
                         return RefreshIndicator(
                             displacement: 50,
                             onRefresh: () async {
-                              context.read<ColocationBloc>().add(const FetchColocations());
+                              context
+                                  .read<ColocationBloc>()
+                                  .add(const FetchColocations());
                             },
                             child: ListView.builder(
                               itemCount: colocations.length,
@@ -188,21 +189,21 @@ class HomeScreen extends StatelessWidget {
                                 final item = colocations[index];
                                 return GestureDetector(
                                   onTap: () {
-                                    Navigator.pushNamed(
-                                        context, '/colocation/task-list',
-                                        arguments: {
+                                    context.push(
+                                        ColocationTasklistScreen.routeName,
+                                        extra: {
                                           'colocation': item,
                                         });
                                   },
                                   child: Padding(
-                                    padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
                                     child: ListTile(
                                       leading: const Icon(Icons.home),
                                       title: Text(item.name),
                                       subtitle: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                               '${'colocation_created_at'.tr()}${DateTime.parse(item.createdAt).toLocal().toString().split(' ')[0]}'),
@@ -211,13 +212,13 @@ class HomeScreen extends StatelessWidget {
                                           Text(item.location),
                                         ],
                                       ),
-                                      trailing: const Icon(Icons.arrow_forward_ios),
+                                      trailing:
+                                          const Icon(Icons.arrow_forward_ios),
                                     ),
                                   ),
                                 );
                               },
-                            )
-                        );
+                            ));
                       }
                     } else {
                       return Container(
@@ -235,12 +236,7 @@ class HomeScreen extends StatelessWidget {
             right: 20,
             child: FloatingActionButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CreateColocationPage(),
-                  ),
-                );
+                context.push(CreateColocationPage.routeName);
               },
               backgroundColor: Colors.green,
               child: const Text(

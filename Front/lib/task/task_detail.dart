@@ -12,6 +12,7 @@ class TaskDetailPage extends StatelessWidget {
   final Task task;
 
   const TaskDetailPage({super.key, required this.task});
+  static const routeName = "/task-detail";
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,8 @@ class TaskDetailPage extends StatelessWidget {
           children: [
             const Icon(Icons.task, color: Colors.white),
             const SizedBox(width: 10),
-            Text('task_detail'.tr(), style: const TextStyle(color: Colors.white)),
+            Text('task_detail'.tr(),
+                style: const TextStyle(color: Colors.white)),
           ],
         ),
         backgroundColor: Colors.green,
@@ -75,8 +77,7 @@ class TaskDetailPage extends StatelessWidget {
                       task.date,
                       style: const TextStyle(fontSize: 20, color: Colors.black),
                     )
-                  ]
-              ),
+                  ]),
               const SizedBox(height: 20),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -113,77 +114,77 @@ class TaskDetailPage extends StatelessWidget {
                       "${task.pts} points",
                       style: const TextStyle(fontSize: 20, color: Colors.black),
                     ),
-                  ]
-              ),
+                  ]),
               BlocBuilder<VoteBloc, CompositeVoteState>(
                   builder: (context, state) {
-                    if (state.voteByTaskIdState is VoteByTaskIdLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (state.voteByTaskIdState is VoteByTaskIdError) {
-                      return Center(
-                        child: Text((state.voteByTaskIdState as VoteByTaskIdError).message),
-                      );
-                    } else if (state.voteByTaskIdState is VoteByTaskIdLoaded) {
-                      final votes = (state.voteByTaskIdState as VoteByTaskIdLoaded).votes;
-                      if ((votes.length) > 0) {
-                        return Column(
-                          children: [
-                            const SizedBox(height: 20),
-                            Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'task_satisfaction_rate'.tr(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  // percentage of satisfaction, with no comma
-                                  Text(
-                                    "${(votes.where((vote) => vote.value == 1).length / votes.length * 100).toStringAsFixed(2)} %",
-                                    style: const TextStyle(fontSize: 20, color: Colors.black),
-                                  ),
-                                ]
-                            ),
-                            const SizedBox(height: 40),
-                          ],
-                        );
-                      } else {
-                        return Column(
-                          children: [
-                            const SizedBox(height: 20),
-                            Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'task_satisfaction_rate'.tr(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  Text(
-                                    "task_no_vote".tr(),
-                                    style: const TextStyle(fontSize: 20, color: Colors.black),
-                                  ),
-                                ]
-                            ),
-                            const SizedBox(height: 40),
-                          ],
-                        );
-                      }
-                    } else {
-                      return const SizedBox(height: 40);
-                    }
+                if (state.voteByTaskIdState is VoteByTaskIdLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state.voteByTaskIdState is VoteByTaskIdError) {
+                  return Center(
+                    child: Text(
+                        (state.voteByTaskIdState as VoteByTaskIdError).message),
+                  );
+                } else if (state.voteByTaskIdState is VoteByTaskIdLoaded) {
+                  final votes =
+                      (state.voteByTaskIdState as VoteByTaskIdLoaded).votes;
+                  if ((votes.length) > 0) {
+                    return Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'task_satisfaction_rate'.tr(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              // percentage of satisfaction, with no comma
+                              Text(
+                                "${(votes.where((vote) => vote.value == 1).length / votes.length * 100).toStringAsFixed(2)} %",
+                                style: const TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                              ),
+                            ]),
+                        const SizedBox(height: 40),
+                      ],
+                    );
+                  } else {
+                    return Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'task_satisfaction_rate'.tr(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Text(
+                                "task_no_vote".tr(),
+                                style: const TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                              ),
+                            ]),
+                        const SizedBox(height: 40),
+                      ],
+                    );
                   }
-              ),
+                } else {
+                  return const SizedBox(height: 40);
+                }
+              }),
               Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -198,16 +199,17 @@ class TaskDetailPage extends StatelessWidget {
                     ),
                     bytes != null
                         ? Card(
-                      child: Image.memory(
-                        bytes,
-                        width: 300,
-                        height: 300,
-                      ),
-                    )
+                            child: Image.memory(
+                              bytes,
+                              width: 300,
+                              height: 300,
+                            ),
+                          )
                         : Text(
-                      'task_detail_no_proof'.tr(),
-                      style: const TextStyle(fontSize: 20, color: Colors.black45),
-                    ),
+                            'task_detail_no_proof'.tr(),
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.black45),
+                          ),
                   ],
                 ),
               ),

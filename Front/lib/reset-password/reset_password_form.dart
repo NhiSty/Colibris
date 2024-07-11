@@ -2,9 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/reset-password/reset_password_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ResetPasswordFormScreen extends StatelessWidget {
   ResetPasswordFormScreen({super.key});
+  static const routeName = "/reset-password-form";
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
@@ -21,8 +23,7 @@ class ResetPasswordFormScreen extends StatelessWidget {
       child: PopScope(
         canPop: false,
         onPopInvoked: (didPop) async {
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/login', (route) => false);
+          context.go('/login');
         },
         child: Scaffold(
           appBar: AppBar(
@@ -30,8 +31,7 @@ class ResetPasswordFormScreen extends StatelessWidget {
             backgroundColor: Colors.green,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
-              onPressed: () =>
-                  Navigator.pushReplacementNamed(context, '/login'),
+              onPressed: () => context.go('/login'),
             ),
           ),
           body: Padding(
@@ -46,7 +46,7 @@ class ResetPasswordFormScreen extends StatelessWidget {
                         SnackBar(content: Text(state.message)),
                       );
                     } else if (state is ResetPasswordEmailSent) {
-                      Navigator.pushNamed(context, '/login');
+                      context.go('/login');
                     }
                   },
                   builder: (context, state) {

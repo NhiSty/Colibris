@@ -12,7 +12,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 class ConversationScreen extends StatefulWidget {
   final int conversationId;
 
-  ConversationScreen({required this.conversationId});
+  const ConversationScreen({super.key, required this.conversationId});
+  static const routeName = "/chat";
 
   @override
   _ConversationScreenState createState() => _ConversationScreenState();
@@ -26,7 +27,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
   final ScrollController _scrollController = ScrollController();
   late int _userId;
   FirebaseClient firebaseClient = FirebaseClient();
-
 
   @override
   void initState() {
@@ -100,7 +100,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
       _scrollToBottom();
     }
   }
-
 
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
