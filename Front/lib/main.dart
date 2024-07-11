@@ -22,7 +22,6 @@ import 'package:front/featureFlag/feature_flag_service.dart';
 import 'package:front/featureFlag/maintenance.dart';
 import 'package:front/home_screen.dart';
 import 'package:front/invitation/bloc/invitation_bloc.dart';
-import 'package:front/invitation/invitation.dart';
 import 'package:front/invitation/invitation_accept_page.dart';
 import 'package:front/invitation/invitation_create_page.dart';
 import 'package:front/invitation/invitation_list_page.dart';
@@ -37,12 +36,15 @@ import 'package:front/task/task_detail.dart';
 import 'package:front/task/update_task_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:front/utils/firebase.dart';
+import 'package:front/website/share/secure_storage.dart';
 import 'firebase_options.dart';
 import 'package:front/vote/bloc/vote_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 final StreamController<List<FeatureFlag>> _featureFlagsController =
     StreamController<List<FeatureFlag>>.broadcast();
+
+var intendedRoute = '/';
 
 final previousFlags = <FeatureFlag>[];
 Future<void> initializeFeatureFlags(List<FeatureFlag> flags) async {
@@ -70,7 +72,11 @@ void onMessageOpenedApp(RemoteMessage message) {
   int colocationId = int.tryParse(colocationIdStr!) ?? 0;
 
   if (colocationId != 0) {
-    navigatorKey.currentContext?.go('/chat', extra: {'chatId': colocationId});
+    navigatorKey.currentContext?.go(LoginScreen.routeName, extra: {
+      'value': colocationId,
+      'intendedRoute': ConversationScreen.routeName,
+      "paramName": "chatId",
+    });
   }
 }
 
@@ -147,18 +153,36 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GoRouter router = GoRouter(
+      navigatorKey: navigatorKey,
+      redirect: (BuildContext context, GoRouterState state) async {
+        final isAuthenticated = await isConnected();
+        if (!isAuthenticated) {
+          return LoginScreen.routeName;
+        }
+
+        if (state.extra == null) {
+          return HomeScreen.routeName;
+        }
+      },
       routes: [
         GoRoute(
           path: '/',
           builder: (context, state) =>
               isFeatureEnabled('maintenance', featureFlag)
                   ? const MaintenanceScreen()
-                  : const LoginScreen(),
+                  : PopScope(
+                      canPop: false,
+                      child: LoginScreen(
+                        data: state.extra,
+                      )),
         ),
         GoRoute(
           path: LoginScreen.routeName,
-          builder: (context, state) =>
-              const PopScope(canPop: false, child: LoginScreen()),
+          builder: (context, state) => PopScope(
+              canPop: false,
+              child: LoginScreen(
+                data: state.extra,
+              )),
         ),
         GoRoute(
           path: RegisterScreen.routeName,

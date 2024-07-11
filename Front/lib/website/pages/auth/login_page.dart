@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
       if (res == 200) {
         var userData = await decodeToken();
         if (userData['role'] == 'ROLE_ADMIN') {
-          context.push(HomeScreen.routeName);
+          context.go(HomeScreen.routeName);
         } else {
           showDialog(
             context: context,

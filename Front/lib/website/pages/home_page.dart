@@ -67,7 +67,9 @@ class _HomePageState extends State<HomePage> {
                   icon: const Icon(Icons.logout, color: Colors.white),
                   onPressed: () {
                     deleteToken();
-                    context.go(LoginPage.routeName);
+                    context.go(
+                      LoginPage.routeName,
+                    );
                   },
                 ),
               ),

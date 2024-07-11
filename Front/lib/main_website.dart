@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:front/website/share/secure_storage.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:front/services/colocMember_service.dart';
 import 'package:front/services/colocation_service.dart';
 import 'package:front/services/log_service.dart';
@@ -41,6 +41,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GoRouter router = GoRouter(
+      redirect: (BuildContext context, GoRouterState state) async {
+        final isAuthenticated = await isConnected();
+        if (!isAuthenticated) {
+          return LoginPage.routeName;
+        }
+      },
       routes: [
         GoRoute(
           path: LoginPage.routeName,
