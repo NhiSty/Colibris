@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:front/colocation/colocation_service.dart';
+import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
 import 'package:latlong2/latlong.dart';
 
 class AddressResult {
@@ -55,18 +56,21 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
           });
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('no_results_found'.tr())),
+              showSnackBarFeedback(
+                  'no_results_found'.tr(), Colors.blue)
           );
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('error_during_search'.tr())),
+            showSnackBarFeedback(
+                'error_during_search'.tr(), Colors.red)
         );
       }
     } catch (e) {
       print('Erreur: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('error_during_search'.tr())),
+          showSnackBarFeedback(
+              'error_during_search'.tr(), Colors.red)
       );
     }
   }
@@ -173,25 +177,19 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                       if (res == 201) {
                         Navigator.pushNamed(context, '/home');
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                'create_colocation_created_successfully'.tr()),
-                          ),
+                            showSnackBarFeedback(
+                                'create_colocation_created_successfully'.tr(), Colors.green)
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content:
-                                Text('create_colocation_created_error'.tr()),
-                          ),
+                            showSnackBarFeedback(
+                                'create_colocation_created_error'.tr(), Colors.red)
                         );
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                              'create_colocation_message_select_address'.tr()),
-                        ),
+                          showSnackBarFeedback(
+                              'create_colocation_message_select_address'.tr(), Colors.orange)
                       );
                     }
                   },

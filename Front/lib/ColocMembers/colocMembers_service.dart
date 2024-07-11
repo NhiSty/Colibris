@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:front/services/user_service.dart';
 import 'package:front/utils/dio.dart';
 import 'package:front/website/share/secure_storage.dart';
 
@@ -28,7 +27,7 @@ Future<int> deleteColocMember(int colocMemberId) async {
       '/coloc/members/$colocMemberId',
       options: Options(headers: headers),
     );
-    return response.statusCode!;
+    return response.statusCode ?? 500;
   } on DioException catch (e) {
     print('Dio error!');
     print('Response status: ${e.response!.statusCode}');

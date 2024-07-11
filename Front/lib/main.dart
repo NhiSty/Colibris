@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:feature_flags_toggly/feature_flags_toggly.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,13 +32,13 @@ import 'package:front/task/add_new_task_screen.dart';
 import 'package:front/task/bloc/task_bloc.dart';
 import 'package:front/task/task_detail.dart';
 import 'package:front/task/update_task_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:front/utils/firebase.dart';
-import 'firebase_options.dart';
 import 'package:front/vote/bloc/vote_bloc.dart';
 
+import 'firebase_options.dart';
+
 final StreamController<List<FeatureFlag>> _featureFlagsController =
-    StreamController<List<FeatureFlag>>.broadcast();
+StreamController<List<FeatureFlag>>.broadcast();
 
 final previousFlags = <FeatureFlag>[];
 Future<void> initializeFeatureFlags(List<FeatureFlag> flags) async {
@@ -57,7 +57,6 @@ bool isFeatureEnabled(String featureName, List<FeatureFlag> flags) {
 
 void onMessage(RemoteMessage message) {
   print('Message en premier plan reçu: ${message.notification?.title}');
-  // Affichez une boîte de dialogue ou mettez à jour l'état de l'application ici
 }
 
 void onMessageOpenedApp(RemoteMessage message) {
@@ -69,10 +68,11 @@ void onMessageOpenedApp(RemoteMessage message) {
     Navigator.pushNamed(
       navigatorKey.currentContext!,
       '/chat',
-      arguments: {'chatId' : colocationId},
+      arguments: {'chatId': colocationId},
     );
   }
 }
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
@@ -84,8 +84,8 @@ void main() async {
   await firebaseClient.requestPermission();
   firebaseClient.initializeListeners(onMessage, onMessageOpenedApp);
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
-
+  FirebaseAnalyticsObserver observer =
+  FirebaseAnalyticsObserver(analytics: analytics);
 
   await EasyLocalization.ensureInitialized();
   await dotenv.load(fileName: ".env");
@@ -116,14 +116,14 @@ void main() async {
   );
 
   Stream<int> periodicStream =
-      Stream.periodic(const Duration(seconds: 5), (count) => count);
+  Stream.periodic(const Duration(seconds: 5), (count) => count);
 
   periodicStream.listen((event) async {
     var flags = await fetchFeatureFlags();
 
     for (var flag in flags) {
       var previousFlag = previousFlags.firstWhere(
-        (previousFlag) => previousFlag.name == flag.name,
+            (previousFlag) => previousFlag.name == flag.name,
         orElse: () =>
             FeatureFlag(id: flag.id, name: flag.name, value: !flag.value),
       );
@@ -137,7 +137,6 @@ void main() async {
     }
   });
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.featureFlag});
 
@@ -156,15 +155,23 @@ class MyApp extends StatelessWidget {
         BlocProvider<TaskBloc>(
           create: (context) => TaskBloc(),
         ),
-        BlocProvider<VoteBloc>(
-            create: (context) => VoteBloc()
-        )
+        BlocProvider<VoteBloc>(create: (context) => VoteBloc())
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,
         title: 'Colobris',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+          brightness: Brightness.dark,
+          primaryColor: Colors.green,
+          colorScheme: ColorScheme.dark(
+            primary: Colors.blueGrey,
+            secondary: Colors.blueAccent,
+          ),
+          appBarTheme: const AppBarTheme(
+            color: Colors.black,
+          ),
+          scaffoldBackgroundColor: const Color(0xFF121212),
+          cardColor: const Color(0xFF1E1E1E),
           useMaterial3: true,
         ),
         home: isFeatureEnabled('maintenance', featureFlag)
@@ -177,7 +184,7 @@ class MyApp extends StatelessWidget {
         locale: context.locale,
         routes: {
           '/login': (context) =>
-              const PopScope(canPop: false, child: LoginScreen()),
+          const PopScope(canPop: false, child: LoginScreen()),
           '/register': (context) => const RegisterScreen(),
           '/home': (context) => const PopScope(
               canPop: false,
@@ -187,9 +194,9 @@ class MyApp extends StatelessWidget {
               )),
           '/create_colocation': (context) => const CreateColocationPage(),
           '/profile': (context) => const Scaffold(
-                body: ProfileScreen(),
-                bottomNavigationBar: BottomNavigationBarWidget(null),
-              ),
+            body: ProfileScreen(),
+            bottomNavigationBar: BottomNavigationBarWidget(null),
+          ),
           '/reset-password': (context) => const ResetPasswordScreen(),
           '/reset-password-form': (context) => ResetPasswordFormScreen(),
         },
@@ -275,12 +282,12 @@ class MyApp extends StatelessWidget {
             case UpdateTaskScreen.routeName:
               return MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
-                        value: BlocProvider.of<TaskBloc>(context),
-                        child: UpdateTaskScreen(
-                          colocation: routes['colocation'],
-                          task: routes['task'],
-                        ),
-                      ),
+                    value: BlocProvider.of<TaskBloc>(context),
+                    child: UpdateTaskScreen(
+                      colocation: routes['colocation'],
+                      task: routes['task'],
+                    ),
+                  ),
                   settings: settings);
 
             default:
@@ -288,6 +295,27 @@ class MyApp extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+}
+
+
+class GradientBackground extends StatelessWidget {
+  final Widget child;
+
+  const GradientBackground({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.grey, Colors.black],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: child,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:front/task/task.dart';
+
 import '../utils/dio.dart';
 import '../website/share/secure_storage.dart';
 
@@ -23,7 +24,6 @@ Future<int> createTask(String title, String description, String date,
       },
       options: Options(headers: headers),
     );
-    print(response.data);
     return response.statusCode!;
   } on DioException catch (e) {
     log('Dio error!');
@@ -33,11 +33,10 @@ Future<int> createTask(String title, String description, String date,
   }
 }
 
-Future<int> updateTask(int taskId, String title, String description, String date,
-    int duration, String picture, int colocationId) async {
+Future<int> updateTask(int taskId, String title, String description,
+    String date, int duration, String picture, int colocationId) async {
   var headers = await addHeader();
   try {
-    print('task values: $taskId, $title, $description, $date, $duration, $picture, $colocationId');
     var response = await dio.put(
       '/tasks/$taskId',
       data: {

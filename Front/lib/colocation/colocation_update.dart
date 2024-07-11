@@ -36,7 +36,15 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('update_colocation_title'.tr()),
+        title: Row(
+          children: [
+            const Icon(Icons.edit_location_alt, color: Colors.white),
+            const SizedBox(width: 10),
+            Text('update_colocation_title'.tr(),
+                style: const TextStyle(color: Colors.white)),
+          ],
+        ),
+        backgroundColor: Colors.green,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())

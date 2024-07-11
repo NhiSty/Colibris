@@ -1,22 +1,14 @@
-
 import 'dart:convert';
 
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 import 'camera_screen.dart';
 
-typedef SubmitForm = Future<int> Function(
-    String title,
-    String description,
-    String date,
-    int duration,
-    String picture,
-    int colocationId
-    );
+typedef SubmitForm = Future<int> Function(String title, String description,
+    String date, int duration, String picture, int colocationId);
 
 class TaskForm extends StatefulWidget {
   final String? title;
@@ -100,7 +92,7 @@ class _TaskFormState extends State<TaskForm> {
 
   @override
   Widget build(BuildContext context) {
-    return  Form(
+    return Form(
       key: _formKey,
       child: Container(
         margin: const EdgeInsets.only(top: 50.0),
@@ -146,48 +138,48 @@ class _TaskFormState extends State<TaskForm> {
                 //height: MediaQuery.of(context).size.width / 3,
                 child: Center(
                     child: TextFormField(
-                      controller: dateController,
-                      //editing controller of this TextField
-                      decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          labelText: "task_create_date".tr() //label text of field
+                  controller: dateController,
+                  //editing controller of this TextField
+                  decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: "task_create_date".tr() //label text of field
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'task_create_date_error'.tr();
-                        }
-                        return null;
-                      },
-                      readOnly: true,
-                      //set it true, so that user will not able to edit text
-                      onTap: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1950),
-                            //DateTime.now() - not to allow to choose before today.
-                            lastDate: DateTime(2100));
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'task_create_date_error'.tr();
+                    }
+                    return null;
+                  },
+                  readOnly: true,
+                  //set it true, so that user will not able to edit text
+                  onTap: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1950),
+                        //DateTime.now() - not to allow to choose before today.
+                        lastDate: DateTime(2100));
 
-                        if (pickedDate != null) {
-                          print(
-                              pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                          String formattedDate =
+                    if (pickedDate != null) {
+                      print(
+                          pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                      String formattedDate =
                           DateFormat('dd/MM/yyyy').format(pickedDate);
-                          print(
-                              formattedDate); //formatted date output using intl package =>  2021-03-16
-                          setState(() {
-                            dateController.text =
-                                formattedDate; //set output date to TextField value.
-                          });
-                        } else {}
-                      },
-                    ))),
+                      print(
+                          formattedDate); //formatted date output using intl package =>  2021-03-16
+                      setState(() {
+                        dateController.text =
+                            formattedDate; //set output date to TextField value.
+                      });
+                    } else {}
+                  },
+                ))),
             Container(
               margin: const EdgeInsets.only(top: 30),
               child: Center(
                 child: TextFormField(
                   controller: _timeRangeController,
-                  readOnly: true, // Prevent manual editing
+                  readOnly: true,
                   onTap: () async {
                     TimeRange result = await showTimeRangePicker(
                       context: context,
@@ -211,10 +203,10 @@ class _TaskFormState extends State<TaskForm> {
               margin: const EdgeInsets.only(top: 30, bottom: 10),
               child: base64Image.isNotEmpty
                   ? Image.memory(
-                base64Decode(base64Image),
-                height: 200,
-                fit: BoxFit.scaleDown,
-              )
+                      base64Decode(base64Image),
+                      height: 200,
+                      fit: BoxFit.scaleDown,
+                    )
                   : const SizedBox.shrink(),
             ),
             Container(
@@ -238,21 +230,21 @@ class _TaskFormState extends State<TaskForm> {
                 },
                 child: base64Image.isEmpty
                     ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.camera_alt),
-                    const SizedBox(width: 10),
-                    Text('task_create_take_picture'.tr())
-                  ],
-                )
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.camera_alt),
+                          const SizedBox(width: 10),
+                          Text('task_create_take_picture'.tr())
+                        ],
+                      )
                     : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.camera_alt),
-                        const SizedBox(width: 10),
-                        Text('task_create_retake_picture'.tr())
-                      ],
-                ) ,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.camera_alt),
+                          const SizedBox(width: 10),
+                          Text('task_create_retake_picture'.tr())
+                        ],
+                      ),
               ),
             ),
             Align(
@@ -263,48 +255,43 @@ class _TaskFormState extends State<TaskForm> {
                 children: [
                   Expanded(
                       child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('cancel'.tr()),
-                      )),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('cancel'.tr()),
+                  )),
                   const SizedBox(
                     width: 10,
                   ),
                   Expanded(
                       child: OutlinedButton(
-                        style: const ButtonStyle(
-                            backgroundColor:
-                            WidgetStatePropertyAll(Colors.green)),
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            var statusCode = await widget.submitForm(
-                                _titleController.text,
-                                _descriptionController.text,
-                                dateController.text,
-                                int.parse(_timeRangeController.text
-                                    .split(':')[0]) *
+                    style: const ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(Colors.green)),
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        var statusCode = await widget.submitForm(
+                            _titleController.text,
+                            _descriptionController.text,
+                            dateController.text,
+                            int.parse(_timeRangeController.text.split(':')[0]) *
                                     60 +
-                                    int.parse(_timeRangeController.text
-                                        .split(':')[1]),
-                                base64Image,
-                                widget.colocationId
-                            );
+                                int.parse(
+                                    _timeRangeController.text.split(':')[1]),
+                            base64Image,
+                            widget.colocationId);
 
-                            print('statusCode: $statusCode');
+                        print('statusCode: $statusCode');
 
-                            if (statusCode == 201 || statusCode == 200) {
-                              widget.onSuccessfulSubmit();
-                            }
-                          }
-                        },
-                        child: Text(
-                          widget.isEditing
-                              ? 'edit'.tr()
-                              : 'add'.tr(),
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ))
+                        if (statusCode == 201 || statusCode == 200) {
+                          widget.onSuccessfulSubmit();
+                        }
+                      }
+                    },
+                    child: Text(
+                      widget.isEditing ? 'edit'.tr() : 'add'.tr(),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ))
                 ],
               ),
             )
