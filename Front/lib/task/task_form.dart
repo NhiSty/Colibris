@@ -266,7 +266,7 @@ class _TaskFormState extends State<TaskForm> {
                   Expanded(
                       child: OutlinedButton(
                     style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.green)),
+                        backgroundColor: WidgetStatePropertyAll(Colors.blueGrey)),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         var statusCode = await widget.submitForm(
@@ -279,8 +279,6 @@ class _TaskFormState extends State<TaskForm> {
                                     _timeRangeController.text.split(':')[1]),
                             base64Image,
                             widget.colocationId);
-
-                        print('statusCode: $statusCode');
 
                         if (statusCode == 201 || statusCode == 200) {
                           widget.onSuccessfulSubmit();

@@ -17,80 +17,82 @@ class ResetPasswordFormScreen extends StatelessWidget {
     final String emailCode =
     ModalRoute.of(context)?.settings.arguments as String;
 
-    return BlocProvider(
-      create: (_) => ResetPasswordBloc(),
-      child: GradientBackground(
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            title: Text('forget_password_change_title'.tr()),
+    return SafeArea(
+      child: BlocProvider(
+        create: (_) => ResetPasswordBloc(),
+        child: GradientBackground(
+          child: Scaffold(
             backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () =>
-                  Navigator.pushReplacementNamed(context, '/login'),
+            appBar: AppBar(
+              title: Text('forget_password_change_title'.tr()),
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () =>
+                    Navigator.pushReplacementNamed(context, '/login'),
+              ),
             ),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: SingleChildScrollView(
-                child: BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
-                  listener: (context, state) {
-                    if (state is ResetPasswordError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.message)),
-                      );
-                    } else if (state is ResetPasswordEmailSent) {
-                      Navigator.pushNamed(context, '/login');
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is ResetPasswordLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Image.asset(
-                            'assets/images/login_page.png',
-                            height: 200,
-                            width: 200,
-                          ),
-                          const SizedBox(height: 20),
-                          buildTextFormField(
-                            _passwordController,
-                            'forget_password_change_new_password'.tr(),
-                            obscureText: true,
-                          ),
-                          const SizedBox(height: 10),
-                          buildTextFormField(
-                            _passwordConfirmController,
-                            'forget_password_change_confirm_password'.tr(),
-                            obscureText: true,
-                          ),
-                          const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _resetPassword(context, emailCode);
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              backgroundColor: Colors.blueGrey,
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
+                    listener: (context, state) {
+                      if (state is ResetPasswordError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(state.message)),
+                        );
+                      } else if (state is ResetPasswordEmailSent) {
+                        Navigator.pushNamed(context, '/login');
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is ResetPasswordLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Image.asset(
+                              'assets/images/login_page.png',
+                              height: 200,
+                              width: 200,
                             ),
-                            child:
-                            Text('forget_password_change_submit'.tr()),
-                          ),
-                        ],
-                      );
-                    }
-                  },
+                            const SizedBox(height: 20),
+                            buildTextFormField(
+                              _passwordController,
+                              'forget_password_change_new_password'.tr(),
+                              obscureText: true,
+                            ),
+                            const SizedBox(height: 10),
+                            buildTextFormField(
+                              _passwordConfirmController,
+                              'forget_password_change_confirm_password'.tr(),
+                              obscureText: true,
+                            ),
+                            const SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _resetPassword(context, emailCode);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.blueGrey,
+                              ),
+                              child:
+                              Text('forget_password_change_submit'.tr()),
+                            ),
+                          ],
+                        );
+                      }
+                    },
+                  ),
                 ),
               ),
             ),

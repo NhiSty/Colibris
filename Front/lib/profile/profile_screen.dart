@@ -54,106 +54,108 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GradientBackground(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: Text('profile'.tr()),
+    return SafeArea(
+      child: GradientBackground(
+        child: Scaffold(
           backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'user_settings'.tr(),
-                    style: const TextStyle(
-                      fontSize: 24,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  _buildEditableRow(
-                    label: 'lastname'.tr(),
-                    controller: _lastnameController,
-                    isEditing: _isEditingLastName,
-                    onEdit: () {
-                      setState(() {
-                        _isEditingLastName = !_isEditingLastName;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16.0),
-                  _buildEditableRow(
-                    label: 'firstname'.tr(),
-                    controller: _firstNameController,
-                    isEditing: _isEditingFirstName,
-                    onEdit: () {
-                      setState(() {
-                        _isEditingFirstName = !_isEditingFirstName;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16.0),
-                  _buildEditableRow(
-                    label: 'email'.tr(),
-                    controller: _emailController,
-                    isEditing: _isEditingEmail,
-                    onEdit: () {
-                      setState(() {
-                        _isEditingEmail = !_isEditingEmail;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16.0),
-                  _buildEditableRow(
-                    label: 'password'.tr(),
-                    controller: _passwordController,
-                    isEditing: _isEditingPassword,
-                    obscureText: true,
-                    hintText: '********',
-                    onEdit: () {
-                      setState(() {
-                        _isEditingPassword = !_isEditingPassword;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16.0),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _isAnyFieldEditing ? null : _submitForm,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueGrey,
-                        textStyle: const TextStyle(fontSize: 18),
-                        foregroundColor: Colors.white,
+          appBar: AppBar(
+            title: Text('profile'.tr()),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'user_settings'.tr(),
+                      style: const TextStyle(
+                        fontSize: 24,
+                        color: Colors.white,
                       ),
-                      child: Text('submit'.tr()),
                     ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text('🇺🇸', style: TextStyle(fontSize: 32)),
-                      Switch(
-                        value: context.locale == const Locale('fr'),
-                        onChanged: (value) {
-                          setState(() {
-                            context.setLocale(
-                                value ? const Locale('fr') : const Locale('en'));
-                          });
-                        },
+                    const SizedBox(height: 16.0),
+                    _buildEditableRow(
+                      label: 'lastname'.tr(),
+                      controller: _lastnameController,
+                      isEditing: _isEditingLastName,
+                      onEdit: () {
+                        setState(() {
+                          _isEditingLastName = !_isEditingLastName;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    _buildEditableRow(
+                      label: 'firstname'.tr(),
+                      controller: _firstNameController,
+                      isEditing: _isEditingFirstName,
+                      onEdit: () {
+                        setState(() {
+                          _isEditingFirstName = !_isEditingFirstName;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    _buildEditableRow(
+                      label: 'email'.tr(),
+                      controller: _emailController,
+                      isEditing: _isEditingEmail,
+                      onEdit: () {
+                        setState(() {
+                          _isEditingEmail = !_isEditingEmail;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    _buildEditableRow(
+                      label: 'password'.tr(),
+                      controller: _passwordController,
+                      isEditing: _isEditingPassword,
+                      obscureText: true,
+                      hintText: '********',
+                      onEdit: () {
+                        setState(() {
+                          _isEditingPassword = !_isEditingPassword;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _isAnyFieldEditing ? null : _submitForm,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueGrey,
+                          textStyle: const TextStyle(fontSize: 18),
+                          foregroundColor: Colors.white,
+                        ),
+                        child: Text('submit'.tr()),
                       ),
-                      const Text('🇫🇷', style: TextStyle(fontSize: 32)),
-                    ],
-                  ),
-                ],
+                    ),
+                    const SizedBox(height: 16.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('🇺🇸', style: TextStyle(fontSize: 32)),
+                        Switch(
+                          value: context.locale == const Locale('fr'),
+                          onChanged: (value) {
+                            setState(() {
+                              context.setLocale(
+                                  value ? const Locale('fr') : const Locale('en'));
+                            });
+                          },
+                        ),
+                        const Text('🇫🇷', style: TextStyle(fontSize: 32)),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

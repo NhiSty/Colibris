@@ -10,7 +10,6 @@ class ApiService {
       final response = await dio.get(
           '/chat/colocations/$conversationId/messages',
           options: Options(headers: headers));
-      print("reponse $response ");
       List<dynamic> data = response.data;
 
       return data.map((item) => Message.fromJson(item)).toList();

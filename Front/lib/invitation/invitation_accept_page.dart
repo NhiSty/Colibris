@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/colocation/colocation_service.dart';
 import 'package:front/invitation/bloc/invitation_bloc.dart';
+import 'package:front/main.dart';
 
 class InvitationAcceptPage extends StatefulWidget {
   final int colocationId;
@@ -36,78 +37,85 @@ class _InvitationAcceptPageState extends State<InvitationAcceptPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'invitation_accept_title'.tr(),
-          style: const TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.green,
-      ),
-      body: Center(
-        child: colocationData == null
-            ? const CircularProgressIndicator()
-            : Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+    return SafeArea(
+      child: GradientBackground(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            title: Text(
+              'invitation_accept_title'.tr(),
+              style: const TextStyle(color: Colors.white),
             ),
-            elevation: 4,
-            child: Padding(
+            backgroundColor: Colors.transparent,
+          ),
+          body: Center(
+            child: colocationData == null
+                ? const CircularProgressIndicator()
+                : Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  InvitationCard(colocationData: colocationData),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+              child: Card(
+                color: Colors.transparent,
+                elevation: 0,
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          context.read<InvitationBloc>().add(
-                              InvitationAccept(
-                                  state: 'accepted',
-                                  invitationId: widget.invitationId));
-                          Navigator.pushNamed(context, '/home');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
+                      InvitationCard(colocationData: colocationData),
+                      const SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              context.read<InvitationBloc>().add(
+                                  InvitationAccept(
+                                      state: 'accepted',
+                                      invitationId:
+                                      widget.invitationId));
+                              Navigator.pushNamed(context, '/home');
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12.0, horizontal: 24.0),
+                            ),
+                            child: Text(
+                              'invitation_accept_accept'.tr(),
+                              style: const TextStyle(color: Colors.white),
+                            ),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-                        ),
-                        child: Text(
-                          'invitation_accept_accept'.tr(),
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          context.read<InvitationBloc>().add(
-                              InvitationReject(
-                                  state: 'declined',
-                                  invitationId: widget.invitationId));
-                          Navigator.pushNamed(context, '/home');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
+                          const SizedBox(width: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              context.read<InvitationBloc>().add(
+                                  InvitationReject(
+                                      state: 'declined',
+                                      invitationId:
+                                      widget.invitationId));
+                              Navigator.pushNamed(context, '/home');
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12.0, horizontal: 24.0),
+                            ),
+                            child: Text(
+                              'invitation_accept_refuse'.tr(),
+                              style: const TextStyle(color: Colors.white),
+                            ),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-                        ),
-                        child: Text(
-                          'invitation_accept_refuse'.tr(),
-                          style: const TextStyle(color: Colors.white),
-                        ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -123,12 +131,12 @@ class InvitationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white, width: 1),
       ),
-      elevation: 4,
-      color: Colors.green,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

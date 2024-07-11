@@ -72,173 +72,175 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GradientBackground(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: Text('create_colocation_title'.tr()),
+    return SafeArea(
+      child: GradientBackground(
+        child: Scaffold(
           backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-        body: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: <Widget>[
-                  TextFormField(
-                    controller: _nameController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'please_give_name'.tr();
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'create_colocation_name'.tr(),
-                      border: const OutlineInputBorder(),
-                      labelStyle: const TextStyle(color: Colors.white),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueGrey),
-                      ),
-                      errorStyle: TextStyle(color: Colors.red[200]),
-                    ),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _descriptionController,
-                    decoration: InputDecoration(
-                      labelText: 'create_colocation_description'.tr(),
-                      border: const OutlineInputBorder(),
-                      labelStyle: const TextStyle(color: Colors.white),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueGrey),
-                      ),
-                    ),
-                    style: const TextStyle(color: Colors.white),
-                    maxLines: 3,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      labelText: 'create_colocation_search_address'.tr(),
-                      border: const OutlineInputBorder(),
-                      labelStyle: const TextStyle(color: Colors.white),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueGrey),
-                      ),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.search, color: Colors.white),
-                        onPressed: () {
-                          _searchAddress(_searchController.text);
-                        },
-                      ),
-                    ),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  const SizedBox(height: 16),
-                  DropdownButtonFormField<AddressResult>(
-                    items: searchResults.map((result) {
-                      return DropdownMenuItem<AddressResult>(
-                        value: result,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          child: Text(
-                            result.placeName,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(color: Colors.white),
-                          ),
+          appBar: AppBar(
+            title: Text('create_colocation_title'.tr()),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+          body: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      controller: _nameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'please_give_name'.tr();
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'create_colocation_name'.tr(),
+                        border: const OutlineInputBorder(),
+                        labelStyle: const TextStyle(color: Colors.white),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
                         ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedLocation = value?.location;
-                        selectedAddress = value?.placeName;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'create_colocation_select_address'.tr(),
-                      border: const OutlineInputBorder(),
-                      labelStyle: const TextStyle(color: Colors.white),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey),
+                        ),
+                        errorStyle: TextStyle(color: Colors.red[200]),
                       ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueGrey),
-                      ),
-                    ),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  const SizedBox(height: 16),
-                  CheckboxListTile(
-                    title: Text(
-                      'create_colocation_permanently'.tr(),
                       style: const TextStyle(color: Colors.white),
                     ),
-                    value: isPermanent,
-                    checkColor: Colors.white,
-                    activeColor: Colors.green,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        isPermanent = value ?? false;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 32),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate() &&
-                          selectedLocation != null) {
-                        var res = await createColocation(
-                          _nameController.text,
-                          _descriptionController.text,
-                          isPermanent,
-                          selectedLocation!,
-                          selectedAddress!,
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _descriptionController,
+                      decoration: InputDecoration(
+                        labelText: 'create_colocation_description'.tr(),
+                        border: const OutlineInputBorder(),
+                        labelStyle: const TextStyle(color: Colors.white),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey),
+                        ),
+                      ),
+                      style: const TextStyle(color: Colors.white),
+                      maxLines: 3,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        labelText: 'create_colocation_search_address'.tr(),
+                        border: const OutlineInputBorder(),
+                        labelStyle: const TextStyle(color: Colors.white),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.search, color: Colors.white),
+                          onPressed: () {
+                            _searchAddress(_searchController.text);
+                          },
+                        ),
+                      ),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<AddressResult>(
+                      items: searchResults.map((result) {
+                        return DropdownMenuItem<AddressResult>(
+                          value: result,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            child: Text(
+                              result.placeName,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
                         );
-
-                        if (res == 201) {
-                          Navigator.pushNamed(context, '/home');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              showSnackBarFeedback(
-                                  'create_colocation_created_successfully'.tr(),
-                                  Colors.green));
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedLocation = value?.location;
+                          selectedAddress = value?.placeName;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'create_colocation_select_address'.tr(),
+                        border: const OutlineInputBorder(),
+                        labelStyle: const TextStyle(color: Colors.white),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey),
+                        ),
+                      ),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(height: 16),
+                    CheckboxListTile(
+                      title: Text(
+                        'create_colocation_permanently'.tr(),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      value: isPermanent,
+                      checkColor: Colors.white,
+                      activeColor: Colors.green,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          isPermanent = value ?? false;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 32),
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate() &&
+                            selectedLocation != null) {
+                          var res = await createColocation(
+                            _nameController.text,
+                            _descriptionController.text,
+                            isPermanent,
+                            selectedLocation!,
+                            selectedAddress!,
+                          );
+      
+                          if (res == 201) {
+                            Navigator.pushNamed(context, '/home');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                showSnackBarFeedback(
+                                    'create_colocation_created_successfully'.tr(),
+                                    Colors.green));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                showSnackBarFeedback(
+                                    'create_colocation_created_error'.tr(),
+                                    Colors.red));
+                          }
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                               showSnackBarFeedback(
-                                  'create_colocation_created_error'.tr(),
-                                  Colors.red));
+                                  'create_colocation_message_select_address'.tr(),
+                                  Colors.orange));
                         }
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            showSnackBarFeedback(
-                                'create_colocation_message_select_address'.tr(),
-                                Colors.orange));
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.blueGrey,
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      minimumSize: const Size(double.infinity, 50),
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.blueGrey,
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        minimumSize: const Size(double.infinity, 50),
+                      ),
+                      child: Text('create_colocation_submit'.tr(),
+                          style: const TextStyle(fontSize: 16)),
                     ),
-                    child: Text('create_colocation_submit'.tr(),
-                        style: const TextStyle(fontSize: 16)),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
