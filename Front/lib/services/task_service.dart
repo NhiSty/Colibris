@@ -8,6 +8,32 @@ import '../website/share/secure_storage.dart';
 class TaskService {
   final Dio _dio = dio;
 
+  Future<ListTaskResponse> searchTasks({required String query}) async {
+    var headers = await addHeader();
+    try {
+      var response = await _dio.get(
+        '/tasks/search',
+        queryParameters: {
+          'query': query,
+        },
+        options: Options(headers: headers),
+      );
+      if (response.statusCode == 200) {
+        List<Task> tasks = (response.data as List)
+            .map((task) => Task.fromJson(task))
+            .toList();
+        return ListTaskResponse(tasks: tasks, total: tasks.length);
+      } else {
+        throw Exception('Failed to search tasks');
+      }
+    } on DioException catch (e) {
+      log('Dio error!');
+      log('Response status: ${e.response!.statusCode}');
+      log('Response data: ${e.response!.data}');
+      throw Exception('Failed to search tasks');
+    }
+  }
+
   Future<int> createTask({
     required String title,
     String description = '',
@@ -76,16 +102,12 @@ class TaskService {
     }
   }
 
-  Future<ListTaskResponse> fetchTasks(
-      {required int colocationId, int page = 1, int pageSize = 5}) async {
+  Future<List<Task>> fetchColocationTasks(
+      {required int colocationId}) async {
     var headers = await addHeader();
     try {
       var response = await _dio.get(
         '/tasks/colocation/$colocationId',
-        queryParameters: {
-          'page': page,
-          'pageSize': pageSize,
-        },
         options: Options(headers: headers),
       );
       if (response.statusCode == 200) {
@@ -93,8 +115,37 @@ class TaskService {
             .map((task) => Task.fromJson(task))
             .toList();
 
-        int total = tasks.length;
-        return ListTaskResponse(tasks: tasks, total: total);
+        return tasks;
+      } else {
+        throw Exception('Failed to load tasks');
+      }
+    } on DioException catch (e) {
+      log('Dio error!');
+      log('Response status: ${e.response!.statusCode}');
+      log('Response data: ${e.response!.data}');
+      throw Exception('Failed to fetch tasks');
+    }
+  }
+
+  // Get all tasks
+  Future<ListTaskResponse> fetchAllTasks(
+      {int page = 1, int pageSize = 5}) async {
+    var headers = await addHeader();
+    try {
+      var response = await _dio.get(
+        '/tasks',
+        queryParameters: {
+          'page': page,
+          'pageSize': pageSize,
+        },
+        options: Options(headers: headers),
+      );
+      if (response.statusCode == 200) {
+        List<Task> tasks = (response.data as List)
+            .map((task) => Task.fromJson(task))
+            .toList();
+
+        return ListTaskResponse(tasks: tasks, total: tasks.length);
       } else {
         throw Exception('Failed to load tasks');
       }

@@ -18,7 +18,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         try {
           print('fetching tasks for colocation ${event.colocationId}');
           TaskService taskService = TaskService();
-          final tasks = await taskService.fetchTasks(colocationId: event.colocationId);
+          final tasks = await taskService.fetchColocationTasks(colocationId: event.colocationId);
           emit(TaskLoaded(tasks));
         } catch (error) {
           emit(TaskError('Failed to fetch tasks: $error', true));
