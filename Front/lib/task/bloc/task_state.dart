@@ -16,9 +16,9 @@ final class TaskLoading extends TaskState {
 }
 
 final class TaskLoaded extends TaskState {
-  final List<Task> tasks;
+  final ListTaskResponse taskResponse;
 
-  const TaskLoaded(this.tasks);
+  const TaskLoaded(this.taskResponse);
 }
 
 final class TaskError extends TaskState {

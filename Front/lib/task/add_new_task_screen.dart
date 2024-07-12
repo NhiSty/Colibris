@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/colocation/colocation.dart';
 import 'package:front/task/task_form.dart';
-import 'package:front/task/task_service.dart';
+import 'package:front/services/task_service.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   final Colocation colocation;
@@ -28,14 +28,14 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       String picture,
       int colocationId,
       ) async {
-    return await createTask(
-        title,
-        description,
-        date,
-        duration,
-        picture,
-        colocationId
-    );
+    TaskService taskService = TaskService();
+    return await taskService.createTask(
+      title: title,
+      description: description,
+      date: date,
+      duration: duration,
+      picture: picture,
+      colocationId: colocationId,);
   }
 
   @override
