@@ -14,7 +14,7 @@ class VerifyResetCode extends ResetPasswordEvent {
 }
 
 class ResetPasswordWithEmailCode extends ResetPasswordEvent {
-  final String email;
+  final String pwd;
   final String code;
-  ResetPasswordWithEmailCode({required this.email, required this.code});
+  ResetPasswordWithEmailCode({required this.pwd, required this.code});
 }

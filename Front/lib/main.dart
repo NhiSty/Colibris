@@ -156,6 +156,15 @@ class MyApp extends StatelessWidget {
       redirect: (BuildContext context, GoRouterState state) async {
         final isAuthenticated = await isConnected();
         if (!isAuthenticated) {
+          if(state.fullPath == RegisterScreen.routeName){
+            return RegisterScreen.routeName;
+          }
+          else if (state.fullPath == ResetPasswordScreen.routeName){
+            return ResetPasswordScreen.routeName;
+          }
+          else if (state.fullPath == ResetPasswordFormScreen.routeName){
+            return ResetPasswordFormScreen.routeName;
+          }
           return LoginScreen.routeName;
         }
 
@@ -217,7 +226,10 @@ class MyApp extends StatelessWidget {
         ),
         GoRoute(
           path: ResetPasswordFormScreen.routeName,
-          builder: (context, state) => ResetPasswordFormScreen(),
+          builder: (context, state) {
+            final Map<String, String> arguments = state.extra as Map<String, String>;
+            return ResetPasswordFormScreen(arguments: arguments);
+          },
         ),
         GoRoute(
           path: InvitationListPage.routeName,

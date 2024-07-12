@@ -1,23 +1,24 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:front/auth/login.dart';
 import 'package:front/reset-password/reset_password_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:front/main.dart';
 
 class ResetPasswordFormScreen extends StatelessWidget {
-  ResetPasswordFormScreen({super.key});
+  final Map<String, String> arguments;
+  ResetPasswordFormScreen({super.key, required this.arguments});
+
   static const routeName = "/reset-password-form";
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmController =
-  TextEditingController();
+  final TextEditingController _passwordConfirmController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final String emailCode =
-    ModalRoute.of(context)?.settings.arguments as String;
+    final String emailCode = arguments['emailCode'] ?? '';
 
     return SafeArea(
       child: BlocProvider(
@@ -36,8 +37,7 @@ class ResetPasswordFormScreen extends StatelessWidget {
                 elevation: 0,
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back),
-                  onPressed: () =>
-                      Navigator.pushReplacementNamed(context, '/login'),
+                  onPressed: () => context.push(LoginScreen.routeName),
                 ),
               ),
               body: Padding(
@@ -52,7 +52,7 @@ class ResetPasswordFormScreen extends StatelessWidget {
                             SnackBar(content: Text(state.message)),
                           );
                         } else if (state is ResetPasswordEmailSent) {
-                          Navigator.pushNamed(context, '/login');
+                          context.push(LoginScreen.routeName);
                         }
                       },
                       builder: (context, state) {
@@ -92,8 +92,7 @@ class ResetPasswordFormScreen extends StatelessWidget {
                                   foregroundColor: Colors.white,
                                   backgroundColor: Colors.blueGrey,
                                 ),
-                                child:
-                                Text('forget_password_change_submit'.tr()),
+                                child: Text('forget_password_change_submit'.tr()),
                               ),
                             ],
                           );
@@ -136,8 +135,7 @@ class ResetPasswordFormScreen extends StatelessWidget {
         if (value == null || value.isEmpty) {
           return '$label invalide';
         }
-        if (label == 'forget_password_change_confirm_password'.tr() &&
-            value != _passwordController.text) {
+        if (label == 'forget_password_change_confirm_password'.tr() && value != _passwordController.text) {
           return 'forget_password_pwd_not_match'.tr();
         }
         return null;
@@ -148,7 +146,7 @@ class ResetPasswordFormScreen extends StatelessWidget {
   void _resetPassword(BuildContext context, String emailCode) {
     context.read<ResetPasswordBloc>().add(
       ResetPasswordWithEmailCode(
-        email: _passwordController.text.trim(),
+        pwd: _passwordController.text.trim(),
         code: emailCode,
       ),
     );

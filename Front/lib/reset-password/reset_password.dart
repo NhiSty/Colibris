@@ -57,8 +57,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           _isEmailSent = true;
                         });
                       } else if (state is ResetPasswordCodeVerified) {
-                        context.push(ResetPasswordFormScreen.routeName,
-                            extra: state.code);
+                        context.go(
+                          ResetPasswordFormScreen.routeName,
+                          extra: {'emailCode': state.code},
+                        );
+
                       }
                     },
                     builder: (context, state) {
