@@ -3,6 +3,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:front/colocation/colocation_service.dart';
+import 'package:front/home_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:front/main.dart';
 import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
 import 'package:latlong2/latlong.dart';
@@ -16,6 +18,7 @@ class AddressResult {
 
 class CreateColocationPage extends StatefulWidget {
   const CreateColocationPage({super.key});
+  static const routeName = "/create_colocation";
 
   @override
   _CreateColocationPageState createState() => _CreateColocationPageState();
@@ -210,9 +213,9 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                             selectedLocation!,
                             selectedAddress!,
                           );
-      
+
                           if (res == 201) {
-                            Navigator.pushNamed(context, '/home');
+                            context.push(HomeScreen.routeName);
                             ScaffoldMessenger.of(context).showSnackBar(
                                 showSnackBarFeedback(
                                     'create_colocation_created_successfully'.tr(),

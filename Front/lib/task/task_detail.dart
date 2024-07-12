@@ -12,6 +12,7 @@ class TaskDetailPage extends StatelessWidget {
   final Task task;
 
   const TaskDetailPage({super.key, required this.task});
+  static const routeName = "/task-detail";
 
   @override
   Widget build(BuildContext context) {

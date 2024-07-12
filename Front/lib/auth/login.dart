@@ -1,12 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:front/auth/auth_service.dart';
 import 'package:front/main.dart';
+import 'package:front/auth/register.dart';
+import 'package:front/home_screen.dart';
+import 'package:front/reset-password/reset_password.dart';
 import 'package:front/utils/firebase.dart';
+import 'package:front/website/share/secure_storage.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key, required this.data});
+  static const routeName = "/login";
+  var data;
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -90,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/register');
+                        context.push(RegisterScreen.routeName);
                       },
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.amber,
@@ -99,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/reset-password');
+                        context.push(ResetPasswordScreen.routeName);
                       },
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.amber,
@@ -121,9 +127,19 @@ class _LoginScreenState extends State<LoginScreen> {
       var res = await login(_emailController.text, _passwordController.text);
       if (!mounted) return;
       if (res == 200) {
-        final token  = await firebaseClient.getFcmToken();
+        final token = await firebaseClient.getFcmToken();
         await addFcmToken(token as String);
-        Navigator.pushNamed(context, '/home');
+
+        if (await isConnected()) {
+          context.push(HomeScreen.routeName);
+        }
+
+        if (widget.data["intendedRoute"] != null &&
+            widget.data["intendedRoute"]!.isNotEmpty) {
+          context.push(widget.data["intendedRoute"]!,
+              extra: {widget.data["paramName"]: widget.data["value"]});
+          return;
+        }
       } else {
         showDialog(
           context: context,
@@ -135,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextButton(
                   child: const Text('OK', style: TextStyle(color: Colors.red)),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                   },
                 ),
               ],

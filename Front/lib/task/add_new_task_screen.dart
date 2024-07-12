@@ -5,6 +5,7 @@ import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
 import 'package:front/task/task_form.dart';
 import 'package:front/task/task_service.dart';
 import 'package:front/main.dart';
+import 'package:go_router/go_router.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   final Colocation colocation;
@@ -23,21 +24,15 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   }
 
   Future<int> _submitForm(
-      String title,
-      String description,
-      String date,
-      int duration,
-      String picture,
-      int colocationId,
-      ) async {
+    String title,
+    String description,
+    String date,
+    int duration,
+    String picture,
+    int colocationId,
+  ) async {
     return await createTask(
-        title,
-        description,
-        date,
-        duration,
-        picture,
-        colocationId
-    );
+        title, description, date, duration, picture, colocationId);
   }
 
   @override
@@ -64,7 +59,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                   colocationId: widget.colocation.id,
                   submitForm: _submitForm,
                   onSuccessfulSubmit: () {
-                    Navigator.pop(context, true);
+                    context.pop(true);
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       showSnackBarFeedback(

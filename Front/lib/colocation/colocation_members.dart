@@ -2,13 +2,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/main.dart';
 import 'package:front/ColocMembers/colocMembers_service.dart';
+import 'package:front/colocation/colocation_parameters.dart';
 import 'package:front/user/user.dart';
 import 'package:front/website/share/secure_storage.dart';
+import 'package:go_router/go_router.dart';
 
 class ColocationMembers extends StatefulWidget {
   final List<User> users;
 
   const ColocationMembers({super.key, required this.users});
+  static const routeName = "/colocation-members";
 
   @override
   _ColocationMembersState createState() => _ColocationMembersState();
@@ -39,7 +42,7 @@ class _ColocationMembersState extends State<ColocationMembers> {
             TextButton(
               child: Text('cancel'.tr(), style: const TextStyle(color: Colors.amber)),
               onPressed: () {
-                Navigator.of(context).pop();
+                context.pop();
               },
             ),
             TextButton(
@@ -47,11 +50,9 @@ class _ColocationMembersState extends State<ColocationMembers> {
               onPressed: () async {
                 var res = await deleteColocMember(user.colocMemberId!);
                 if (res == 200) {
-                  setState(() {
-                    _users.removeWhere((u) => u.id == user.id);
-                  });
-                  if (!mounted) return;
-                  Navigator.of(context).pop();
+                  if (!context.mounted) return;
+                  context.push(ColocationSettingsPage.routeName,
+                      extra: {'colocationId': user.colocationId});
                 }
               },
             ),
@@ -133,7 +134,7 @@ class _ColocationMembersState extends State<ColocationMembers> {
                                 TextButton(
                                   child: Text('ok'.tr(), style: const TextStyle(color: Colors.amber)),
                                   onPressed: () {
-                                    Navigator.of(context).pop();
+                                    context.pop();
                                   },
                                 ),
                               ],

@@ -22,6 +22,7 @@ import 'package:front/featureFlag/feature_flag_service.dart';
 import 'package:front/featureFlag/maintenance.dart';
 import 'package:front/home_screen.dart';
 import 'package:front/invitation/bloc/invitation_bloc.dart';
+import 'package:front/invitation/invitation_accept_page.dart';
 import 'package:front/invitation/invitation_create_page.dart';
 import 'package:front/invitation/invitation_list_page.dart';
 import 'package:front/profile/profile_screen.dart';
@@ -30,15 +31,21 @@ import 'package:front/reset-password/reset_password_form.dart';
 import 'package:front/shared.widget/bottom_navigation_bar.dart';
 import 'package:front/task/add_new_task_screen.dart';
 import 'package:front/task/bloc/task_bloc.dart';
+import 'package:front/task/camera_screen.dart';
 import 'package:front/task/task_detail.dart';
 import 'package:front/task/update_task_screen.dart';
 import 'package:front/utils/firebase.dart';
+import 'package:front/website/share/secure_storage.dart';
+import 'firebase_options.dart';
 import 'package:front/vote/bloc/vote_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'firebase_options.dart';
 
 final StreamController<List<FeatureFlag>> _featureFlagsController =
 StreamController<List<FeatureFlag>>.broadcast();
+
+var intendedRoute = '/';
 
 final previousFlags = <FeatureFlag>[];
 Future<void> initializeFeatureFlags(List<FeatureFlag> flags) async {
@@ -65,11 +72,11 @@ void onMessageOpenedApp(RemoteMessage message) {
   int colocationId = int.tryParse(colocationIdStr!) ?? 0;
 
   if (colocationId != 0) {
-    Navigator.pushNamed(
-      navigatorKey.currentContext!,
-      '/chat',
-      arguments: {'chatId': colocationId},
-    );
+    navigatorKey.currentContext?.go(LoginScreen.routeName, extra: {
+      'value': colocationId,
+      'intendedRoute': ConversationScreen.routeName,
+      "paramName": "chatId",
+    });
   }
 }
 
@@ -144,6 +151,186 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GoRouter router = GoRouter(
+      navigatorKey: navigatorKey,
+      redirect: (BuildContext context, GoRouterState state) async {
+        final isAuthenticated = await isConnected();
+        if (!isAuthenticated) {
+          return LoginScreen.routeName;
+        }
+
+        if (state.extra == null) {
+          return HomeScreen.routeName;
+        }
+      },
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, state) =>
+          isFeatureEnabled('maintenance', featureFlag)
+              ? const MaintenanceScreen()
+              : PopScope(
+              canPop: false,
+              child: LoginScreen(
+                data: state.extra,
+              )),
+        ),
+        GoRoute(
+          path: LoginScreen.routeName,
+          builder: (context, state) =>
+              PopScope(
+                  canPop: false,
+                  child: LoginScreen(
+                    data: state.extra,
+                  )),
+        ),
+        GoRoute(
+          path: RegisterScreen.routeName,
+          builder: (context, state) => const RegisterScreen(),
+        ),
+        GoRoute(
+          path: HomeScreen.routeName,
+          builder: (context, state) =>
+          const PopScope(
+            canPop: false,
+            child: Scaffold(
+              body: HomeScreen(),
+              bottomNavigationBar: BottomNavigationBarWidget(null),
+            ),
+          ),
+        ),
+        GoRoute(
+          path: CreateColocationPage.routeName,
+          builder: (context, state) => const CreateColocationPage(),
+        ),
+        GoRoute(
+          path: ProfileScreen.routeName,
+          builder: (context, state) =>
+          const Scaffold(
+            body: ProfileScreen(),
+            bottomNavigationBar: BottomNavigationBarWidget(null),
+          ),
+        ),
+        GoRoute(
+          path: ResetPasswordScreen.routeName,
+          builder: (context, state) => const ResetPasswordScreen(),
+        ),
+        GoRoute(
+          path: ResetPasswordFormScreen.routeName,
+          builder: (context, state) => ResetPasswordFormScreen(),
+        ),
+        GoRoute(
+          path: InvitationListPage.routeName,
+          builder: (context, state) =>
+              BlocProvider.value(
+                value: BlocProvider.of<InvitationBloc>(context),
+                child: InvitationListPage(
+                  invitations: (state.extra as Map)['invitations'],
+                ),
+              ),
+        ),
+        GoRoute(
+          path: InvitationCreatePage.routeName,
+          builder: (context, state) =>
+              BlocProvider.value(
+                value: BlocProvider.of<InvitationBloc>(context),
+                child: InvitationCreatePage(
+                  colocationId: (state.extra as Map)['colocationId'],
+                ),
+              ),
+        ),
+        GoRoute(
+          path: ColocationTasklistScreen.routeName,
+          builder: (context, state) =>
+              BlocProvider.value(
+                value: BlocProvider.of<ColocationBloc>(context),
+                child: ColocationTasklistScreen(
+                  colocation: (state.extra as Map)['colocation'],
+                ),
+              ),
+        ),
+        GoRoute(
+          path: InvitationAcceptPage.routeName,
+          builder: (context, state) =>
+              BlocProvider.value(
+                value: BlocProvider.of<InvitationBloc>(context),
+                child: InvitationAcceptPage(
+                  invitationId: (state.extra as Map)['invitationId'],
+                  colocationId: (state.extra as Map)['colocationId'],
+                ),
+              ),
+        ),
+        GoRoute(
+          path: ColocationSettingsPage.routeName,
+          builder: (context, state) =>
+              ColocationSettingsPage(
+                colocationId: (state.extra as Map)['colocationId'],
+              ),
+        ),
+        GoRoute(
+          path: ColocationMembers.routeName,
+          builder: (context, state) =>
+              ColocationMembers(
+                users: (state.extra as Map)['users'],
+              ),
+        ),
+        GoRoute(
+          path: ColocationMembersList.routeName,
+          builder: (context, state) =>
+              ColocationMembersList(
+                users: (state.extra as Map)['users'],
+              ),
+        ),
+        GoRoute(
+          path: ColocationUpdatePage.routeName,
+          builder: (context, state) =>
+              ColocationUpdatePage(
+                colocationId: (state.extra as Map)['colocationId'],
+              ),
+        ),
+        GoRoute(
+          path: TaskDetailPage.routeName,
+          builder: (context, state) =>
+              TaskDetailPage(
+                task: (state.extra as Map)['task'],
+              ),
+        ),
+        GoRoute(
+          path: ConversationScreen.routeName,
+          builder: (context, state) =>
+              ConversationScreen(
+                conversationId: (state.extra as Map)['chatId'],
+              ),
+        ),
+        GoRoute(
+          path: AddNewTaskScreen.routeName,
+          builder: (context, state) =>
+              BlocProvider.value(
+                value: BlocProvider.of<TaskBloc>(context),
+                child: AddNewTaskScreen(
+                  colocation: (state.extra as Map)['colocation'],
+                ),
+              ),
+        ),
+        GoRoute(
+          path: UpdateTaskScreen.routeName,
+          builder: (context, state) =>
+              BlocProvider.value(
+                value: BlocProvider.of<TaskBloc>(context),
+                child: UpdateTaskScreen(
+                  colocation: (state.extra as Map)['colocation'],
+                  task: (state.extra as Map)['task'],
+                ),
+              ),
+        ),
+        GoRoute(
+          path: CameraScreen.routeName,
+          builder: (context, state) =>
+              CameraScreen(cameras: (state.extra as Map)['camera']),
+        ),
+      ],
+    );
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<InvitationBloc>(
@@ -155,11 +342,14 @@ class MyApp extends StatelessWidget {
         BlocProvider<TaskBloc>(
           create: (context) => TaskBloc(),
         ),
-        BlocProvider<VoteBloc>(create: (context) => VoteBloc())
+        BlocProvider<VoteBloc>(create: (context) => VoteBloc(),
+        ),
       ],
-      child: MaterialApp(
-        navigatorKey: navigatorKey,
-        title: 'Colobris',
+      child: MaterialApp.router(
+        routerDelegate: router.routerDelegate,
+        routeInformationParser: router.routeInformationParser,
+        routeInformationProvider: router.routeInformationProvider,
+        title: 'Colobri',
         theme: ThemeData(
           brightness: Brightness.dark,
           primaryColor: Colors.green,
@@ -174,126 +364,10 @@ class MyApp extends StatelessWidget {
           cardColor: const Color(0xFF1E1E1E),
           useMaterial3: true,
         ),
-        home: isFeatureEnabled('maintenance', featureFlag)
-            ? const MaintenanceScreen()
-            : const HomeScreen(),
-        initialRoute: '/login',
         debugShowCheckedModeBanner: false,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
-        routes: {
-          '/login': (context) =>
-          const PopScope(canPop: false, child: LoginScreen()),
-          '/register': (context) => const RegisterScreen(),
-          '/home': (context) => const PopScope(
-              canPop: false,
-              child: Scaffold(
-                body: HomeScreen(),
-                bottomNavigationBar: BottomNavigationBarWidget(null),
-              )),
-          '/create_colocation': (context) => const CreateColocationPage(),
-          '/profile': (context) => const Scaffold(
-            body: ProfileScreen(),
-            bottomNavigationBar: BottomNavigationBarWidget(null),
-          ),
-          '/reset-password': (context) => const ResetPasswordScreen(),
-          '/reset-password-form': (context) => ResetPasswordFormScreen(),
-        },
-        onGenerateRoute: (settings) {
-          final routes = settings.arguments as Map<dynamic, dynamic>? ?? {};
-          switch (settings.name) {
-            case ColocationTasklistScreen.routeName:
-              return MaterialPageRoute(
-                builder: (context) => BlocProvider.value(
-                  value: BlocProvider.of<ColocationBloc>(context),
-                  child: ColocationTasklistScreen(
-                    colocation: routes['colocation'],
-                  ),
-                ),
-                settings: settings,
-              );
-            case '/invitations':
-              return MaterialPageRoute(
-                builder: (context) => BlocProvider.value(
-                  value: BlocProvider.of<InvitationBloc>(context),
-                  child: InvitationListPage(
-                    invitations: routes['invitations'],
-                  ),
-                ),
-                settings: settings,
-              );
-            case '/create_invitation':
-              return MaterialPageRoute(
-                builder: (context) => BlocProvider.value(
-                  value: BlocProvider.of<InvitationBloc>(context),
-                  child: InvitationCreatePage(
-                    colocationId: routes['colocationId'],
-                  ),
-                ),
-                settings: settings,
-              );
-            case AddNewTaskScreen.routeName:
-              return MaterialPageRoute(
-                builder: (context) => BlocProvider.value(
-                  value: BlocProvider.of<TaskBloc>(context),
-                  child: AddNewTaskScreen(
-                    colocation: routes['colocation'],
-                  ),
-                ),
-                settings: settings,
-              );
-            case '/colocation_manage':
-              return MaterialPageRoute(
-                builder: (context) => ColocationSettingsPage(
-                  colocationId: routes['colocationId'],
-                ),
-              );
-            case '/colocation_members':
-              return MaterialPageRoute(
-                builder: (context) => ColocationMembers(
-                  users: routes['users'],
-                ),
-              );
-            case '/colocation_members_list':
-              return MaterialPageRoute(
-                builder: (context) => ColocationMembersList(
-                  users: routes['users'],
-                ),
-              );
-            case '/colocation_update':
-              return MaterialPageRoute(
-                builder: (context) => ColocationUpdatePage(
-                  colocationId: routes['colocationId'],
-                ),
-              );
-            case '/task_detail':
-              return MaterialPageRoute(
-                builder: (context) => TaskDetailPage(
-                  task: routes['task'],
-                ),
-              );
-            case '/chat':
-              return MaterialPageRoute(
-                builder: (context) => ConversationScreen(
-                  conversationId: routes['chatId'],
-                ),
-              );
-            case UpdateTaskScreen.routeName:
-              return MaterialPageRoute(
-                  builder: (context) => BlocProvider.value(
-                    value: BlocProvider.of<TaskBloc>(context),
-                    child: UpdateTaskScreen(
-                      colocation: routes['colocation'],
-                      task: routes['task'],
-                    ),
-                  ),
-                  settings: settings);
-
-            default:
-              return null;
-          }
-        },
       ),
     );
   }

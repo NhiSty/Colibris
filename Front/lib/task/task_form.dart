@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 import 'camera_screen.dart';
@@ -214,17 +216,14 @@ class _TaskFormState extends State<TaskForm> {
               child: ElevatedButton(
                 onPressed: () async {
                   final camera = await availableCameras();
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => CameraScreen(cameras: camera)),
-                  );
+                  final result = await await context
+                      .push(CameraScreen.routeName, extra: {"camera": camera});
 
                   if (result != null &&
-                      result['fileName'] != null &&
-                      result['base64Image'] != null) {
+                      (result as Map<String, dynamic>)['fileName'] != null &&
+                      (result)['base64Image'] != null) {
                     setState(() {
-                      base64Image = result['base64Image'];
+                      base64Image = (result)['base64Image'];
                     });
                   }
                 },
@@ -256,7 +255,7 @@ class _TaskFormState extends State<TaskForm> {
                   Expanded(
                       child: OutlinedButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      context.pop();
                     },
                     child: Text('cancel'.tr()),
                   )),

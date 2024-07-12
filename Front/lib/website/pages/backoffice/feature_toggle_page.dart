@@ -7,6 +7,8 @@ import 'package:front/website/pages/backoffice/flipping/breadcrumb.dart';
 class FeatureTogglePage extends StatefulWidget {
   const FeatureTogglePage({super.key});
 
+  static const routeName = "/feature-flipping";
+
   @override
   _FeatureTogglePageState createState() => _FeatureTogglePageState();
 }

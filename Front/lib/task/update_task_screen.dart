@@ -4,6 +4,7 @@ import 'package:front/colocation/colocation.dart';
 import 'package:front/task/task.dart';
 import 'package:front/task/task_form.dart';
 import 'package:front/task/task_service.dart';
+import 'package:go_router/go_router.dart';
 
 class UpdateTaskScreen extends StatefulWidget {
   final Colocation colocation;
@@ -67,7 +68,7 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
           isEditing: true,
           submitForm: _submitForm,
           onSuccessfulSubmit: () {
-            Navigator.pop(context, true);
+            context.pop();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('task_update_success'.tr()),

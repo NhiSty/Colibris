@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:front/invitation/invitation_service.dart';
 import 'package:front/main.dart';
 import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
+import 'package:go_router/go_router.dart';
 
 class InvitationCreatePage extends StatefulWidget {
   const InvitationCreatePage({super.key, required this.colocationId});
   final int colocationId;
+  static const routeName = "/create-invitation";
 
   @override
   _InvitationCreatePageState createState() => _InvitationCreatePageState();
@@ -68,7 +70,7 @@ class _InvitationCreatePageState extends State<InvitationCreatePage> {
                     child: ElevatedButton(
                       onPressed: () async {
                         String email = _emailController.text;
-      
+
                         if (email.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             showSnackBarFeedback(
@@ -76,10 +78,10 @@ class _InvitationCreatePageState extends State<InvitationCreatePage> {
                               Colors.orange,
                             ),
                           );
-      
+
                           return;
                         }
-      
+
                         if (!email.contains('@') || !email.contains('.')) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             showSnackBarFeedback(
@@ -87,12 +89,12 @@ class _InvitationCreatePageState extends State<InvitationCreatePage> {
                               Colors.orange,
                             ),
                           );
-      
+
                           return;
                         }
-      
+
                         var res = await createInvitation(email, widget.colocationId);
-      
+
                         if (res == 403) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             showSnackBarFeedback(
@@ -100,7 +102,7 @@ class _InvitationCreatePageState extends State<InvitationCreatePage> {
                               Colors.lightBlue,
                             ),
                           );
-      
+
                           return;
                         } else if (res == 404) {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -117,7 +119,7 @@ class _InvitationCreatePageState extends State<InvitationCreatePage> {
                               Colors.green,
                             ),
                           );
-                          Navigator.pop(context);
+                          context.pop();
                         }
                       },
                       style: ElevatedButton.styleFrom(

@@ -1,12 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:front/colocation/colocation_parameters.dart';
 import 'package:front/main.dart';
 import 'package:front/colocation/colocation_service.dart';
+import 'package:go_router/go_router.dart';
 import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
 
 class ColocationUpdatePage extends StatefulWidget {
   final int colocationId;
   const ColocationUpdatePage({super.key, required this.colocationId});
+  static const routeName = "/colocation-update";
 
   @override
   _ColocationUpdateWidgetState createState() => _ColocationUpdateWidgetState();
@@ -124,9 +127,8 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
                         );
 
                         if (res == 200) {
-                          Navigator.pushNamed(context, '/colocation_manage',
-                              arguments: {
-                                'colocationId': widget.colocationId
+                          context.push(ColocationSettingsPage.routeName,
+                                extra: {'colocationId': widget.colocationId
                               });
                           ScaffoldMessenger.of(context).showSnackBar(
                             showSnackBarFeedback(

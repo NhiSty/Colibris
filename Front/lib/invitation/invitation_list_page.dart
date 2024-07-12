@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:front/invitation/invitation.dart';
 import 'package:front/invitation/invitation_accept_page.dart';
 import 'package:front/main.dart';
+import 'package:go_router/go_router.dart';
 
 class InvitationListPage extends StatefulWidget {
   final List<Invitation> invitations;
+  static const routeName = "/invitations";
 
   const InvitationListPage({super.key, required this.invitations});
 
@@ -72,15 +74,10 @@ class _InvitationListPageState extends State<InvitationListPage> {
                       ),
                     ),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => InvitationAcceptPage(
-                            invitationId: widget.invitations[index].id,
-                            colocationId: widget.invitations[index].colocationId,
-                          ),
-                        ),
-                      );
+                      context.push(InvitationAcceptPage.routeName, extra: {
+                        'invitationId': widget.invitations[index].id,
+                        'colocationId': widget.invitations[index].colocationId,
+                      });
                     },
                     leading: const Icon(
                       Icons.email,
