@@ -19,6 +19,12 @@ func NewTaskService(db *gorm.DB) *TaskService {
 	}
 }
 
+func (t *TaskService) SearchTasks(query string) ([]model.Task, error) {
+	var tasks []model.Task
+	result := t.db.Where("title LIKE ? OR description LIKE ?", "%"+query+"%", "%"+query+"%").Find(&tasks)
+	return tasks, result.Error
+}
+
 func (t *TaskService) GetById(id uint) (*model.Task, error) {
 	var task model.Task
 	result := t.db.Where("id = ?", id).First(&task)

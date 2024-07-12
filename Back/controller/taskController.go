@@ -20,6 +20,35 @@ func NewTaskController(service *service.TaskService) *TaskController {
 	}
 }
 
+// SearchTasks allows to search tasks by title or description
+// @Summary Search tasks by title or description
+// @Description Search tasks by title or description
+// @Tags tasks
+// @Produce json
+// @Param query query string false "Search query"
+// @Success 200 {array} model.Task
+// @Failure 403 {object} error
+// @Failure 500 {object} error
+// @Router /tasks/search [get]
+// @Security Bearer
+func (ctl *TaskController) SearchTasks(c *gin.Context) {
+	query := c.DefaultQuery("query", "")
+
+	if !service.IsAdmin(c) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden"})
+		return
+	}
+
+	tasks, err := ctl.service.SearchTasks(query)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, tasks)
+}
+
 // CreateTask allows to create a new task
 // @Summary Create a new task
 // @Description Create a new task
