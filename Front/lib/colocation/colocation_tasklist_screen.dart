@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/colocation/colocation.dart';
 import 'package:front/shared.widget/bottom_navigation_bar.dart';
-import 'package:front/task/task_service.dart';
 import 'package:front/vote/bloc/vote_bloc.dart';
 import 'package:front/website/share/secure_storage.dart';
 
+import '../services/task_service.dart';
 import '../task/bloc/task_bloc.dart';
 import '../task/task_list_item.dart';
 
@@ -168,7 +168,8 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                               widget.colocation.userId ==
                                                   userData['user_id']
                                               ? () async {
-                                            await deleteTask(item.id);
+                                            TaskService taskService = TaskService();
+                                            await taskService.deleteTask(item.id);
                                             context.read<TaskBloc>().add(
                                                 FetchTasks(
                                                     widget.colocation.id));
@@ -270,7 +271,8 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                                   widget.colocation.userId ==
                                                       userData['user_id']
                                                   ? () async {
-                                                await deleteTask(item.id);
+                                                TaskService taskService = TaskService();
+                                                await taskService.deleteTask(item.id);
                                                 context.read<TaskBloc>().add(
                                                     FetchTasks(widget.colocation.id));
                                               }

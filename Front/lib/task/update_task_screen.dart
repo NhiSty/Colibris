@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:front/colocation/colocation.dart';
 import 'package:front/task/task.dart';
 import 'package:front/task/task_form.dart';
-import 'package:front/task/task_service.dart';
+import 'package:front/services/task_service.dart';
 
 class UpdateTaskScreen extends StatefulWidget {
   final Colocation colocation;
@@ -47,14 +47,15 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
       String picture,
       int colocationId,
       ) async {
-    return await updateTask(
-        widget.task.id,
-        title,
-        description,
-        date,
-        duration,
-        picture,
-        colocationId
+    TaskService taskService = TaskService();
+    return await taskService.updateTask(
+      taskId: widget.task.id,
+      title: title,
+      description: description,
+      date: date,
+      duration: duration,
+      picture: picture,
+      colocationId: colocationId,
     );
   }
 

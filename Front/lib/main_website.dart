@@ -5,8 +5,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:front/services/colocMember_service.dart';
 import 'package:front/services/colocation_service.dart';
 import 'package:front/services/log_service.dart';
+import 'package:front/services/task_service.dart';
 import 'package:front/services/user_service.dart';
 import 'package:front/website/pages/auth/login_page.dart';
+import 'package:front/website/pages/backoffice/tasks/bloc/task_bloc.dart';
 import 'package:front/website/pages/backoffice/colocMember_handle_page.dart';
 import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
 import 'package:front/website/pages/backoffice/colocation_handle_page.dart';
@@ -15,6 +17,7 @@ import 'package:front/website/pages/backoffice/feature_toggle_page.dart';
 import 'package:front/website/pages/backoffice/log_handle_page.dart';
 import 'package:front/website/pages/backoffice/logs/bloc/log_bloc.dart';
 import 'package:front/website/pages/backoffice/messages_handle_page.dart';
+import 'package:front/website/pages/backoffice/task_handle_page.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
 import 'package:front/website/pages/backoffice/user_handle_page.dart';
 import 'package:front/website/pages/home_page.dart';
@@ -58,6 +61,11 @@ class MyApp extends StatelessWidget {
               ColocMemberBloc(colocMemberService: ColocMemberService())
                 ..add(LoadColocMembers()),
         ),
+        BlocProvider<TaskBloc>(
+          create: (context) =>
+          TaskBloc(taskService: TaskService())
+            ..add(LoadTasks()),
+        ),
       ],
       child: MaterialApp(
         title: 'BackOffice administration',
@@ -79,6 +87,7 @@ class MyApp extends StatelessWidget {
           '/feature-flipping': (context) => const FeatureTogglePage(),
           '/backoffice/coloc-members': (context) =>
               const ColocMemberHandlePage(),
+          '/backoffice/tasks': (context) => const TaskHandlePage(),
         },
         onGenerateRoute: (settings) {
           print('Generating route for: ${settings.name}');
