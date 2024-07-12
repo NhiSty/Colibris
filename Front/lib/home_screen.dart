@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                           Text(
                             'colocation_home'.tr(),
                             style: const TextStyle(
-                              fontSize: 22,
+                              fontSize: 23,
                               color: Colors.white,
                             ),
                           ),
@@ -226,7 +226,7 @@ class HomeScreen extends StatelessWidget {
                                           vertical: 8.0,
                                           horizontal: 16.0),
                                       child: Card(
-                                        color: Colors.blueGrey,
+                                        color: Colors.blueGrey[800],
                                         elevation: 4,
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(12),
@@ -281,7 +281,7 @@ class HomeScreen extends StatelessWidget {
                   onPressed: () {
                     context.push(CreateColocationPage.routeName);
                   },
-                  backgroundColor: Colors.blueGrey[400],
+                  backgroundColor: Colors.blueGrey[800],
                   child: const Icon(
                     Icons.add,
                     size: 30,

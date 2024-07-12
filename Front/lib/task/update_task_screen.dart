@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/colocation/colocation.dart';
+import 'package:front/main.dart';
+import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
 import 'package:front/task/task.dart';
 import 'package:front/task/task_form.dart';
 import 'package:front/task/task_service.dart';
@@ -49,35 +51,40 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: Text(
-          'task_update'.tr(),
-          style: const TextStyle(color: Colors.white),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: TaskForm(
-          colocationId: widget.colocation.id,
-          title: widget.task.title,
-          description: widget.task.description,
-          date: widget.task.date,
-          timeRange: convertMinutesToHHMM(widget.task.duration),
-          image: widget.task.picture,
-          isEditing: true,
-          submitForm: _submitForm,
-          onSuccessfulSubmit: () {
-            context.pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('task_update_success'.tr()),
-                backgroundColor: Colors.green,
+        child: GradientBackground(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+                appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(
+            'task_update'.tr(),
+            style: const TextStyle(color: Colors.white),
+          ),
+                ),
+                body: SingleChildScrollView(
+          child: TaskForm(
+            colocationId: widget.colocation.id,
+            title: widget.task.title,
+            description: widget.task.description,
+            date: widget.task.date,
+            timeRange: convertMinutesToHHMM(widget.task.duration),
+            image: widget.task.picture,
+            isEditing: true,
+            submitForm: _submitForm,
+            onSuccessfulSubmit: () {
+              context.pop();
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                showSnackBarFeedback(
+                  'task_update_success'.tr(),
+                  Colors.green,
+                ),
+              );
+            },
+          ),
+                ),
               ),
-            );
-          },
-        ),
-      ),
-    ));
+        )
+    );
   }
 }

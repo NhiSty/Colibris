@@ -61,7 +61,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             registerUser(
-                              _emailController.text,
+                              _emailController.text.trim(),
                               _passwordController.text,
                               _firstNameController.text,
                               _lastNameController.text,
@@ -88,7 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         context.push(LoginScreen.routeName);
                       },
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.amber,
+                        foregroundColor: Colors.yellow,
                       ),
                       child: Text('register_go_login'.tr()),
                     ),
@@ -114,8 +114,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           borderSide: BorderSide(color: Colors.white),
         ),
         focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.blueGrey),
+          borderSide: BorderSide(color: Colors.tealAccent),
         ),
+        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
       ),
       style: const TextStyle(color: Colors.white),
       keyboardType: keyboardType,

@@ -71,14 +71,13 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
                       labelText: 'update_colocation_name'.tr(),
                       labelStyle: const TextStyle(color: Colors.white),
                       border: const OutlineInputBorder(),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide:
-                        BorderSide(color: Colors.white),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey[800]!),
                       ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide:
-                        BorderSide(color: Colors.blueGrey),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey[800]!),
                       ),
+                      errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
                     ),
                     style: const TextStyle(color: Colors.white),
                   ),
@@ -89,13 +88,11 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
                       labelText: 'update_colocation_description'.tr(),
                       labelStyle: const TextStyle(color: Colors.white),
                       border: const OutlineInputBorder(),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide:
-                        BorderSide(color: Colors.white),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey[800]!),
                       ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide:
-                        BorderSide(color: Colors.blueGrey),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey[800]!),
                       ),
                     ),
                     maxLines: 3,

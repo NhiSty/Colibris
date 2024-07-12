@@ -51,7 +51,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           ),
                         );
 
-                            context.go('/login');
+                        context.go('/login');
                       } else if (state is ResetPasswordEmailSent) {
                         setState(() {
                           _isEmailSent = true;
@@ -73,13 +73,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            const Text(
-                              'Colibri',
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
                             Image.asset(
                               'assets/images/login_page.png',
                               height: 200,
@@ -91,7 +84,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               Text(
                                 'forget_password_text'.tr(),
                                 style: const TextStyle(
-                                    fontSize: 14, color: Colors.white),
+                                    fontSize: 16, color: Colors.white),
                               ),
                               const SizedBox(height: 20),
                               buildTextFormField(
@@ -125,7 +118,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               Text(
                                 'forget_password_received_code_by_mail'.tr(),
                                 style: const TextStyle(
-                                    fontSize: 14, color: Colors.white),
+                                    fontSize: 16, color: Colors.white),
                               ),
                               const SizedBox(height: 20),
                               buildTextFormField(
@@ -189,9 +182,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           borderSide: BorderSide(color: Colors.white),
         ),
         focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.blueGrey),
+          borderSide: BorderSide(color: Colors.tealAccent),
         ),
-        errorStyle: TextStyle(color: Colors.red[200]),
+        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
       ),
       style: const TextStyle(color: Colors.white),
       keyboardType: keyboardType,

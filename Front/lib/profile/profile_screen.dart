@@ -60,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            title: Text('profile'.tr()),
+            title: Text('user_settings'.tr()),
             backgroundColor: Colors.transparent,
             elevation: 0,
           ),
@@ -72,13 +72,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      'user_settings'.tr(),
-                      style: const TextStyle(
-                        fontSize: 24,
-                        color: Colors.white,
-                      ),
-                    ),
                     const SizedBox(height: 16.0),
                     _buildEditableRow(
                       label: 'lastname'.tr(),
@@ -221,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           width: 100,
           child: Text(
             label,
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(color: Color(0xFF333333), fontSize: 17),
           ),
         ),
         Expanded(
@@ -233,9 +226,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               hintText: hintText,
               labelStyle: const TextStyle(color: Colors.white),
               border: const OutlineInputBorder(),
-              enabledBorder:
-              isEditing ? const OutlineInputBorder() : InputBorder.none,
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+              ),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.tealAccent),
+              ),
               hintStyle: const TextStyle(color: Colors.white),
+              errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
             ),
             style: const TextStyle(color: Colors.white),
             validator: (value) {

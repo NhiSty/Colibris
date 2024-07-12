@@ -52,6 +52,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Card(
+              elevation: 0,
               color: Colors.transparent,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),

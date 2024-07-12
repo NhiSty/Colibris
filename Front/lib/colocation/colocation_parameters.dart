@@ -24,7 +24,7 @@ class ColocationSettingsPage extends StatelessWidget {
           title: Text('confirm_delete'.tr()),
           content: Text('coloc_settings_delete_colocation_confirm'.tr()),
           backgroundColor: Colors.grey[850],
-          titleTextStyle:  TextStyle(color: Colors.red[200], fontSize: 20),
+          titleTextStyle:  TextStyle(color: Colors.red[500], fontSize: 20),
           contentTextStyle: const TextStyle(color: Colors.white, fontSize: 16),
           actions: <Widget>[
             TextButton(
@@ -34,7 +34,7 @@ class ColocationSettingsPage extends StatelessWidget {
               },
             ),
             TextButton(
-              child: Text('confirm'.tr(), style: TextStyle(color: Colors.red[200])),
+              child: Text('confirm'.tr(), style: TextStyle(color: Colors.red[500])),
               onPressed: () async {
                 var res = await deleteColocation(colocationId);
                 if (res == 200) {
@@ -63,7 +63,7 @@ class ColocationSettingsPage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           children: <Widget>[
             ListTile(
-              title: Text('coloc_member'.tr(), style: const TextStyle(color: Colors.white)),
+              title: Text('coloc_member'.tr(), style: const TextStyle(color: Colors.white, fontSize: 17)),
               trailing: const Icon(Icons.arrow_forward, color: Colors.white),
               onTap: () async {
                 var res = await findUserInColoc(colocationId);
@@ -79,7 +79,7 @@ class ColocationSettingsPage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('coloc_settings_modify_colocation'.tr(), style: const TextStyle(color: Colors.white)),
+              title: Text('coloc_settings_modify_colocation'.tr(), style: const TextStyle(color: Colors.white, fontSize: 17)),
               trailing: const Icon(Icons.arrow_forward, color: Colors.white),
               onTap: () {
                 context.push(ColocationUpdatePage.routeName,
@@ -87,7 +87,7 @@ class ColocationSettingsPage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('coloc_settings_invit_coloc_roommate'.tr(), style: const TextStyle(color: Colors.white)),
+              title: Text('coloc_settings_invit_coloc_roommate'.tr(), style: const TextStyle(color: Colors.white, fontSize: 17)),
               trailing: const Icon(Icons.arrow_forward, color: Colors.white),
               onTap: () {
                 context.push(InvitationCreatePage.routeName,
@@ -95,7 +95,7 @@ class ColocationSettingsPage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('coloc_settings_ban_coloc_roommate'.tr(), style: const TextStyle(color: Colors.white)),
+              title: Text('coloc_settings_ban_coloc_roommate'.tr(), style: const TextStyle(color: Colors.white, fontSize: 17)),
               trailing: const Icon(Icons.arrow_forward, color: Colors.white),
               onTap: () async {
                 var res = await findUserInColoc(colocationId);
@@ -111,8 +111,8 @@ class ColocationSettingsPage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('coloc_settings_delete_colocation'.tr(), style: TextStyle(color: Colors.red[200])),
-              trailing: Icon(Icons.delete, color: Colors.red[200]),
+              title: Text('coloc_settings_delete_colocation'.tr(), style: TextStyle(color: Colors.red[400], fontSize: 17)),
+              trailing: Icon(Icons.delete, color: Colors.red[500]),
               onTap: () {
                 _showDeleteConfirmationDialog(context);
               },

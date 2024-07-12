@@ -85,7 +85,7 @@ class _CameraScreenState extends State<CameraScreen> {
             height: MediaQuery.of(context).size.height * 0.15,
             decoration: const BoxDecoration(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                color: Colors.green),
+                color: Colors.transparent),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

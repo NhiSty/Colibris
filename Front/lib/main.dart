@@ -167,10 +167,6 @@ class MyApp extends StatelessWidget {
           }
           return LoginScreen.routeName;
         }
-
-        if (state.extra == null) {
-          return HomeScreen.routeName;
-        }
       },
       routes: [
         GoRoute(
@@ -180,9 +176,12 @@ class MyApp extends StatelessWidget {
               ? const MaintenanceScreen()
               : PopScope(
               canPop: false,
+/*
               child: LoginScreen(
                 data: state.extra,
               )),
+*/
+              child: HomeScreen()),
         ),
         GoRoute(
           path: LoginScreen.routeName,
@@ -396,7 +395,7 @@ class GradientBackground extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.grey, Colors.black],
+          colors: [Color(0xFF66CDAA), Color(0xFF008B8B)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

@@ -52,6 +52,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
             child: DefaultTabController(
                 length: 2,
                 child: Scaffold(
+                    backgroundColor: Colors.transparent,
                     appBar: AppBar(
                       bottom: TabBar(
                         indicatorColor: Colors.white,
@@ -68,7 +69,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                           ),
                         ],
                       ),
-                      backgroundColor: Colors.green,
+                      backgroundColor: Colors.transparent,
                       title: Text(
                         widget.colocation.name,
                         style: const TextStyle(color: Colors.white),
@@ -355,8 +356,13 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                 .add(FetchTasks(widget.colocation.id));
                           }
                         },
-                        backgroundColor: Colors.green,
-                        child: const Icon(Icons.add, color: Colors.white))))));
+                        backgroundColor: Colors.blueGrey[800],
+                        child: const Icon(Icons.add, color: Colors.white)
+                    )
+                )
+            )
+        )
+    );
   }
 }
 

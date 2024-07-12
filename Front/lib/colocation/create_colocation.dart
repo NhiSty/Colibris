@@ -103,13 +103,13 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                         labelText: 'create_colocation_name'.tr(),
                         border: const OutlineInputBorder(),
                         labelStyle: const TextStyle(color: Colors.white),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
                         ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
                         ),
-                        errorStyle: TextStyle(color: Colors.red[200]),
+                        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
                       ),
                       style: const TextStyle(color: Colors.white),
                     ),
@@ -120,12 +120,14 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                         labelText: 'create_colocation_description'.tr(),
                         border: const OutlineInputBorder(),
                         labelStyle: const TextStyle(color: Colors.white),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
+                        enabledBorder:  OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
                         ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
+                        focusedBorder:  OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
                         ),
+                        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
+
                       ),
                       style: const TextStyle(color: Colors.white),
                       maxLines: 3,
@@ -137,12 +139,13 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                         labelText: 'create_colocation_search_address'.tr(),
                         border: const OutlineInputBorder(),
                         labelStyle: const TextStyle(color: Colors.white),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
+                        enabledBorder:  OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
                         ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
+                        focusedBorder:  OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
                         ),
+                        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.search, color: Colors.white),
                           onPressed: () {
@@ -177,12 +180,14 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                         labelText: 'create_colocation_select_address'.tr(),
                         border: const OutlineInputBorder(),
                         labelStyle: const TextStyle(color: Colors.white),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
+                        enabledBorder:  OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
                         ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
+                        focusedBorder:  OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
                         ),
+                        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
+
                       ),
                       style: const TextStyle(color: Colors.white),
                     ),

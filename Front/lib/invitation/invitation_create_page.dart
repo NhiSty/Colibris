@@ -69,7 +69,7 @@ class _InvitationCreatePageState extends State<InvitationCreatePage> {
                     width: 200,
                     child: ElevatedButton(
                       onPressed: () async {
-                        String email = _emailController.text;
+                        String email = _emailController.text.trim();
 
                         if (email.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(

@@ -27,8 +27,9 @@ class TaskListItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(right: 10),
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-          borderRadius: BorderRadius.circular(10)),
+        border: Border.all(color: Colors.blueGrey[800]!),
+        borderRadius: BorderRadius.circular(10),
+      ),
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: ListTile(
         contentPadding: const EdgeInsets.only(right: 0, left: 16),
@@ -36,9 +37,12 @@ class TaskListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-                child: Text(item.title,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold))),
+              child: Text(item.title,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold
+                  )
+              ),
+            ),
             Expanded(
               child: Align(
                 alignment: Alignment.centerRight,
@@ -46,99 +50,104 @@ class TaskListItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     BlocBuilder<VoteBloc, CompositeVoteState>(
-                        builder: (context, state) {
-                      if (state.voteByUserState is VoteByUserLoading) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (state.voteByUserState is VoteByUserError) {
-                        return Center(
-                          child: Text((state.voteByUserState as VoteByUserError)
-                              .message),
-                        );
-                      } else if (state.voteByUserState is VoteByUserLoaded) {
-                        final votes =
-                            (state.voteByUserState as VoteByUserLoaded).votes;
+                      builder: (context, state) {
+                        if (state.voteByUserState is VoteByUserLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (state.voteByUserState is VoteByUserError) {
+                          return Center(
+                            child: Text((state.voteByUserState as VoteByUserError).message),
+                          );
+                        } else if (state.voteByUserState is VoteByUserLoaded) {
+                          final votes = (state.voteByUserState as VoteByUserLoaded).votes;
 
-                        final voteIndex =
-                            votes.indexWhere((vote) => vote.taskId == item.id);
-                        final vote =
-                            voteIndex != -1 ? votes.elementAt(voteIndex) : null;
+                          final voteIndex = votes.indexWhere((vote) => vote.taskId == item.id);
+                          final vote = voteIndex != -1 ? votes.elementAt(voteIndex) : null;
 
-                        return PopupMenuButton(
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                                onTap: onViewPressed,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(Icons.remove_red_eye_outlined),
-                                    const SizedBox(width: 10),
-                                    Text('task_action_details'.tr()),
-                                  ],
-                                )),
-                            if (onEditPressed != null)
-                              PopupMenuItem(
-                                  onTap: onEditPressed,
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              popupMenuTheme: PopupMenuThemeData(
+                                color: Colors.blueGrey[800],
+                                textStyle: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            child: PopupMenuButton(
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                                  onTap: onViewPressed,
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      const Icon(Icons.edit_outlined),
+                                      const Icon(Icons.remove_red_eye_outlined, color: Colors.white),
                                       const SizedBox(width: 10),
-                                      Text('task_action_edit'.tr()),
+                                      Text('task_action_details'.tr(), style: const TextStyle(color: Colors.white)),
                                     ],
-                                  )),
-                            if (onLikePressed != null)
-                              PopupMenuItem(
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return VoteDialog(
-                                          taskId: item.id,
-                                          vote: vote,
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      if (vote != null)
-                                        vote.value == 1
-                                            ? const Icon(
-                                                Icons.thumb_up_outlined,
-                                                color: Colors.green)
-                                            : const Icon(
-                                                Icons.thumb_down_outlined,
-                                                color: Colors.red)
-                                      else
-                                        const Icon(Icons.thumb_up_outlined),
-                                      const SizedBox(width: 10),
-                                      Text('task_action_like'.tr()),
-                                    ],
-                                  )),
-                            if (onDeletePressed != null)
-                              PopupMenuItem(
-                                  onTap: onDeletePressed,
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(Icons.delete_outlined),
-                                      const SizedBox(width: 10),
-                                      Text('task_action_delete'.tr()),
-                                    ],
-                                  )),
-                          ],
-                        );
-                      } else {
-                        return Center(child: Text('vote_unknown_error'.tr()));
-                      }
-                    })
+                                  ),
+                                ),
+                                if (onEditPressed != null)
+                                  PopupMenuItem(
+                                    onTap: onEditPressed,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(Icons.edit_outlined, color: Colors.white),
+                                        const SizedBox(width: 10),
+                                        Text('task_action_edit'.tr(), style: const TextStyle(color: Colors.white)),
+                                      ],
+                                    ),
+                                  ),
+                                if (onLikePressed != null)
+                                  PopupMenuItem(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return VoteDialog(
+                                            taskId: item.id,
+                                            vote: vote,
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        if (vote != null)
+                                          vote.value == 1
+                                              ? const Icon(Icons.thumb_up_outlined, color: Colors.green)
+                                              : const Icon(Icons.thumb_down_outlined, color: Colors.red)
+                                        else
+                                          const Icon(Icons.thumb_up_outlined, color: Colors.white),
+                                        const SizedBox(width: 10),
+                                        Text('task_action_like'.tr(), style: const TextStyle(color: Colors.white)),
+                                      ],
+                                    ),
+                                  ),
+                                if (onDeletePressed != null)
+                                  PopupMenuItem(
+                                    onTap: onDeletePressed,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(Icons.delete_outlined, color: Colors.white),
+                                        const SizedBox(width: 10),
+                                        Text('task_action_delete'.tr(), style: const TextStyle(color: Colors.white)),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return Center(child: Text('vote_unknown_error'.tr()));
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
         subtitle: Column(

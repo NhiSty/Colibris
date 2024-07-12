@@ -1,12 +1,10 @@
 import 'dart:convert';
-
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:time_range_picker/time_range_picker.dart';
-
 import 'camera_screen.dart';
 
 typedef SubmitForm = Future<int> Function(String title, String description,
@@ -66,27 +64,18 @@ class _TaskFormState extends State<TaskForm> {
   void _onRangeSelected(TimeRange range) {
     setState(() {
       final dayInSeconds = const Duration(days: 1).inSeconds;
-      final durationEndTime =
-          Duration(hours: range.endTime.hour, minutes: range.endTime.minute)
-              .inSeconds;
-      final durationStartTime =
-          Duration(hours: range.startTime.hour, minutes: range.startTime.minute)
-              .inSeconds;
+      final durationEndTime = Duration(hours: range.endTime.hour, minutes: range.endTime.minute).inSeconds;
+      final durationStartTime = Duration(hours: range.startTime.hour, minutes: range.startTime.minute).inSeconds;
       int totalDurationInSeconds;
 
       if (durationEndTime - durationStartTime < 0) {
-        totalDurationInSeconds =
-            (durationEndTime + dayInSeconds) - durationStartTime;
+        totalDurationInSeconds = (durationEndTime + dayInSeconds) - durationStartTime;
       } else {
         totalDurationInSeconds = durationEndTime - durationStartTime;
       }
 
-      var hours = '${(Duration(seconds: totalDurationInSeconds))}'
-          .split('.')[0]
-          .split(':')[0];
-      var minutes = '${(Duration(seconds: totalDurationInSeconds))}'
-          .split('.')[0]
-          .split(':')[1];
+      var hours = '${(Duration(seconds: totalDurationInSeconds))}'.split('.')[0].split(':')[0];
+      var minutes = '${(Duration(seconds: totalDurationInSeconds))}'.split('.')[0].split(':')[1];
 
       _timeRangeController.text = '$hours:$minutes';
     });
@@ -107,7 +96,14 @@ class _TaskFormState extends State<TaskForm> {
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 labelText: 'task_create_task_name'.tr(),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                ),
               ),
+              style: const TextStyle(color: Colors.white),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'task_create_task_name_error'.tr();
@@ -125,7 +121,15 @@ class _TaskFormState extends State<TaskForm> {
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
                     labelText: 'task_create_description'.tr(),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                    ),
+                    errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
                   ),
+                  style: const TextStyle(color: Colors.white),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'task_create_description_error'.tr();
@@ -136,16 +140,22 @@ class _TaskFormState extends State<TaskForm> {
               ),
             ),
             Container(
-                margin: const EdgeInsets.only(top: 30),
-                //height: MediaQuery.of(context).size.width / 3,
-                child: Center(
-                    child: TextFormField(
+              margin: const EdgeInsets.only(top: 30),
+              child: Center(
+                child: TextFormField(
                   controller: dateController,
-                  //editing controller of this TextField
                   decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: "task_create_date".tr() //label text of field
-                      ),
+                    border: const OutlineInputBorder(),
+                    labelText: "task_create_date".tr(),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                    ),
+                    errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
+                  ),
+                  style: const TextStyle(color: Colors.white),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'task_create_date_error'.tr();
@@ -153,29 +163,24 @@ class _TaskFormState extends State<TaskForm> {
                     return null;
                   },
                   readOnly: true,
-                  //set it true, so that user will not able to edit text
                   onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1950),
-                        //DateTime.now() - not to allow to choose before today.
-                        lastDate: DateTime(2100));
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1950),
+                      lastDate: DateTime(2100),
+                    );
 
                     if (pickedDate != null) {
-                      print(
-                          pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                      String formattedDate =
-                          DateFormat('dd/MM/yyyy').format(pickedDate);
-                      print(
-                          formattedDate); //formatted date output using intl package =>  2021-03-16
+                      String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate);
                       setState(() {
-                        dateController.text =
-                            formattedDate; //set output date to TextField value.
+                        dateController.text = formattedDate;
                       });
-                    } else {}
+                    }
                   },
-                ))),
+                ),
+              ),
+            ),
             Container(
               margin: const EdgeInsets.only(top: 30),
               child: Center(
@@ -191,7 +196,15 @@ class _TaskFormState extends State<TaskForm> {
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
                     labelText: 'task_create_past_time'.tr(),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                    ),
+                    errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
                   ),
+                  style: const TextStyle(color: Colors.white),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'task_create_duration_error'.tr();
@@ -203,12 +216,13 @@ class _TaskFormState extends State<TaskForm> {
             ),
             Card(
               margin: const EdgeInsets.only(top: 30, bottom: 10),
+              color: Colors.blueGrey,
               child: base64Image.isNotEmpty
                   ? Image.memory(
-                      base64Decode(base64Image),
-                      height: 200,
-                      fit: BoxFit.scaleDown,
-                    )
+                base64Decode(base64Image),
+                height: 200,
+                fit: BoxFit.scaleDown,
+              )
                   : const SizedBox.shrink(),
             ),
             Container(
@@ -216,34 +230,35 @@ class _TaskFormState extends State<TaskForm> {
               child: ElevatedButton(
                 onPressed: () async {
                   final camera = await availableCameras();
-                  final result = await await context
-                      .push(CameraScreen.routeName, extra: {"camera": camera});
+                  final result = await context.push(CameraScreen.routeName, extra: {"camera": camera});
 
-                  if (result != null &&
-                      (result as Map<String, dynamic>)['fileName'] != null &&
-                      (result)['base64Image'] != null) {
+                  if (result != null && (result as Map<String, dynamic>)['fileName'] != null && (result)['base64Image'] != null) {
                     setState(() {
                       base64Image = (result)['base64Image'];
                     });
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.tealAccent,
+                  foregroundColor: Colors.black,
+                ),
                 child: base64Image.isEmpty
                     ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.camera_alt),
-                          const SizedBox(width: 10),
-                          Text('task_create_take_picture'.tr())
-                        ],
-                      )
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.camera_alt),
+                    const SizedBox(width: 10),
+                    Text('task_create_take_picture'.tr())
+                  ],
+                )
                     : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.camera_alt),
-                          const SizedBox(width: 10),
-                          Text('task_create_retake_picture'.tr())
-                        ],
-                      ),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.camera_alt),
+                    const SizedBox(width: 10),
+                    Text('task_create_retake_picture'.tr())
+                  ],
+                ),
               ),
             ),
             Align(
@@ -253,45 +268,47 @@ class _TaskFormState extends State<TaskForm> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                      child: OutlinedButton(
-                    onPressed: () {
-                      context.pop();
-                    },
-                    child: Text('cancel'.tr()),
-                  )),
-                  const SizedBox(
-                    width: 10,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        context.pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: Text('cancel'.tr()),
+                    ),
                   ),
+                  const SizedBox(width: 10),
                   Expanded(
-                      child: OutlinedButton(
-                    style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.blueGrey)),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        var statusCode = await widget.submitForm(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          var statusCode = await widget.submitForm(
                             _titleController.text,
                             _descriptionController.text,
                             dateController.text,
-                            int.parse(_timeRangeController.text.split(':')[0]) *
-                                    60 +
-                                int.parse(
-                                    _timeRangeController.text.split(':')[1]),
+                            int.parse(_timeRangeController.text.split(':')[0]) * 60 +
+                                int.parse(_timeRangeController.text.split(':')[1]),
                             base64Image,
-                            widget.colocationId);
+                            widget.colocationId,
+                          );
 
-                        if (statusCode == 201 || statusCode == 200) {
-                          widget.onSuccessfulSubmit();
+                          if (statusCode == 201 || statusCode == 200) {
+                            widget.onSuccessfulSubmit();
+                          }
                         }
-                      }
-                    },
-                    child: Text(
-                      widget.isEditing ? 'edit'.tr() : 'add'.tr(),
-                      style: const TextStyle(color: Colors.white),
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueGrey[700],
+                        foregroundColor: Colors.white,
+                      ),
+                      child: Text(widget.isEditing ? 'edit'.tr() : 'add'.tr()),
                     ),
-                  ))
+                  )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

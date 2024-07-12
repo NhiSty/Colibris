@@ -104,7 +104,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
       currentIndex: currentIndex,
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.white.withOpacity(0.7),
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.black,
       type: BottomNavigationBarType.fixed,
       onTap: (index) {
         if (index >= 0 && index < routes.length) {

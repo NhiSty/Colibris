@@ -39,7 +39,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
-
                     Image.asset(
                       'assets/images/login_page.png',
                       height: 300,
@@ -51,7 +50,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: 'login_email'.tr(),
+                        labelStyle: const TextStyle(color: Colors.white),
                         border: const OutlineInputBorder(),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.tealAccent),
+                        ),
+                        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
                       ),
                       style: const TextStyle(color: Colors.white),
                       validator: (value) {
@@ -66,7 +73,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _passwordController,
                       decoration: InputDecoration(
                         labelText: 'login_password'.tr(),
+                        labelStyle: const TextStyle(color: Colors.white),
                         border: const OutlineInputBorder(),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.tealAccent),
+                        ),
+                        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
                       ),
                       obscureText: true,
                       style: const TextStyle(color: Colors.white),
@@ -99,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         context.push(RegisterScreen.routeName);
                       },
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.amber,
+                        foregroundColor: Colors.yellow,
                       ),
                       child: Text('login_register'.tr()),
                     ),
@@ -108,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         context.push(ResetPasswordScreen.routeName);
                       },
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.amber,
+                        foregroundColor: Colors.yellow,
                       ),
                       child: Text('login_forget_password'.tr()),
                     ),
@@ -124,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   loginClick() async {
     if (_formKey.currentState!.validate()) {
-      var res = await login(_emailController.text, _passwordController.text);
+      var res = await login(_emailController.text.trim(), _passwordController.text);
       if (!mounted) return;
       if (res == 200) {
         final token = await firebaseClient.getFcmToken();
