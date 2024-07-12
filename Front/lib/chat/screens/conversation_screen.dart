@@ -145,7 +145,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () async {
-                  var res = await fetchColocation(1);
+                  var res = await fetchColocation(widget.conversationId);
                   var colocation = Colocation.fromJson(res);
                   context.push(ColocationTasklistScreen.routeName,
                       extra: {"colocation": colocation});
