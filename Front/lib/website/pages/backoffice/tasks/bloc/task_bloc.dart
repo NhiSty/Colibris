@@ -1,9 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/services/task_service.dart';
-
-import '../../../../../task/task.dart';
 import 'task_state.dart';
 
 part 'task_event.dart';

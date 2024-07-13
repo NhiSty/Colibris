@@ -92,6 +92,15 @@ class MyApp extends StatelessWidget {
           path: TaskHandlePage.routeName,
           builder: (context, state) => const TaskHandlePage(),
         ),
+        GoRoute(
+          path: MessagesHandlePage.routeName,
+          builder: (context, state) {
+            final colocationId = (state.extra as Map)['id'];
+            return MessagesHandlePage(
+              colocationId: colocationId,
+            );
+          },
+        ),
       ],
       errorBuilder: (context, state) => Scaffold(
         body: Center(child: Text(state.error.toString())),

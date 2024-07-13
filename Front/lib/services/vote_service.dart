@@ -9,7 +9,11 @@ import '../website/share/secure_storage.dart';
 class VoteService {
   final Dio _dio = dio;
 
-  Future<dynamic> addVote(int taskId, int value) async {
+  Future<dynamic> addVote({
+    required int taskId,
+    required int value,
+    int userId = 0,
+}) async {
     var headers = await addHeader();
     try {
       var response = await _dio.post(
@@ -17,6 +21,7 @@ class VoteService {
         data: {
           'taskId': taskId,
           'value': value,
+          'userId': userId,
         },
         options: Options(headers: headers),
       );
@@ -101,6 +106,25 @@ class VoteService {
       log('Response data: ${e.response!.data}');
 
       throw Exception('Failed to update vote with id : $voteId');
+    }
+  }
+
+  Future<dynamic> deleteVote(int voteId) async {
+    var headers = await addHeader();
+
+    try {
+      var response = await _dio.delete('/votes/$voteId',
+          options: Options(headers: headers));
+      return {
+        'statusCode': response.statusCode,
+        'data': response.data,
+      };
+    } on DioException catch (e) {
+      log('Dio error!');
+      log('Response status: ${e.response!.statusCode}');
+      log('Response data: ${e.response!.data}');
+
+      throw Exception('Failed to delete vote with id : $voteId');
     }
   }
 }

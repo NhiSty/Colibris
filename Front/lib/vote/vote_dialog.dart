@@ -47,7 +47,10 @@ class _VoteDialogState extends State<VoteDialog> {
       response = await voteService.updateVote(voteId, likeValue);
       return response;
     } else {
-      response = await voteService.addVote(taskId, likeValue);
+      response = await voteService.addVote(
+        taskId: taskId,
+        value: likeValue
+      );
       return response;
     }
   }
