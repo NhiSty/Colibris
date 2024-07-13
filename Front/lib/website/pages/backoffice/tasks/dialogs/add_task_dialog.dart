@@ -80,14 +80,26 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
         listener: (context, state) {
           if (state is TaskAdded) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(state.message),
-              backgroundColor: Colors.green,
+                content: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(state.message),
+                )
             ));
             Navigator.of(context).pop();
           } else if (state is TaskError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(state.message),
-              backgroundColor: Colors.red,
+              content: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(state.message),
+              ),
             ));
           }
         },
@@ -288,13 +300,13 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
 
 
               context.read<TaskBloc>().add(AddTask(
-                    title: title,
-                    description: description,
-                    date: date,
-                    duration: int.parse(_timeRangeController.text.split(':')[0]) * 60 + int.parse(_timeRangeController.text.split(':')[1]),
-                    userId: userId,
-                    colocationId: colocationId,
-                  ));
+                title: title,
+                description: description,
+                date: date,
+                duration: int.parse(_timeRangeController.text.split(':')[0]) * 60 + int.parse(_timeRangeController.text.split(':')[1]),
+                userId: userId,
+                colocationId: colocationId,
+              ));
             }
           },
           child: Text('save'.tr()),

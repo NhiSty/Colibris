@@ -88,6 +88,10 @@ class MyApp extends StatelessWidget {
             );
           },
         ),
+        GoRoute(
+          path: TaskHandlePage.routeName,
+          builder: (context, state) => const TaskHandlePage(),
+        ),
       ],
       errorBuilder: (context, state) => Scaffold(
         body: Center(child: Text(state.error.toString())),

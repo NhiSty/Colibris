@@ -60,12 +60,6 @@ class EditTask extends TaskEvent {
   });
 }
 
-class TaskUpdated extends TaskEvent {
-  final Task task;
-
-  TaskUpdated({required this.task});
-}
-
 class DeleteTask extends TaskEvent {
   final int id;
 

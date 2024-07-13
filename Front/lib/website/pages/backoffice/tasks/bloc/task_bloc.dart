@@ -106,15 +106,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
           colocationId: event.colocationId,
           userId: event.userId,
         );
-        final response = await taskService.fetchAllTasks();
-        final tasks = response.tasks;
-        final totalTasks = response.total;
-        emit(TaskLoaded(
-          tasks: tasks,
-          currentPage: 1,
-          totalTasks: totalTasks,
-          showPagination: true,
-        ));
+        emit(TaskUpdated(message: 'backoffice_task_task_updated_successfully'.tr()));
       } catch (e, stacktrace) {
         print('EditTask error: $e');
         print('Stacktrace: $stacktrace');

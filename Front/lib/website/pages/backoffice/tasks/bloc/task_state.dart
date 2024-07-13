@@ -28,6 +28,12 @@ class TaskAdded extends TaskState {
   TaskAdded({required this.message});
 }
 
+class TaskUpdated extends TaskState {
+  final String message;
+
+  TaskUpdated({required this.message});
+}
+
 class UsersAndColocationsLoading extends TaskState {}
 
 class UsersAndColocationsLoaded extends TaskState {

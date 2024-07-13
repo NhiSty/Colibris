@@ -89,16 +89,29 @@ class _UpdateTaskDialogState extends State<UpdateTaskDialog> {
       width: 600.0,
       content: BlocListener<TaskBloc, TaskState>(
           listener: (context, state) {
-            if (state is TaskAdded) {
+            if (state is TaskUpdated) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.green,
-              ));
-              Navigator.of(context).pop();
+                  content: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text('backoffice_task_task_updated_successfully'.tr(),
+                    ),
+                  )
+              )
+              );
             } else if (state is TaskError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
+                content: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text('task_update_error'.tr()),
+                ),
               ));
             }
           },
@@ -188,6 +201,7 @@ class _UpdateTaskDialogState extends State<UpdateTaskDialog> {
                                   onTap: () async {
                                     TimeRange result = await showTimeRangePicker(
                                       context: context,
+                                      padding: 30,
                                     );
                                     _onRangeSelected(result);
                                   },

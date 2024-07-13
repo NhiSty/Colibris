@@ -10,6 +10,8 @@ import 'package:front/website/pages/backoffice/tasks/components/title_and_breadc
 class TaskHandlePage extends StatelessWidget {
   const TaskHandlePage({super.key});
 
+  static const routeName = "/backoffice/tasks";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -124,6 +124,7 @@
   "_commentUpdateTask": "--------> Ecran Modifier une tâche <---------",
   "task_update": "Update task",
   "task_updated": "Task updated successfully",
+  "task_update_error": "Failed to update task",
 
   "_commentDetailTask": "--------> Ecran détail tache <---------",
   "task_detail": "Task details",
