@@ -14,7 +14,8 @@ func TaskRoutes(taskRoutes *gin.RouterGroup, db *gorm.DB) {
 	taskController := controller.NewTaskController(taskService)
 	AuthMiddleware := middleware.AuthMiddleware
 	{
-		routes.GET("", AuthMiddleware(), taskController.SearchTasks)
+		routes.GET("/search", AuthMiddleware("ROLE_ADMIN"), taskController.SearchTasks)
+		routes.GET("", AuthMiddleware("ROLE_ADMIN"), taskController.GetAllTasks)
 		routes.POST("", AuthMiddleware(), taskController.CreateTask)
 		routes.GET("/:id", AuthMiddleware(), taskController.GetTaskById)
 		routes.GET("/user/:userId", AuthMiddleware(), taskController.GetAllUserTasks)
