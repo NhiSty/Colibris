@@ -4,6 +4,7 @@ import 'package:front/vote/vote.dart';
 import 'package:front/vote/vote_service.dart';
 import 'package:front/website/share/secure_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'bloc/vote_bloc.dart';
 
@@ -72,7 +73,7 @@ class _VoteDialogState extends State<VoteDialog> {
 
                     if (response['statusCode'] == 201 ||
                         response['statusCode'] == 200) {
-                      Navigator.of(context).pop();
+                      context.pop();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
@@ -83,7 +84,7 @@ class _VoteDialogState extends State<VoteDialog> {
                         buttonIsLoading = '';
                       });
                     } else if (response['statusCode'] == 422) {
-                      Navigator.of(context).pop();
+                      context.pop();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('${response['data']}'.tr()),
@@ -112,7 +113,7 @@ class _VoteDialogState extends State<VoteDialog> {
 
                     if (response['statusCode'] == 201 ||
                         response['statusCode'] == 200) {
-                      Navigator.of(context).pop();
+                      context.pop();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
@@ -123,7 +124,7 @@ class _VoteDialogState extends State<VoteDialog> {
                         buttonIsLoading = '';
                       });
                     } else if (response['statusCode'] == 422) {
-                      Navigator.of(context).pop();
+                      context.pop();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('${response['data']}'.tr()),

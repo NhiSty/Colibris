@@ -2,9 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/website/pages/auth/login_page.dart';
 import 'package:front/website/share/secure_storage.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  static const routeName = "/home";
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -64,11 +67,8 @@ class _HomePageState extends State<HomePage> {
                   icon: const Icon(Icons.logout, color: Colors.white),
                   onPressed: () {
                     deleteToken();
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginPage()),
-                      (Route<dynamic> route) => false,
+                    context.go(
+                      LoginPage.routeName,
                     );
                   },
                 ),
@@ -151,7 +151,7 @@ class _HomePageState extends State<HomePage> {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, routeName);
+          context.push(routeName);
         },
         child: Container(
           decoration: BoxDecoration(

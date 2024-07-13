@@ -34,7 +34,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
     on<ResetPasswordWithEmailCode>((event, emit) async {
       emit(ResetPasswordLoading());
       try {
-        await resetPasswordWithCode(event.email, event.code);
+        await resetPasswordWithCode(event.pwd, event.code);
         emit(ResetPasswordEmailSent());
       } catch (e) {
         emit(ResetPasswordError(e.toString()));

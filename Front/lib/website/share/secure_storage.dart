@@ -11,6 +11,17 @@ Future<String?> getToken() async {
   return await _storage.read(key: 'token');
 }
 
+Future<bool> isConnected() async {
+  String? token = await getToken();
+  if (token != null) {
+    if (JwtDecoder.isExpired(token)) {
+      return false;
+    }
+    return true;
+  }
+  return false;
+}
+
 Future<void> deleteToken() async {
   await _storage.delete(key: 'token');
 }

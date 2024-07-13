@@ -1,11 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
+
 class Validators {
   static String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Email is required';
+      return 'email_required'.tr();
     }
     final emailRegExp = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegExp.hasMatch(value)) {
-      return 'Invalid email format';
+      return 'email_invalid'.tr();
     }
     return null;
   }

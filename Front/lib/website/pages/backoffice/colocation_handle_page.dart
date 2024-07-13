@@ -10,6 +10,8 @@ import 'package:front/website/pages/backoffice/colocations/components/title_and_
 class ColocationHandlePage extends StatelessWidget {
   const ColocationHandlePage({super.key});
 
+  static const routeName = "/backoffice/colocations";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -192,7 +192,7 @@
   "invitation_received_at": "Invitation received at : ",
 
   "_commentInvitationAcceptPage": "--------> Ecran Invitation accept page <---------",
-  "invitation_accept_title": "Accept or decline the invitation",
+  "invitation_accept_title": "Accept or decline",
   "invitation_accept_accept": "Accept",
   "invitation_accept_refuse": "Decline",
   "invitation_accept_message1": "You have been invited to join the shared apartment",

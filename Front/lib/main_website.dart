@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:front/website/share/secure_storage.dart';
+import 'package:go_router/go_router.dart';
 import 'package:front/services/colocMember_service.dart';
 import 'package:front/services/colocation_service.dart';
 import 'package:front/services/log_service.dart';
@@ -41,6 +43,57 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GoRouter router = GoRouter(
+      redirect: (BuildContext context, GoRouterState state) async {
+        final isAuthenticated = await isConnected();
+        if (!isAuthenticated) {
+          return LoginPage.routeName;
+        }
+      },
+      routes: [
+        GoRoute(
+          path: LoginPage.routeName,
+          builder: (context, state) => const LoginPage(),
+        ),
+        GoRoute(
+          path: HomePage.routeName,
+          builder: (context, state) => const HomePage(),
+        ),
+        GoRoute(
+          path: UserHandlePage.routeName,
+          builder: (context, state) => const UserHandlePage(),
+        ),
+        GoRoute(
+          path: LogPage.routeName,
+          builder: (context, state) => const LogPage(),
+        ),
+        GoRoute(
+          path: ColocationHandlePage.routeName,
+          builder: (context, state) => const ColocationHandlePage(),
+        ),
+        GoRoute(
+          path: FeatureTogglePage.routeName,
+          builder: (context, state) => const FeatureTogglePage(),
+        ),
+        GoRoute(
+          path: ColocMemberHandlePage.routeName,
+          builder: (context, state) => const ColocMemberHandlePage(),
+        ),
+        GoRoute(
+          path: MessagesHandlePage.routeName,
+          builder: (context, state) {
+            final colocationId = (state.extra as Map)['id'];
+            return MessagesHandlePage(
+              colocationId: colocationId,
+            );
+          },
+        ),
+      ],
+      errorBuilder: (context, state) => Scaffold(
+        body: Center(child: Text(state.error.toString())),
+      ),
+    );
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<UserBloc>(
@@ -67,44 +120,18 @@ class MyApp extends StatelessWidget {
             ..add(LoadTasks()),
         ),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'BackOffice administration',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const HomePage(),
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
-        initialRoute: '/login',
-        routes: {
-          '/login': (context) => const LoginPage(),
-          '/home': (context) => const HomePage(),
-          '/backoffice/user': (context) => const UserHandlePage(),
-          '/backoffice/logs': (context) => const LogPage(),
-          '/backoffice/colocations': (context) => const ColocationHandlePage(),
-          '/feature-flipping': (context) => const FeatureTogglePage(),
-          '/backoffice/coloc-members': (context) =>
-              const ColocMemberHandlePage(),
-          '/backoffice/tasks': (context) => const TaskHandlePage(),
-        },
-        onGenerateRoute: (settings) {
-          print('Generating route for: ${settings.name}');
-          final Uri uri = Uri.parse(settings.name ?? '');
-
-          if (uri.pathSegments.length == 4 &&
-              uri.pathSegments[0] == 'backoffice' &&
-              uri.pathSegments[1] == 'colocations' &&
-              uri.pathSegments[3] == 'messages') {
-            final colocationId = uri.pathSegments[2];
-            return MaterialPageRoute(
-              builder: (context) =>
-                  MessagesHandlePage(colocationId: int.parse(colocationId)),
-            );
-          }
-          return null;
-        },
+        routerDelegate: router.routerDelegate,
+        routeInformationParser: router.routeInformationParser,
+        routeInformationProvider: router.routeInformationProvider,
       ),
     );
   }
