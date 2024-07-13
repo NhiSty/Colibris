@@ -41,7 +41,7 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 	}
 
 	userIDFromToken, exists := c.Get("userID")
-	if !exists {
+	if !exists && !service.IsAdmin(c) {
 		c.JSON(http.StatusUnauthorized, "Unauthorized")
 		return
 	}
@@ -86,8 +86,16 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 		return
 	}
 
+	var userId int
+
+	if service.IsAdmin(c) {
+		userId = int(req.UserID)
+	} else {
+		userId = int(userIDFromToken.(uint))
+	}
+
 	// Check if the task is already voted
-	_, err = ctl.voteService.GetVoteByTaskIdAndUserId(int(req.TaskID), int(userIDFromToken.(uint)))
+	_, err = ctl.voteService.GetVoteByTaskIdAndUserId(int(req.TaskID), userId)
 	if err == nil {
 		c.JSON(http.StatusBadRequest, "error_votingTaskAlreadyVoted")
 		return
@@ -436,6 +444,31 @@ func (ctl *VoteController) GetVotesByUserId(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"votes": votes,
+	})
+}
+
+func (ctl *VoteController) DeleteVote(c *gin.Context) {
+	voteId, err := strconv.Atoi(c.Params.ByName("voteId"))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	_, err = ctl.voteService.GetVoteById(voteId)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err.Error())
+		return
+	}
+
+	if err := ctl.voteService.DeleteVote(voteId); err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"Message": "vote deleted successfully",
 	})
 }
 
