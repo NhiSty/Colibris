@@ -4,6 +4,7 @@ import 'package:front/colocation/colocation.dart';
 import 'package:front/services/user_service.dart';
 import 'package:front/website/pages/backoffice/colocations/dialogs/colocations/delete_colocation_dialog.dart';
 import 'package:front/website/pages/backoffice/colocations/dialogs/colocations/edit_colocation_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 class ColocationListItem extends StatelessWidget {
   final Colocation colocation;
@@ -116,10 +117,8 @@ class ColocationListItem extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.message, color: Colors.green[800]),
                 onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/backoffice/colocations/${colocation.id}/messages',
-                  );
+                  context.push('/backoffice/colocations/messages',
+                      extra: {'id': colocation.id});
                 },
               ),
               IconButton(

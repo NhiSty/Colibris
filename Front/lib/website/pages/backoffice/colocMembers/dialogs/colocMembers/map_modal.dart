@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:front/services/colocMember_service.dart';
 import 'package:front/website/share/custom_dialog.dart';
+import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
 void showMapModal(BuildContext context, ColocMemberDetail colocMember) {
@@ -55,7 +56,7 @@ void showMapModal(BuildContext context, ColocMemberDetail colocMember) {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              context.pop();
             },
             child: Text('close'.tr()),
           ),

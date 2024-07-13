@@ -1,10 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:front/colocation/colocation_parameters.dart';
+import 'package:front/main.dart';
 import 'package:front/colocation/colocation_service.dart';
+import 'package:go_router/go_router.dart';
+import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
 
 class ColocationUpdatePage extends StatefulWidget {
   final int colocationId;
   const ColocationUpdatePage({super.key, required this.colocationId});
+  static const routeName = "/colocation-update";
 
   @override
   _ColocationUpdateWidgetState createState() => _ColocationUpdateWidgetState();
@@ -34,95 +39,125 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('update_colocation_title'.tr()),
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: <Widget>[
-                      TextFormField(
-                        controller: _nameController,
-                        decoration: InputDecoration(
-                          labelText: 'update_colocation_name'.tr(),
-                          border: const OutlineInputBorder(),
-                        ),
+    return GradientBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: Row(
+            children: [
+              const Icon(Icons.edit_location_alt, color: Colors.white),
+              const SizedBox(width: 10),
+              Text(
+                'update_colocation_title'.tr(),
+                style: const TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      labelText: 'update_colocation_name'.tr(),
+                      labelStyle: const TextStyle(color: Colors.white),
+                      border: const OutlineInputBorder(),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey[800]!),
                       ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _descriptionController,
-                        decoration: InputDecoration(
-                          labelText: 'update_colocation_description'.tr(),
-                          border: const OutlineInputBorder(),
-                        ),
-                        maxLines: 3,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey[800]!),
                       ),
-                      const SizedBox(height: 16),
-                      CheckboxListTile(
-                        title: Text('update_colocation_permanently'.tr()),
-                        value: isPermanent,
-                        checkColor: Colors.white,
-                        activeColor: Colors.green,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            isPermanent = value ?? false;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 32),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            var res = await updateColocation(
-                              widget.colocationId,
-                              _nameController.text,
-                              _descriptionController.text,
-                              isPermanent,
-                            );
-
-                            if (res == 200) {
-                              Navigator.pushNamed(context, '/colocation_manage',
-                                  arguments: {
-                                    'colocationId': widget.colocationId
-                                  });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      'update_colocation_updated_successfully'
-                                          .tr()),
-                                  backgroundColor: Colors.green,
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      'update_colocation_updated_error'.tr()),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            }
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.green,
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          minimumSize: const Size(double.infinity, 50),
-                        ),
-                        child: Text('update_colocation_update_submit'.tr()),
-                      ),
-                    ],
+                      errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
+                    ),
+                    style: const TextStyle(color: Colors.white),
                   ),
-                ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _descriptionController,
+                    decoration: InputDecoration(
+                      labelText: 'update_colocation_description'.tr(),
+                      labelStyle: const TextStyle(color: Colors.white),
+                      border: const OutlineInputBorder(),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                      ),
+                    ),
+                    maxLines: 3,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  const SizedBox(height: 16),
+                  CheckboxListTile(
+                    title: Text('update_colocation_permanently'.tr(),
+                        style: const TextStyle(color: Colors.white)),
+                    value: isPermanent,
+                    checkColor: Colors.white,
+                    activeColor: Colors.blueGrey,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        isPermanent = value ?? false;
+                      });
+                    },
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  const SizedBox(height: 32),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        var res = await updateColocation(
+                          widget.colocationId,
+                          _nameController.text,
+                          _descriptionController.text,
+                          isPermanent,
+                        );
+
+                        if (res == 200) {
+                          context.push(ColocationSettingsPage.routeName,
+                                extra: {'colocationId': widget.colocationId
+                              });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            showSnackBarFeedback(
+                              'update_colocation_updated_successfully'.tr(),
+                              Colors.green,
+                            ),
+                          );
+                        } else {
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            showSnackBarFeedback(
+                              'update_colocation_updated_error'.tr(),
+                              Colors.red,
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.blueGrey,
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    child: Text('update_colocation_update_submit'.tr()),
+                  ),
+                ],
               ),
             ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -3,11 +3,13 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:path/path.dart' as path;
 
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription>? cameras;
   const CameraScreen({super.key, required this.cameras});
+  static const routeName = "/camera";
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
@@ -45,7 +47,7 @@ class _CameraScreenState extends State<CameraScreen> {
       final bytes = await imageFile.readAsBytes();
       final String base64Image = base64Encode(bytes);
 
-      Navigator.pop(context, {
+      context.pop({
         'fileName': fileName,
         'base64Image': base64Image,
       });
@@ -83,7 +85,7 @@ class _CameraScreenState extends State<CameraScreen> {
             height: MediaQuery.of(context).size.height * 0.15,
             decoration: const BoxDecoration(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                color: Colors.green),
+                color: Colors.transparent),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

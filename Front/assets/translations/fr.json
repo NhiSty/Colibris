@@ -190,7 +190,7 @@
   "invitation_received_at": "Invitation reçu le : ",
 
   "_commentInvitationAcceptPage": "--------> Ecran Invitation accept page <---------",
-  "invitation_accept_title": "Accepter ou refuser l'invitation",
+  "invitation_accept_title": "Accepter ou refuser",
   "invitation_accept_accept": "Accepter",
   "invitation_accept_refuse": "Refuser",
   "invitation_accept_message1": "Vous êtes invité à rejoindre la colocation",

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:front/vote/vote.dart';
+
 import '../utils/dio.dart';
 import '../website/share/secure_storage.dart';
 
@@ -22,7 +23,6 @@ Future<dynamic> addVote(int taskId, int value) async {
       'data': response.data,
     };
   } on DioException catch (e) {
-
     if (e.response?.statusCode == 422) {
       return {
         'statusCode': 422,
@@ -60,7 +60,6 @@ Future<List<Vote>> fetchUserVotes() async {
   }
 }
 
-// fetch all vote by task id
 Future<List<Vote>> fetchVotesByTaskId(int taskId) async {
   var headers = await addHeader();
   try {
@@ -87,18 +86,12 @@ Future<dynamic> updateVote(int voteId, int value) async {
   var headers = await addHeader();
 
   try {
-    var response = await dio.put(
-      '/votes/$voteId',
-      options: Options(headers: headers),
-      data: {
-        'value': value
-      }
-    );
+    var response = await dio.put('/votes/$voteId',
+        options: Options(headers: headers), data: {'value': value});
     return {
       'statusCode': response.statusCode,
       'data': response.data,
     };
-
   } on DioException catch (e) {
     log('Dio error!');
     log('Response status: ${e.response!.statusCode}');

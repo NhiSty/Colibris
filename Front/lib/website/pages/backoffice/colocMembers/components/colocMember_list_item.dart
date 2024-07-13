@@ -4,6 +4,8 @@ import 'package:front/services/colocMember_service.dart';
 import 'package:front/website/pages/backoffice/colocMembers/dialogs/colocMembers/delete_coloc_member.dart';
 import 'package:front/website/pages/backoffice/colocMembers/dialogs/colocMembers/edit_coloc_member.dart';
 import 'package:front/website/pages/backoffice/colocMembers/dialogs/colocMembers/map_modal.dart';
+import 'package:front/website/pages/backoffice/user_handle_page.dart';
+import 'package:go_router/go_router.dart';
 
 class ColocMemberListItem extends StatelessWidget {
   final ColocMemberDetail colocMember;
@@ -173,7 +175,7 @@ class ColocMemberListItem extends StatelessWidget {
                       ],
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/backoffice/user');
+                      context.push(UserHandlePage.routeName);
                     },
                   ),
                 ],

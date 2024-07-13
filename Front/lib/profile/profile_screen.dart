@@ -1,10 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:front/main.dart';
+import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
 import 'package:front/user/user_service.dart';
 import 'package:front/website/share/secure_storage.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+  static const routeName = "/profile";
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -23,11 +26,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isEditingPassword = false;
 
   bool get _isAnyFieldEditing => [
-        _isEditingLastName,
-        _isEditingFirstName,
-        _isEditingEmail,
-        _isEditingPassword
-      ].any((isEditing) => isEditing);
+    _isEditingLastName,
+    _isEditingFirstName,
+    _isEditingEmail,
+    _isEditingPassword
+  ].any((isEditing) => isEditing);
 
   @override
   void initState() {
@@ -52,102 +55,103 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('profile'.tr()),
-        backgroundColor: Colors.green,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'user_settings'.tr(),
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+    return SafeArea(
+      child: GradientBackground(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            title: Text('user_settings'.tr()),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 16.0),
+                    _buildEditableRow(
+                      label: 'lastname'.tr(),
+                      controller: _lastnameController,
+                      isEditing: _isEditingLastName,
+                      onEdit: () {
+                        setState(() {
+                          _isEditingLastName = !_isEditingLastName;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    _buildEditableRow(
+                      label: 'firstname'.tr(),
+                      controller: _firstNameController,
+                      isEditing: _isEditingFirstName,
+                      onEdit: () {
+                        setState(() {
+                          _isEditingFirstName = !_isEditingFirstName;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    _buildEditableRow(
+                      label: 'email'.tr(),
+                      controller: _emailController,
+                      isEditing: _isEditingEmail,
+                      onEdit: () {
+                        setState(() {
+                          _isEditingEmail = !_isEditingEmail;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    _buildEditableRow(
+                      label: 'password'.tr(),
+                      controller: _passwordController,
+                      isEditing: _isEditingPassword,
+                      obscureText: true,
+                      hintText: '********',
+                      onEdit: () {
+                        setState(() {
+                          _isEditingPassword = !_isEditingPassword;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _isAnyFieldEditing ? null : _submitForm,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueGrey,
+                          textStyle: const TextStyle(fontSize: 18),
+                          foregroundColor: Colors.white,
+                        ),
+                        child: Text('submit'.tr()),
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('🇺🇸', style: TextStyle(fontSize: 32)),
+                        Switch(
+                          value: context.locale == const Locale('fr'),
+                          onChanged: (value) {
+                            setState(() {
+                              context.setLocale(
+                                  value ? const Locale('fr') : const Locale('en'));
+                            });
+                          },
+                        ),
+                        const Text('🇫🇷', style: TextStyle(fontSize: 32)),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 16.0),
-              _buildEditableRow(
-                label: 'lastname'.tr(),
-                controller: _lastnameController,
-                isEditing: _isEditingLastName,
-                onEdit: () {
-                  setState(() {
-                    _isEditingLastName = !_isEditingLastName;
-                  });
-                },
-              ),
-              const SizedBox(height: 16.0),
-              _buildEditableRow(
-                label: 'firstname'.tr(),
-                controller: _firstNameController,
-                isEditing: _isEditingFirstName,
-                onEdit: () {
-                  setState(() {
-                    _isEditingFirstName = !_isEditingFirstName;
-                  });
-                },
-              ),
-              const SizedBox(height: 16.0),
-              _buildEditableRow(
-                label: 'email'.tr(),
-                controller: _emailController,
-                isEditing: _isEditingEmail,
-                onEdit: () {
-                  setState(() {
-                    _isEditingEmail = !_isEditingEmail;
-                  });
-                },
-              ),
-              const SizedBox(height: 16.0),
-              _buildEditableRow(
-                label: 'password'.tr(),
-                controller: _passwordController,
-                isEditing: _isEditingPassword,
-                obscureText: true,
-                hintText: '********',
-                onEdit: () {
-                  setState(() {
-                    _isEditingPassword = !_isEditingPassword;
-                  });
-                },
-              ),
-              const SizedBox(height: 16.0),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _isAnyFieldEditing ? null : _submitForm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    textStyle: const TextStyle(fontSize: 18),
-                    foregroundColor: Colors.white,
-                  ),
-                  child: Text('submit'.tr()),
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('🇺🇸', style: TextStyle(fontSize: 32)),
-                  Switch(
-                    value: context.locale == const Locale('fr'),
-                    onChanged: (value) {
-                      setState(() {
-                        context.setLocale(
-                            value ? const Locale('fr') : const Locale('en'));
-                      });
-                    },
-                  ),
-                  const Text('🇫🇷', style: TextStyle(fontSize: 32)),
-                ],
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -177,15 +181,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('update_success'.tr()),
+          showSnackBarFeedback(
+            'update_success'.tr(),
+            Colors.green,
           ),
         );
+
       } catch (e) {
         print('Error updating user data: $e');
+
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('update_failure'.tr()),
+          showSnackBarFeedback(
+            'update_failure'.tr(),
+            Colors.red,
           ),
         );
       }
@@ -204,7 +212,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         SizedBox(
           width: 100,
-          child: Text(label),
+          child: Text(
+            label,
+            style: const TextStyle(color: Color(0xFF333333), fontSize: 17),
+          ),
         ),
         Expanded(
           child: TextFormField(
@@ -213,10 +224,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
             obscureText: obscureText,
             decoration: InputDecoration(
               hintText: hintText,
+              labelStyle: const TextStyle(color: Colors.white),
               border: const OutlineInputBorder(),
-              enabledBorder:
-                  isEditing ? const OutlineInputBorder() : InputBorder.none,
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+              ),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.tealAccent),
+              ),
+              hintStyle: const TextStyle(color: Colors.white),
+              errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
             ),
+            style: const TextStyle(color: Colors.white),
             validator: (value) {
               if (label == 'password'.tr()) {
                 if (isEditing && (value == null || value.isEmpty)) {
@@ -233,6 +252,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         IconButton(
           icon: Icon(isEditing ? Icons.check : Icons.edit),
+          color: Colors.white,
           onPressed: onEdit,
         ),
       ],

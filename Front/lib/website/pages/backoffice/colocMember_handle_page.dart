@@ -9,6 +9,8 @@ import 'package:front/website/pages/backoffice/colocMembers/components/title_and
 class ColocMemberHandlePage extends StatelessWidget {
   const ColocMemberHandlePage({super.key});
 
+  static const routeName = "/backoffice/coloc-members";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
