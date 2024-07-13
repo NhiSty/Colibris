@@ -12,7 +12,7 @@ class PaginationControls extends StatelessWidget {
     super.key,
     required this.currentPage,
     required this.totalTasks,
-    this.pageSize = 5,
+    this.pageSize = 4,
     this.showPagination = true,
   });
 

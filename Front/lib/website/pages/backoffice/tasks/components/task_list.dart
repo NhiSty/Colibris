@@ -18,9 +18,11 @@ class TaskList extends StatelessWidget {
 
     return ListView.separated(
       shrinkWrap: true,
-      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1, vertical: 24),
       itemCount: tasks.length,
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      separatorBuilder: (BuildContext context, int index) {
+        return const SizedBox(height: 6);
+      },
       itemBuilder: (BuildContext context, int index) {
         final task = tasks[index];
         return Center(

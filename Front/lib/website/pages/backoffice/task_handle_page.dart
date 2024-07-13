@@ -5,7 +5,7 @@ import 'package:front/website/pages/backoffice/tasks/bloc/task_bloc.dart';
 import 'package:front/website/pages/backoffice/tasks/bloc/task_state.dart';
 import 'package:front/website/pages/backoffice/tasks/components/task_list.dart';
 import 'package:front/website/pages/backoffice/tasks/components/pagination_controls.dart';
-//import 'package:front/website/pages/backoffice/tasks/components/title_and_breadcrumb.dart';
+import 'package:front/website/pages/backoffice/tasks/components/title_and_breadcrumb.dart';
 
 class TaskHandlePage extends StatelessWidget {
   const TaskHandlePage({super.key});
@@ -16,10 +16,11 @@ class TaskHandlePage extends StatelessWidget {
       body: Column(
         children: [
           const SizedBox(height: 20),
-          //const TitleAndBreadcrumb(),
+          const TitleAndBreadcrumb(),
           BlocBuilder<TaskBloc, TaskState>(
             builder: (context, state) {
               if (state is TaskLoading) {
+                print('TaskLoading');
                 return const Center(child: CircularProgressIndicator());
               } else if (state is TaskLoaded) {
                 return Expanded(
