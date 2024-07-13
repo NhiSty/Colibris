@@ -176,11 +176,10 @@ class MyApp extends StatelessWidget {
                     ? const MaintenanceScreen()
                     : PopScope(
                         canPop: false,
-                        child: /*LoginScreen(
+                        child: LoginScreen(
                         data: state.extra,
-                      ))*/
-                            HomeScreen(),
-                      )),
+                      ))
+        ),
         GoRoute(
           path: LoginScreen.routeName,
           builder: (context, state) => PopScope(

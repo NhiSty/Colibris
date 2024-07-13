@@ -125,7 +125,7 @@ class ResetPasswordFormScreen extends StatelessWidget {
           borderSide: BorderSide(color: Colors.white),
         ),
         focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.tealAccent),
+          borderSide: BorderSide(color: Colors.white),
         ),
         errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
       ),

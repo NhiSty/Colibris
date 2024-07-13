@@ -37,7 +37,7 @@ class ColocationSettingsPage extends StatelessWidget {
               child: Text('confirm'.tr(), style: TextStyle(color: Colors.red[500])),
               onPressed: () async {
                 var res = await deleteColocation(colocationId);
-                if (res == 200) {
+                if (res == 204) {
                   if (!context.mounted) return;
                   context.push(HomeScreen.routeName);
                 }

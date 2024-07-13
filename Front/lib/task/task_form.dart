@@ -96,11 +96,12 @@ class _TaskFormState extends State<TaskForm> {
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 labelText: 'task_create_task_name'.tr(),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                labelStyle: const TextStyle(color: Colors.white),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
                 ),
               ),
               style: const TextStyle(color: Colors.white),
@@ -121,11 +122,12 @@ class _TaskFormState extends State<TaskForm> {
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
                     labelText: 'task_create_description'.tr(),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                    labelStyle: const TextStyle(color: Colors.white),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
                     ),
                     errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
                   ),
@@ -147,11 +149,12 @@ class _TaskFormState extends State<TaskForm> {
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
                     labelText: "task_create_date".tr(),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                    labelStyle: const TextStyle(color: Colors.white),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
                     ),
                     errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
                   ),
@@ -196,11 +199,12 @@ class _TaskFormState extends State<TaskForm> {
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
                     labelText: 'task_create_past_time'.tr(),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                    labelStyle: const TextStyle(color: Colors.white),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
                     ),
                     errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
                   ),
@@ -216,7 +220,7 @@ class _TaskFormState extends State<TaskForm> {
             ),
             Card(
               margin: const EdgeInsets.only(top: 30, bottom: 10),
-              color: Colors.blueGrey,
+              color: Colors.white,
               child: base64Image.isNotEmpty
                   ? Image.memory(
                 base64Decode(base64Image),
@@ -239,7 +243,7 @@ class _TaskFormState extends State<TaskForm> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.tealAccent,
+                  backgroundColor: Colors.white,
                   foregroundColor: Colors.black,
                 ),
                 child: base64Image.isEmpty

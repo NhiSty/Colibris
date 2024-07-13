@@ -71,11 +71,11 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
                       labelText: 'update_colocation_name'.tr(),
                       labelStyle: const TextStyle(color: Colors.white),
                       border: const OutlineInputBorder(),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
                       ),
                       errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
                     ),
@@ -88,11 +88,11 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
                       labelText: 'update_colocation_description'.tr(),
                       labelStyle: const TextStyle(color: Colors.white),
                       border: const OutlineInputBorder(),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
                       ),
                     ),
                     maxLines: 3,
@@ -134,7 +134,6 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
                             ),
                           );
                         } else {
-
                           ScaffoldMessenger.of(context).showSnackBar(
                             showSnackBarFeedback(
                               'update_colocation_updated_error'.tr(),
@@ -147,8 +146,7 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.blueGrey,
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      minimumSize: const Size(double.infinity, 50),
+                      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
                     ),
                     child: Text('update_colocation_update_submit'.tr()),
                   ),

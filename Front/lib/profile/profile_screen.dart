@@ -20,18 +20,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  bool _isEditingLastName = false;
-  bool _isEditingFirstName = false;
-  bool _isEditingEmail = false;
-  bool _isEditingPassword = false;
-
-  bool get _isAnyFieldEditing => [
-    _isEditingLastName,
-    _isEditingFirstName,
-    _isEditingEmail,
-    _isEditingPassword
-  ].any((isEditing) => isEditing);
-
   @override
   void initState() {
     super.initState();
@@ -73,56 +61,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 16.0),
-                    _buildEditableRow(
+                    _buildTextField(
                       label: 'lastname'.tr(),
                       controller: _lastnameController,
-                      isEditing: _isEditingLastName,
-                      onEdit: () {
-                        setState(() {
-                          _isEditingLastName = !_isEditingLastName;
-                        });
-                      },
                     ),
                     const SizedBox(height: 16.0),
-                    _buildEditableRow(
+                    _buildTextField(
                       label: 'firstname'.tr(),
                       controller: _firstNameController,
-                      isEditing: _isEditingFirstName,
-                      onEdit: () {
-                        setState(() {
-                          _isEditingFirstName = !_isEditingFirstName;
-                        });
-                      },
                     ),
                     const SizedBox(height: 16.0),
-                    _buildEditableRow(
+                    _buildTextField(
                       label: 'email'.tr(),
                       controller: _emailController,
-                      isEditing: _isEditingEmail,
-                      onEdit: () {
-                        setState(() {
-                          _isEditingEmail = !_isEditingEmail;
-                        });
-                      },
                     ),
                     const SizedBox(height: 16.0),
-                    _buildEditableRow(
+                    _buildTextField(
                       label: 'password'.tr(),
                       controller: _passwordController,
-                      isEditing: _isEditingPassword,
                       obscureText: true,
                       hintText: '********',
-                      onEdit: () {
-                        setState(() {
-                          _isEditingPassword = !_isEditingPassword;
-                        });
-                      },
                     ),
                     const SizedBox(height: 16.0),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _isAnyFieldEditing ? null : _submitForm,
+                        onPressed: _submitForm,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueGrey,
                           textStyle: const TextStyle(fontSize: 18),
@@ -200,62 +164,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Widget _buildEditableRow({
+  Widget _buildTextField({
     required String label,
     required TextEditingController controller,
-    required bool isEditing,
-    required VoidCallback onEdit,
     bool obscureText = false,
     String? hintText,
   }) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 100,
-          child: Text(
-            label,
-            style: const TextStyle(color: Color(0xFF333333), fontSize: 17),
-          ),
+    return TextFormField(
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hintText,
+        labelStyle: const TextStyle(color: Colors.white),
+        border: const OutlineInputBorder(),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
         ),
-        Expanded(
-          child: TextFormField(
-            controller: controller,
-            enabled: isEditing,
-            obscureText: obscureText,
-            decoration: InputDecoration(
-              hintText: hintText,
-              labelStyle: const TextStyle(color: Colors.white),
-              border: const OutlineInputBorder(),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
-              ),
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.tealAccent),
-              ),
-              hintStyle: const TextStyle(color: Colors.white),
-              errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
-            ),
-            style: const TextStyle(color: Colors.white),
-            validator: (value) {
-              if (label == 'password'.tr()) {
-                if (isEditing && (value == null || value.isEmpty)) {
-                  return 'Please enter a new password';
-                }
-              } else {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your $label';
-                }
-              }
-              return null;
-            },
-          ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
         ),
-        IconButton(
-          icon: Icon(isEditing ? Icons.check : Icons.edit),
-          color: Colors.white,
-          onPressed: onEdit,
-        ),
-      ],
+        hintStyle: const TextStyle(color: Colors.white),
+        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
+      ),
+      style: const TextStyle(color: Colors.white),
+      validator: (value) {
+        if (label == 'password'.tr()) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter a new password';
+          }
+        } else {
+          if (value == null || value.isEmpty) {
+            return 'Please enter your $label';
+          }
+        }
+        return null;
+      },
     );
   }
 }
