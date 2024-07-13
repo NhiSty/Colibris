@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:front/services/vote_service.dart';
 import 'package:front/vote/vote.dart';
-import 'package:front/vote/vote_service.dart';
 import 'package:front/website/share/secure_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -20,6 +20,8 @@ class VoteDialog extends StatefulWidget {
 class _VoteDialogState extends State<VoteDialog> {
   var userData = {};
   String buttonIsLoading = '';
+
+  VoteService voteService = VoteService();
 
   @override
   void initState() {
@@ -42,10 +44,10 @@ class _VoteDialogState extends State<VoteDialog> {
     dynamic response;
 
     if (voteId != null) {
-      response = await updateVote(voteId, likeValue);
+      response = await voteService.updateVote(voteId, likeValue);
       return response;
     } else {
-      response = await addVote(taskId, likeValue);
+      response = await voteService.addVote(taskId, likeValue);
       return response;
     }
   }
