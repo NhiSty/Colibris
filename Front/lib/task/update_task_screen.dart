@@ -84,7 +84,7 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
                 Navigator.pop(context, true);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('task_update_success'.tr()),
+                    content: Text('task_updated'.tr()),
                     backgroundColor: Colors.green,
                   ),
                 );
