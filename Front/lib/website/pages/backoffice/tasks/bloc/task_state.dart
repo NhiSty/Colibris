@@ -22,6 +22,24 @@ class TaskLoaded extends TaskState {
   });
 }
 
+class TaskAdded extends TaskState {
+  final String message;
+
+  TaskAdded({required this.message});
+}
+
+class UsersAndColocationsLoading extends TaskState {}
+
+class UsersAndColocationsLoaded extends TaskState {
+  final List<dynamic> users;
+  final List<dynamic> colocations;
+
+  UsersAndColocationsLoaded({
+    required this.users,
+    required this.colocations,
+  });
+}
+
 class TaskError extends TaskState {
   final String message;
 

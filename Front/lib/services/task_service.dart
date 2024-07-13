@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:front/task/task.dart';
+import '../user/user.dart';
 import '../utils/dio.dart';
 import '../website/share/secure_storage.dart';
 
@@ -76,10 +77,10 @@ class TaskService {
     required int duration,
     String picture = '',
     required int colocationId,
+    int? userId,
 }) async {
     var headers = await addHeader();
     try {
-      print('task values: $taskId, $title, $description, $date, $duration, $picture, $colocationId');
       var response = await _dio.put(
         '/tasks/$taskId',
         data: {
@@ -88,7 +89,8 @@ class TaskService {
           'date': date,
           'duration': duration,
           'picture': picture,
-          'colocationId': colocationId,
+          'colocation_id': colocationId,
+          'user_id': userId,
         },
         options: Options(headers: headers),
       );
@@ -129,7 +131,7 @@ class TaskService {
 
   // Get all tasks
   Future<ListTaskResponse> fetchAllTasks(
-      {int page = 1, int pageSize = 5}) async {
+      {int page = 1, int pageSize = 4}) async {
     var headers = await addHeader();
     try {
       var response = await _dio.get(
@@ -141,11 +143,12 @@ class TaskService {
         options: Options(headers: headers),
       );
       if (response.statusCode == 200) {
-        List<Task> tasks = (response.data as List)
+        List<Task> tasks = (response.data['tasks'] as List)
             .map((task) => Task.fromJson(task))
             .toList();
+        final total = response.data['total'];
 
-        return ListTaskResponse(tasks: tasks, total: tasks.length);
+        return ListTaskResponse(tasks: tasks, total: total);
       } else {
         throw Exception('Failed to load tasks');
       }
@@ -170,6 +173,38 @@ class TaskService {
       print('Response status: ${e.response!.statusCode}');
       print('Response data: ${e.response!.data}');
       throw Exception('Failed to delete task');
+    }
+  }
+
+  Future<List<dynamic>> getAllUsers() async {
+    var headers = await addHeader();
+    final response = await dio.get(
+      '/users',
+      options: Options(headers: headers),
+    );
+
+    if (response.statusCode == 200) {
+      List<User> users = (response.data['users'] as List)
+          .map((user) => User.fromJson(user))
+          .toList();
+
+      return users;
+    } else {
+      throw Exception('Failed to load users');
+    }
+  }
+
+  Future<List<dynamic>> getAllColocations() async {
+    var headers = await addHeader();
+    final response = await dio.get(
+      '/colocations',
+      options: Options(headers: headers),
+    );
+
+    if (response.statusCode == 200) {
+      return response.data['colocations'];
+    } else {
+      throw Exception('Failed to load colocations');
     }
   }
 }

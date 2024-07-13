@@ -7,7 +7,7 @@ class LoadTasks extends TaskEvent {
   final int page;
   final int pageSize;
 
-  LoadTasks({this.page = 1, this.pageSize = 5});
+  LoadTasks({this.page = 1, this.pageSize = 4});
 }
 
 class SearchTasks extends TaskEvent {
@@ -25,6 +25,7 @@ class AddTask extends TaskEvent {
   final int duration;
   final String picture;
   final int colocationId;
+  final int? userId;
 
   AddTask({
     required this.title,
@@ -33,6 +34,7 @@ class AddTask extends TaskEvent {
     required this.duration,
     this.picture = '',
     required this.colocationId,
+    this.userId = null,
   });
 }
 
@@ -44,6 +46,7 @@ class EditTask extends TaskEvent {
   final int duration;
   final String picture;
   final int colocationId;
+  final int? userId;
 
   EditTask({
     required this.taskId,
@@ -53,7 +56,14 @@ class EditTask extends TaskEvent {
     required this.duration,
     this.picture = '',
     required this.colocationId,
+    this.userId = null,
   });
+}
+
+class TaskUpdated extends TaskEvent {
+  final Task task;
+
+  TaskUpdated({required this.task});
 }
 
 class DeleteTask extends TaskEvent {
@@ -61,3 +71,5 @@ class DeleteTask extends TaskEvent {
 
   DeleteTask({required this.id});
 }
+
+class LoadAllUsersAndColocations extends TaskEvent {}

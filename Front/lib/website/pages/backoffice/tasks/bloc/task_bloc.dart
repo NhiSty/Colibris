@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/services/task_service.dart';
 
+import '../../../../../task/task.dart';
 import 'task_state.dart';
 
 part 'task_event.dart';
@@ -80,14 +82,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
           picture: event.picture,
           colocationId: event.colocationId,
         );
-        final response = await taskService.fetchAllTasks();
-        final tasks = response.tasks;
-        final totalTasks = response.total;
-        emit(TaskLoaded(
-          tasks: tasks,
-          currentPage: 1,
-          totalTasks: totalTasks,
-          showPagination: true,
+        await taskService.fetchAllTasks();
+        emit(TaskAdded(
+          message: 'backoffice_task_task_added_successfully'.tr(),
         ));
       } catch (e, stacktrace) {
         print('AddTask error: $e');
@@ -107,6 +104,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
           duration: event.duration,
           picture: event.picture,
           colocationId: event.colocationId,
+          userId: event.userId,
         );
         final response = await taskService.fetchAllTasks();
         final tasks = response.tasks;
@@ -139,6 +137,22 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         ));
       } catch (e, stacktrace) {
         print('DeleteTask error: $e');
+        print('Stacktrace: $stacktrace');
+        emit(TaskError(message: e.toString()));
+      }
+    });
+
+    on<LoadAllUsersAndColocations>((event, emit) async {
+      emit(UsersAndColocationsLoading());
+      try {
+        final users = await taskService.getAllUsers();
+        final colocations = await taskService.getAllColocations();
+        emit(UsersAndColocationsLoaded(
+          users: users,
+          colocations: colocations,
+        ));
+      } catch (e, stacktrace) {
+        print('LoadAllUsersAndColocations error: $e');
         print('Stacktrace: $stacktrace');
         emit(TaskError(message: e.toString()));
       }
