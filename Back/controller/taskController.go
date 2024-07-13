@@ -20,6 +20,42 @@ func NewTaskController(service *service.TaskService) *TaskController {
 	}
 }
 
+func (ctl *TaskController) GetAllTasks(c *gin.Context) {
+	pageParam := c.DefaultQuery("page", "")
+	pageSizeParam := c.DefaultQuery("pageSize", "")
+
+	if pageParam == "" || pageSizeParam == "" {
+		tasks, total, err := ctl.service.GetAllTasks(0, 0)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"total": total, "tasks": tasks})
+		return
+	}
+
+	page, err := strconv.Atoi(pageParam)
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	pageSize, err := strconv.Atoi(pageSizeParam)
+	if err != nil || pageSize < 1 {
+		pageSize = 5
+	}
+
+	tasks, total, err := ctl.service.GetAllTasks(page, pageSize)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"total": total,
+		"tasks": tasks,
+	})
+
+}
+
 // SearchTasks allows to search tasks by title or description
 // @Summary Search tasks by title or description
 // @Description Search tasks by title or description
@@ -290,33 +326,35 @@ func (ctl *TaskController) UpdateTask(c *gin.Context) {
 		return
 	}
 
-	userIDFromToken, exists := c.Get("userID")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
-
-	colocationService := service.NewColocationService(ctl.service.GetDB())
-	colocation, colocationErr := colocationService.GetColocationById(int(task.ColocationID))
-
-	if colocationErr != nil {
-		c.JSON(http.StatusNotFound, colocationErr.Error())
-		return
-	}
-
-	colocationMembers := colocation.ColocMembers
-	isMember := false
-	isOwner := colocation.UserID == userIDFromToken.(uint)
-	for _, member := range colocationMembers {
-		if member.UserID == userIDFromToken.(uint) {
-			isMember = true
-			break
+	if !service.IsAdmin(c) {
+		userIDFromToken, exists := c.Get("userID")
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+			return
 		}
-	}
 
-	if !isMember && !service.IsAdmin(c) && !isOwner {
-		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
-		return
+		colocationService := service.NewColocationService(ctl.service.GetDB())
+		colocation, colocationErr := colocationService.GetColocationById(int(task.ColocationID))
+
+		if colocationErr != nil {
+			c.JSON(http.StatusNotFound, colocationErr.Error())
+			return
+		}
+
+		colocationMembers := colocation.ColocMembers
+		isMember := false
+		isOwner := colocation.UserID == userIDFromToken.(uint)
+		for _, member := range colocationMembers {
+			if member.UserID == userIDFromToken.(uint) {
+				isMember = true
+				break
+			}
+		}
+
+		if !isMember && !service.IsAdmin(c) && !isOwner {
+			c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+			return
+		}
 	}
 
 	taskUpdate := make(map[string]interface{})
@@ -338,6 +376,14 @@ func (ctl *TaskController) UpdateTask(c *gin.Context) {
 		taskUpdate["picture"] = req.Picture
 	}
 
+	if int(req.ColocationID) != 0 && service.IsAdmin(c) {
+		taskUpdate["colocation_id"] = req.ColocationID
+	}
+
+	if req.UserID != 0 && service.IsAdmin(c) {
+		taskUpdate["user_id"] = req.UserID
+	}
+
 	if _, err := ctl.service.UpdateTask(uint(id), taskUpdate); err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
@@ -345,7 +391,7 @@ func (ctl *TaskController) UpdateTask(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"Message": "task updated successfully",
-		"result":  task,
+		"result":  taskUpdate,
 	})
 }
 
