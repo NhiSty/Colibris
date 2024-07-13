@@ -43,11 +43,12 @@ import 'package:go_router/go_router.dart';
 import 'firebase_options.dart';
 
 final StreamController<List<FeatureFlag>> _featureFlagsController =
-StreamController<List<FeatureFlag>>.broadcast();
+    StreamController<List<FeatureFlag>>.broadcast();
 
 var intendedRoute = '/';
 
 final previousFlags = <FeatureFlag>[];
+
 Future<void> initializeFeatureFlags(List<FeatureFlag> flags) async {
   await Toggly.init(
     flagDefaults: {
@@ -92,7 +93,7 @@ void main() async {
   firebaseClient.initializeListeners(onMessage, onMessageOpenedApp);
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   FirebaseAnalyticsObserver observer =
-  FirebaseAnalyticsObserver(analytics: analytics);
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   await EasyLocalization.ensureInitialized();
   await dotenv.load(fileName: ".env");
@@ -123,14 +124,14 @@ void main() async {
   );
 
   Stream<int> periodicStream =
-  Stream.periodic(const Duration(seconds: 5), (count) => count);
+      Stream.periodic(const Duration(seconds: 5), (count) => count);
 
   periodicStream.listen((event) async {
     var flags = await fetchFeatureFlags();
 
     for (var flag in flags) {
       var previousFlag = previousFlags.firstWhere(
-            (previousFlag) => previousFlag.name == flag.name,
+        (previousFlag) => previousFlag.name == flag.name,
         orElse: () =>
             FeatureFlag(id: flag.id, name: flag.name, value: !flag.value),
       );
@@ -144,6 +145,7 @@ void main() async {
     }
   });
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.featureFlag});
 
@@ -156,13 +158,11 @@ class MyApp extends StatelessWidget {
       redirect: (BuildContext context, GoRouterState state) async {
         final isAuthenticated = await isConnected();
         if (!isAuthenticated) {
-          if(state.fullPath == RegisterScreen.routeName){
+          if (state.fullPath == RegisterScreen.routeName) {
             return RegisterScreen.routeName;
-          }
-          else if (state.fullPath == ResetPasswordScreen.routeName){
+          } else if (state.fullPath == ResetPasswordScreen.routeName) {
             return ResetPasswordScreen.routeName;
-          }
-          else if (state.fullPath == ResetPasswordFormScreen.routeName){
+          } else if (state.fullPath == ResetPasswordFormScreen.routeName) {
             return ResetPasswordFormScreen.routeName;
           }
           return LoginScreen.routeName;
@@ -172,25 +172,21 @@ class MyApp extends StatelessWidget {
         GoRoute(
           path: '/',
           builder: (context, state) =>
-          isFeatureEnabled('maintenance', featureFlag)
-              ? const MaintenanceScreen()
-              : PopScope(
-              canPop: false,
-/*
-              child: LoginScreen(
-                data: state.extra,
-              )),
-*/
-              child: HomeScreen()),
+              isFeatureEnabled('maintenance', featureFlag)
+                  ? const MaintenanceScreen()
+                  : PopScope(
+                      canPop: false,
+                      child: LoginScreen(
+                        data: state.extra,
+                      )),
         ),
         GoRoute(
           path: LoginScreen.routeName,
-          builder: (context, state) =>
-              PopScope(
-                  canPop: false,
-                  child: LoginScreen(
-                    data: state.extra,
-                  )),
+          builder: (context, state) => PopScope(
+              canPop: false,
+              child: LoginScreen(
+                data: state.extra,
+              )),
         ),
         GoRoute(
           path: RegisterScreen.routeName,
@@ -198,8 +194,7 @@ class MyApp extends StatelessWidget {
         ),
         GoRoute(
           path: HomeScreen.routeName,
-          builder: (context, state) =>
-          const PopScope(
+          builder: (context, state) => const PopScope(
             canPop: false,
             child: Scaffold(
               body: HomeScreen(),
@@ -213,8 +208,7 @@ class MyApp extends StatelessWidget {
         ),
         GoRoute(
           path: ProfileScreen.routeName,
-          builder: (context, state) =>
-          const Scaffold(
+          builder: (context, state) => const Scaffold(
             body: ProfileScreen(),
             bottomNavigationBar: BottomNavigationBarWidget(null),
           ),
@@ -226,113 +220,102 @@ class MyApp extends StatelessWidget {
         GoRoute(
           path: ResetPasswordFormScreen.routeName,
           builder: (context, state) {
-            final Map<String, String> arguments = state.extra as Map<String, String>;
+            final Map<String, String> arguments =
+                state.extra as Map<String, String>;
             return ResetPasswordFormScreen(arguments: arguments);
           },
         ),
         GoRoute(
           path: InvitationListPage.routeName,
-          builder: (context, state) =>
-              BlocProvider.value(
-                value: BlocProvider.of<InvitationBloc>(context),
-                child: InvitationListPage(
-                  invitations: (state.extra as Map)['invitations'],
-                ),
-              ),
+          builder: (context, state) => BlocProvider.value(
+            value: BlocProvider.of<InvitationBloc>(context),
+            child: InvitationListPage(
+              invitations: (state.extra as Map)['invitations'],
+            ),
+          ),
         ),
         GoRoute(
           path: InvitationCreatePage.routeName,
-          builder: (context, state) =>
-              BlocProvider.value(
-                value: BlocProvider.of<InvitationBloc>(context),
-                child: InvitationCreatePage(
-                  colocationId: (state.extra as Map)['colocationId'],
-                ),
-              ),
+          builder: (context, state) => BlocProvider.value(
+            value: BlocProvider.of<InvitationBloc>(context),
+            child: InvitationCreatePage(
+              colocationId: (state.extra as Map)['colocationId'],
+            ),
+          ),
         ),
         GoRoute(
           path: ColocationTasklistScreen.routeName,
-          builder: (context, state) =>
-              BlocProvider.value(
-                value: BlocProvider.of<ColocationBloc>(context),
-                child: ColocationTasklistScreen(
-                  colocation: (state.extra as Map)['colocation'],
-                ),
-              ),
+          builder: (context, state) => BlocProvider.value(
+            value: BlocProvider.of<ColocationBloc>(context),
+            child: ColocationTasklistScreen(
+              colocation: (state.extra as Map)['colocation'],
+            ),
+          ),
         ),
         GoRoute(
           path: InvitationAcceptPage.routeName,
-          builder: (context, state) =>
-              BlocProvider.value(
-                value: BlocProvider.of<InvitationBloc>(context),
-                child: InvitationAcceptPage(
-                  invitationId: (state.extra as Map)['invitationId'],
-                  colocationId: (state.extra as Map)['colocationId'],
-                ),
-              ),
+          builder: (context, state) => BlocProvider.value(
+            value: BlocProvider.of<InvitationBloc>(context),
+            child: InvitationAcceptPage(
+              invitationId: (state.extra as Map)['invitationId'],
+              colocationId: (state.extra as Map)['colocationId'],
+            ),
+          ),
         ),
         GoRoute(
           path: ColocationSettingsPage.routeName,
-          builder: (context, state) =>
-              ColocationSettingsPage(
-                colocationId: (state.extra as Map)['colocationId'],
-              ),
+          builder: (context, state) => ColocationSettingsPage(
+            colocationId: (state.extra as Map)['colocationId'],
+          ),
         ),
         GoRoute(
           path: ColocationMembers.routeName,
-          builder: (context, state) =>
-              ColocationMembers(
-                users: (state.extra as Map)['users'],
-              ),
+          builder: (context, state) => ColocationMembers(
+            users: (state.extra as Map)['users'],
+          ),
         ),
         GoRoute(
           path: ColocationMembersList.routeName,
-          builder: (context, state) =>
-              ColocationMembersList(
-                users: (state.extra as Map)['users'],
-              ),
+          builder: (context, state) => ColocationMembersList(
+            users: (state.extra as Map)['users'],
+          ),
         ),
         GoRoute(
           path: ColocationUpdatePage.routeName,
-          builder: (context, state) =>
-              ColocationUpdatePage(
-                colocationId: (state.extra as Map)['colocationId'],
-              ),
+          builder: (context, state) => ColocationUpdatePage(
+            colocationId: (state.extra as Map)['colocationId'],
+          ),
         ),
         GoRoute(
           path: TaskDetailPage.routeName,
-          builder: (context, state) =>
-              TaskDetailPage(
-                task: (state.extra as Map)['task'],
-              ),
+          builder: (context, state) => TaskDetailPage(
+            task: (state.extra as Map)['task'],
+          ),
         ),
         GoRoute(
           path: ConversationScreen.routeName,
-          builder: (context, state) =>
-              ConversationScreen(
-                conversationId: (state.extra as Map)['chatId'],
-              ),
+          builder: (context, state) => ConversationScreen(
+            conversationId: (state.extra as Map)['chatId'],
+          ),
         ),
         GoRoute(
           path: AddNewTaskScreen.routeName,
-          builder: (context, state) =>
-              BlocProvider.value(
-                value: BlocProvider.of<TaskBloc>(context),
-                child: AddNewTaskScreen(
-                  colocation: (state.extra as Map)['colocation'],
-                ),
-              ),
+          builder: (context, state) => BlocProvider.value(
+            value: BlocProvider.of<TaskBloc>(context),
+            child: AddNewTaskScreen(
+              colocation: (state.extra as Map)['colocation'],
+            ),
+          ),
         ),
         GoRoute(
           path: UpdateTaskScreen.routeName,
-          builder: (context, state) =>
-              BlocProvider.value(
-                value: BlocProvider.of<TaskBloc>(context),
-                child: UpdateTaskScreen(
-                  colocation: (state.extra as Map)['colocation'],
-                  task: (state.extra as Map)['task'],
-                ),
-              ),
+          builder: (context, state) => BlocProvider.value(
+            value: BlocProvider.of<TaskBloc>(context),
+            child: UpdateTaskScreen(
+              colocation: (state.extra as Map)['colocation'],
+              task: (state.extra as Map)['task'],
+            ),
+          ),
         ),
         GoRoute(
           path: CameraScreen.routeName,
@@ -353,7 +336,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<TaskBloc>(
           create: (context) => TaskBloc(),
         ),
-        BlocProvider<VoteBloc>(create: (context) => VoteBloc(),
+        BlocProvider<VoteBloc>(
+          create: (context) => VoteBloc(),
         ),
       ],
       child: MaterialApp.router(
@@ -383,7 +367,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 
 class GradientBackground extends StatelessWidget {
   final Widget child;
