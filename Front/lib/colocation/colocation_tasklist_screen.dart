@@ -359,8 +359,9 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                 .add(FetchTasks(widget.colocation.id));
                           }
                         },
-                        backgroundColor: Colors.blueGrey[800],
-                        child: const Icon(Icons.add, color: Colors.white)
+                        backgroundColor: Colors.white ,
+                        child: Icon(Icons.add, color: Colors.blueGrey[800], size: 30,
+                        )
                     )
                 )
             )

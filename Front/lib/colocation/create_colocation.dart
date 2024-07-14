@@ -46,7 +46,7 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
 
         if (features.isNotEmpty) {
           List<AddressResult> results =
-          List<AddressResult>.from(features.map((feature) {
+              List<AddressResult>.from(features.map((feature) {
             final center = feature['center'];
             final placeName = feature['place_name'];
             return AddressResult(
@@ -103,13 +103,14 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                         labelText: 'create_colocation_name'.tr(),
                         border: const OutlineInputBorder(),
                         labelStyle: const TextStyle(color: Colors.white),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
                         ),
-                        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
+                        errorStyle:
+                            TextStyle(color: Colors.red[500], fontSize: 15),
                       ),
                       style: const TextStyle(color: Colors.white),
                     ),
@@ -120,14 +121,14 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                         labelText: 'create_colocation_description'.tr(),
                         border: const OutlineInputBorder(),
                         labelStyle: const TextStyle(color: Colors.white),
-                        enabledBorder:  OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
                         ),
-                        focusedBorder:  OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
                         ),
-                        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
-
+                        errorStyle:
+                            TextStyle(color: Colors.red[500], fontSize: 15),
                       ),
                       style: const TextStyle(color: Colors.white),
                       maxLines: 3,
@@ -139,13 +140,14 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                         labelText: 'create_colocation_search_address'.tr(),
                         border: const OutlineInputBorder(),
                         labelStyle: const TextStyle(color: Colors.white),
-                        enabledBorder:  OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
                         ),
-                        focusedBorder:  OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
                         ),
-                        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
+                        errorStyle:
+                            TextStyle(color: Colors.red[500], fontSize: 15),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.search, color: Colors.white),
                           onPressed: () {
@@ -180,14 +182,14 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                         labelText: 'create_colocation_select_address'.tr(),
                         border: const OutlineInputBorder(),
                         labelStyle: const TextStyle(color: Colors.white),
-                        enabledBorder:  OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
                         ),
-                        focusedBorder:  OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey[800]!),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
                         ),
-                        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
-
+                        errorStyle:
+                            TextStyle(color: Colors.red[500], fontSize: 15),
                       ),
                       style: const TextStyle(color: Colors.white),
                     ),
@@ -198,8 +200,8 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                         style: const TextStyle(color: Colors.white),
                       ),
                       value: isPermanent,
-                      checkColor: Colors.white,
-                      activeColor: Colors.green,
+                      checkColor: Colors.blueGrey[800],
+                      activeColor: Colors.white,
                       onChanged: (bool? value) {
                         setState(() {
                           isPermanent = value ?? false;
@@ -223,7 +225,8 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                             context.push(HomeScreen.routeName);
                             ScaffoldMessenger.of(context).showSnackBar(
                                 showSnackBarFeedback(
-                                    'create_colocation_created_successfully'.tr(),
+                                    'create_colocation_created_successfully'
+                                        .tr(),
                                     Colors.green));
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -234,7 +237,8 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                               showSnackBarFeedback(
-                                  'create_colocation_message_select_address'.tr(),
+                                  'create_colocation_message_select_address'
+                                      .tr(),
                                   Colors.orange));
                         }
                       },

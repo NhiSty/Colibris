@@ -34,7 +34,7 @@ class ColocationMembersList extends StatelessWidget {
             itemCount: users.length,
             itemBuilder: (context, index) {
               return Card(
-                color: Colors.grey[800],
+                color: Colors.white,
                 margin: const EdgeInsets.symmetric(vertical: 8.0),
                 elevation: 3,
                 shape: RoundedRectangleBorder(
@@ -47,15 +47,14 @@ class ColocationMembersList extends StatelessWidget {
                     backgroundColor: Colors.green,
                     child: Text(
                       users[index].firstname[0].toUpperCase(),
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.black),
                     ),
                   ),
                   title: Text(
-                    users[index].firstname,
+                    '${users[index].lastname} ${users[index].firstname}',
                     style: const TextStyle(
-                      fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ),
                   subtitle: Text(
@@ -63,7 +62,7 @@ class ColocationMembersList extends StatelessWidget {
                     style: const TextStyle(
                       fontStyle: FontStyle.italic,
                       fontSize: 14,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ),
                   trailing: Text(
