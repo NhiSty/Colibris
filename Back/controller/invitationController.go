@@ -61,7 +61,7 @@ func (ctl *InvitationController) CreateInvitation(c *gin.Context) {
 	}
 
 	if err := ctl.invService.CreateInvitation(&invitation); err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusNotFound, err.Error())
 		return
 	}
 

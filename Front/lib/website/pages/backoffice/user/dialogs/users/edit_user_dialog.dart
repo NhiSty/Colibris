@@ -5,12 +5,15 @@ import 'package:front/services/user_service.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 void showEditUserDialog(BuildContext context, User user) {
   TextEditingController firstNameController =
-      TextEditingController(text: user.firstname);
+  TextEditingController(text: user.firstname);
   TextEditingController lastNameController =
       TextEditingController(text: user.lastname);
+
+  String selectedRole = user.roles;
 
   showDialog(
     context: context,
@@ -28,10 +31,10 @@ void showEditUserDialog(BuildContext context, User user) {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child:
-                      Text('backoffice_users_user_updated_successfully'.tr()),
+                  Text('backoffice_users_user_updated_successfully'.tr()),
                 ),
               ));
-              Navigator.pop(context);
+              context.pop();
             } else if (state is UserError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Container(
@@ -47,25 +50,57 @@ void showEditUserDialog(BuildContext context, User user) {
           },
           child: CustomDialog(
             title: 'backoffice_users_update_user'.tr(),
-            height: 100.0,
-            width: 250.0,
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: firstNameController,
-                  decoration: InputDecoration(labelText: 'firstname'.tr()),
-                ),
-                TextField(
-                  controller: lastNameController,
-                  decoration: InputDecoration(labelText: 'lastname'.tr()),
-                ),
-              ],
+            height: 200.0,
+            width: 300.0,
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextField(
+                    controller: firstNameController,
+                    decoration: InputDecoration(labelText: 'firstname'.tr()),
+                  ),
+                  TextField(
+                    controller: lastNameController,
+                    decoration: InputDecoration(labelText: 'lastname'.tr()),
+                  ),
+                  SizedBox(height: 16),
+                  Text('select_role'.tr()),
+                  ToggleButtons(
+                    isSelected: [
+                      selectedRole == 'ROLE_USER',
+                      selectedRole == 'ROLE_ADMIN'
+                    ],
+                    onPressed: (index) {
+                      String newRole = index == 0 ? 'ROLE_USER' : 'ROLE_ADMIN';
+                      context.read<UserBloc>().add(UpdateUserRole(
+                            id: user.id.toString(),
+                            roles: newRole,
+                          ));
+                      selectedRole = newRole;
+                    },
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text('ROLE_USER'.tr()),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text('ROLE_ADMIN'.tr()),
+                      ),
+                    ],
+                    fillColor: Colors.blue.withOpacity(0.2),
+                    selectedColor: Colors.white,
+                    borderWidth: 1,
+                  ),
+                ],
+              ),
             ),
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: Text('cancel'.tr()),
               ),

@@ -10,6 +10,8 @@ import 'package:front/website/pages/backoffice/user/components/user_list.dart';
 class UserHandlePage extends StatelessWidget {
   const UserHandlePage({super.key});
 
+  static const routeName = "/backoffice/user";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

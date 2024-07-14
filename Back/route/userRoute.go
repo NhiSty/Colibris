@@ -18,7 +18,9 @@ func UserRoutes(userRoutes *gin.RouterGroup, db *gorm.DB) {
 		routes.GET("", AuthMiddleware("ROLE_ADMIN"), userController.GetAllUsers)
 		routes.GET("/:id", AuthMiddleware(), userController.GetUserById)
 		routes.PATCH("/:id", AuthMiddleware(), userController.UpdateUser)
+		routes.PATCH("/:id/update_role", AuthMiddleware("ROLE_ADMIN"), userController.UpdateRoleUser)
 		routes.DELETE("/:id", AuthMiddleware(), userController.DeleteUserById)
 		routes.GET("/search", AuthMiddleware("ROLE_ADMIN"), userController.SearchUsers)
+		routes.PATCH("/add-fcm-token", AuthMiddleware(), userController.AddFcmToken)
 	}
 }

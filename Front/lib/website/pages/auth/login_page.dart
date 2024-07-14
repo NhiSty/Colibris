@@ -2,10 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:front/auth/auth_service.dart';
+import 'package:front/home_screen.dart';
 import 'package:front/website/share/secure_storage.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  static const routeName = "/";
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -112,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
       if (res == 200) {
         var userData = await decodeToken();
         if (userData['role'] == 'ROLE_ADMIN') {
-          Navigator.pushNamed(context, '/home');
+          context.go(HomeScreen.routeName);
         } else {
           showDialog(
             context: context,
@@ -128,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text('backoffice_understand'.tr(),
                         style: const TextStyle(color: Colors.white)),
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      context.pop();
                     },
                   ),
                 ],
@@ -147,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                 TextButton(
                   child: const Text('OK'),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                   },
                 ),
               ],

@@ -8,6 +8,7 @@ class Task {
   final int colocationId;
   final int userId;
   final int pts;
+  final bool validate;
 
   Task({
     required this.id,
@@ -19,6 +20,7 @@ class Task {
     required this.colocationId,
     required this.userId,
     required this.pts,
+    required this.validate,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class Task {
       colocationId: json['ColocationID'],
       userId: json['UserID'],
       pts: json['Pts'],
+      validate: json['Validate'],
     );
   }
 }

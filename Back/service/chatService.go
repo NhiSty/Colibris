@@ -65,6 +65,39 @@ func (c *ChatService) BroadcastMessage(colocationID string, message []byte, user
 	c.clients[colocationID] = activeClients
 }
 
+func (c *ChatService) BroadcastDeleteMessage(colocationID string, messageID int) {
+	c.clientsMu.Lock()
+	defer c.clientsMu.Unlock()
+
+	deleteMessage := map[string]interface{}{
+		"type":      "delete",
+		"messageID": messageID,
+	}
+	messageJSON, _ := json.Marshal(deleteMessage)
+
+	var activeClients []*model.Client
+	for _, client := range c.clients[colocationID] {
+		err := client.Conn.WriteMessage(websocket.TextMessage, messageJSON)
+		if err != nil {
+			log.Printf("Erreur lors de l'envoi du message au client : %v", err)
+			client.Conn.Close()
+		} else {
+			activeClients = append(activeClients, client)
+		}
+	}
+	c.clients[colocationID] = activeClients
+}
+
+func (c *ChatService) DeleteMessage(colocationID string, messageID int) error {
+	err := c.db.Delete(&model.Message{}, messageID).Error
+	if err != nil {
+		return err
+	}
+
+	c.BroadcastDeleteMessage(colocationID, messageID)
+	return nil
+}
+
 func (c *ChatService) GetMessages(colocationID string) ([]model.Message, error) {
 	var messages []model.Message
 	if err := c.db.Where("colocation_id = ?", colocationID).Order("created_at ASC").Find(&messages).Error; err != nil {

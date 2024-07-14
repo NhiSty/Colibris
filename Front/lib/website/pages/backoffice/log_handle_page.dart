@@ -9,6 +9,8 @@ import 'package:front/website/pages/backoffice/logs/components/title_and_breadcr
 class LogPage extends StatefulWidget {
   const LogPage({super.key});
 
+  static const routeName = "/backoffice/logs";
+
   @override
   _LogPageState createState() => _LogPageState();
 }

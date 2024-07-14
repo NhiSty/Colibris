@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 void showAddUserDialog(BuildContext context) {
   TextEditingController firstNameController = TextEditingController();
@@ -29,7 +30,7 @@ void showAddUserDialog(BuildContext context) {
                   child: Text('backoffice_users_user_added_successfully'.tr()),
                 ),
               ));
-              Navigator.pop(context);
+              context.pop();
             } else if (state is UserError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Container(
@@ -73,7 +74,7 @@ void showAddUserDialog(BuildContext context) {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: Text('cancel'.tr()),
               ),
