@@ -170,15 +170,15 @@ class MyApp extends StatelessWidget {
       },
       routes: [
         GoRoute(
-          path: '/',
-          builder: (context, state) =>
-              isFeatureEnabled('maintenance', featureFlag)
-                  ? const MaintenanceScreen()
-                  : PopScope(
-                      canPop: false,
-                      child: LoginScreen(
+            path: '/',
+            builder: (context, state) =>
+                isFeatureEnabled('maintenance', featureFlag)
+                    ? const MaintenanceScreen()
+                    : PopScope(
+                        canPop: false,
+                        child: LoginScreen(
                         data: state.extra,
-                      )),
+                      ))
         ),
         GoRoute(
           path: LoginScreen.routeName,
@@ -348,7 +348,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           brightness: Brightness.dark,
           primaryColor: Colors.green,
-          colorScheme: ColorScheme.dark(
+          colorScheme: const ColorScheme.dark(
             primary: Colors.blueGrey,
             secondary: Colors.blueAccent,
           ),

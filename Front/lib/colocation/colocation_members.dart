@@ -88,7 +88,7 @@ class _ColocationMembersState extends State<ColocationMembers> {
             itemCount: _users.length,
             itemBuilder: (context, index) {
               return Card(
-                color: Colors.grey[800],
+                color: Colors.white,
                 margin: const EdgeInsets.symmetric(vertical: 8.0),
                 elevation: 3,
                 shape: RoundedRectangleBorder(
@@ -101,7 +101,7 @@ class _ColocationMembersState extends State<ColocationMembers> {
                     backgroundColor: Colors.green,
                     child: Text(
                       _users[index].firstname[0],
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.black),
                     ),
                   ),
                   title: Text(
@@ -109,7 +109,7 @@ class _ColocationMembersState extends State<ColocationMembers> {
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ),
                   subtitle: Text(
@@ -117,7 +117,7 @@ class _ColocationMembersState extends State<ColocationMembers> {
                     style: const TextStyle(
                       fontStyle: FontStyle.italic,
                       fontSize: 14,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ),
                   trailing: ElevatedButton(

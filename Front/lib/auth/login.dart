@@ -56,9 +56,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderSide: BorderSide(color: Colors.white),
                         ),
                         focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.tealAccent),
+                          borderSide: BorderSide(color: Colors.white),
                         ),
-                        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
+                        errorStyle:
+                            TextStyle(color: Colors.red[500], fontSize: 15),
                       ),
                       style: const TextStyle(color: Colors.white),
                       validator: (value) {
@@ -79,9 +80,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderSide: BorderSide(color: Colors.white),
                         ),
                         focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.tealAccent),
+                          borderSide: BorderSide(color: Colors.white),
                         ),
-                        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
+                        errorStyle:
+                            TextStyle(color: Colors.red[500], fontSize: 15),
                       ),
                       obscureText: true,
                       style: const TextStyle(color: Colors.white),
@@ -139,7 +141,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   loginClick() async {
     if (_formKey.currentState!.validate()) {
-      var res = await login(_emailController.text.trim(), _passwordController.text);
+      var res =
+          await login(_emailController.text.trim(), _passwordController.text);
       if (!mounted) return;
       if (res == 200) {
         final token = await firebaseClient.getFcmToken();
@@ -160,8 +163,10 @@ class _LoginScreenState extends State<LoginScreen> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('error'.tr(), style: const TextStyle(color: Colors.red)),
-              content: Text('error_email_or_password'.tr(), style: const TextStyle(color: Colors.white)),
+              title:
+                  Text('error'.tr(), style: const TextStyle(color: Colors.red)),
+              content: Text('error_email_or_password'.tr(),
+                  style: const TextStyle(color: Colors.white)),
               actions: <Widget>[
                 TextButton(
                   child: const Text('OK', style: TextStyle(color: Colors.red)),
