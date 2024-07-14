@@ -57,7 +57,7 @@ class _InvitationCreatePageState extends State<InvitationCreatePage> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
-                      borderSide: const BorderSide(color: Colors.blueGrey),
+                      borderSide: const BorderSide(color: Colors.white),
                     ),
                   ),
                   style: const TextStyle(color: Colors.white),
