@@ -82,7 +82,7 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 	}
 
 	if !taskInColocation && !service.IsAdmin(c) {
-		c.JSON(http.StatusBadRequest, "error_votingTaskCantVoteForTaskNotInYourColocation")
+		c.JSON(http.StatusUnprocessableEntity, "error_votingTaskCantVoteForTaskNotInYourColocation")
 		return
 	}
 
@@ -97,13 +97,13 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 	// Check if the task is already voted
 	_, err = ctl.voteService.GetVoteByTaskIdAndUserId(int(req.TaskID), userId)
 	if err == nil {
-		c.JSON(http.StatusBadRequest, "error_votingTaskAlreadyVoted")
+		c.JSON(http.StatusUnprocessableEntity, "error_votingTaskAlreadyVoted")
 		return
 	}
 
 	// Check if the user is not voting for himself
-	if task.UserID == userIDFromToken {
-		c.JSON(http.StatusBadRequest, "error_votingTaskCantVoteForYourself")
+	if task.UserID == userIDFromToken && !service.IsAdmin(c) {
+		c.JSON(http.StatusUnprocessableEntity, "error_votingTaskCantVoteForYourself")
 		return
 	}
 
@@ -264,8 +264,8 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		return
 	}
 
-	if task.UserID == userIDFromToken {
-		c.JSON(http.StatusBadRequest, "error_votingTaskCantVoteForYourself")
+	if task.UserID == userIDFromToken && !service.IsAdmin(c) {
+		c.JSON(http.StatusUnprocessableEntity, "error_votingTaskCantVoteForYourself")
 		return
 	}
 
@@ -282,7 +282,8 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		voteUpdates["value"] = req.Value
 	}
 
-	if _, err := ctl.voteService.UpdateVote(voteId, voteUpdates); err != nil {
+	voteUpdated, err := ctl.voteService.UpdateVote(voteId, voteUpdates)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -334,7 +335,8 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"Message": "vote updated successfully",
+		"message": "backoffice_task_task_updated_successfully",
+		"vote":    voteUpdated,
 	})
 }
 
