@@ -2,6 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:front/services/vote_service.dart';
+import 'package:front/website/pages/backoffice/vote_handle_page.dart';
+import 'package:front/website/pages/backoffice/votes/bloc/vote_bloc.dart';
 import 'package:front/website/share/secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:front/services/colocMember_service.dart';
@@ -92,6 +95,24 @@ class MyApp extends StatelessWidget {
           path: TaskHandlePage.routeName,
           builder: (context, state) => const TaskHandlePage(),
         ),
+        GoRoute(
+          path: MessagesHandlePage.routeName,
+          builder: (context, state) {
+            final colocationId = (state.extra as Map)['id'];
+            return MessagesHandlePage(
+              colocationId: colocationId,
+            );
+          },
+        ),
+        GoRoute(
+          path: VoteHandlePage.routeName,
+          builder: (context, state) {
+            final taskId = (state.extra as Map)['taskId'];
+            return VoteHandlePage(
+              taskId: taskId,
+            );
+          },
+        ),
       ],
       errorBuilder: (context, state) => Scaffold(
         body: Center(child: Text(state.error.toString())),
@@ -122,6 +143,10 @@ class MyApp extends StatelessWidget {
           create: (context) =>
           TaskBloc(taskService: TaskService())
             ..add(LoadTasks()),
+        ),
+        BlocProvider<VoteBloc>(
+          create: (context) =>
+          VoteBloc(voteService: VoteService()),
         ),
       ],
       child: MaterialApp.router(

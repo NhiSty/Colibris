@@ -1,12 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/colocation/colocation.dart';
-import 'package:front/services/colocation_service.dart';
 import 'package:front/task/task.dart';
 import 'package:front/services/user_service.dart';
-import 'package:front/website/pages/backoffice/tasks/bloc/task_bloc.dart';
 import 'package:front/website/pages/backoffice/tasks/dialogs/delete_task_dialog.dart';
+import 'package:front/website/pages/backoffice/vote_handle_page.dart';
+import 'package:go_router/go_router.dart';
 import '../dialogs/edit_task_dialog.dart';
 
 class TaskListItem extends StatelessWidget {
@@ -295,6 +293,17 @@ class TaskListItem extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    IconButton(
+                      icon: Icon(Icons.thumbs_up_down, color: Colors.orange),
+                      onPressed: () {
+                        buildContext.push(
+                          VoteHandlePage.routeName,
+                          extra: {
+                            'taskId': task.id,
+                          },
+                        );
+                      },
+                    ),
                     IconButton(
                       icon: Icon(Icons.edit, color: Colors.blue[800]),
                       onPressed: () {
