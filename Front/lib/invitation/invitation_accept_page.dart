@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/colocation/colocation_service.dart';
-import 'package:front/home_screen.dart';
-import 'package:front/invitation/bloc/invitation_bloc.dart';
-import 'package:front/main.dart';
+import 'package:colibris/colocation/colocation_service.dart';
+import 'package:colibris/home_screen.dart';
+import 'package:colibris/invitation/bloc/invitation_bloc.dart';
+import 'package:colibris/main.dart';
 import 'package:go_router/go_router.dart';
 
 class InvitationAcceptPage extends StatefulWidget {
@@ -56,72 +56,70 @@ class _InvitationAcceptPageState extends State<InvitationAcceptPage> {
             child: colocationData == null
                 ? const CircularProgressIndicator()
                 : Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Card(
-                color: Colors.transparent,
-                elevation: 0,
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      InvitationCard(colocationData: colocationData),
-                      const SizedBox(height: 24),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              context.read<InvitationBloc>().add(
-                                  InvitationAccept(
-                                      state: 'accepted',
-                                      invitationId:
-                                      widget.invitationId));
-                              context.push(HomeScreen.routeName);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12.0, horizontal: 24.0),
+                    padding: const EdgeInsets.all(16.0),
+                    child: Card(
+                      color: Colors.transparent,
+                      elevation: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            InvitationCard(colocationData: colocationData),
+                            const SizedBox(height: 24),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    context.read<InvitationBloc>().add(
+                                        InvitationAccept(
+                                            state: 'accepted',
+                                            invitationId: widget.invitationId));
+                                    context.push(HomeScreen.routeName);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12.0, horizontal: 24.0),
+                                  ),
+                                  child: Text(
+                                    'invitation_accept_accept'.tr(),
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    context.read<InvitationBloc>().add(
+                                        InvitationReject(
+                                            state: 'declined',
+                                            invitationId: widget.invitationId));
+                                    context.push(HomeScreen.routeName);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12.0, horizontal: 24.0),
+                                  ),
+                                  child: Text(
+                                    'invitation_accept_refuse'.tr(),
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ],
                             ),
-                            child: Text(
-                              'invitation_accept_accept'.tr(),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          ElevatedButton(
-                            onPressed: () {
-                              context.read<InvitationBloc>().add(
-                                  InvitationReject(
-                                      state: 'declined',
-                                      invitationId:
-                                      widget.invitationId));
-                              context.push(HomeScreen.routeName);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12.0, horizontal: 24.0),
-                            ),
-                            child: Text(
-                              'invitation_accept_refuse'.tr(),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ),
           ),
         ),
       ),

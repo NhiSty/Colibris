@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:front/services/user_service.dart';
+import 'package:colibris/services/user_service.dart';
 
 @immutable
 abstract class UserState {}

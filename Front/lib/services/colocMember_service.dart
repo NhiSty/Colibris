@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:front/ColocMembers/colocMembers.dart';
-import 'package:front/services/user_service.dart';
-import 'package:front/utils/dio.dart';
-import 'package:front/website/share/secure_storage.dart';
+import 'package:colibris/ColocMembers/colocMembers.dart';
+import 'package:colibris/services/user_service.dart';
+import 'package:colibris/utils/dio.dart';
+import 'package:colibris/website/share/secure_storage.dart';
 import 'package:intl/intl.dart';
 
 class ColocMemberService {

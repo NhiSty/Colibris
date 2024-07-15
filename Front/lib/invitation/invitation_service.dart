@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:front/utils/dio.dart';
-import 'package:front/invitation/invitation.dart';
-import 'package:front/website/share/secure_storage.dart';
+import 'package:colibris/utils/dio.dart';
+import 'package:colibris/invitation/invitation.dart';
+import 'package:colibris/website/share/secure_storage.dart';
 
 Future<List<Invitation>> fetchInvitations() async {
   var headers = await addHeader();

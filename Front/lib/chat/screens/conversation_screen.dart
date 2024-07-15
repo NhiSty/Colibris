@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/chat/models/message.dart';
-import 'package:front/chat/services/api_service.dart';
-import 'package:front/chat/services/websocket_service.dart';
-import 'package:front/colocation/colocation.dart';
-import 'package:front/colocation/colocation_service.dart';
-import 'package:front/colocation/colocation_tasklist_screen.dart';
-import 'package:front/main.dart';
-import 'package:front/utils/firebase.dart';
-import 'package:front/website/share/secure_storage.dart';
+import 'package:colibris/chat/models/message.dart';
+import 'package:colibris/chat/services/api_service.dart';
+import 'package:colibris/chat/services/websocket_service.dart';
+import 'package:colibris/colocation/colocation.dart';
+import 'package:colibris/colocation/colocation_service.dart';
+import 'package:colibris/colocation/colocation_tasklist_screen.dart';
+import 'package:colibris/main.dart';
+import 'package:colibris/utils/firebase.dart';
+import 'package:colibris/website/share/secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -59,7 +59,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   Future<void> _fetchMessages() async {
     try {
       List<Message> messages =
-      await apiService.getMessages(widget.conversationId);
+          await apiService.getMessages(widget.conversationId);
       setState(() {
         _messages = messages;
         _scrollToBottom();
@@ -173,8 +173,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                               DateFormat('dd MMM yyyy')
                                   .format(message.createdAt),
                               style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black),
+                                  fontSize: 14, color: Colors.black),
                             ),
                           ),
                         Align(
@@ -184,7 +183,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           child: Container(
                             constraints: BoxConstraints(
                                 maxWidth:
-                                MediaQuery.of(context).size.width * 0.75),
+                                    MediaQuery.of(context).size.width * 0.75),
                             margin: EdgeInsets.symmetric(
                                 vertical: 2, horizontal: 8),
                             padding: EdgeInsets.all(10),
@@ -250,7 +249,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                     Expanded(
                       child: TextField(
                         controller: _messageController,
-                        style: TextStyle(color : Colors.black),
+                        style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
                           hintText: 'chat_enter_message'.tr(),
                           hintStyle: const TextStyle(color: Colors.grey),

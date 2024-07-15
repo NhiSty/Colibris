@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/services/user_service.dart';
-import 'package:front/website/pages/backoffice/user/components/user_list_item.dart';
+import 'package:colibris/services/user_service.dart';
+import 'package:colibris/website/pages/backoffice/user/components/user_list_item.dart';
 
 class UserList extends StatelessWidget {
   final List<User> users;

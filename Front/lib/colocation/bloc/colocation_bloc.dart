@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:front/colocation/colocation.dart';
-import 'package:front/colocation/colocation_service.dart';
+import 'package:colibris/colocation/colocation.dart';
+import 'package:colibris/colocation/colocation_service.dart';
 
 part 'colocation_event.dart';
 part 'colocation_state.dart';

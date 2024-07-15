@@ -1,14 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/colocation/bloc/colocation_bloc.dart';
-import 'package:front/colocation/colocation_tasklist_screen.dart';
-import 'package:front/colocation/create_colocation.dart';
-import 'package:front/invitation/bloc/invitation_bloc.dart';
-import 'package:front/invitation/invitation_list_page.dart';
+import 'package:colibris/colocation/bloc/colocation_bloc.dart';
+import 'package:colibris/colocation/colocation_tasklist_screen.dart';
+import 'package:colibris/colocation/create_colocation.dart';
+import 'package:colibris/invitation/bloc/invitation_bloc.dart';
+import 'package:colibris/invitation/invitation_list_page.dart';
 import 'package:go_router/go_router.dart';
-import 'package:front/main.dart';
-import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
+import 'package:colibris/main.dart';
+import 'package:colibris/shared.widget/snack_bar_feedback_handling.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -77,7 +77,8 @@ class HomeScreen extends StatelessWidget {
                                       size: 50,
                                     ),
                                     onPressed: () {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         showSnackBarFeedback(
                                           'colocation_no_invitation_yet'.tr(),
                                           Colors.blueAccent,
@@ -95,10 +96,11 @@ class HomeScreen extends StatelessWidget {
                                           size: 50,
                                         ),
                                         onPressed: () {
-                                          context.push( InvitationListPage.routeName,
-                                          extra: {
-                                            'invitations': invitations,
-                                          });
+                                          context.push(
+                                              InvitationListPage.routeName,
+                                              extra: {
+                                                'invitations': invitations,
+                                              });
                                         },
                                       ),
                                       Positioned(
@@ -144,8 +146,10 @@ class HomeScreen extends StatelessWidget {
                   Expanded(
                     child: BlocBuilder<ColocationBloc, ColocationState>(
                       builder: (context, state) {
-                        if (state is ColocationInitial || state is ColocationLoading) {
-                          return const Center(child: CircularProgressIndicator());
+                        if (state is ColocationInitial ||
+                            state is ColocationLoading) {
+                          return const Center(
+                              child: CircularProgressIndicator());
                         } else if (state is ColocationError) {
                           if (state.isDirty) {
                             return Center(
@@ -173,7 +177,8 @@ class HomeScreen extends StatelessWidget {
                               ),
                             );
                           }
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         } else if (state is ColocationLoaded) {
                           final colocations = state.colocations;
                           if (colocations.isEmpty) {
@@ -205,7 +210,9 @@ class HomeScreen extends StatelessWidget {
                             return RefreshIndicator(
                               displacement: 50,
                               onRefresh: () async {
-                                context.read<ColocationBloc>().add(const FetchColocations());
+                                context
+                                    .read<ColocationBloc>()
+                                    .add(const FetchColocations());
                               },
                               child: ListView.builder(
                                 itemCount: colocations.length,
@@ -213,8 +220,7 @@ class HomeScreen extends StatelessWidget {
                                   final item = colocations[index];
                                   return GestureDetector(
                                     onTap: () {
-
-                                    context.push(
+                                      context.push(
                                         ColocationTasklistScreen.routeName,
                                         extra: {
                                           'colocation': item,
@@ -223,13 +229,13 @@ class HomeScreen extends StatelessWidget {
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0,
-                                          horizontal: 16.0),
+                                          vertical: 8.0, horizontal: 16.0),
                                       child: Card(
                                         color: Colors.blueGrey[800],
                                         elevation: 4,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                         ),
                                         child: ListTile(
                                           leading: const Icon(Icons.home),
@@ -240,19 +246,23 @@ class HomeScreen extends StatelessWidget {
                                                 fontSize: 18),
                                           ),
                                           subtitle: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 '${'colocation_created_at'.tr()} ${DateTime.parse(item.createdAt).toLocal().toString().split(' ')[0]}',
-                                                style: const TextStyle(fontSize: 12),
+                                                style: const TextStyle(
+                                                    fontSize: 12),
                                               ),
                                               Text(
                                                 item.location,
-                                                style: const TextStyle(fontSize: 12),
+                                                style: const TextStyle(
+                                                    fontSize: 12),
                                               ),
                                             ],
                                           ),
-                                          trailing: const Icon(Icons.arrow_forward_ios),
+                                          trailing: const Icon(
+                                              Icons.arrow_forward_ios),
                                         ),
                                       ),
                                     ),

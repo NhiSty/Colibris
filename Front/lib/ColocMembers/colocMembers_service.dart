@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:front/utils/dio.dart';
-import 'package:front/website/share/secure_storage.dart';
+import 'package:colibris/utils/dio.dart';
+import 'package:colibris/website/share/secure_storage.dart';
 
 fetchColoMembersByColoc(int colocId) async {
   var headers = await addHeader();

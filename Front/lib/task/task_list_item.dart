@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/task/task.dart';
-import 'package:front/vote/bloc/vote_bloc.dart';
+import 'package:colibris/task/task.dart';
+import 'package:colibris/vote/bloc/vote_bloc.dart';
 
 import '../vote/vote_dialog.dart';
 
@@ -39,9 +39,7 @@ class TaskListItem extends StatelessWidget {
             Expanded(
               child: Text(item.title,
                   style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold
-                  )
-              ),
+                      fontSize: 18, fontWeight: FontWeight.bold)),
             ),
             Expanded(
               child: Align(
@@ -57,13 +55,19 @@ class TaskListItem extends StatelessWidget {
                           );
                         } else if (state.voteByUserState is VoteByUserError) {
                           return Center(
-                            child: Text((state.voteByUserState as VoteByUserError).message),
+                            child: Text(
+                                (state.voteByUserState as VoteByUserError)
+                                    .message),
                           );
                         } else if (state.voteByUserState is VoteByUserLoaded) {
-                          final votes = (state.voteByUserState as VoteByUserLoaded).votes;
+                          final votes =
+                              (state.voteByUserState as VoteByUserLoaded).votes;
 
-                          final voteIndex = votes.indexWhere((vote) => vote.taskId == item.id);
-                          final vote = voteIndex != -1 ? votes.elementAt(voteIndex) : null;
+                          final voteIndex = votes
+                              .indexWhere((vote) => vote.taskId == item.id);
+                          final vote = voteIndex != -1
+                              ? votes.elementAt(voteIndex)
+                              : null;
 
                           return Theme(
                             data: Theme.of(context).copyWith(
@@ -79,9 +83,12 @@ class TaskListItem extends StatelessWidget {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      const Icon(Icons.remove_red_eye_outlined, color: Colors.white),
+                                      const Icon(Icons.remove_red_eye_outlined,
+                                          color: Colors.white),
                                       const SizedBox(width: 10),
-                                      Text('task_action_details'.tr(), style: const TextStyle(color: Colors.white)),
+                                      Text('task_action_details'.tr(),
+                                          style: const TextStyle(
+                                              color: Colors.white)),
                                     ],
                                   ),
                                 ),
@@ -91,9 +98,12 @@ class TaskListItem extends StatelessWidget {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        const Icon(Icons.edit_outlined, color: Colors.white),
+                                        const Icon(Icons.edit_outlined,
+                                            color: Colors.white),
                                         const SizedBox(width: 10),
-                                        Text('task_action_edit'.tr(), style: const TextStyle(color: Colors.white)),
+                                        Text('task_action_edit'.tr(),
+                                            style: const TextStyle(
+                                                color: Colors.white)),
                                       ],
                                     ),
                                   ),
@@ -115,12 +125,19 @@ class TaskListItem extends StatelessWidget {
                                       children: [
                                         if (vote != null)
                                           vote.value == 1
-                                              ? const Icon(Icons.thumb_up_outlined, color: Colors.green)
-                                              : const Icon(Icons.thumb_down_outlined, color: Colors.red)
+                                              ? const Icon(
+                                                  Icons.thumb_up_outlined,
+                                                  color: Colors.green)
+                                              : const Icon(
+                                                  Icons.thumb_down_outlined,
+                                                  color: Colors.red)
                                         else
-                                          const Icon(Icons.thumb_up_outlined, color: Colors.white),
+                                          const Icon(Icons.thumb_up_outlined,
+                                              color: Colors.white),
                                         const SizedBox(width: 10),
-                                        Text('task_action_like'.tr(), style: const TextStyle(color: Colors.white)),
+                                        Text('task_action_like'.tr(),
+                                            style: const TextStyle(
+                                                color: Colors.white)),
                                       ],
                                     ),
                                   ),
@@ -130,9 +147,12 @@ class TaskListItem extends StatelessWidget {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        const Icon(Icons.delete_outlined, color: Colors.white),
+                                        const Icon(Icons.delete_outlined,
+                                            color: Colors.white),
                                         const SizedBox(width: 10),
-                                        Text('task_action_delete'.tr(), style: const TextStyle(color: Colors.white)),
+                                        Text('task_action_delete'.tr(),
+                                            style: const TextStyle(
+                                                color: Colors.white)),
                                       ],
                                     ),
                                   ),

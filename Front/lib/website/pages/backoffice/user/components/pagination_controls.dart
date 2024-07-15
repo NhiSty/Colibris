@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
+import 'package:colibris/website/pages/backoffice/user/bloc/user_bloc.dart';
 
 class PaginationControls extends StatelessWidget {
   final int currentPage;

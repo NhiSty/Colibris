@@ -2,18 +2,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/website/pages/backoffice/colocations/bloc/colocation_bloc.dart';
+import 'package:colibris/website/pages/backoffice/colocations/bloc/colocation_bloc.dart';
 
 class SearchBarComponent extends StatefulWidget {
   const SearchBarComponent({Key? key}) : super(key: key);
 
   @override
-  _SearchBarComponentState createState() =>
-      _SearchBarComponentState();
+  _SearchBarComponentState createState() => _SearchBarComponentState();
 }
 
-class _SearchBarComponentState
-    extends State<SearchBarComponent> {
+class _SearchBarComponentState extends State<SearchBarComponent> {
   TextEditingController searchController = TextEditingController();
 
   @override

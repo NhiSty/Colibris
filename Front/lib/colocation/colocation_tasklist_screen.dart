@@ -1,18 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/colocation/colocation.dart';
-import 'package:front/main.dart';
-import 'package:front/colocation/colocation_parameters.dart';
-import 'package:front/shared.widget/bottom_navigation_bar.dart';
-import 'package:front/task/bloc/task_bloc.dart';
-import 'package:front/task/task_list_item.dart';
-import 'package:front/task/add_new_task_screen.dart';
-import 'package:front/task/task_detail.dart';
-import 'package:front/task/task_service.dart';
-import 'package:front/task/update_task_screen.dart';
-import 'package:front/vote/bloc/vote_bloc.dart';
-import 'package:front/website/share/secure_storage.dart';
+import 'package:colibris/colocation/colocation.dart';
+import 'package:colibris/main.dart';
+import 'package:colibris/colocation/colocation_parameters.dart';
+import 'package:colibris/shared.widget/bottom_navigation_bar.dart';
+import 'package:colibris/task/bloc/task_bloc.dart';
+import 'package:colibris/task/task_list_item.dart';
+import 'package:colibris/task/add_new_task_screen.dart';
+import 'package:colibris/task/task_detail.dart';
+import 'package:colibris/task/task_service.dart';
+import 'package:colibris/task/update_task_screen.dart';
+import 'package:colibris/vote/bloc/vote_bloc.dart';
+import 'package:colibris/website/share/secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class ColocationTasklistScreen extends StatefulWidget {
@@ -357,12 +357,7 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                           }
                         },
                         backgroundColor: Colors.blueGrey[800],
-                        child: const Icon(Icons.add, color: Colors.white)
-                    )
-                )
-            )
-        )
-    );
+                        child: const Icon(Icons.add, color: Colors.white))))));
   }
 }
 

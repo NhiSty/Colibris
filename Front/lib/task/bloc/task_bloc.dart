@@ -1,7 +1,6 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:front/task/task.dart';
+import 'package:colibris/task/task.dart';
 
 import '../task_service.dart';
 

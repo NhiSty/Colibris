@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/services/colocMember_service.dart';
-import 'package:front/website/pages/backoffice/colocMembers/dialogs/colocMembers/delete_coloc_member.dart';
-import 'package:front/website/pages/backoffice/colocMembers/dialogs/colocMembers/edit_coloc_member.dart';
-import 'package:front/website/pages/backoffice/colocMembers/dialogs/colocMembers/map_modal.dart';
-import 'package:front/website/pages/backoffice/user_handle_page.dart';
+import 'package:colibris/services/colocMember_service.dart';
+import 'package:colibris/website/pages/backoffice/colocMembers/dialogs/colocMembers/delete_coloc_member.dart';
+import 'package:colibris/website/pages/backoffice/colocMembers/dialogs/colocMembers/edit_coloc_member.dart';
+import 'package:colibris/website/pages/backoffice/colocMembers/dialogs/colocMembers/map_modal.dart';
+import 'package:colibris/website/pages/backoffice/user_handle_page.dart';
 import 'package:go_router/go_router.dart';
 
 class ColocMemberListItem extends StatelessWidget {

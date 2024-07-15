@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/invitation/invitation_service.dart';
-import 'package:front/main.dart';
-import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
+import 'package:colibris/invitation/invitation_service.dart';
+import 'package:colibris/main.dart';
+import 'package:colibris/shared.widget/snack_bar_feedback_handling.dart';
 import 'package:go_router/go_router.dart';
 
 class InvitationCreatePage extends StatefulWidget {
@@ -93,7 +93,8 @@ class _InvitationCreatePageState extends State<InvitationCreatePage> {
                           return;
                         }
 
-                        var res = await createInvitation(email, widget.colocationId);
+                        var res =
+                            await createInvitation(email, widget.colocationId);
 
                         if (res == 403) {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -134,7 +135,7 @@ class _InvitationCreatePageState extends State<InvitationCreatePage> {
                         ),
                       ),
                       child: Text('invit_colocation_submit'.tr(),
-                      style: TextStyle(fontSize: 15)),
+                          style: TextStyle(fontSize: 15)),
                     ),
                   ),
                 ),

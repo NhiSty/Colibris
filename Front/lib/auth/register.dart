@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/auth/auth_service.dart';
-import 'package:front/main.dart';
-import 'package:front/auth/login.dart';
+import 'package:colibris/auth/auth_service.dart';
+import 'package:colibris/main.dart';
+import 'package:colibris/auth/login.dart';
 import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -49,13 +49,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (_isLoading) const CircularProgressIndicator(),
                     if (!_isLoading) ...[
                       const SizedBox(height: 20),
-                      buildTextFormField(_lastNameController, 'register_lastname'.tr(), TextInputType.text),
+                      buildTextFormField(_lastNameController,
+                          'register_lastname'.tr(), TextInputType.text),
                       const SizedBox(height: 10),
-                      buildTextFormField(_firstNameController, 'register_firstname'.tr(), TextInputType.text),
+                      buildTextFormField(_firstNameController,
+                          'register_firstname'.tr(), TextInputType.text),
                       const SizedBox(height: 10),
-                      buildTextFormField(_emailController, 'register_email'.tr(), TextInputType.emailAddress),
+                      buildTextFormField(_emailController,
+                          'register_email'.tr(), TextInputType.emailAddress),
                       const SizedBox(height: 10),
-                      buildTextFormField(_passwordController, 'register_password'.tr(), TextInputType.text, obscureText: true),
+                      buildTextFormField(_passwordController,
+                          'register_password'.tr(), TextInputType.text,
+                          obscureText: true),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
@@ -73,7 +78,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.blueGrey,
                         ),
-                        child: Text('register_submit'.tr(),
+                        child: Text(
+                          'register_submit'.tr(),
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),
@@ -102,8 +108,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  TextFormField buildTextFormField(
-      TextEditingController controller, String label, TextInputType keyboardType, {bool obscureText = false}) {
+  TextFormField buildTextFormField(TextEditingController controller,
+      String label, TextInputType keyboardType,
+      {bool obscureText = false}) {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
@@ -130,7 +137,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void registerUser(String email, String password, String firstname, String lastname) async {
+  void registerUser(
+      String email, String password, String firstname, String lastname) async {
     setState(() {
       _isLoading = true;
     });
@@ -148,8 +156,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('register_successful'.tr(), style: const TextStyle(color: Colors.green)),
-            content: Text('register_user_created_successfully'.tr(), style: const TextStyle(color: Colors.white)),
+            title: Text('register_successful'.tr(),
+                style: const TextStyle(color: Colors.green)),
+            content: Text('register_user_created_successfully'.tr(),
+                style: const TextStyle(color: Colors.white)),
             backgroundColor: Colors.grey[850],
             actions: <Widget>[
               TextButton(
@@ -167,8 +177,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('error'.tr(), style: const TextStyle(color: Colors.red)),
-            content: Text('${'register_error'.tr()} $response', style: const TextStyle(color: Colors.white)),
+            title:
+                Text('error'.tr(), style: const TextStyle(color: Colors.red)),
+            content: Text('${'register_error'.tr()} $response',
+                style: const TextStyle(color: Colors.white)),
             backgroundColor: Colors.grey[850],
             actions: <Widget>[
               TextButton(

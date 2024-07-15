@@ -1,13 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/main.dart';
-import 'package:front/user/user.dart';
+import 'package:colibris/main.dart';
+import 'package:colibris/user/user.dart';
 
 class ColocationMembersList extends StatelessWidget {
   final List<User> users;
 
   const ColocationMembersList({super.key, required this.users});
-  static const routeName = "/colocation-members-list"; 
+  static const routeName = "/colocation-members-list";
 
   @override
   Widget build(BuildContext context) {

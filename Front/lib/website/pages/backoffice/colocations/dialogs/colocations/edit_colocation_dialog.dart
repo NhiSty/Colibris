@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/colocation/colocation.dart';
-import 'package:front/website/pages/backoffice/colocations/bloc/colocation_bloc.dart';
-import 'package:front/website/pages/backoffice/colocations/bloc/colocation_state.dart';
-import 'package:front/website/share/custom_dialog.dart';
+import 'package:colibris/colocation/colocation.dart';
+import 'package:colibris/website/pages/backoffice/colocations/bloc/colocation_bloc.dart';
+import 'package:colibris/website/pages/backoffice/colocations/bloc/colocation_state.dart';
+import 'package:colibris/website/share/custom_dialog.dart';
 import 'package:go_router/go_router.dart';
 
 void showEditColocationDialog(BuildContext context, Colocation coloc) {

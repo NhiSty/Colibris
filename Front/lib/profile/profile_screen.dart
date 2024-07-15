@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/main.dart';
-import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
-import 'package:front/user/user_service.dart';
-import 'package:front/website/share/secure_storage.dart';
+import 'package:colibris/main.dart';
+import 'package:colibris/shared.widget/snack_bar_feedback_handling.dart';
+import 'package:colibris/user/user_service.dart';
+import 'package:colibris/website/share/secure_storage.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -26,11 +26,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isEditingPassword = false;
 
   bool get _isAnyFieldEditing => [
-    _isEditingLastName,
-    _isEditingFirstName,
-    _isEditingEmail,
-    _isEditingPassword
-  ].any((isEditing) => isEditing);
+        _isEditingLastName,
+        _isEditingFirstName,
+        _isEditingEmail,
+        _isEditingPassword
+      ].any((isEditing) => isEditing);
 
   @override
   void initState() {
@@ -140,8 +140,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           value: context.locale == const Locale('fr'),
                           onChanged: (value) {
                             setState(() {
-                              context.setLocale(
-                                  value ? const Locale('fr') : const Locale('en'));
+                              context.setLocale(value
+                                  ? const Locale('fr')
+                                  : const Locale('en'));
                             });
                           },
                         ),
@@ -186,7 +187,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Colors.green,
           ),
         );
-
       } catch (e) {
         print('Error updating user data: $e');
 

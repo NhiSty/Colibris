@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/colocation/colocation.dart';
-import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
-import 'package:front/task/task_form.dart';
-import 'package:front/task/task_service.dart';
-import 'package:front/main.dart';
+import 'package:colibris/colocation/colocation.dart';
+import 'package:colibris/shared.widget/snack_bar_feedback_handling.dart';
+import 'package:colibris/task/task_form.dart';
+import 'package:colibris/task/task_service.dart';
+import 'package:colibris/main.dart';
 import 'package:go_router/go_router.dart';
 
 class AddNewTaskScreen extends StatefulWidget {

@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/website/pages/backoffice/logs/bloc/log_bloc.dart';
-import 'package:front/website/pages/backoffice/logs/bloc/log_state.dart';
-import 'package:front/website/pages/backoffice/logs/components/log_list.dart';
-import 'package:front/website/pages/backoffice/logs/components/title_and_breadcrumb.dart';
+import 'package:colibris/website/pages/backoffice/logs/bloc/log_bloc.dart';
+import 'package:colibris/website/pages/backoffice/logs/bloc/log_state.dart';
+import 'package:colibris/website/pages/backoffice/logs/components/log_list.dart';
+import 'package:colibris/website/pages/backoffice/logs/components/title_and_breadcrumb.dart';
 
 class LogPage extends StatefulWidget {
   const LogPage({super.key});

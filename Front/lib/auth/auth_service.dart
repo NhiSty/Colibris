@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:front/utils/dio.dart';
-import 'package:front/website/share/secure_storage.dart';
+import 'package:colibris/utils/dio.dart';
+import 'package:colibris/website/share/secure_storage.dart';
 
 Future<int> login(String email, String password) async {
   Response response;
@@ -110,9 +110,8 @@ Future<int?> resetPasswordWithCode(String password, String email_code) async {
 Future<int?> addFcmToken(String token) async {
   var headers = await addHeader();
   try {
-    var response = await dio.patch("/users/add-fcm-token", options: Options(headers: headers), data: {
-      "fcm_token": token
-    });
+    var response = await dio.patch("/users/add-fcm-token",
+        options: Options(headers: headers), data: {"fcm_token": token});
     if (response.statusCode == 200) {
       return response.statusCode;
     } else {

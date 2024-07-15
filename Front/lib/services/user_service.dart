@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:front/utils/dio.dart';
-import 'package:front/website/share/secure_storage.dart';
+import 'package:colibris/utils/dio.dart';
+import 'package:colibris/website/share/secure_storage.dart';
 
 class UserService {
   final Dio _dio = dio;
@@ -133,7 +133,6 @@ class UserService {
       throw Exception('Failed to update user');
     }
   }
-
 
   Future<void> deleteUser(int userId) async {
     try {

@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/home_screen.dart';
-import 'package:front/website/pages/backoffice/user/components/search_bar_and_add_user_button.dart';
+import 'package:colibris/home_screen.dart';
+import 'package:colibris/website/pages/backoffice/user/components/search_bar_and_add_user_button.dart';
 import 'package:go_router/go_router.dart';
 
 class TitleAndBreadcrumb extends StatelessWidget {

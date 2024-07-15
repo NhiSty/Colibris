@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
-import 'package:front/website/pages/backoffice/user/bloc/user_state.dart';
-import 'package:front/website/pages/backoffice/user/components/pagination_controls.dart';
-import 'package:front/website/pages/backoffice/user/components/title_and_breadcrumb.dart';
-import 'package:front/website/pages/backoffice/user/components/user_list.dart';
+import 'package:colibris/website/pages/backoffice/user/bloc/user_bloc.dart';
+import 'package:colibris/website/pages/backoffice/user/bloc/user_state.dart';
+import 'package:colibris/website/pages/backoffice/user/components/pagination_controls.dart';
+import 'package:colibris/website/pages/backoffice/user/components/title_and_breadcrumb.dart';
+import 'package:colibris/website/pages/backoffice/user/components/user_list.dart';
 
 class UserHandlePage extends StatelessWidget {
   const UserHandlePage({super.key});

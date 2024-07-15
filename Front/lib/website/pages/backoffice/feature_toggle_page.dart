@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/featureFlag/featureFlag.dart';
-import 'package:front/featureFlag/feature_flag_service.dart';
-import 'package:front/website/pages/backoffice/flipping/breadcrumb.dart';
+import 'package:colibris/featureFlag/featureFlag.dart';
+import 'package:colibris/featureFlag/feature_flag_service.dart';
+import 'package:colibris/website/pages/backoffice/flipping/breadcrumb.dart';
 
 class FeatureTogglePage extends StatefulWidget {
   const FeatureTogglePage({super.key});

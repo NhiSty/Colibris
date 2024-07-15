@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/vote/vote.dart';
-import 'package:front/vote/vote_service.dart';
-import 'package:front/website/share/secure_storage.dart';
+import 'package:colibris/vote/vote.dart';
+import 'package:colibris/vote/vote_service.dart';
+import 'package:colibris/website/share/secure_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 

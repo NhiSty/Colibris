@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:front/colocation/colocation.dart';
+import 'package:colibris/colocation/colocation.dart';
 
 @immutable
 sealed class ColocationState {}

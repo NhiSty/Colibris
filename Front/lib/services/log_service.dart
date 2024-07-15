@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:front/utils/dio.dart';
+import 'package:colibris/utils/dio.dart';
 
 class LogService {
   final Dio _dio = dio;

@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:front/invitation/invitation.dart';
-import 'package:front/invitation/invitation_service.dart';
+import 'package:colibris/invitation/invitation.dart';
+import 'package:colibris/invitation/invitation_service.dart';
 import 'package:meta/meta.dart';
 
 part 'invitation_event.dart';

@@ -2,9 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
-import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_state.dart';
-import 'package:front/website/share/custom_dialog.dart';
+import 'package:colibris/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
+import 'package:colibris/website/pages/backoffice/colocMembers/bloc/colocMember_state.dart';
+import 'package:colibris/website/share/custom_dialog.dart';
 import 'package:go_router/go_router.dart';
 
 void showEditColocMemberDialog(

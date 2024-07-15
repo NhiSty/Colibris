@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/services/log_service.dart';
-import 'package:front/website/pages/backoffice/logs/bloc/log_state.dart';
+import 'package:colibris/services/log_service.dart';
+import 'package:colibris/website/pages/backoffice/logs/bloc/log_state.dart';
 
 part 'log_event.dart';
 

@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/colocation/colocation.dart';
-import 'package:front/website/pages/backoffice/colocations/components/colocation_list_item.dart';
+import 'package:colibris/colocation/colocation.dart';
+import 'package:colibris/website/pages/backoffice/colocations/components/colocation_list_item.dart';
 
 class ColocationList extends StatelessWidget {
   final List<Colocation> colocations;

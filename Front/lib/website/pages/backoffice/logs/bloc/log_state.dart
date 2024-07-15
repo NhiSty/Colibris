@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:front/services/log_service.dart';
+import 'package:colibris/services/log_service.dart';
 
 @immutable
 abstract class LogState {}

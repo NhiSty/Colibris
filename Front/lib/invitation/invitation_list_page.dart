@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/invitation/invitation.dart';
-import 'package:front/invitation/invitation_accept_page.dart';
-import 'package:front/main.dart';
+import 'package:colibris/invitation/invitation.dart';
+import 'package:colibris/invitation/invitation_accept_page.dart';
+import 'package:colibris/main.dart';
 import 'package:go_router/go_router.dart';
 
 class InvitationListPage extends StatefulWidget {
@@ -40,57 +40,59 @@ class _InvitationListPageState extends State<InvitationListPage> {
             padding: const EdgeInsets.all(16.0),
             child: widget.invitations.isEmpty
                 ? Center(
-              child: Text(
-                'no_invitations'.tr(),
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-              ),
-            )
-                : ListView.builder(
-              itemCount: widget.invitations.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  color: Colors.grey[850],
-                  margin: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(16.0),
-                    title: Text(
-                      'invitation_to_join_colocation'.tr(),
+                    child: Text(
+                      'no_invitations'.tr(),
                       style: const TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
                         color: Colors.white,
                       ),
                     ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        "${'invitation_received_at'.tr()} ${DateTime.parse(widget.invitations[index].createdAt).toLocal().toString().split(' ')[0]}",
-                        style: const TextStyle(color: Colors.white70),
-                      ),
-                    ),
-                    onTap: () {
-                      context.push(InvitationAcceptPage.routeName, extra: {
-                        'invitationId': widget.invitations[index].id,
-                        'colocationId': widget.invitations[index].colocationId,
-                      });
+                  )
+                : ListView.builder(
+                    itemCount: widget.invitations.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        color: Colors.grey[850],
+                        margin: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(16.0),
+                          title: Text(
+                            'invitation_to_join_colocation'.tr(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              "${'invitation_received_at'.tr()} ${DateTime.parse(widget.invitations[index].createdAt).toLocal().toString().split(' ')[0]}",
+                              style: const TextStyle(color: Colors.white70),
+                            ),
+                          ),
+                          onTap: () {
+                            context
+                                .push(InvitationAcceptPage.routeName, extra: {
+                              'invitationId': widget.invitations[index].id,
+                              'colocationId':
+                                  widget.invitations[index].colocationId,
+                            });
+                          },
+                          leading: const Icon(
+                            Icons.email,
+                            color: Colors.white,
+                          ),
+                          trailing: const Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
                     },
-                    leading: const Icon(
-                      Icons.email,
-                      color: Colors.white,
-                    ),
-                    trailing: const Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.white,
-                    ),
                   ),
-                );
-              },
-            ),
           ),
         ),
       ),

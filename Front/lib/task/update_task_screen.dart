@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/colocation/colocation.dart';
-import 'package:front/main.dart';
-import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
-import 'package:front/task/task.dart';
-import 'package:front/task/task_form.dart';
-import 'package:front/task/task_service.dart';
+import 'package:colibris/colocation/colocation.dart';
+import 'package:colibris/main.dart';
+import 'package:colibris/shared.widget/snack_bar_feedback_handling.dart';
+import 'package:colibris/task/task.dart';
+import 'package:colibris/task/task_form.dart';
+import 'package:colibris/task/task_service.dart';
 import 'package:go_router/go_router.dart';
 
 class UpdateTaskScreen extends StatefulWidget {
@@ -52,16 +52,16 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: GradientBackground(
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-                appBar: AppBar(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: Text(
             'task_update'.tr(),
             style: const TextStyle(color: Colors.white),
           ),
-                ),
-                body: SingleChildScrollView(
+        ),
+        body: SingleChildScrollView(
           child: TaskForm(
             colocationId: widget.colocation.id,
             title: widget.task.title,
@@ -82,9 +82,8 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
               );
             },
           ),
-                ),
-              ),
-        )
-    );
+        ),
+      ),
+    ));
   }
 }

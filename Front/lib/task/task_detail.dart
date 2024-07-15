@@ -4,9 +4,9 @@ import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/main.dart';
-import 'package:front/task/task.dart';
-import 'package:front/vote/bloc/vote_bloc.dart';
+import 'package:colibris/main.dart';
+import 'package:colibris/task/task.dart';
+import 'package:colibris/vote/bloc/vote_bloc.dart';
 
 class TaskDetailPage extends StatelessWidget {
   final Task task;
@@ -170,12 +170,16 @@ class TaskDetailPage extends StatelessWidget {
                       } else if (state.voteByTaskIdState is VoteByTaskIdError) {
                         return Center(
                           child: Text(
-                            (state.voteByTaskIdState as VoteByTaskIdError).message,
+                            (state.voteByTaskIdState as VoteByTaskIdError)
+                                .message,
                             style: const TextStyle(color: Colors.redAccent),
                           ),
                         );
-                      } else if (state.voteByTaskIdState is VoteByTaskIdLoaded) {
-                        final votes = (state.voteByTaskIdState as VoteByTaskIdLoaded).votes;
+                      } else if (state.voteByTaskIdState
+                          is VoteByTaskIdLoaded) {
+                        final votes =
+                            (state.voteByTaskIdState as VoteByTaskIdLoaded)
+                                .votes;
                         if (votes.isNotEmpty) {
                           return Card(
                             color: Colors.white.withOpacity(0.9),
@@ -183,7 +187,8 @@ class TaskDetailPage extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'task_satisfaction_rate'.tr(),
@@ -211,7 +216,8 @@ class TaskDetailPage extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'task_satisfaction_rate'.tr(),
@@ -253,23 +259,25 @@ class TaskDetailPage extends StatelessWidget {
                         const SizedBox(height: 10),
                         bytes != null
                             ? Card(
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.memory(
-                              bytes,
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              height: MediaQuery.of(context).size.width * 0.8,
-                            ),
-                          ),
-                        )
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.memory(
+                                    bytes,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    height:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                  ),
+                                ),
+                              )
                             : Text(
-                          'task_detail_no_proof'.tr(),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.white70,
-                          ),
-                        ),
+                                'task_detail_no_proof'.tr(),
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white70,
+                                ),
+                              ),
                       ],
                     ),
                   ),

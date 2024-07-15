@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:front/services/user_service.dart';
-import 'package:front/website/pages/backoffice/user/dialogs/users/delete_user_dialog.dart';
-import 'package:front/website/pages/backoffice/user/dialogs/users/edit_user_dialog.dart';
-import 'package:front/website/share/secure_storage.dart';
+import 'package:colibris/services/user_service.dart';
+import 'package:colibris/website/pages/backoffice/user/dialogs/users/delete_user_dialog.dart';
+import 'package:colibris/website/pages/backoffice/user/dialogs/users/edit_user_dialog.dart';
+import 'package:colibris/website/share/secure_storage.dart';
 
 class UserListItem extends StatefulWidget {
   final User user;

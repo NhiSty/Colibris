@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:front/services/colocMember_service.dart';
+import 'package:colibris/services/colocMember_service.dart';
 
 @immutable
 abstract class ColocMemberState {}

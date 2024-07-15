@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/reset-password/reset_password_bloc.dart';
-import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
-import 'package:front/reset-password/reset_password_form.dart';
-import 'package:front/validators.dart';
-import 'package:front/main.dart';
+import 'package:colibris/reset-password/reset_password_bloc.dart';
+import 'package:colibris/shared.widget/snack_bar_feedback_handling.dart';
+import 'package:colibris/reset-password/reset_password_form.dart';
+import 'package:colibris/validators.dart';
+import 'package:colibris/main.dart';
 import 'package:go_router/go_router.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -61,7 +61,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           ResetPasswordFormScreen.routeName,
                           extra: {'emailCode': state.code},
                         );
-
                       }
                     },
                     builder: (context, state) {
@@ -98,14 +97,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                 onPressed: _isEmailSent
                                     ? null
                                     : () {
-                                  if (_formKey.currentState!.validate()) {
-                                    context.read<ResetPasswordBloc>().add(
-                                      SendResetEmail(
-                                          _emailController.text
-                                              .trim()),
-                                    );
-                                  }
-                                },
+                                        if (_formKey.currentState!.validate()) {
+                                          context.read<ResetPasswordBloc>().add(
+                                                SendResetEmail(_emailController
+                                                    .text
+                                                    .trim()),
+                                              );
+                                        }
+                                      },
                                 style: ElevatedButton.styleFrom(
                                   foregroundColor: Colors.white,
                                   backgroundColor: Colors.blueGrey,
@@ -131,9 +130,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
                                     context.read<ResetPasswordBloc>().add(
-                                      VerifyResetCode(
-                                          _codeController.text.trim()),
-                                    );
+                                          VerifyResetCode(
+                                              _codeController.text.trim()),
+                                        );
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       showSnackBarFeedback(
@@ -165,13 +164,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   TextFormField buildTextFormField(
-      TextEditingController controller,
-      String? Function(String?)? validator,
-      String label, {
-        TextInputType keyboardType = TextInputType.text,
-        bool obscureText = false,
-        bool enabled = true,
-      }) {
+    TextEditingController controller,
+    String? Function(String?)? validator,
+    String label, {
+    TextInputType keyboardType = TextInputType.text,
+    bool obscureText = false,
+    bool enabled = true,
+  }) {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(

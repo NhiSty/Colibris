@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/services/colocMember_service.dart';
+import 'package:colibris/services/colocMember_service.dart';
 
 import 'colocMember_state.dart';
 

@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:front/chat/models/message.dart';
-import 'package:front/chat/services/api_service.dart';
-import 'package:front/website/share/secure_storage.dart';
+import 'package:colibris/chat/models/message.dart';
+import 'package:colibris/chat/services/api_service.dart';
+import 'package:colibris/website/share/secure_storage.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class MessagesHandlePage extends StatefulWidget {

@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/auth/login.dart';
-import 'package:front/reset-password/reset_password_bloc.dart';
+import 'package:colibris/auth/login.dart';
+import 'package:colibris/reset-password/reset_password_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:front/main.dart';
+import 'package:colibris/main.dart';
 
 class ResetPasswordFormScreen extends StatelessWidget {
   final Map<String, String> arguments;
@@ -14,7 +14,8 @@ class ResetPasswordFormScreen extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmController = TextEditingController();
+  final TextEditingController _passwordConfirmController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +93,8 @@ class ResetPasswordFormScreen extends StatelessWidget {
                                   foregroundColor: Colors.white,
                                   backgroundColor: Colors.blueGrey,
                                 ),
-                                child: Text('forget_password_change_submit'.tr()),
+                                child:
+                                    Text('forget_password_change_submit'.tr()),
                               ),
                             ],
                           );
@@ -110,11 +112,11 @@ class ResetPasswordFormScreen extends StatelessWidget {
   }
 
   TextFormField buildTextFormField(
-      TextEditingController controller,
-      String label, {
-        TextInputType keyboardType = TextInputType.text,
-        bool obscureText = false,
-      }) {
+    TextEditingController controller,
+    String label, {
+    TextInputType keyboardType = TextInputType.text,
+    bool obscureText = false,
+  }) {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
@@ -136,7 +138,8 @@ class ResetPasswordFormScreen extends StatelessWidget {
         if (value == null || value.isEmpty) {
           return '$label invalide';
         }
-        if (label == 'forget_password_change_confirm_password'.tr() && value != _passwordController.text) {
+        if (label == 'forget_password_change_confirm_password'.tr() &&
+            value != _passwordController.text) {
           return 'forget_password_pwd_not_match'.tr();
         }
         return null;
@@ -146,10 +149,10 @@ class ResetPasswordFormScreen extends StatelessWidget {
 
   void _resetPassword(BuildContext context, String emailCode) {
     context.read<ResetPasswordBloc>().add(
-      ResetPasswordWithEmailCode(
-        pwd: _passwordController.text.trim(),
-        code: emailCode,
-      ),
-    );
+          ResetPasswordWithEmailCode(
+            pwd: _passwordController.text.trim(),
+            code: emailCode,
+          ),
+        );
   }
 }

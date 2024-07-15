@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/main.dart';
-import 'package:front/ColocMembers/colocMembers_service.dart';
-import 'package:front/user/user.dart';
-import 'package:front/website/share/secure_storage.dart';
+import 'package:colibris/main.dart';
+import 'package:colibris/ColocMembers/colocMembers_service.dart';
+import 'package:colibris/user/user.dart';
+import 'package:colibris/website/share/secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class ColocationMembers extends StatefulWidget {
@@ -35,17 +35,19 @@ class _ColocationMembersState extends State<ColocationMembers> {
           title: Text('confirm_delete'.tr()),
           content: Text('ban_roommate_confirm'.tr()),
           backgroundColor: Colors.grey[850],
-          titleTextStyle:  TextStyle(color: Colors.red[200], fontSize: 20),
+          titleTextStyle: TextStyle(color: Colors.red[200], fontSize: 20),
           contentTextStyle: const TextStyle(color: Colors.white, fontSize: 16),
           actions: <Widget>[
             TextButton(
-              child: Text('cancel'.tr(), style: const TextStyle(color: Colors.amber)),
+              child: Text('cancel'.tr(),
+                  style: const TextStyle(color: Colors.amber)),
               onPressed: () {
                 context.pop();
               },
             ),
             TextButton(
-              child: Text('confirm'.tr(), style: const TextStyle(color: Colors.red)),
+              child: Text('confirm'.tr(),
+                  style: const TextStyle(color: Colors.red)),
               onPressed: () async {
                 var res = await deleteColocMember(user.colocMemberId!);
                 if (res == 200) {
@@ -128,12 +130,16 @@ class _ColocationMembersState extends State<ColocationMembers> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text('ban_roommate_error'.tr(), style: const TextStyle(color: Colors.red)),
-                              content: Text('ban_roommate_error_msg'.tr(), style: const TextStyle(color: Colors.white)),
+                              title: Text('ban_roommate_error'.tr(),
+                                  style: const TextStyle(color: Colors.red)),
+                              content: Text('ban_roommate_error_msg'.tr(),
+                                  style: const TextStyle(color: Colors.white)),
                               backgroundColor: Colors.grey[850],
                               actions: <Widget>[
                                 TextButton(
-                                  child: Text('ok'.tr(), style: const TextStyle(color: Colors.amber)),
+                                  child: Text('ok'.tr(),
+                                      style:
+                                          const TextStyle(color: Colors.amber)),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },

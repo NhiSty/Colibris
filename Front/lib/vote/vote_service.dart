@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:front/vote/vote.dart';
+import 'package:colibris/vote/vote.dart';
 
 import '../utils/dio.dart';
 import '../website/share/secure_storage.dart';

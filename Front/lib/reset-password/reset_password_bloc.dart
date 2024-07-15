@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/auth/auth_service.dart';
+import 'package:colibris/auth/auth_service.dart';
 
-part 'package:front/reset-password/reset_password_event.dart';
-part 'package:front/reset-password/reset_password_state.dart';
+part 'package:colibris/reset-password/reset_password_event.dart';
+part 'package:colibris/reset-password/reset_password_state.dart';
 
 class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   ResetPasswordBloc() : super(ResetPasswordInitial()) {

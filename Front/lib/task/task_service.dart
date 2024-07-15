@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:front/task/task.dart';
+import 'package:colibris/task/task.dart';
 
 import '../utils/dio.dart';
 import '../website/share/secure_storage.dart';

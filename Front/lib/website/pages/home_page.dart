@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/website/pages/auth/login_page.dart';
-import 'package:front/website/share/secure_storage.dart';
+import 'package:colibris/website/pages/auth/login_page.dart';
+import 'package:colibris/website/share/secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {

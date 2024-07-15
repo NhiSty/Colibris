@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/services/log_service.dart';
-import 'package:front/website/pages/backoffice/logs/components/log_list_item.dart';
+import 'package:colibris/services/log_service.dart';
+import 'package:colibris/website/pages/backoffice/logs/components/log_list_item.dart';
 
 class LogList extends StatelessWidget {
   final List<Log> logs;

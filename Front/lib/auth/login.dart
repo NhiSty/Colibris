@@ -1,12 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/auth/auth_service.dart';
-import 'package:front/main.dart';
-import 'package:front/auth/register.dart';
-import 'package:front/home_screen.dart';
-import 'package:front/reset-password/reset_password.dart';
-import 'package:front/utils/firebase.dart';
-import 'package:front/website/share/secure_storage.dart';
+import 'package:colibris/auth/auth_service.dart';
+import 'package:colibris/main.dart';
+import 'package:colibris/auth/register.dart';
+import 'package:colibris/home_screen.dart';
+import 'package:colibris/reset-password/reset_password.dart';
+import 'package:colibris/utils/firebase.dart';
+import 'package:colibris/website/share/secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -58,7 +58,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.tealAccent),
                         ),
-                        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
+                        errorStyle:
+                            TextStyle(color: Colors.red[500], fontSize: 15),
                       ),
                       style: const TextStyle(color: Colors.white),
                       validator: (value) {
@@ -81,7 +82,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.tealAccent),
                         ),
-                        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
+                        errorStyle:
+                            TextStyle(color: Colors.red[500], fontSize: 15),
                       ),
                       obscureText: true,
                       style: const TextStyle(color: Colors.white),
@@ -139,7 +141,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   loginClick() async {
     if (_formKey.currentState!.validate()) {
-      var res = await login(_emailController.text.trim(), _passwordController.text);
+      var res =
+          await login(_emailController.text.trim(), _passwordController.text);
       if (!mounted) return;
       if (res == 200) {
         final token = await firebaseClient.getFcmToken();
@@ -160,8 +163,10 @@ class _LoginScreenState extends State<LoginScreen> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('error'.tr(), style: const TextStyle(color: Colors.red)),
-              content: Text('error_email_or_password'.tr(), style: const TextStyle(color: Colors.white)),
+              title:
+                  Text('error'.tr(), style: const TextStyle(color: Colors.red)),
+              content: Text('error_email_or_password'.tr(),
+                  style: const TextStyle(color: Colors.white)),
               actions: <Widget>[
                 TextButton(
                   child: const Text('OK', style: TextStyle(color: Colors.red)),

@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/services/user_service.dart';
-import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
-import 'package:front/website/pages/backoffice/user/bloc/user_state.dart';
-import 'package:front/website/share/custom_dialog.dart';
+import 'package:colibris/services/user_service.dart';
+import 'package:colibris/website/pages/backoffice/user/bloc/user_bloc.dart';
+import 'package:colibris/website/pages/backoffice/user/bloc/user_state.dart';
+import 'package:colibris/website/share/custom_dialog.dart';
 import 'package:go_router/go_router.dart';
 
 void showDeleteUserDialog(BuildContext context, User user) {

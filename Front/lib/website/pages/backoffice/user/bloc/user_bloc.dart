@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/auth/auth_service.dart';
-import 'package:front/services/user_service.dart';
+import 'package:colibris/auth/auth_service.dart';
+import 'package:colibris/services/user_service.dart';
 
 import 'user_state.dart';
 
@@ -125,9 +125,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       try {
         await userService.updateUserRole(
           int.parse(event.id),
-          {
-            'roles': event.roles
-          },
+          {'roles': event.roles},
         );
         final response = await userService.getAllUsers();
         final users = response.users;
@@ -144,7 +142,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         emit(UserError(message: e.toString()));
       }
     });
-
 
     on<DeleteUser>((event, emit) async {
       emit(UserLoading());

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/services/colocation_service.dart';
+import 'package:colibris/services/colocation_service.dart';
 
 import 'colocation_state.dart';
 

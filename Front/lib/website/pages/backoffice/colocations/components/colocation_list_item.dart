@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/colocation/colocation.dart';
-import 'package:front/services/user_service.dart';
-import 'package:front/website/pages/backoffice/colocations/dialogs/colocations/delete_colocation_dialog.dart';
-import 'package:front/website/pages/backoffice/colocations/dialogs/colocations/edit_colocation_dialog.dart';
+import 'package:colibris/colocation/colocation.dart';
+import 'package:colibris/services/user_service.dart';
+import 'package:colibris/website/pages/backoffice/colocations/dialogs/colocations/delete_colocation_dialog.dart';
+import 'package:colibris/website/pages/backoffice/colocations/dialogs/colocations/edit_colocation_dialog.dart';
 import 'package:go_router/go_router.dart';
 
 class ColocationListItem extends StatelessWidget {

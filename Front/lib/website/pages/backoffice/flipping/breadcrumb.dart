@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/home_screen.dart';
+import 'package:colibris/home_screen.dart';
 import 'package:go_router/go_router.dart';
 
 class TitleAndBreadcrumb extends StatelessWidget {
@@ -14,7 +14,6 @@ class TitleAndBreadcrumb extends StatelessWidget {
         const SizedBox(height: 16),
         GestureDetector(
           onTap: () {
-          
             context.push(HomeScreen.routeName);
           },
           child: MouseRegion(

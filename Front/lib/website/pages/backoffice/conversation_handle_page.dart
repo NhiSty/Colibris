@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/website/pages/backoffice/colocations/bloc/colocation_bloc.dart';
-import 'package:front/website/pages/backoffice/colocations/bloc/colocation_state.dart';
-import 'package:front/website/pages/backoffice/colocations/components/colocation_list.dart';
-import 'package:front/website/pages/backoffice/colocations/components/pagination_controls.dart';
+import 'package:colibris/website/pages/backoffice/colocations/bloc/colocation_bloc.dart';
+import 'package:colibris/website/pages/backoffice/colocations/bloc/colocation_state.dart';
+import 'package:colibris/website/pages/backoffice/colocations/components/colocation_list.dart';
+import 'package:colibris/website/pages/backoffice/colocations/components/pagination_controls.dart';
 
 import 'chats/title_and_breadcrumb.dart';
 
