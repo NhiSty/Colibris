@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:front/user/user.dart';
 import 'package:front/vote/vote.dart';
 
 @immutable
@@ -31,8 +32,28 @@ class VoteError extends VoteState {
   VoteError({required this.message});
 }
 
+class Vote422Error extends VoteState {
+  final String message;
+  final List<Vote> votes;
+
+  Vote422Error({required this.message, required this.votes});
+}
+
 class VoteDeleted extends VoteState {
   final String message;
 
   VoteDeleted({required this.message});
+}
+
+class UserColocationLoading extends VoteState {}
+class UserColocationLoaded extends VoteState {
+  final List<User> users;
+
+  UserColocationLoaded({required this.users});
+}
+
+class UserColocationError extends VoteState {
+  final String message;
+
+  UserColocationError({required this.message});
 }

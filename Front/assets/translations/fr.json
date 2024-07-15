@@ -313,7 +313,7 @@
   "backoffice_colocMember_score_updated_error": "Erreur lors de la modification du score : ",
 
 
-  "_commentBackOfficeTask": "--------> Ecran BackOffice coloc Member <---------",
+  "_commentBackOfficeTask": "--------> Ecran BackOffice Task <---------",
     "backoffice_task_title": "Gestion des tâches",
     "backoffice_task_breadcrumb": " > Gestion des tâches",
     "backoffice_task_no_task": "Aucune tâche trouvée",
@@ -336,5 +336,21 @@
     "backoffice_task_date": "Date",
     "backoffice_task_duration": "Durée",
     "backoffice_task_points": "Pts",
-    "backoffice_task_colocation_id": "Colocation id"
+    "backoffice_task_colocation_id": "Colocation id",
+
+
+  "_commentBackOfficeVote": "--------> Ecran BackOffice Vote <---------",
+  "please_select_your_opinion": "Veuillez donner votre avis",
+  "backoffice_vote_vote_deleted_successfully": "Vote supprimé avec succès",
+  "backoffice_vote_vote_deleted_error": "Erreur lors de la suppression du vote",
+  "backoffice_vote_vote_delete": "Supprimer le vote",
+  "backoffice_vote_vote_deleted_confirm": "Êtes-vous sûr de vouloir supprimer ce vote ?",
+  "backoffice_vote_add_vote": "Ajouter un vote",
+  "backoffice_vote_select_user_in_add_modal": "Choisir un utilisateur",
+  "please_select_user_in_add_modal": "Veuillez sélectionner un utilisateur",
+  "backoffice_vote_error_loading_owner_info": "Erreur lors du chargement des informations du propriétaire",
+  "backoffice_vote_owned_by": "De ",
+  "backoffice_vote_no_vote": "Aucun vote trouvé",
+  "backoffice_vote_breadcrumb": " > Votes",
+  "backoffice_vote_title": "Gestion des votes"
 }

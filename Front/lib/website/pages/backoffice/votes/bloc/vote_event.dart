@@ -6,7 +6,7 @@ sealed class VoteEvent {}
 class LoadVotes extends VoteEvent {
   final int taskId;
 
-  LoadVotes({required this.taskId});
+  LoadVotes({this.taskId = -1});
 }
 
 class AddVote extends VoteEvent {
@@ -39,4 +39,10 @@ class DeleteVote extends VoteEvent {
   final int voteId;
 
   DeleteVote({required this.voteId});
+}
+
+class LoadUsersColocation extends VoteEvent {
+  final int taskId;
+
+  LoadUsersColocation({required this.taskId});
 }

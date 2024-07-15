@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:front/user/user.dart';
 import 'package:front/vote/vote.dart';
 
 import '../utils/dio.dart';
@@ -12,7 +13,7 @@ class VoteService {
   Future<dynamic> addVote({
     required int taskId,
     required int value,
-    int userId = 0,
+    int userId = -1,
 }) async {
     var headers = await addHeader();
     try {
@@ -98,9 +99,18 @@ class VoteService {
           options: Options(headers: headers), data: {'value': value});
       return {
         'statusCode': response.statusCode,
-        'data': response.data,
+        'message': response.data['message'],
+        'vote': Vote.fromJson(response.data['vote']),
       };
     } on DioException catch (e) {
+      if (e.response?.statusCode == 422) {
+        return {
+          'statusCode': 422,
+          'message': e.response?.data['message'],
+          'vote': null
+        };
+      }
+
       log('Dio error!');
       log('Response status: ${e.response!.statusCode}');
       log('Response data: ${e.response!.data}');
@@ -125,6 +135,33 @@ class VoteService {
       log('Response data: ${e.response!.data}');
 
       throw Exception('Failed to delete vote with id : $voteId');
+    }
+  }
+
+  // Get User by task id
+  Future<List<User>> fetchUserByTaskId(int taskId) async {
+    var headers = await addHeader();
+    try {
+      var response = await _dio.get(
+        '/users/tasks/$taskId',
+        options: Options(headers: headers),
+      );
+      print('Response: ${response}');
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data['users'] ?? [];
+
+        var r = data.map((user) => User.fromJson(user)).toList();
+        print('Response: ${r}');
+
+        return data.map((user) => User.fromJson(user)).toList();
+      } else {
+        throw Exception('Failed to load users $taskId');
+      }
+    } on DioException catch (e) {
+      log('Dio error!');
+      log('Response status: ${e.response!.statusCode}');
+      log('Response data: ${e.response!.data}');
+      throw Exception('Failed to fetch users by taskId $taskId');
     }
   }
 }

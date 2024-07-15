@@ -31,23 +31,30 @@ class VoteBloc extends Bloc<VoteEvent, VoteState> {
         final response = await voteService.addVote(
           taskId: event.taskId,
           value: event.vote,
+          userId: event.userId,
         );
         if (response['statusCode'] == 201) {
           emit(VoteAdded(message: 'Vote added successfully'));
         } else {
-          emit(VoteError(message: 'Failed to add vote'));
+          emit(VoteError(message: response['data']));
         }
       } catch (e, stacktrace) {
-
+        print('UpdateVote error: $e');
+        print('Stacktrace: $stacktrace');
+        emit(VoteError(message: e.toString()));
       }
     });
 
     on<EditVote>((event, emit) async {
       emit(VoteLoading());
       try {
-        final response = await voteService.updateVote(event.voteId, event.vote,);
+        final response = await voteService.updateVote(event.voteId, event.vote);
         if (response['statusCode'] == 200) {
           emit(VoteUpdated(message: 'Vote updated successfully'));
+        } else
+        if (response['statusCode'] == 422 ) {
+          print('response: $response');
+          emit(Vote422Error(message: response['message'], votes: []));
         } else {
           emit(VoteError(message: 'Failed to update vote'));
         }
@@ -71,6 +78,18 @@ class VoteBloc extends Bloc<VoteEvent, VoteState> {
         print('DeleteVote error: $e');
         print('Stacktrace: $stacktrace');
         emit(VoteError(message: e.toString()));
+      }
+    });
+
+    on<LoadUsersColocation>((event, emit) async {
+      emit(UserColocationLoading());
+      try {
+        final _users = await voteService.fetchUserByTaskId(event.taskId);
+        emit(UserColocationLoaded(users: _users));
+      } catch (e, stacktrace) {
+        print('LoadUserColocation error: $e');
+        print('Stacktrace: $stacktrace');
+        emit(UserColocationError(message: e.toString()));
       }
     });
 
