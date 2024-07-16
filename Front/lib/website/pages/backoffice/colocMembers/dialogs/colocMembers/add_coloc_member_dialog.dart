@@ -44,8 +44,14 @@ class _AddColocMemberDialogState extends State<AddColocMemberDialog> {
         listener: (context, state) {
           if (state is ColocMemberAdded) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(state.message),
-              backgroundColor: Colors.green,
+              content: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(state.message),
+              )
             ));
             context.pop();
           } else if (state is ColocMemberError) {

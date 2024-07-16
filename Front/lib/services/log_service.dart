@@ -2,13 +2,16 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:front/utils/dio.dart';
+import 'package:front/website/share/secure_storage.dart';
 
 class LogService {
   final Dio _dio = dio;
 
   Future<List<Log>> fetchLogs() async {
     try {
-      final response = await _dio.get('/backend/logs');
+      var headers = await addHeader();
+      final response = await _dio.get('/backend/logs',
+          options: Options(headers: headers));
 
       if (response.statusCode == 200) {
         List<Log> logs =
