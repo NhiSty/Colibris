@@ -143,22 +143,22 @@ class _ConversationScreenState extends State<ConversationScreen> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-              title: Text('chat_title'.tr()),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () async {
-                  var res = await fetchColocation(widget.conversationId);
-                  var colocation = Colocation.fromJson(res);
-                  if (widget.fromNotification) {
-                    context.go(ColocationTasklistScreen.routeName,
-                        extra: {"colocation": colocation});
-                  }
-                  context.pop();
-                  /**/
-                },
-              )),
+            title: Text('Chat Title'),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () async {
+                var res = await fetchColocation(widget.conversationId);
+                var colocation = Colocation.fromJson(res);
+                if (widget.fromNotification) {
+                  context.go(ColocationTasklistScreen.routeName,
+                      extra: {"colocation": colocation});
+                }
+                context.pop();
+              },
+            ),
+          ),
           body: Column(
             children: [
               Expanded(
@@ -171,6 +171,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                     final showDateSeparator = index == 0 ||
                         _messages[index - 1].createdAt.day !=
                             message.createdAt.day;
+                    final isAdmin = message.senderRole == 'ROLE_ADMIN';
 
                     return Column(
                       children: [
@@ -191,7 +192,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           child: Container(
                             constraints: BoxConstraints(
                                 maxWidth:
-                                    MediaQuery.of(context).size.width * 0.75),
+                                MediaQuery.of(context).size.width * 0.75),
                             margin: EdgeInsets.symmetric(
                                 vertical: 2, horizontal: 8),
                             padding: EdgeInsets.all(10),
@@ -217,13 +218,38 @@ class _ConversationScreenState extends State<ConversationScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  message.senderName,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      message.senderName,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    if (isAdmin)
+                                      const Padding(
+                                        padding: EdgeInsets.only(left: 4.0),
+                                        child: Icon(
+                                          Icons.warning_amber_rounded,
+                                          color: Colors.yellow,
+                                          size: 16,
+                                        ),
+                                      ),
+                                  ],
                                 ),
+                                if (isAdmin)
+                                  const Padding(
+                                    padding: EdgeInsets.only(top: 2.0),
+                                    child: Text(
+                                      'Message de la part d\'un admin',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontStyle: FontStyle.italic,
+                                        color: Colors.yellow,
+                                      ),
+                                    ),
+                                  ),
                                 SizedBox(height: 3),
                                 Text(
                                   message.content,
@@ -259,7 +285,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                         controller: _messageController,
                         style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
-                          hintText: 'chat_enter_message'.tr(),
+                          hintText: 'Enter your message',
                           hintStyle: const TextStyle(color: Colors.grey),
                           filled: true,
                           fillColor: Colors.white,
