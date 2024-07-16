@@ -184,6 +184,8 @@ definitions:
     properties:
       taskId:
         type: integer
+      userId:
+        type: integer
       value:
         type: integer
     required:
@@ -1281,6 +1283,34 @@ paths:
       summary: Get all tasks of a colocation
       tags:
       - tasks
+  /tasks/search:
+    get:
+      description: Search tasks by title or description
+      parameters:
+      - description: Search query
+        in: query
+        name: query
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Task'
+            type: array
+        "403":
+          description: Forbidden
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Search tasks by title or description
+      tags:
+      - tasks
   /tasks/user/{userId}:
     get:
       description: Get all tasks of a user
@@ -1412,6 +1442,35 @@ paths:
           description: Bad Request
           schema: {}
       summary: Update a user by ID
+      tags:
+      - users
+  /users/colocation/{id}:
+    get:
+      description: Get all users of colocation by task ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all users of colocation by task ID
       tags:
       - users
   /votes:
