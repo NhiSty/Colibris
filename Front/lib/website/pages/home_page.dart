@@ -146,11 +146,10 @@ class _HomePageState extends State<HomePage> {
               'backoffice_homepage_coloc_members_description'.tr(),
               Icons.group,
               fontSize,
-              buttonSize),
-          _buildCard(
+              buttonSize),_buildCard(
               context,
               'backoffice_homepage_tasks'.tr(),
-              '/tasks',
+              '/backoffice/tasks',
               'backoffice_homepage_tasks_description'.tr(),
               Icons.check,
               fontSize,

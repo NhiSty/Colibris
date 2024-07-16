@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:front/colocation/colocation.dart';
 import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
 import 'package:front/task/task_form.dart';
-import 'package:front/task/task_service.dart';
+import 'package:front/services/task_service.dart';
 import 'package:front/main.dart';
 import 'package:go_router/go_router.dart';
 
@@ -31,8 +31,14 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
     String picture,
     int colocationId,
   ) async {
-    return await createTask(
-        title, description, date, duration, picture, colocationId);
+    TaskService taskService = TaskService();
+    return await taskService.createTask(
+      title: title,
+      description: description,
+      date: date,
+      duration: duration,
+      picture: picture,
+      colocationId: colocationId,);
   }
 
   @override

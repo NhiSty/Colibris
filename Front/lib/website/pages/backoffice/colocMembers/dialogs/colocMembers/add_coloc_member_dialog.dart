@@ -88,7 +88,7 @@ class _AddColocMemberDialogState extends State<AddColocMemberDialog> {
                           .toList(),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please select a user';
+                          return 'please_select_user_in_add_modal'.tr();
                         }
                         return null;
                       },
@@ -112,7 +112,7 @@ class _AddColocMemberDialogState extends State<AddColocMemberDialog> {
                           .toList(),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please select a colocation';
+                          return 'please_select_a_colocation'.tr();
                         }
                         return null;
                       },

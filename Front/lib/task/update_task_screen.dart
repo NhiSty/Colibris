@@ -5,7 +5,7 @@ import 'package:front/main.dart';
 import 'package:front/shared.widget/snack_bar_feedback_handling.dart';
 import 'package:front/task/task.dart';
 import 'package:front/task/task_form.dart';
-import 'package:front/task/task_service.dart';
+import 'package:front/services/task_service.dart';
 import 'package:go_router/go_router.dart';
 
 class UpdateTaskScreen extends StatefulWidget {
@@ -44,8 +44,16 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
     String picture,
     int colocationId,
   ) async {
-    return await updateTask(widget.task.id, title, description, date, duration,
-        picture, colocationId);
+    TaskService taskService = TaskService();
+    return await taskService.updateTask(
+      taskId: widget.task.id,
+      title: title,
+      description: description,
+      date: date,
+      duration: duration,
+      picture: picture,
+      colocationId: colocationId,
+    );
   }
 
   @override
@@ -76,7 +84,7 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
 
               ScaffoldMessenger.of(context).showSnackBar(
                 showSnackBarFeedback(
-                  'task_update_success'.tr(),
+                  'task_updated'.tr(),
                   Colors.green,
                 ),
               );
