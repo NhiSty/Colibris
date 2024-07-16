@@ -46,9 +46,17 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 		return
 	}
 
+	var userId int
+
+	if service.IsAdmin(c) {
+		userId = int(req.UserID)
+	} else {
+		userId = int(userIDFromToken.(uint))
+	}
+
 	// Recover colocMember by userId
 	var colocMemberService = service.NewColocMemberService(ctl.voteService.GetDB())
-	colocMember, err := colocMemberService.GetColocMemberByUserId(int(userIDFromToken.(uint)))
+	colocMember, err := colocMemberService.GetColocMemberByUserId(userId)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
@@ -65,7 +73,7 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 	}
 
 	var colocService = service.NewColocationService(ctl.voteService.GetDB())
-	colocations, err := colocService.GetAllUserColocations(int(userIDFromToken.(uint)))
+	colocations, err := colocService.GetAllUserColocations(userId)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
@@ -84,14 +92,6 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 	if !taskInColocation && !service.IsAdmin(c) {
 		c.JSON(http.StatusUnprocessableEntity, "error_votingTaskCantVoteForTaskNotInYourColocation")
 		return
-	}
-
-	var userId int
-
-	if service.IsAdmin(c) {
-		userId = int(req.UserID)
-	} else {
-		userId = int(userIDFromToken.(uint))
 	}
 
 	// Check if the task is already voted
@@ -115,7 +115,7 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 	}
 
 	vote := model.Vote{
-		UserID: userIDFromToken.(uint),
+		UserID: uint(userId),
 		TaskID: req.TaskID,
 		Value:  req.Value,
 	}
@@ -211,6 +211,13 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		return
 	}
 
+	vote, err := ctl.voteService.GetVoteById(voteId)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err.Error())
+		return
+	}
+
 	// verify if the user is the owner of the colocation
 	userIDFromToken, exists := c.Get("userID")
 	if !exists && !service.IsAdmin(c) {
@@ -218,16 +225,17 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		return
 	}
 
-	// Recover colocMember by userId
-	var colocMemberService = service.NewColocMemberService(ctl.voteService.GetDB())
-	colocMember, err := colocMemberService.GetColocMemberByUserId(int(userIDFromToken.(uint)))
+	var userId int
 
-	if err != nil {
-		c.JSON(http.StatusNotFound, err.Error())
-		return
+	if !service.IsAdmin(c) {
+		userId = int(userIDFromToken.(uint))
+	} else {
+		userId = int(vote.UserID)
 	}
 
-	vote, err := ctl.voteService.GetVoteById(voteId)
+	// Recover colocMember by userId
+	var colocMemberService = service.NewColocMemberService(ctl.voteService.GetDB())
+	colocMember, err := colocMemberService.GetColocMemberByUserId(userId)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
@@ -243,7 +251,7 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 	task, err := taskService.GetById(vote.TaskID)
 
 	var colocService = service.NewColocationService(ctl.voteService.GetDB())
-	colocations, err := colocService.GetAllUserColocations(int(userIDFromToken.(uint)))
+	colocations, err := colocService.GetAllUserColocations(userId)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
