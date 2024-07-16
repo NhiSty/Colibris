@@ -23,6 +23,7 @@ jobs:
         run: |
           echo "API_URL=${{secrets.API_URL}}" > .env
           echo "MAPBOX_KEY=${{secrets.MAPBOX_KEY}}" >> .env
+          echo "ENVIRONMENT=prod" >> .env
 
       - name: Cache Flutter dependencies
         uses: actions/cache@v3

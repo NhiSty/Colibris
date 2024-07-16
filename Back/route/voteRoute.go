@@ -18,5 +18,6 @@ func VoteRoutes(voteRoutes *gin.RouterGroup, db *gorm.DB) {
 		routes.GET("/tasks/:taskId", AuthMiddleware(), voteController.GetVotesByTaskId)
 		routes.GET("/users/:userId", AuthMiddleware(), voteController.GetVotesByUserId)
 		routes.PUT("/:voteId", AuthMiddleware(), voteController.UpdateVote)
+		routes.DELETE("/:voteId", AuthMiddleware("ROLE_ADMIN"), voteController.DeleteVote)
 	}
 }

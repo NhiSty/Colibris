@@ -77,6 +77,7 @@ void onMessageOpenedApp(RemoteMessage message) {
       'value': colocationId,
       'intendedRoute': ConversationScreen.routeName,
       "paramName": "chatId",
+      "fromNotification": true,
     });
   }
 }
@@ -170,16 +171,15 @@ class MyApp extends StatelessWidget {
       },
       routes: [
         GoRoute(
-          path: '/',
-          builder: (context, state) =>
-              isFeatureEnabled('maintenance', featureFlag)
-                  ? const MaintenanceScreen()
-                  : PopScope(
-                      canPop: false,
-                      child: LoginScreen(
-                        data: state.extra,
-                      )),
-        ),
+            path: '/',
+            builder: (context, state) =>
+                isFeatureEnabled('maintenance', featureFlag)
+                    ? const MaintenanceScreen()
+                    : PopScope(
+                        canPop: false,
+                        child: LoginScreen(
+                          data: state.extra,
+                        ))),
         GoRoute(
           path: LoginScreen.routeName,
           builder: (context, state) => PopScope(
@@ -296,6 +296,7 @@ class MyApp extends StatelessWidget {
           path: ConversationScreen.routeName,
           builder: (context, state) => ConversationScreen(
             conversationId: (state.extra as Map)['chatId'],
+            fromNotification: (state.extra as Map)['fromNotification'] ?? false,
           ),
         ),
         GoRoute(
@@ -348,7 +349,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           brightness: Brightness.dark,
           primaryColor: Colors.green,
-          colorScheme: ColorScheme.dark(
+          colorScheme: const ColorScheme.dark(
             primary: Colors.blueGrey,
             secondary: Colors.blueAccent,
           ),
