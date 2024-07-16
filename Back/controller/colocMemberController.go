@@ -4,7 +4,9 @@ import (
 	"Colibris/dto"
 	"Colibris/model"
 	"Colibris/service"
+	"Colibris/utils"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -260,23 +262,25 @@ func (ctl *ColocMemberController) UpdateColocMemberScore(c *gin.Context) {
 func (ctl *ColocMemberController) DeleteColocMember(c *gin.Context) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 
-	colocMember, err := ctl.colocService.GetColocMemberById(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid member ID"})
+		return
+	}
 
+	colocMember, err := ctl.colocService.GetColocMemberById(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
 		return
 	}
 
-	var colocService = service.NewColocationService(ctl.colocService.GetDB())
+	colocService := service.NewColocationService(ctl.colocService.GetDB())
 	coloc, err := colocService.GetColocationById(int(colocMember.ColocationID))
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
 		return
-
 	}
 
-	var userIdFromToken = c.MustGet("userID").(uint)
-
+	userIdFromToken := c.MustGet("userID").(uint)
 	if coloc.UserID != userIdFromToken && !service.IsAdmin(c) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
 		return
@@ -287,10 +291,30 @@ func (ctl *ColocMemberController) DeleteColocMember(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"Message": "colocation member deleted successfully",
-	})
+	userService := service.NewUserService(ctl.colocService.GetDB())
+	user, err := userService.GetUserById(colocMember.UserID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
 
+	firebaseClient, err := utils.NewFirebaseClient()
+	if err != nil {
+		log.Printf("error initializing Firebase client: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to initialize Firebase client"})
+		return
+	}
+
+	err = firebaseClient.UnsubscribeFromTopic(user.FcmToken, int(colocMember.ColocationID))
+	if err != nil {
+		log.Printf("error unsubscribing from topic: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to unsubscribe from topic"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "colocation member deleted successfully",
+	})
 }
 
 // SearchColocMembers allows to search colocation members

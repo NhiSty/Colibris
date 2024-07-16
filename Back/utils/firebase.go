@@ -77,3 +77,34 @@ func (f *FirebaseClient) SendNotification(title, body, senderName, colocationID,
 	log.Printf("Successfully sent message: %s\n", response)
 	return nil
 }
+
+func (f *FirebaseClient) SubscribeToTopic(token string, id int) error {
+	if f.client == nil {
+		return fmt.Errorf("Firebase client is not initialized")
+	}
+	topic := fmt.Sprintf("room_colocation_%d", id)
+
+	response, err := f.client.SubscribeToTopic(context.Background(), []string{token}, topic)
+	if err != nil {
+		return fmt.Errorf("error subscribing to topic: %v", err)
+	}
+
+	log.Printf("Successfully subscribed to topic: %s\n", response)
+	return nil
+}
+
+func (f *FirebaseClient) UnsubscribeFromTopic(token string, id int) error {
+	if f.client == nil {
+		return fmt.Errorf("Firebase client is not initialized")
+	}
+
+	topic := fmt.Sprintf("room_colocation_%d", id)
+
+	response, err := f.client.UnsubscribeFromTopic(context.Background(), []string{token}, topic)
+	if err != nil {
+		return fmt.Errorf("error unsubscribing from topic: %v", err)
+	}
+
+	log.Printf("Successfully unsubscribed from topic: %s\n", response)
+	return nil
+}

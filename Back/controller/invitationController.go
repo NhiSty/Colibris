@@ -4,7 +4,10 @@ import (
 	"Colibris/dto"
 	"Colibris/model"
 	"Colibris/service"
+	"Colibris/utils"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -146,6 +149,28 @@ func (ctl *InvitationController) UpdateInvitation(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
+	}
+
+	if req.State == "accepted" {
+		fcmToken, exists := c.Get("fcmToken")
+		if !exists {
+			fmt.Println(http.StatusBadRequest, gin.H{"error": "FCM token not provided"})
+			return
+		}
+
+		firebaseClient, err := utils.NewFirebaseClient()
+		if err != nil {
+			log.Printf("error initializing Firebase client: %v\n", err)
+			fmt.Println(http.StatusInternalServerError, gin.H{"error": "Failed to initialize Firebase client"})
+			return
+		}
+
+		err = firebaseClient.SubscribeToTopic(fcmToken.(string), int(invitationByID.ColocationID))
+		if err != nil {
+			log.Printf("error subscribing to topic: %v\n", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to subscribe to topic"})
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{

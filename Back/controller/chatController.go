@@ -62,6 +62,13 @@ func (c *ChatController) HandleConnections(ctx *gin.Context) {
 		return
 	}
 
+	firebaseClient, err := utils.NewFirebaseClient()
+	if err != nil {
+		log.Printf("error initializing Firebase client: %v\n", err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to initialize Firebase client"})
+		return
+	}
+
 	conn, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -71,13 +78,6 @@ func (c *ChatController) HandleConnections(ctx *gin.Context) {
 
 	client := &model.Client{Conn: conn, ColocationID: colocationID}
 	c.Service.RegisterClient(client)
-
-	firebaseClient, err := utils.NewFirebaseClient()
-	if err != nil {
-		log.Printf("error initializing Firebase client: %v\n", err)
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to initialize Firebase client"})
-		return
-	}
 
 	for {
 		_, msg, err := conn.ReadMessage()
@@ -100,6 +100,35 @@ func (c *ChatController) HandleConnections(ctx *gin.Context) {
 
 func (c *ChatController) GetMessages(ctx *gin.Context) {
 	colocationID := ctx.Param("colocation_id")
+	userIDFromToken, exists := ctx.Get("userID")
+
+	if !exists {
+		fmt.Println(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+		return
+	}
+	userID := int(userIDFromToken.(uint))
+	userRole, _ := ctx.Get("role")
+
+	colocationIdToInt, err := strconv.ParseUint(colocationID, 10, 32)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid colocation ID"})
+		return
+	}
+
+	// Check if the user is a member of the colocation
+	isMember, err := c.ColocMemberService.IsMemberOfColocation(userID, uint(colocationIdToInt))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// If the user is not a member and not an admin, deny access
+	if !isMember && userRole != "ROLE_ADMIN" {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+		return
+	}
+
+	// Fetch messages if the user is authorized
 	messages, err := c.Service.GetMessages(colocationID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
