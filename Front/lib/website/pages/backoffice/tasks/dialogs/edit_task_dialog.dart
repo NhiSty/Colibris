@@ -5,6 +5,7 @@ import 'package:front/task/task.dart';
 import 'package:front/website/pages/backoffice/tasks/bloc/task_bloc.dart';
 import 'package:front/website/pages/backoffice/tasks/bloc/task_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
+import 'package:go_router/go_router.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 void showEditTaskDialog({ required BuildContext context, required Task task }) {
@@ -234,15 +235,16 @@ class _UpdateTaskDialogState extends State<UpdateTaskDialog> {
                                 });
                               },
                               items: state.users
+                                  //.where((user) => user.roles == 'ROLE_USER')
                                   .map((user) => DropdownMenuItem<String>(
                                 value: user.id.toString(),
                                 child:
-                                Text('${user.firstname} ${user.lastname}'),
+                                Text('${user.firstname} ${user.lastname} (${user.id})'),
                               ))
                                   .toList(),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please select a user';
+                                  return 'please_select_user_in_add_modal'.tr();
                                 }
                                 return null;
                               },
@@ -270,7 +272,7 @@ class _UpdateTaskDialogState extends State<UpdateTaskDialog> {
                                   .toList(),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please select a colocation';
+                                  return 'please_select_a_colocation';
                                 }
                                 return null;
                               },
@@ -290,7 +292,7 @@ class _UpdateTaskDialogState extends State<UpdateTaskDialog> {
           )), actions: [
       TextButton(
         onPressed: () {
-          Navigator.of(context).pop();
+          context.pop();
           taskBloc.add(LoadTasks());
         },
         child: Text('cancel'.tr()),

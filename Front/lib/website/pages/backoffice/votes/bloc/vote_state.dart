@@ -41,8 +41,9 @@ class Vote422Error extends VoteState {
 
 class VoteDeleted extends VoteState {
   final String message;
+  final int taskId;
 
-  VoteDeleted({required this.message});
+  VoteDeleted({required this.message, required this.taskId});
 }
 
 class UserColocationLoading extends VoteState {}

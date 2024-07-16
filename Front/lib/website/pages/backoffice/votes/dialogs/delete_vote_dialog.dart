@@ -30,6 +30,7 @@ void showDeleteVoteDialog({
                       'backoffice_vote_vote_deleted_successfully'.tr()),
                 ),
               ));
+              context.read<VoteBloc>().add(LoadVotes(taskId: taskId));
               context.pop();
             } else if (state is VoteError) {
               context.pop();
@@ -61,7 +62,10 @@ void showDeleteVoteDialog({
                 onPressed: () {
                   context
                       .read<VoteBloc>()
-                      .add(DeleteVote(voteId: voteId));
+                      .add(DeleteVote(
+                      voteId: voteId,
+                      taskId: taskId
+                  ));
                 },
                 child: Text('delete'.tr()),
               ),
@@ -70,7 +74,5 @@ void showDeleteVoteDialog({
         ),
       );
     },
-  ).then((_) {
-    context.read<VoteBloc>().add(LoadVotes(taskId: taskId));
-  });
+  );
 }

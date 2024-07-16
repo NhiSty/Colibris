@@ -41,7 +41,8 @@ class TaskService {
     required String date,
     required int duration,
     String picture = '',
-    required int colocationId
+    required int colocationId,
+    int? userId,
 }) async {
     var headers = await addHeader();
     try {
@@ -55,7 +56,7 @@ class TaskService {
           'duration': duration,
           'picture': picture,
           'colocationId': colocationId,
-          'userId': userData['user_id'],
+          'userId': userId ?? userData['user_id'],
         },
         options: Options(headers: headers),
       );

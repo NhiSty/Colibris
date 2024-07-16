@@ -14,6 +14,7 @@ class VoteBloc extends Bloc<VoteEvent, VoteState> {
     on<LoadVotes>((event, emit) async {
       emit(VoteLoading());
       try {
+        print('taskId: ${event.taskId}');
         final votes = await voteService.fetchVotesByTaskId(event.taskId);
         emit(VoteLoaded(
             votes: votes
@@ -34,7 +35,7 @@ class VoteBloc extends Bloc<VoteEvent, VoteState> {
           userId: event.userId,
         );
         if (response['statusCode'] == 201) {
-          emit(VoteAdded(message: 'Vote added successfully'));
+          emit(VoteAdded(message: 'backoffice_vote_vote_added_successfully'.tr()));
         } else {
           emit(VoteError(message: response['data']));
         }
@@ -70,7 +71,10 @@ class VoteBloc extends Bloc<VoteEvent, VoteState> {
       try {
         final response = await voteService.deleteVote(event.voteId);
         if (response['statusCode'] == 200) {
-          emit(VoteDeleted(message: 'Vote deleted successfully'));
+          emit(VoteDeleted(
+              message: 'backoffice_vote_vote_deleted_successfully'.tr(),
+              taskId: event.taskId
+          ));
         } else {
           emit(VoteError(message: 'Failed to delete vote'));
         }

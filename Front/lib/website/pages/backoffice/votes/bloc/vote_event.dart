@@ -37,8 +37,9 @@ class EditVote extends VoteEvent {
 
 class DeleteVote extends VoteEvent {
   final int voteId;
+  final int taskId;
 
-  DeleteVote({required this.voteId});
+  DeleteVote({required this.voteId, required this.taskId});
 }
 
 class LoadUsersColocation extends VoteEvent {
