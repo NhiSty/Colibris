@@ -60,6 +60,10 @@ func (v *VoteService) UpdateVote(id int, voteUpdates map[string]interface{}) (*m
 	return &vote, nil
 }
 
+func (v *VoteService) DeleteVote(id int) error {
+	return v.db.Where("id = ?", id).Delete(&model.Vote{}).Error
+}
+
 func (v *VoteService) GetDB() *gorm.DB {
 	return v.db
 }

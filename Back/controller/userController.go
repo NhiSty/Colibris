@@ -283,3 +283,53 @@ func (ctrl *UserController) UpdateRoleUser(c *gin.Context) {
 	c.JSON(http.StatusOK, updatedUser)
 
 }
+
+// GetUsersByTaskId Get users all user of colocation by task ID
+// @Summary Get all users of colocation by task ID
+// @Description Get all users of colocation by task ID
+// @Tags users
+// @Produce json
+// @Param id path int true "Task ID"
+// @Success 200 {array} model.User
+// @Failure 400 {object} error
+// @Failure 500 {object} error
+// @Router /users/colocation/{id} [get]
+// @Security Bearer
+func (ctrl *UserController) GetUsersByTaskId(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("task_id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid task ID"})
+		return
+	}
+
+	taskService := service.NewTaskService(ctrl.service.GetDB())
+	task, err := taskService.GetById(uint(id))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	var colocationId = task.ColocationID
+
+	colocationService := service.NewColocationService(ctrl.service.GetDB())
+	colocation, err := colocationService.GetColocationById(int(colocationId))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	colocMembers := colocation.ColocMembers
+
+	colocMembersUsers := make([]model.User, 0)
+
+	for _, colocMember := range colocMembers {
+		colocMemberUser, _ := ctrl.service.GetUserById(colocMember.UserID)
+		colocMembersUsers = append(colocMembersUsers, *colocMemberUser)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"users": colocMembersUsers,
+	})
+}

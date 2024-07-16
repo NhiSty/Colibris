@@ -101,6 +101,46 @@ definitions:
     - new_password
     - token
     type: object
+  dto.TaskCreateRequest:
+    properties:
+      colocationId:
+        type: integer
+      date:
+        type: string
+      description:
+        type: string
+      duration:
+        type: integer
+      picture:
+        type: string
+      title:
+        type: string
+      userId:
+        type: integer
+    required:
+    - colocationId
+    - date
+    - duration
+    - title
+    - userId
+    type: object
+  dto.TaskUpdateRequest:
+    properties:
+      colocation_id:
+        type: integer
+      date:
+        type: string
+      description:
+        type: string
+      duration:
+        type: integer
+      picture:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: integer
+    type: object
   dto.UpdateUserDTO:
     properties:
       email:
@@ -139,6 +179,25 @@ definitions:
     - firstname
     - lastname
     - password
+    type: object
+  dto.VoteCreateRequest:
+    properties:
+      taskId:
+        type: integer
+      userId:
+        type: integer
+      value:
+        type: integer
+    required:
+    - taskId
+    - value
+    type: object
+  dto.VoteUpdateRequest:
+    properties:
+      value:
+        type: integer
+    required:
+    - value
     type: object
   gorm.DeletedAt:
     properties:
@@ -263,6 +322,35 @@ definitions:
     x-enum-varnames:
     - ROLE_ADMIN
     - ROLE_USER
+  model.Task:
+    properties:
+      colocationID:
+        type: integer
+      createdAt:
+        type: string
+      date:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      duration:
+        type: integer
+      id:
+        type: integer
+      picture:
+        type: string
+      pts:
+        type: number
+      title:
+        type: string
+      updatedAt:
+        type: string
+      userID:
+        type: integer
+      validate:
+        type: boolean
+    type: object
   model.User:
     properties:
       colocations:
@@ -289,6 +377,17 @@ definitions:
         $ref: '#/definitions/model.Role'
       updatedAt:
         type: string
+    type: object
+  model.Vote:
+    properties:
+      id:
+        type: integer
+      taskID:
+        type: integer
+      userID:
+        type: integer
+      value:
+        type: integer
     type: object
 host: localhost:8080
 info:
@@ -1014,6 +1113,236 @@ paths:
       summary: Send a reset password link to the user's email
       tags:
       - reset-password
+  /tasks:
+    post:
+      consumes:
+      - application/json
+      description: Create a new task
+      parameters:
+      - description: Task object
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TaskCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.TaskCreateRequest'
+        "400":
+          description: Bad Request
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Create a new task
+      tags:
+      - tasks
+  /tasks/{id}:
+    delete:
+      description: Delete a task by ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "403":
+          description: Forbidden
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Delete a task by ID
+      tags:
+      - tasks
+    get:
+      description: Get a task by ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Task'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "403":
+          description: Forbidden
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get a task by ID
+      tags:
+      - tasks
+    put:
+      consumes:
+      - application/json
+      description: Update a task by ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Task object
+        in: body
+        name: taskUpdates
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TaskUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.TaskUpdateRequest'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "403":
+          description: Forbidden
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Update a task by ID
+      tags:
+      - tasks
+  /tasks/colocation/{colocationId}:
+    get:
+      description: Get all tasks of a colocation
+      parameters:
+      - description: Colocation ID
+        in: path
+        name: colocationId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Task'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "403":
+          description: Forbidden
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all tasks of a colocation
+      tags:
+      - tasks
+  /tasks/search:
+    get:
+      description: Search tasks by title or description
+      parameters:
+      - description: Search query
+        in: query
+        name: query
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Task'
+            type: array
+        "403":
+          description: Forbidden
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Search tasks by title or description
+      tags:
+      - tasks
+  /tasks/user/{userId}:
+    get:
+      description: Get all tasks of a user
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Task'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "403":
+          description: Forbidden
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all tasks of a user
+      tags:
+      - tasks
   /users:
     get:
       consumes:
@@ -1115,6 +1444,204 @@ paths:
       summary: Update a user by ID
       tags:
       - users
+  /users/colocation/{id}:
+    get:
+      description: Get all users of colocation by task ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all users of colocation by task ID
+      tags:
+      - users
+  /votes:
+    post:
+      consumes:
+      - application/json
+      description: Add a vote to a task
+      parameters:
+      - description: Vote object
+        in: body
+        name: vote
+        required: true
+        schema:
+          $ref: '#/definitions/dto.VoteCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.VoteCreateRequest'
+        "400":
+          description: error_votingTaskAlreadyVoted
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "422":
+          description: error_votingTaskOver3DaysOld
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Add a vote to a task
+      tags:
+      - votes
+  /votes/{voteId}:
+    put:
+      consumes:
+      - application/json
+      description: Update a vote
+      parameters:
+      - description: Vote ID
+        in: path
+        name: voteId
+        required: true
+        type: integer
+      - description: Vote object
+        in: body
+        name: vote
+        required: true
+        schema:
+          $ref: '#/definitions/dto.VoteUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.VoteUpdateRequest'
+        "400":
+          description: error_votingTaskCantVoteForYourself
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "422":
+          description: error_votingTaskOver3DaysOld
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Update a vote
+      tags:
+      - votes
+  /votes/task/{taskId}:
+    get:
+      description: Get all votes by task id
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Vote'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all votes by task id
+      tags:
+      - votes
+  /votes/user/{userId}:
+    get:
+      description: Get all votes by user id
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Vote'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: You are not allowed to access this resource
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get all votes by user id
+      tags:
+      - votes
 securityDefinitions:
   Bearer:
     description: Type "Bearer" followed by a space and JWT token.

@@ -2,7 +2,7 @@
 // @version 2.0
 // @description This is a sample server for a pet store.
 // @termsOfService http://swagger.io/terms/
-// @host localhost:8080
+// @host https://back.colibris.live
 // @securityDefinitions.apikey Bearer
 // @in header
 // @name Authorization

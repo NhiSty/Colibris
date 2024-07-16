@@ -20,6 +20,82 @@ func NewTaskController(service *service.TaskService) *TaskController {
 	}
 }
 
+func (ctl *TaskController) GetAllTasks(c *gin.Context) {
+	pageParam := c.DefaultQuery("page", "")
+	pageSizeParam := c.DefaultQuery("pageSize", "")
+
+	if pageParam == "" || pageSizeParam == "" {
+		tasks, total, err := ctl.service.GetAllTasks(0, 0)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"total": total, "tasks": tasks})
+		return
+	}
+
+	page, err := strconv.Atoi(pageParam)
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	pageSize, err := strconv.Atoi(pageSizeParam)
+	if err != nil || pageSize < 1 {
+		pageSize = 5
+	}
+
+	tasks, total, err := ctl.service.GetAllTasks(page, pageSize)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"total": total,
+		"tasks": tasks,
+	})
+
+}
+
+// SearchTasks allows to search tasks by title or description
+// @Summary Search tasks by title or description
+// @Description Search tasks by title or description
+// @Tags tasks
+// @Produce json
+// @Param query query string false "Search query"
+// @Success 200 {array} model.Task
+// @Failure 403 {object} error
+// @Failure 500 {object} error
+// @Router /tasks/search [get]
+// @Security Bearer
+func (ctl *TaskController) SearchTasks(c *gin.Context) {
+	query := c.DefaultQuery("query", "")
+
+	if !service.IsAdmin(c) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden"})
+		return
+	}
+
+	tasks, err := ctl.service.SearchTasks(query)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, tasks)
+}
+
+// CreateTask allows to create a new task
+// @Summary Create a new task
+// @Description Create a new task
+// @Tags tasks
+// @Accept json
+// @Produce json
+// @Param task body dto.TaskCreateRequest true "Task object"
+// @Success 201 {object} dto.TaskCreateRequest
+// @Failure 400 {object} error
+// @Router /tasks [post]
+// @Security Bearer
 func (ctl *TaskController) CreateTask(c *gin.Context) {
 	var req dto.TaskCreateRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -49,6 +125,21 @@ func (ctl *TaskController) CreateTask(c *gin.Context) {
 	})
 }
 
+// add Comment to swagger
+
+// GetTaskById fetches a task by its ID
+// @Summary Get a task by ID
+// @Description Get a task by ID
+// @Tags tasks
+// @Produce json
+// @Param id path int true "Task ID"
+// @Success 200 {object} model.Task
+// @Failure 400 {object} error
+// @Failure 404 {object} error
+// @Failure 403 {object} error
+// @Failure 401 {object} error
+// @Router /tasks/{id} [get]
+// @Security Bearer
 func (ctl *TaskController) GetTaskById(c *gin.Context) {
 
 	taskId := c.Param("id")
@@ -99,6 +190,18 @@ func (ctl *TaskController) GetTaskById(c *gin.Context) {
 	})
 }
 
+// GetAllUserTasks fetches all tasks of a user
+// @Summary Get all tasks of a user
+// @Description Get all tasks of a user
+// @Tags tasks
+// @Produce json
+// @Param userId path int true "User ID"
+// @Success 200 {array} model.Task
+// @Failure 400 {object} error
+// @Failure 404 {object} error
+// @Failure 403 {object} error
+// @Router /tasks/user/{userId} [get]
+// @Security Bearer
 func (ctl *TaskController) GetAllUserTasks(c *gin.Context) {
 	id, err := strconv.Atoi(c.Params.ByName("userId"))
 
@@ -125,6 +228,19 @@ func (ctl *TaskController) GetAllUserTasks(c *gin.Context) {
 	})
 }
 
+// GetAllCollocationTasks fetches all tasks of a colocation
+// @Summary Get all tasks of a colocation
+// @Description Get all tasks of a colocation
+// @Tags tasks
+// @Produce json
+// @Param colocationId path int true "Colocation ID"
+// @Success 200 {array} model.Task
+// @Failure 400 {object} error
+// @Failure 404 {object} error
+// @Failure 403 {object} error
+// @Failure 401 {object} error
+// @Router /tasks/colocation/{colocationId} [get]
+// @Security Bearer
 func (ctl *TaskController) GetAllCollocationTasks(c *gin.Context) {
 	colocationId, err := strconv.Atoi(c.Params.ByName("colocationId"))
 	userIDFromToken, exists := c.Get("userID")
@@ -173,6 +289,21 @@ func (ctl *TaskController) GetAllCollocationTasks(c *gin.Context) {
 	})
 }
 
+// UpdateTask updates a task by its ID
+// @Summary Update a task by ID
+// @Description Update a task by ID
+// @Tags tasks
+// @Accept json
+// @Produce json
+// @Param id path int true "Task ID"
+// @Param taskUpdates body dto.TaskUpdateRequest true "Task object"
+// @Success 200 {object} dto.TaskUpdateRequest
+// @Failure 400 {object} error
+// @Failure 404 {object} error
+// @Failure 403 {object} error
+// @Failure 401 {object} error
+// @Router /tasks/{id} [put]
+// @Security Bearer
 func (ctl *TaskController) UpdateTask(c *gin.Context) {
 
 	id, err := strconv.Atoi(c.Params.ByName("id"))
@@ -195,33 +326,35 @@ func (ctl *TaskController) UpdateTask(c *gin.Context) {
 		return
 	}
 
-	userIDFromToken, exists := c.Get("userID")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
-
-	colocationService := service.NewColocationService(ctl.service.GetDB())
-	colocation, colocationErr := colocationService.GetColocationById(int(task.ColocationID))
-
-	if colocationErr != nil {
-		c.JSON(http.StatusNotFound, colocationErr.Error())
-		return
-	}
-
-	colocationMembers := colocation.ColocMembers
-	isMember := false
-	isOwner := colocation.UserID == userIDFromToken.(uint)
-	for _, member := range colocationMembers {
-		if member.UserID == userIDFromToken.(uint) {
-			isMember = true
-			break
+	if !service.IsAdmin(c) {
+		userIDFromToken, exists := c.Get("userID")
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+			return
 		}
-	}
 
-	if !isMember && !service.IsAdmin(c) && !isOwner {
-		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
-		return
+		colocationService := service.NewColocationService(ctl.service.GetDB())
+		colocation, colocationErr := colocationService.GetColocationById(int(task.ColocationID))
+
+		if colocationErr != nil {
+			c.JSON(http.StatusNotFound, colocationErr.Error())
+			return
+		}
+
+		colocationMembers := colocation.ColocMembers
+		isMember := false
+		isOwner := colocation.UserID == userIDFromToken.(uint)
+		for _, member := range colocationMembers {
+			if member.UserID == userIDFromToken.(uint) {
+				isMember = true
+				break
+			}
+		}
+
+		if !isMember && !service.IsAdmin(c) && !isOwner {
+			c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+			return
+		}
 	}
 
 	taskUpdate := make(map[string]interface{})
@@ -243,6 +376,14 @@ func (ctl *TaskController) UpdateTask(c *gin.Context) {
 		taskUpdate["picture"] = req.Picture
 	}
 
+	if int(req.ColocationID) != 0 && service.IsAdmin(c) {
+		taskUpdate["colocation_id"] = req.ColocationID
+	}
+
+	if req.UserID != 0 && service.IsAdmin(c) {
+		taskUpdate["user_id"] = req.UserID
+	}
+
 	if _, err := ctl.service.UpdateTask(uint(id), taskUpdate); err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
@@ -250,10 +391,24 @@ func (ctl *TaskController) UpdateTask(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"Message": "task updated successfully",
-		"result":  task,
+		"result":  taskUpdate,
 	})
 }
 
+// DeleteTask deletes a task by its ID
+// @Summary Delete a task by ID
+// @Description Delete a task by ID
+// @Tags tasks
+// @Produce json
+// @Param id path int true "Task ID"
+// @Success 200 {object} string
+// @Failure 400 {object} error
+// @Failure 404 {object} error
+// @Failure 403 {object} error
+// @Failure 401 {object} error
+// @Failure 500 {object} error
+// @Router /tasks/{id} [delete]
+// @Security Bearer
 func (ctl *TaskController) DeleteTask(c *gin.Context) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 

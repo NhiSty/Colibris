@@ -13,6 +13,7 @@ import 'package:front/task/task_service.dart';
 import 'package:front/task/update_task_screen.dart';
 import 'package:front/vote/bloc/vote_bloc.dart';
 import 'package:front/website/share/secure_storage.dart';
+import '../services/task_service.dart';
 import 'package:go_router/go_router.dart';
 
 class ColocationTasklistScreen extends StatefulWidget {
@@ -194,7 +195,8 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                                                 .userId ==
                                                             userData['user_id']
                                                     ? () async {
-                                                        await deleteTask(
+                                                        TaskService taskService = TaskService();
+                                            await taskService.deleteTask(
                                                             item.id);
                                                         context
                                                             .read<TaskBloc>()
@@ -316,7 +318,8 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                                                 .userId ==
                                                             userData['user_id']
                                                     ? () async {
-                                                        await deleteTask(
+                                                        TaskService taskService = TaskService();
+                                                await taskService.deleteTask(
                                                             item.id);
                                                         context
                                                             .read<TaskBloc>()
@@ -356,8 +359,9 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                                 .add(FetchTasks(widget.colocation.id));
                           }
                         },
-                        backgroundColor: Colors.blueGrey[800],
-                        child: const Icon(Icons.add, color: Colors.white)
+                        backgroundColor: Colors.white ,
+                        child: Icon(Icons.add, color: Colors.blueGrey[800], size: 30,
+                        )
                     )
                 )
             )
