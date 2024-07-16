@@ -5,10 +5,11 @@ import 'package:front/task/task_form.dart';
 import 'package:front/website/pages/backoffice/tasks/bloc/task_bloc.dart';
 import 'package:front/website/pages/backoffice/tasks/bloc/task_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
+import 'package:go_router/go_router.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 void showAddTaskDialog(BuildContext context) {
-
+  context.read<TaskBloc>().add(LoadAllUsersAndColocations());
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -70,7 +71,6 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<TaskBloc>().add(LoadAllUsersAndColocations());
 
     return CustomDialog(
       title: 'backoffice_task_add_task'.tr(),
@@ -229,15 +229,16 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                             });
                           },
                           items: state.users
+                              .where((user) => user.roles == 'ROLE_USER')
                               .map((user) => DropdownMenuItem<String>(
                             value: user.id.toString(),
                             child:
-                            Text('${user.firstname} ${user.lastname}'),
+                            Text('${user.firstname} ${user.lastname} (${user.id})'),
                           ))
                               .toList(),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please select a user';
+                              return 'please_select_user_in_add_modal'.tr();
                             }
                             return null;
                           },
@@ -285,7 +286,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            context.pop();
           },
           child: Text('cancel'.tr()),
         ),

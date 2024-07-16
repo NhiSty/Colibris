@@ -346,11 +346,13 @@
   "backoffice_vote_vote_delete": "Supprimer le vote",
   "backoffice_vote_vote_deleted_confirm": "Êtes-vous sûr de vouloir supprimer ce vote ?",
   "backoffice_vote_add_vote": "Ajouter un vote",
+  "backoffice_vote_vote_added_successfully": "Vote ajouté avec succès",
   "backoffice_vote_select_user_in_add_modal": "Choisir un utilisateur",
   "please_select_user_in_add_modal": "Veuillez sélectionner un utilisateur",
   "backoffice_vote_error_loading_owner_info": "Erreur lors du chargement des informations du propriétaire",
   "backoffice_vote_owned_by": "De ",
   "backoffice_vote_no_vote": "Aucun vote trouvé",
   "backoffice_vote_breadcrumb": " > Votes",
-  "backoffice_vote_title": "Gestion des votes"
+  "backoffice_vote_title": "Gestion des votes",
+  "please_select_a_colocation": "Veuillez sélectionner une colocation"
 }

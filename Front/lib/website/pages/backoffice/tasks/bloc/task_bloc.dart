@@ -79,6 +79,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
           duration: event.duration,
           picture: event.picture,
           colocationId: event.colocationId,
+          userId: event.userId,
         );
         await taskService.fetchAllTasks();
         emit(TaskAdded(

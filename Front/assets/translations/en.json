@@ -340,6 +340,7 @@
   "_commentBackOfficeVote": "--------> Ecran BackOffice Vote <---------",
   "please_select_your_opinion": "Please select your opinion",
   "backoffice_vote_vote_deleted_successfully": "Vote deleted successfully",
+  "backoffice_vote_vote_added_successfully": "Vote added successfully",
   "backoffice_vote_vote_deleted_error": "Error while deleting vote : ",
   "backoffice_vote_vote_delete": "Delete vote",
   "backoffice_vote_vote_deleted_confirm": "Are you sure you want to delete this vote ?",
@@ -350,5 +351,6 @@
   "backoffice_vote_owned_by": "Owned by ",
   "backoffice_vote_no_vote": "No vote found",
   "backoffice_vote_breadcrumb": " > Votes",
-  "backoffice_vote_title": "Handle votes"
+  "backoffice_vote_title": "Handle votes",
+  "please_select_a_colocation": "Please select a shared apartment"
 }

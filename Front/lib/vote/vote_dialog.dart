@@ -95,7 +95,7 @@ class _VoteDialogState extends State<VoteDialog> {
                 ScaffoldMessenger.of(context).showSnackBar(
                     showSnackBarFeedback(
                       '${response['message']}'.tr(),
-                      Colors.green,
+                      Colors.red,
                     )
                 );
                 setState(() {
@@ -136,7 +136,7 @@ class _VoteDialogState extends State<VoteDialog> {
                 ScaffoldMessenger.of(context).showSnackBar(
                     showSnackBarFeedback(
                       '${response['message']}'.tr(),
-                      Colors.green,
+                      Colors.orange,
                     )
                 );
                 setState(() {

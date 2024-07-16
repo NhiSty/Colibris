@@ -22,7 +22,6 @@ class TaskHandlePage extends StatelessWidget {
           BlocBuilder<TaskBloc, TaskState>(
             builder: (context, state) {
               if (state is TaskLoading) {
-                print('TaskLoading');
                 return const Center(child: CircularProgressIndicator());
               } else if (state is TaskLoaded) {
                 return Expanded(

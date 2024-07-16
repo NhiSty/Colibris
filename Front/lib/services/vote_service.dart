@@ -104,9 +104,10 @@ class VoteService {
       };
     } on DioException catch (e) {
       if (e.response?.statusCode == 422) {
+        print('response.data : ${e.response?.data}');
         return {
           'statusCode': 422,
-          'message': e.response?.data['message'],
+          'message': e.response?.data,
           'vote': null
         };
       }
