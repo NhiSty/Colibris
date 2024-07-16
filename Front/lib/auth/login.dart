@@ -154,8 +154,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
         if (widget.data["intendedRoute"] != null &&
             widget.data["intendedRoute"]!.isNotEmpty) {
-          context.push(widget.data["intendedRoute"]!,
-              extra: {widget.data["paramName"]: widget.data["value"]});
+          context.push(widget.data["intendedRoute"]!, extra: {
+            widget.data["paramName"]: widget.data["value"],
+            "fromNotification": widget.data["fromNotification"]
+          });
           return;
         }
       } else {

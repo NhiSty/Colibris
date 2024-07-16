@@ -21,71 +21,81 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Stack(
-            children: [
-              Container(
+          LayoutBuilder(
+            builder: (context, constraints) {
+              double fontSize = constraints.maxWidth > 600 ? 20 : 12;
+              double buttonSize = constraints.maxWidth > 600 ? 40 : 16;
+
+              return Container(
                 color: Colors.blue,
                 padding: const EdgeInsets.all(16.0),
-                child: Center(
-                  child: Text(
-                    'backoffice_title'.tr(),
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              Positioned(
-                right: 16.0,
-                top: 16.0,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('🇺🇸', style: TextStyle(fontSize: 32)),
-                    Switch(
-                      value: context.locale == const Locale('fr'),
-                      onChanged: (value) {
-                        setState(() {
-                          context.setLocale(
-                              value ? const Locale('fr') : const Locale('en'));
-                        });
+                    IconButton(
+                      icon: const Icon(Icons.logout, color: Colors.white),
+                      iconSize: buttonSize,
+                      onPressed: () {
+                        deleteToken();
+                        context.go(
+                          LoginPage.routeName,
+                        );
                       },
                     ),
-                    const Text(
-                      '🇫🇷',
-                      style: TextStyle(fontSize: 32),
-                    )
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          'backoffice_title'.tr(),
+                          style: TextStyle(
+                            fontSize: fontSize + 4,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Text('🇺🇸', style: TextStyle(fontSize: buttonSize)),
+                        Transform.scale(
+                          scale: 0.8,
+                          child: Switch(
+                            value: context.locale == const Locale('fr'),
+                            onChanged: (value) {
+                              setState(() {
+                                context.setLocale(value
+                                    ? const Locale('fr')
+                                    : const Locale('en'));
+                              });
+                            },
+                          ),
+                        ),
+                        Text(
+                          '🇫🇷',
+                          style: TextStyle(fontSize: buttonSize),
+                        )
+                      ],
+                    ),
                   ],
                 ),
-              ),
-              Positioned(
-                left: 16.0,
-                top: 16.0,
-                child: IconButton(
-                  icon: const Icon(Icons.logout, color: Colors.white),
-                  onPressed: () {
-                    deleteToken();
-                    context.go(
-                      LoginPage.routeName,
-                    );
-                  },
-                ),
-              ),
-            ],
+              );
+            },
           ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: LayoutBuilder(
                 builder: (context, constraints) {
+                  double fontSize = constraints.maxWidth > 600 ? 20 : 16;
+                  double buttonSize = constraints.maxWidth > 600 ? 40 : 32;
+
                   if (constraints.maxWidth <= 600) {
-                    return _buildGridView(context, 2);
+                    return _buildGridView(context, 2, fontSize, buttonSize);
                   } else if (constraints.maxWidth <= 900) {
-                    return _buildGridView(context, 3);
+                    return _buildGridView(context, 3, fontSize, buttonSize);
                   } else {
-                    return _buildGridView(context, 5);
+                    return _buildGridView(context, 5, fontSize, buttonSize);
                   }
                 },
               ),
@@ -96,7 +106,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildGridView(BuildContext context, int crossAxisCount) {
+  Widget _buildGridView(BuildContext context, int crossAxisCount,
+      double fontSize, double buttonSize) {
     return Center(
       child: GridView.count(
         crossAxisCount: crossAxisCount,
@@ -109,44 +120,61 @@ class _HomePageState extends State<HomePage> {
               'backoffice_homepage_users'.tr(),
               '/backoffice/user',
               'backoffice_homepage_users_description'.tr(),
-              Icons.person),
+              Icons.person,
+              fontSize,
+              buttonSize),
           _buildCard(
               context,
               'backoffice_homepage_logs'.tr(),
               '/backoffice/logs',
               'backoffice_homepage_logs_description'.tr(),
-              Icons.note_alt),
+              Icons.note_alt,
+              fontSize,
+              buttonSize),
           _buildCard(
               context,
               'backoffice_homepage_colocations'.tr(),
               '/backoffice/colocations',
               'backoffice_homepage_colocations_description'.tr(),
-              Icons.home),
+              Icons.home,
+              fontSize,
+              buttonSize),
           _buildCard(
               context,
               'backoffice_homepage_coloc_members'.tr(),
               '/backoffice/coloc-members',
               'backoffice_homepage_coloc_members_description'.tr(),
-              Icons.group),
-          _buildCard(
+              Icons.group,
+              fontSize,
+              buttonSize),_buildCard(
               context,
               'backoffice_homepage_tasks'.tr(),
               '/backoffice/tasks',
               'backoffice_homepage_tasks_description'.tr(),
-              Icons.check),
+              Icons.check,
+              fontSize,
+              buttonSize),
           _buildCard(
               context,
               'backoffice_homepage_flipping'.tr(),
               '/feature-flipping',
               'backoffice_homepage_flipping_description'.tr(),
-              Icons.flag),
+              Icons.flag,
+              fontSize,
+              buttonSize),
         ],
       ),
     );
   }
 
-  Widget _buildCard(BuildContext context, String title, String routeName,
-      String description, IconData iconData) {
+  Widget _buildCard(
+      BuildContext context,
+      String title,
+      String routeName,
+      String description,
+      IconData iconData,
+      double fontSize,
+      double buttonSize) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
@@ -172,7 +200,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Icon(
                 iconData,
-                size: 40,
+                size: buttonSize,
                 color: Colors.white,
               ),
               const SizedBox(height: 8),
@@ -181,14 +209,21 @@ class _HomePageState extends State<HomePage> {
                 child: Center(
                   child: Text(
                     title,
-                    style: const TextStyle(fontSize: 20, color: Colors.white),
+                    style: TextStyle(fontSize: fontSize, color: Colors.white),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
-                description,
-                style: const TextStyle(fontSize: 14, color: Colors.white),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  description,
+                  style: TextStyle(fontSize: fontSize - 5, color: Colors.white),
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                  maxLines: null,
+                ),
               ),
             ],
           ),

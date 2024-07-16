@@ -39,7 +39,7 @@ func NewLogController(service *service.LogService) *LogController {
 
 func (controller *LogController) GetLogs(c *gin.Context) {
 	// if the user is not an admin, return unauthorized
-	if !service.IsAdmin(c) == false {
+	if !service.IsAdmin(c) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
