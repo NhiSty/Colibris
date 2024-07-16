@@ -34,6 +34,8 @@ func NewChatController(service *service.ChatService, colocMemberService *service
 func (c *ChatController) HandleConnections(ctx *gin.Context) {
 	colocationID := ctx.Param("colocation_id")
 	userIDFromToken, exists := ctx.Get("userID")
+	userRole, _ := ctx.Get("role")
+	senderRole := userRole.(string)
 
 	if !exists {
 		ctx.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
@@ -85,7 +87,7 @@ func (c *ChatController) HandleConnections(ctx *gin.Context) {
 			break
 		}
 
-		c.Service.BroadcastMessage(colocationID, msg, userID, senderName)
+		c.Service.BroadcastMessage(colocationID, msg, userID, senderName, senderRole)
 
 		title := "Nouveau message dans la colocation"
 		body := string(msg)
@@ -141,6 +143,7 @@ func (c *ChatController) GetMessages(ctx *gin.Context) {
 func (c *ChatController) HandleAdminConnections(ctx *gin.Context) {
 	colocationID := ctx.Param("colocation_id")
 	tokenString := ctx.Query("token")
+
 	if tokenString == "" {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Token is required"})
 		return
@@ -163,6 +166,13 @@ func (c *ChatController) HandleAdminConnections(ctx *gin.Context) {
 		firstName := claims["first_name"].(string)
 		lastName := claims["last_name"].(string)
 		senderName := firstName + " " + lastName
+
+		firebaseClient, err := utils.NewFirebaseClient()
+		if err != nil {
+			log.Printf("error initializing Firebase client: %v\n", err)
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to initialize Firebase client"})
+			return
+		}
 
 		conn, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 		if err != nil {
@@ -205,8 +215,16 @@ func (c *ChatController) HandleAdminConnections(ctx *gin.Context) {
 						fmt.Println("Invalid message content")
 						continue
 					}
-					updatedMessage := fmt.Sprintf("⚠️ Message d'un administrateur: %s", content)
-					c.Service.BroadcastMessage(colocationID, []byte(updatedMessage), int(userID), senderName)
+					c.Service.BroadcastMessage(colocationID, []byte(content), int(userID), senderName, "ROLE_ADMIN")
+
+					title := "Nouveau message d'un administrateur dans la colocation"
+					body := content
+					topic := "colocation_room_" + colocationID
+
+					err = firebaseClient.SendNotification(title, body, senderName, colocationID, topic)
+					if err != nil {
+						log.Printf("error sending notification: %v\n", err)
+					}
 				}
 			}
 		}
