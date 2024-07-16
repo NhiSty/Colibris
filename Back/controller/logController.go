@@ -2,6 +2,7 @@ package controller
 
 import (
 	"Colibris/service"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -39,7 +40,10 @@ func NewLogController(service *service.LogService) *LogController {
 
 func (controller *LogController) GetLogs(c *gin.Context) {
 	// if the user is not an admin, return unauthorized
-	if !service.IsAdmin(c) == false {
+	fmt.Print("----->IsAdmin: " + fmt.Sprint(service.IsAdmin(c)))
+
+	if !service.IsAdmin(c) {
+		fmt.Print("----->dans le if: " + fmt.Sprint(service.IsAdmin(c)))
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
