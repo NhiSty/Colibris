@@ -10,6 +10,7 @@ type Message struct {
 	Content      string `json:"content"`
 	SenderID     int    `json:"sender_id"`
 	SenderName   string `json:"sender_name"`
+	SenderRole   string `json:"sender_role"`
 	ColocationID string `json:"colocation_id"`
 }
 
