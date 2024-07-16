@@ -147,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (res == 200) {
         final token = await firebaseClient.getFcmToken();
         await addFcmToken(token as String);
-
+        await login(_emailController.text.trim(), _passwordController.text);
         if (await isConnected()) {
           context.push(HomeScreen.routeName);
         }

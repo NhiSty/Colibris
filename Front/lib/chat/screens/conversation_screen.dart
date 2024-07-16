@@ -40,8 +40,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
     _getUserData();
     _fetchMessages();
     _connectToWebSocket();
-    final roomId = widget.conversationId;
-    firebaseClient.subscribeToTopic("room_colocation_$roomId");
+    // final roomId = widget.conversationId;
+    // // firebaseClient.subscribeToTopic("room_colocation_$roomId");
   }
 
   @override
@@ -74,6 +74,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   Future<void> _connectToWebSocket() async {
     var token = await getToken() ?? '';
     _channel = WebSocketService.connect(widget.conversationId, token);
+    print("Attempting to connect to WebSocket with channel: $_channel");
     _channel.stream.listen((message) {
       try {
         final data = json.decode(message);
@@ -94,6 +95,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
       }
     }, onError: (error) {
       print("WebSocket error: $error");
+      // Retry logic or additional error handling can be added here
     }, onDone: () {
       print("WebSocket closed");
     });
