@@ -89,7 +89,7 @@ func (c *ChatController) HandleConnections(ctx *gin.Context) {
 
 		title := "Nouveau message dans la colocation"
 		body := string(msg)
-		topic := "room_colocation_" + colocationID
+		topic := "colocation_room_" + colocationID
 
 		err = firebaseClient.SendNotification(title, body, senderName, colocationID, topic)
 		if err != nil {

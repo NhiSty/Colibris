@@ -82,7 +82,7 @@ func (f *FirebaseClient) SubscribeToTopic(token string, id int) error {
 	if f.client == nil {
 		return fmt.Errorf("Firebase client is not initialized")
 	}
-	topic := fmt.Sprintf("room_colocation_%d", id)
+	topic := fmt.Sprintf("colocation_room_%d", id)
 
 	response, err := f.client.SubscribeToTopic(context.Background(), []string{token}, topic)
 	if err != nil {
@@ -98,7 +98,7 @@ func (f *FirebaseClient) UnsubscribeFromTopic(token string, id int) error {
 		return fmt.Errorf("Firebase client is not initialized")
 	}
 
-	topic := fmt.Sprintf("room_colocation_%d", id)
+	topic := fmt.Sprintf("colocation_room_%d", id)
 
 	response, err := f.client.UnsubscribeFromTopic(context.Background(), []string{token}, topic)
 	if err != nil {
