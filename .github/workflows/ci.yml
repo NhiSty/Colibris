@@ -35,4 +35,4 @@ jobs:
           docker-compose exec -T golang go test tests/utils.go tests/featureFlag_test.go
           docker-compose exec -T golang go test tests/utils.go tests/colocMember_test.go
           docker-compose exec -T golang go test tests/utils.go tests/invitation_test.go
-
+          docker-compose exec -T golang go test tests/jwt_unitary_test.go
