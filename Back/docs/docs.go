@@ -2545,7 +2545,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "2.0",
-	Host:             "localhost:8080",
+	Host:             "https://back.colibris.live",
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Swagger Example API",
