@@ -26,6 +26,16 @@ jobs:
         run: docker compose up -d
         if: success()
 
+      - name: sleep 30
+        run: sleep 30
+
+      - name: docker compose ps
+        run: docker compose ps
+
+      - name: docker compose logs
+        run: docker compose logs golang
+
+
       - name: Run tests inside the container
         run: |
           sleep 30
