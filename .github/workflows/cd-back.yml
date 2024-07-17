@@ -24,11 +24,12 @@ jobs:
           echo "MJ_APIKEY_PUBLIC=${{ secrets.MJ_APIKEY_PUBLIC }}" >> .env
           echo "MJ_APIKEY_PRIVATE=${{ secrets.MJ_APIKEY_PRIVATE }}" >> .env
           echo "${{ secrets.GOOGLE_CREDENTIALS_BASE_64 }}" | base64 --decode > google-credentials.json
-          echo "GOOGLE_APPLICATION_CREDENTIALS_CONTENTS==$(cat google-credentials.json)" >> .env
+          echo "GOOGLE_APPLICATION_CREDENTIALS_CONTENTS='$(cat google-credentials.json)'" >> .env
 
       - name: Pull latest code
         run: |
           cd /home/ubuntu/Colibris
+          git clean -f
           git pull origin main
 
       - name: Build application
