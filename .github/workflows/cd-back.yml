@@ -26,10 +26,10 @@ jobs:
           echo "${{ secrets.GOOGLE_CREDENTIALS_BASE_64 }}" | base64 --decode > google-credentials.json
           echo "GOOGLE_APPLICATION_CREDENTIALS_CONTENTS==$(cat google-credentials.json)" >> .env
 
-    - name: Clean up untracked files
-        run: |
-          cd /home/ubuntu/Colibris/Back
-          rm -f back back.log google-credentials.json
+      - name: Clean up untracked files
+          run: |
+            cd /home/ubuntu/Colibris/Back
+            rm -f back back.log google-credentials.json
 
       - name: Pull latest code
         run: |
