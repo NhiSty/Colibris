@@ -133,7 +133,7 @@ func (c *ChatController) HandleAdminConnections(ctx *gin.Context) {
 
 		firstName := claims["first_name"].(string)
 		lastName := claims["last_name"].(string)
-		senderName := firstName + " " + lastName
+		senderName := "Admin (" + firstName + " " + lastName + ")"
 
 		conn, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 		if err != nil {
@@ -176,7 +176,7 @@ func (c *ChatController) HandleAdminConnections(ctx *gin.Context) {
 						fmt.Println("Invalid message content")
 						continue
 					}
-					updatedMessage := fmt.Sprintf("⚠️ Message d'un administrateur: %s", content)
+					updatedMessage := content
 					c.Service.BroadcastMessage(colocationID, []byte(updatedMessage), int(userID), senderName)
 				}
 			}
