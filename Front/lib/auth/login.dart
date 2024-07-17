@@ -209,14 +209,24 @@ class _LoginScreenState extends State<LoginScreen> {
           context.push(HomeScreen.routeName);
         }
 
-        if (widget.data["intendedRoute"] != null &&
-            widget.data["intendedRoute"]!.isNotEmpty) {
-          context.push(widget.data["intendedRoute"]!, extra: {
-            widget.data["paramName"]: widget.data["value"],
-            "fromNotification": widget.data["fromNotification"]
-          });
+        if (widget.data["intendedRoute"] != null && widget.data["intendedRoute"]!.isNotEmpty) {
+          Map<String, dynamic> extraData = {
+            "fromNotification": widget.data["fromNotification"],
+          };
+          if (widget.data.containsKey("colocationId")) {
+            extraData["colocationId"] = widget.data["colocationId"];
+          }
+
+          if (widget.data.containsKey("invitationId")) {
+            extraData["invitationId"] = widget.data["invitationId"];
+          } else {
+            extraData[widget.data["paramName"]] = widget.data["value"];
+          }
+
+          context.push(widget.data["intendedRoute"]!, extra: extraData);
           return;
         }
+
       } else {
         showDialog(
           context: context,
