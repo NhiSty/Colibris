@@ -16,12 +16,18 @@ import (
 	"Colibris/route"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	_ "github.com/joho/godotenv/autoload"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"log"
 )
 
 func main() {
+	errLoad := godotenv.Load()
+	if errLoad != nil {
+		log.Fatalf("Erreur lors du chargement du fichier .env : %v", errLoad)
+	}
 	r := gin.Default()
 
 	config := cors.Config{
