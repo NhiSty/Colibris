@@ -244,7 +244,7 @@ class _CreateColocationPageState extends State<CreateColocationPage> {
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: Colors.blueGrey,
+                        backgroundColor: Colors.blueGrey[800],
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                         minimumSize: const Size(double.infinity, 50),
                       ),

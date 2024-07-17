@@ -34,9 +34,8 @@ class ColocationMembersList extends StatelessWidget {
             itemCount: users.length,
             itemBuilder: (context, index) {
               return Card(
-                color: Colors.white,
+                color: Colors.blueGrey.withOpacity(0.05),
                 margin: const EdgeInsets.symmetric(vertical: 8.0),
-                elevation: 3,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -44,7 +43,7 @@ class ColocationMembersList extends StatelessWidget {
                   contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 10.0),
                   leading: CircleAvatar(
-                    backgroundColor: Colors.green,
+                    backgroundColor: Colors.white,
                     child: Text(
                       users[index].firstname[0].toUpperCase(),
                       style: const TextStyle(color: Colors.black),
@@ -54,7 +53,7 @@ class ColocationMembersList extends StatelessWidget {
                     '${users[index].lastname} ${users[index].firstname}',
                     style: const TextStyle(
                       fontSize: 16,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   subtitle: Text(
@@ -62,13 +61,13 @@ class ColocationMembersList extends StatelessWidget {
                     style: const TextStyle(
                       fontStyle: FontStyle.italic,
                       fontSize: 14,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   trailing: Text(
                     "Score: ${users[index].score}",
                     style: const TextStyle(
-                      color: Colors.green,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
