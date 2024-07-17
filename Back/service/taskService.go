@@ -19,6 +19,27 @@ func NewTaskService(db *gorm.DB) *TaskService {
 	}
 }
 
+func (t *TaskService) GetAllTasks(page int, pageSize int) ([]model.Task, int64, error) {
+	var tasks []model.Task
+	var total int64
+
+	t.db.Model(&model.Task{}).Count(&total)
+	if page == 0 || pageSize == 0 {
+		result := t.db.Find(&tasks)
+		return tasks, total, result.Error
+	}
+
+	offset := (page - 1) * pageSize
+	result := t.db.Limit(pageSize).Offset(offset).Find(&tasks)
+	return tasks, total, result.Error
+}
+
+func (t *TaskService) SearchTasks(query string) ([]model.Task, error) {
+	var tasks []model.Task
+	result := t.db.Where("title LIKE ? OR description LIKE ?", "%"+query+"%", "%"+query+"%").Find(&tasks)
+	return tasks, result.Error
+}
+
 func (t *TaskService) GetById(id uint) (*model.Task, error) {
 	var task model.Task
 	result := t.db.Where("id = ?", id).First(&task)

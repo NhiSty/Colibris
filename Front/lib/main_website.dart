@@ -2,13 +2,18 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:front/services/vote_service.dart';
+import 'package:front/website/pages/backoffice/vote_handle_page.dart';
+import 'package:front/website/pages/backoffice/votes/bloc/vote_bloc.dart';
 import 'package:front/website/share/secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:front/services/colocMember_service.dart';
 import 'package:front/services/colocation_service.dart';
 import 'package:front/services/log_service.dart';
+import 'package:front/services/task_service.dart';
 import 'package:front/services/user_service.dart';
 import 'package:front/website/pages/auth/login_page.dart';
+import 'package:front/website/pages/backoffice/tasks/bloc/task_bloc.dart';
 import 'package:front/website/pages/backoffice/colocMember_handle_page.dart';
 import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
 import 'package:front/website/pages/backoffice/colocation_handle_page.dart';
@@ -17,6 +22,7 @@ import 'package:front/website/pages/backoffice/feature_toggle_page.dart';
 import 'package:front/website/pages/backoffice/log_handle_page.dart';
 import 'package:front/website/pages/backoffice/logs/bloc/log_bloc.dart';
 import 'package:front/website/pages/backoffice/messages_handle_page.dart';
+import 'package:front/website/pages/backoffice/task_handle_page.dart';
 import 'package:front/website/pages/backoffice/user/bloc/user_bloc.dart';
 import 'package:front/website/pages/backoffice/user_handle_page.dart';
 import 'package:front/website/pages/home_page.dart';
@@ -85,6 +91,28 @@ class MyApp extends StatelessWidget {
             );
           },
         ),
+        GoRoute(
+          path: TaskHandlePage.routeName,
+          builder: (context, state) => const TaskHandlePage(),
+        ),
+        GoRoute(
+          path: MessagesHandlePage.routeName,
+          builder: (context, state) {
+            final colocationId = (state.extra as Map)['id'];
+            return MessagesHandlePage(
+              colocationId: colocationId,
+            );
+          },
+        ),
+        GoRoute(
+          path: VoteHandlePage.routeName,
+          builder: (context, state) {
+            final taskId = (state.extra as Map)['taskId'];
+            return VoteHandlePage(
+              taskId: taskId,
+            );
+          },
+        ),
       ],
       errorBuilder: (context, state) => Scaffold(
         body: Center(child: Text(state.error.toString())),
@@ -110,6 +138,15 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               ColocMemberBloc(colocMemberService: ColocMemberService())
                 ..add(LoadColocMembers()),
+        ),
+        BlocProvider<TaskBloc>(
+          create: (context) =>
+          TaskBloc(taskService: TaskService())
+            ..add(LoadTasks()),
+        ),
+        BlocProvider<VoteBloc>(
+          create: (context) =>
+          VoteBloc(voteService: VoteService()),
         ),
       ],
       child: MaterialApp.router(

@@ -67,3 +67,7 @@ func (s *UserService) DeleteUserById(id uint) error {
 func (s *UserService) AddUser(user *model.User) error {
 	return s.db.Create(user).Error
 }
+
+func (s *UserService) GetDB() *gorm.DB {
+	return s.db
+}

@@ -14,6 +14,24 @@ type VoteController struct {
 	voteService service.VoteService
 }
 
+// AddVote allows to add a vote to a task
+// @Summary Add a vote to a task
+// @Description Add a vote to a task
+// @Tags votes
+// @Accept json
+// @Produce json
+// @Param vote body dto.VoteCreateRequest true "Vote object"
+// @Success 201 {object} dto.VoteCreateRequest
+// @Failure 400 {object} error
+// @Failure 400 {string} string "error_votingTaskCantVoteForTaskNotInYourColocation"
+// @Failure 400 {string} string "error_votingTaskCantVoteForYourself"
+// @Failure 400 {string} string "error_votingTaskAlreadyVoted"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 404 {object} error
+// @Failure 422 {string} string "error_votingTaskOver3DaysOld"
+// @Failure 500 {object} error
+// @Router /votes [post]
+// @Security Bearer
 func (ctl *VoteController) AddVote(c *gin.Context) {
 	var req dto.VoteCreateRequest
 
@@ -23,14 +41,22 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 	}
 
 	userIDFromToken, exists := c.Get("userID")
-	if !exists {
+	if !exists && !service.IsAdmin(c) {
 		c.JSON(http.StatusUnauthorized, "Unauthorized")
 		return
 	}
 
+	var userId int
+
+	if service.IsAdmin(c) {
+		userId = int(req.UserID)
+	} else {
+		userId = int(userIDFromToken.(uint))
+	}
+
 	// Recover colocMember by userId
 	var colocMemberService = service.NewColocMemberService(ctl.voteService.GetDB())
-	colocMember, err := colocMemberService.GetColocMemberByUserId(int(userIDFromToken.(uint)))
+	colocMember, err := colocMemberService.GetColocMemberByUserId(userId)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
@@ -47,7 +73,7 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 	}
 
 	var colocService = service.NewColocationService(ctl.voteService.GetDB())
-	colocations, err := colocService.GetAllUserColocations(int(userIDFromToken.(uint)))
+	colocations, err := colocService.GetAllUserColocations(userId)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
@@ -64,20 +90,20 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 	}
 
 	if !taskInColocation && !service.IsAdmin(c) {
-		c.JSON(http.StatusBadRequest, "error_votingTaskCantVoteForTaskNotInYourColocation")
+		c.JSON(http.StatusUnprocessableEntity, "error_votingTaskCantVoteForTaskNotInYourColocation")
 		return
 	}
 
 	// Check if the task is already voted
-	_, err = ctl.voteService.GetVoteByTaskIdAndUserId(int(req.TaskID), int(userIDFromToken.(uint)))
+	_, err = ctl.voteService.GetVoteByTaskIdAndUserId(int(req.TaskID), userId)
 	if err == nil {
-		c.JSON(http.StatusBadRequest, "error_votingTaskAlreadyVoted")
+		c.JSON(http.StatusUnprocessableEntity, "error_votingTaskAlreadyVoted")
 		return
 	}
 
 	// Check if the user is not voting for himself
-	if task.UserID == userIDFromToken {
-		c.JSON(http.StatusBadRequest, "error_votingTaskCantVoteForYourself")
+	if task.UserID == userIDFromToken && !service.IsAdmin(c) {
+		c.JSON(http.StatusUnprocessableEntity, "error_votingTaskCantVoteForYourself")
 		return
 	}
 
@@ -89,7 +115,7 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 	}
 
 	vote := model.Vote{
-		UserID: userIDFromToken.(uint),
+		UserID: uint(userId),
 		TaskID: req.TaskID,
 		Value:  req.Value,
 	}
@@ -151,6 +177,25 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 
 }
 
+// UpdateVote allows to update a vote
+// @Summary Update a vote
+// @Description Update a vote
+// @Tags votes
+// @Accept json
+// @Produce json
+// @Param voteId path int true "Vote ID"
+// @Param vote body dto.VoteUpdateRequest true "Vote object"
+// @Success 200 {object} dto.VoteUpdateRequest
+// @Failure 400 {object} error
+// @Failure 400 {string} string "error_votingTaskCantVoteForTaskNotInYourColocation"
+// @Failure 400 {string} string "error_votingTaskCantVoteForYourself"
+// @Failure 403 {string} string "Unauthorized"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 404 {object} error
+// @Failure 422 {string} string "error_votingTaskOver3DaysOld"
+// @Failure 500 {object} error
+// @Router /votes/{voteId} [put]
+// @Security Bearer
 func (ctl *VoteController) UpdateVote(c *gin.Context) {
 	var req dto.VoteUpdateRequest
 
@@ -166,6 +211,13 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		return
 	}
 
+	vote, err := ctl.voteService.GetVoteById(voteId)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err.Error())
+		return
+	}
+
 	// verify if the user is the owner of the colocation
 	userIDFromToken, exists := c.Get("userID")
 	if !exists && !service.IsAdmin(c) {
@@ -173,16 +225,17 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		return
 	}
 
-	// Recover colocMember by userId
-	var colocMemberService = service.NewColocMemberService(ctl.voteService.GetDB())
-	colocMember, err := colocMemberService.GetColocMemberByUserId(int(userIDFromToken.(uint)))
+	var userId int
 
-	if err != nil {
-		c.JSON(http.StatusNotFound, err.Error())
-		return
+	if !service.IsAdmin(c) {
+		userId = int(userIDFromToken.(uint))
+	} else {
+		userId = int(vote.UserID)
 	}
 
-	vote, err := ctl.voteService.GetVoteById(voteId)
+	// Recover colocMember by userId
+	var colocMemberService = service.NewColocMemberService(ctl.voteService.GetDB())
+	colocMember, err := colocMemberService.GetColocMemberByUserId(userId)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
@@ -198,7 +251,7 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 	task, err := taskService.GetById(vote.TaskID)
 
 	var colocService = service.NewColocationService(ctl.voteService.GetDB())
-	colocations, err := colocService.GetAllUserColocations(int(userIDFromToken.(uint)))
+	colocations, err := colocService.GetAllUserColocations(userId)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
@@ -219,8 +272,8 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		return
 	}
 
-	if task.UserID == userIDFromToken {
-		c.JSON(http.StatusBadRequest, "error_votingTaskCantVoteForYourself")
+	if task.UserID == userIDFromToken && !service.IsAdmin(c) {
+		c.JSON(http.StatusUnprocessableEntity, "error_votingTaskCantVoteForYourself")
 		return
 	}
 
@@ -237,7 +290,8 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		voteUpdates["value"] = req.Value
 	}
 
-	if _, err := ctl.voteService.UpdateVote(voteId, voteUpdates); err != nil {
+	voteUpdated, err := ctl.voteService.UpdateVote(voteId, voteUpdates)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -289,10 +343,24 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"Message": "vote updated successfully",
+		"message": "backoffice_task_task_updated_successfully",
+		"vote":    voteUpdated,
 	})
 }
 
+// GetVotesByTaskId allows to get all votes by task id
+// @Summary Get all votes by task id
+// @Description Get all votes by task id
+// @Tags votes
+// @Produce json
+// @Param taskId path int true "Task ID"
+// @Success 200 {array} model.Vote
+// @Failure 400 {object} error
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 404 {object} error
+// @Failure 500 {object} error
+// @Router /votes/task/{taskId} [get]
+// @Security Bearer
 func (ctl *VoteController) GetVotesByTaskId(c *gin.Context) {
 	taskId, err := strconv.Atoi(c.Params.ByName("taskId"))
 
@@ -349,6 +417,20 @@ func (ctl *VoteController) GetVotesByTaskId(c *gin.Context) {
 	})
 }
 
+// GetVotesByUserId allows to get all votes by user id
+// @Summary Get all votes by user id
+// @Description Get all votes by user id
+// @Tags votes
+// @Produce json
+// @Param userId path int true "User ID"
+// @Success 200 {array} model.Vote
+// @Failure 400 {object} error
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 403 {string} string "You are not allowed to access this resource"
+// @Failure 404 {object} error
+// @Failure 500 {object} error
+// @Router /votes/user/{userId} [get]
+// @Security Bearer
 func (ctl *VoteController) GetVotesByUserId(c *gin.Context) {
 	userId, err := strconv.Atoi(c.Params.ByName("userId"))
 
@@ -372,6 +454,31 @@ func (ctl *VoteController) GetVotesByUserId(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"votes": votes,
+	})
+}
+
+func (ctl *VoteController) DeleteVote(c *gin.Context) {
+	voteId, err := strconv.Atoi(c.Params.ByName("voteId"))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	_, err = ctl.voteService.GetVoteById(voteId)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err.Error())
+		return
+	}
+
+	if err := ctl.voteService.DeleteVote(voteId); err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"Message": "vote deleted successfully",
 	})
 }
 

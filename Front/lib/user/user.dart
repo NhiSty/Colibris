@@ -6,6 +6,7 @@ class User {
   int? colocMemberId;
   int? colocationId;
   int? score;
+  String? roles;
 
   User({
     required this.id,
@@ -15,6 +16,7 @@ class User {
     this.colocMemberId,
     this.colocationId,
     this.score,
+    this.roles,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class User {
       colocMemberId: json['ColocMemberID'],
       colocationId: json['ColocationID'],
       score: json['Score'],
+      roles: json['Roles'],
     );
   }
 }
