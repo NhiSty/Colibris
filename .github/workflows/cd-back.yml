@@ -27,9 +27,9 @@ jobs:
           echo "GOOGLE_APPLICATION_CREDENTIALS_CONTENTS==$(cat google-credentials.json)" >> .env
 
       - name: Clean up untracked files
-          run: |
-            cd /home/ubuntu/Colibris/Back
-            rm -f back back.log google-credentials.json
+        run: |
+          cd /home/ubuntu/Colibris/Back
+          rm -f back back.log google-credentials.json
 
       - name: Pull latest code
         run: |
