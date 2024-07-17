@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:front/utils/dio.dart';
 import 'package:front/website/share/secure_storage.dart';
@@ -123,5 +123,35 @@ Future<int?> addFcmToken(String token) async {
     print('Response status: ${e.response!.statusCode}');
     print('Response data: ${e.response!.data}');
     throw Exception('Failed to load feature flags');
+  }
+}
+
+Future<int> signWithGoogle(
+    String email, String name, String token, String provider) async {
+  try {
+    print("object $name $email");
+
+    final response = await dio.post('/auth/validate-token', data: {
+      'email': email,
+      'name': name,
+      'token': token,
+      'provider': provider,
+    });
+
+    if (response.data.containsKey('token')) {
+      var apiToken = response.data['token'];
+      await deleteToken();
+      await saveToken(apiToken);
+    } else {
+      log('Token non trouvé dans la réponse');
+      return 500;
+    }
+
+    return response.statusCode!;
+  } on DioException catch (e) {
+    log('Erreur Dio!');
+    log('Statut de la réponse: ${e.response!.statusCode}');
+    log('Données de la réponse: ${e.response!.data}');
+    return e.response?.statusCode ?? 500;
   }
 }

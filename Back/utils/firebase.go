@@ -3,6 +3,7 @@ package utils
 import (
 	"context"
 	"firebase.google.com/go"
+	"firebase.google.com/go/auth"
 	"firebase.google.com/go/messaging"
 	"fmt"
 	"google.golang.org/api/option"
@@ -10,9 +11,9 @@ import (
 	"os"
 )
 
-// FirebaseClient structure
 type FirebaseClient struct {
-	client *messaging.Client
+	AuthClient      *auth.Client
+	messagingClient *messaging.Client
 }
 
 func NewFirebaseClient() (*FirebaseClient, error) {
@@ -21,7 +22,6 @@ func NewFirebaseClient() (*FirebaseClient, error) {
 		return nil, fmt.Errorf("environment variable GOOGLE_APPLICATION_CREDENTIALS_CONTENTS is not set")
 	}
 
-	// Write the service account key to a temporary file
 	tmpFile, err := os.CreateTemp("", "serviceAccountKey-*.json")
 	if err != nil {
 		return nil, fmt.Errorf("error creating temporary file: %v", err)
@@ -41,21 +41,22 @@ func NewFirebaseClient() (*FirebaseClient, error) {
 		return nil, fmt.Errorf("error initializing app: %v", err)
 	}
 
-	client, err := app.Messaging(context.Background())
+	authClient, err := app.Auth(context.Background())
+	if err != nil {
+		return nil, fmt.Errorf("error getting Auth client: %v", err)
+	}
+
+	messagingClient, err := app.Messaging(context.Background())
 	if err != nil {
 		return nil, fmt.Errorf("error getting Messaging client: %v", err)
 	}
 
-	if client == nil {
-		return nil, fmt.Errorf("Messaging client is nil")
-	}
-
-	return &FirebaseClient{client: client}, nil
+	return &FirebaseClient{AuthClient: authClient, messagingClient: messagingClient}, nil
 }
 
 func (f *FirebaseClient) SendNotification(title, body, senderName, colocationID, topic string) error {
-	if f.client == nil {
-		return fmt.Errorf("Firebase client is not initialized")
+	if f.messagingClient == nil {
+		return fmt.Errorf("Firebase messaging client is not initialized")
 	}
 
 	message := &messaging.Message{
@@ -69,7 +70,7 @@ func (f *FirebaseClient) SendNotification(title, body, senderName, colocationID,
 		},
 	}
 
-	response, err := f.client.Send(context.Background(), message)
+	response, err := f.messagingClient.Send(context.Background(), message)
 	if err != nil {
 		return fmt.Errorf("error sending message: %v", err)
 	}
