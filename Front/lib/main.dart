@@ -171,7 +171,7 @@ class MyApp extends StatelessWidget {
       },
       routes: [
         GoRoute(
-            path: '/',
+            path: '/-',
             builder: (context, state) =>
                 isFeatureEnabled('maintenance', featureFlag)
                     ? const MaintenanceScreen()
@@ -193,7 +193,7 @@ class MyApp extends StatelessWidget {
           builder: (context, state) => const RegisterScreen(),
         ),
         GoRoute(
-          path: HomeScreen.routeName,
+          path: '/',
           builder: (context, state) => const PopScope(
             canPop: false,
             child: Scaffold(

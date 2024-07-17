@@ -24,14 +24,7 @@ class TaskDetailPage extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            title: Row(
-              children: [
-                const Icon(Icons.task, color: Colors.white),
-                const SizedBox(width: 10),
-                Text('task_detail'.tr(),
-                    style: const TextStyle(color: Colors.white)),
-              ],
-            ),
+            title: SizedBox(),
             backgroundColor: Colors.transparent,
             elevation: 0,
           ),
@@ -41,45 +34,37 @@ class TaskDetailPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Center(
-                    child: Text(
-                      task.title,
-                      style: const TextStyle(
-                        fontSize: 28,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Container(
+                    width: double.infinity,
+                    child: Card(
+                        color: Colors.blueGrey.withOpacity(0.05),
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  task.title,
+                                  style: const TextStyle(
+                                    fontSize: 32,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  task.description,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            )
+                        )
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Card(
-                    color: Colors.white.withOpacity(0.9),
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'task_detail_description'.tr(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            task.description,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.black87,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                   Card(
                     color: Colors.white.withOpacity(0.9),
                     margin: const EdgeInsets.symmetric(vertical: 10),
