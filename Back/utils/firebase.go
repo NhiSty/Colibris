@@ -80,12 +80,12 @@ func (f *FirebaseClient) SendNotification(title, body, senderName, colocationID,
 }
 
 func (f *FirebaseClient) SubscribeToTopic(token string, id int) error {
-	if f.client == nil {
+	if f.messagingClient == nil {
 		return fmt.Errorf("Firebase client is not initialized")
 	}
 	topic := fmt.Sprintf("colocation_room_%d", id)
 
-	response, err := f.client.SubscribeToTopic(context.Background(), []string{token}, topic)
+	response, err := f.messagingClient.SubscribeToTopic(context.Background(), []string{token}, topic)
 	if err != nil {
 		return fmt.Errorf("error subscribing to topic: %v", err)
 	}
@@ -95,13 +95,13 @@ func (f *FirebaseClient) SubscribeToTopic(token string, id int) error {
 }
 
 func (f *FirebaseClient) UnsubscribeFromTopic(token string, id int) error {
-	if f.client == nil {
+	if f.messagingClient == nil {
 		return fmt.Errorf("Firebase client is not initialized")
 	}
 
 	topic := fmt.Sprintf("colocation_room_%d", id)
 
-	response, err := f.client.UnsubscribeFromTopic(context.Background(), []string{token}, topic)
+	response, err := f.messagingClient.UnsubscribeFromTopic(context.Background(), []string{token}, topic)
 	if err != nil {
 		return fmt.Errorf("error unsubscribing from topic: %v", err)
 	}
