@@ -12,11 +12,12 @@ func ColocMemberRoutes(colocMemberRoutes *gin.RouterGroup, db *gorm.DB) {
 	routes := colocMemberRoutes.Group("/coloc/members")
 
 	colocMemberService := service.NewColocMemberService(db)
-	colocMemberController := controller.NewColocMemberController(colocMemberService)
+	userService := service.NewUserService(db)
+	colocMemberController := controller.NewColocMemberController(colocMemberService, userService)
 	AuthMiddleware := middleware.AuthMiddleware
 
 	{
-		routes.POST("", AuthMiddleware(), colocMemberController.CreateColocMember)
+		routes.POST("", AuthMiddleware("ROLE_ADMIN"), colocMemberController.CreateColocMember)
 		routes.GET("/:id", AuthMiddleware(), colocMemberController.GetColocMemberById)
 		routes.GET("/colocation/:colocId", AuthMiddleware(), colocMemberController.GetAllColocMembersByColoc)
 		routes.GET("", AuthMiddleware(), colocMemberController.GetAllColocMembers)

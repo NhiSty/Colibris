@@ -5,6 +5,7 @@ import (
 	"Colibris/model"
 	"Colibris/service"
 	"Colibris/utils"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -13,6 +14,7 @@ import (
 
 type ColocMemberController struct {
 	colocService service.ColocMemberService
+	userService  service.UserService
 }
 
 // CreateColocMember allows to create a new colocation member
@@ -44,6 +46,23 @@ func (ctl *ColocMemberController) CreateColocMember(c *gin.Context) {
 		return
 	}
 
+	user, _ := ctl.userService.GetUserById(req.UserID)
+
+	fcmToken := user.FcmToken
+
+	firebaseClient, err := utils.NewFirebaseClient()
+	if err != nil {
+		log.Printf("error initializing Firebase client: %v\n", err)
+		fmt.Println(http.StatusInternalServerError, gin.H{"error": "Failed to initialize Firebase client"})
+		return
+	}
+
+	err = firebaseClient.SubscribeToTopic(fcmToken, int(req.ColocationID))
+	if err != nil {
+		log.Printf("error subscribing to topic: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to subscribe to topic"})
+		return
+	}
 	c.JSON(http.StatusCreated, gin.H{
 		"Message": "colocation member created successfully",
 		"result":  colocMember,
@@ -357,6 +376,6 @@ func (ctl *ColocMemberController) SearchColocMembers(c *gin.Context) {
 	})
 }
 
-func NewColocMemberController(colocMemberService service.ColocMemberService) *ColocMemberController {
-	return &ColocMemberController{colocService: colocMemberService}
+func NewColocMemberController(colocMemberService service.ColocMemberService, userService *service.UserService) *ColocMemberController {
+	return &ColocMemberController{colocService: colocMemberService, userService: *userService}
 }
