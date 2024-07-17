@@ -104,7 +104,7 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
                         style: const TextStyle(color: Colors.white)),
                     value: isPermanent,
                     checkColor: Colors.white,
-                    activeColor: Colors.blueGrey,
+                    activeColor: Colors.blueGrey[800],
                     onChanged: (bool? value) {
                       setState(() {
                         isPermanent = value ?? false;
@@ -145,7 +145,7 @@ class _ColocationUpdateWidgetState extends State<ColocationUpdatePage> {
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
-                      backgroundColor: Colors.blueGrey,
+                      backgroundColor: Colors.blueGrey[800],
                       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
                     ),
                     child: Text('update_colocation_update_submit'.tr()),

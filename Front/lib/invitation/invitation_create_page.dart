@@ -124,7 +124,7 @@ class _InvitationCreatePageState extends State<InvitationCreatePage> {
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: Colors.blueGrey,
+                        backgroundColor: Colors.blueGrey[800],
                         padding: const EdgeInsets.symmetric(
                           vertical: 14.0,
                           horizontal: 6.0,

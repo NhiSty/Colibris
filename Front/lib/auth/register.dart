@@ -71,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
-                          backgroundColor: Colors.blueGrey,
+                          backgroundColor: Colors.blueGrey[800],
                         ),
                         child: Text('register_submit'.tr(),
                           style: const TextStyle(fontSize: 16),
@@ -116,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.white),
         ),
-        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
+        errorStyle: TextStyle(color: Color(0xFFD00000), fontSize: 15),
       ),
       style: const TextStyle(color: Colors.white),
       keyboardType: keyboardType,
@@ -167,7 +167,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('error'.tr(), style: const TextStyle(color: Colors.red)),
+            title: Text('error'.tr(), style: const TextStyle(color: Color(0xFFD00000))),
             content: Text('${'register_error'.tr()} $response', style: const TextStyle(color: Colors.white)),
             backgroundColor: Colors.grey[850],
             actions: <Widget>[
@@ -175,7 +175,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: () {
                   context.pop();
                 },
-                child: const Text('OK', style: TextStyle(color: Colors.red)),
+                child: const Text('OK', style: TextStyle(color: Color(0xFFD00000))),
               ),
             ],
           );
