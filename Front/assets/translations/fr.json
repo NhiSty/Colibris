@@ -129,9 +129,9 @@
   "_commentDetailTask": "--------> Ecran détail tache <---------",
   "task_detail": "Détail de la tâche",
   "task_detail_description": "Description :",
-  "task_detail_date_realization": "Date de réalisation :",
-  "task_detail_duration": "Durée de la tâche :",
-  "task_detail_points": "Cette tâche a rapporté :",
+  "task_detail_date_realization": "Date :",
+  "task_detail_duration": "Durée :",
+  "task_detail_points": "Récompense :",
   "task_detail_proof_visual": "Preuve visuelle :",
   "task_detail_no_proof": "Aucune preuve visuelle fournie",
 

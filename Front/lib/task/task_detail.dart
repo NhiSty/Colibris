@@ -24,9 +24,15 @@ class TaskDetailPage extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            title: SizedBox(),
+            title: Row(
+              children: [
+                const Icon(Icons.task, color: Colors.white),
+                const SizedBox(width: 10),
+                Text('task_detail'.tr(),
+                    style: const TextStyle(color: Colors.white)),
+              ],
+            ),
             backgroundColor: Colors.transparent,
-            elevation: 0,
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -47,7 +53,7 @@ class TaskDetailPage extends StatelessWidget {
                                 Text(
                                   task.title,
                                   style: const TextStyle(
-                                    fontSize: 32,
+                                    fontSize: 26,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -55,7 +61,7 @@ class TaskDetailPage extends StatelessWidget {
                                 Text(
                                   task.description,
                                   style: const TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 16,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -66,7 +72,7 @@ class TaskDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Card(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.blueGrey.withOpacity(0.05),
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -77,15 +83,15 @@ class TaskDetailPage extends StatelessWidget {
                             'task_detail_date_realization'.tr(),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 24,
-                              color: Colors.black,
+                              fontSize: 18,
+                              color: Colors.white,
                             ),
                           ),
                           Text(
                             task.date,
                             style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.black87,
+                              fontSize: 16,
+                              color: Colors.white,
                             ),
                           ),
                         ],
@@ -93,7 +99,7 @@ class TaskDetailPage extends StatelessWidget {
                     ),
                   ),
                   Card(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.blueGrey.withOpacity(0.05),
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -104,15 +110,15 @@ class TaskDetailPage extends StatelessWidget {
                             'task_detail_duration'.tr(),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 24,
-                              color: Colors.black,
+                              fontSize: 18,
+                              color: Colors.white,
                             ),
                           ),
                           Text(
                             "${(task.duration / 60).toStringAsPrecision(2)} h",
                             style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.black87,
+                              fontSize: 16,
+                              color: Colors.white,
                             ),
                           ),
                         ],
@@ -120,7 +126,7 @@ class TaskDetailPage extends StatelessWidget {
                     ),
                   ),
                   Card(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.blueGrey.withOpacity(0.05),
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -131,15 +137,15 @@ class TaskDetailPage extends StatelessWidget {
                             'task_detail_points'.tr(),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 22,
-                              color: Colors.black,
+                              fontSize: 16,
+                              color: Colors.white,
                             ),
                           ),
                           Text(
                             "${task.pts} points",
                             style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.black87,
+                              fontSize: 16,
+                              color: Colors.white,
                             ),
                           ),
                         ],
@@ -163,7 +169,7 @@ class TaskDetailPage extends StatelessWidget {
                         final votes = (state.voteByTaskIdState as VoteByTaskIdLoaded).votes;
                         if (votes.isNotEmpty) {
                           return Card(
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.blueGrey.withOpacity(0.05),
                             margin: const EdgeInsets.symmetric(vertical: 10),
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
@@ -174,15 +180,15 @@ class TaskDetailPage extends StatelessWidget {
                                     'task_satisfaction_rate'.tr(),
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 22,
-                                      color: Colors.black,
+                                      fontSize: 18,
+                                      color: Colors.white,
                                     ),
                                   ),
                                   Text(
                                     "${(votes.where((vote) => vote.value == 1).length / votes.length * 100).toStringAsFixed(2)} %",
                                     style: const TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.black87,
+                                      fontSize: 16,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ],
@@ -191,7 +197,7 @@ class TaskDetailPage extends StatelessWidget {
                           );
                         } else {
                           return Card(
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.blueGrey.withOpacity(0.05),
                             margin: const EdgeInsets.symmetric(vertical: 10),
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
@@ -202,15 +208,15 @@ class TaskDetailPage extends StatelessWidget {
                                     'task_satisfaction_rate'.tr(),
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 22,
-                                      color: Colors.black,
+                                      fontSize: 18,
+                                      color: Colors.white,
                                     ),
                                   ),
                                   Text(
                                     "task_no_vote".tr(),
                                     style: const TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.black87,
+                                      fontSize: 16,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ],
@@ -231,14 +237,14 @@ class TaskDetailPage extends StatelessWidget {
                           'task_detail_proof_visual'.tr(),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 24,
+                            fontSize: 18,
                             color: Colors.white,
                           ),
                         ),
                         const SizedBox(height: 10),
                         bytes != null
                             ? Card(
-                          color: Colors.white,
+                          color: Colors.blueGrey.withOpacity(0.05),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Image.memory(
@@ -251,7 +257,7 @@ class TaskDetailPage extends StatelessWidget {
                             : Text(
                           'task_detail_no_proof'.tr(),
                           style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 16,
                             color: Colors.white70,
                           ),
                         ),
