@@ -3,7 +3,7 @@ name: Deploy Go App
 on:
   push:
     branches:
-      - fix/cd
+      - main
 
 jobs:
   deploy:
@@ -30,7 +30,7 @@ jobs:
         run: |
           cd /home/ubuntu/Colibris
           git clean -f
-          git pull
+          git pull origin main
 
       - name: Build application
         run: |
