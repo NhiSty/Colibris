@@ -28,7 +28,7 @@ jobs:
 
       - name: Run tests inside the container
         run: |
-          sleep 25
+          sleep 30
           docker-compose exec -T golang go test tests/utils.go tests/register_test.go
           docker-compose exec -T golang go test tests/utils.go tests/login_test.go
           docker-compose exec -T golang go test tests/utils.go tests/colocation_test.go
