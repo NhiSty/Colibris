@@ -5,6 +5,7 @@ on:
     branches:
       - fix/cd
 
+
 jobs:
   deploy:
     runs-on: self-hosted
