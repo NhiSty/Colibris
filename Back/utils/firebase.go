@@ -67,6 +67,7 @@ func (f *FirebaseClient) SendNotification(title, body, senderName, colocationID,
 		Topic: topic,
 		Data: map[string]string{
 			"colocationID": colocationID,
+			"type":         "chat",
 		},
 	}
 
@@ -107,5 +108,32 @@ func (f *FirebaseClient) UnsubscribeFromTopic(token string, id int) error {
 	}
 
 	log.Printf("Successfully unsubscribed from topic: %s\n", response)
+	return nil
+}
+
+func (f *FirebaseClient) SendNotificationToDevice(title, body, senderName, colocationID, invitationID, fcmToken string) error {
+	if f.messagingClient == nil {
+		return fmt.Errorf("Firebase messaging client is not initialized")
+	}
+
+	message := &messaging.Message{
+		Notification: &messaging.Notification{
+			Title: title,
+			Body:  "From: " + senderName + "\n" + body,
+		},
+		Token: fcmToken,
+		Data: map[string]string{
+			"colocationID": colocationID,
+			"invitationID": invitationID,
+			"type":         "invitation",
+		},
+	}
+
+	response, err := f.messagingClient.Send(context.Background(), message)
+	if err != nil {
+		return fmt.Errorf("error sending message: %v", err)
+	}
+
+	log.Printf("Successfully sent message: %s\n", response)
 	return nil
 }
