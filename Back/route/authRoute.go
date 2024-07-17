@@ -4,12 +4,14 @@ import (
 	"Colibris/controller"
 	"Colibris/middleware"
 	"Colibris/service"
+	"Colibris/utils"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 func AuthRoutes(authRoutes *gin.RouterGroup, db *gorm.DB) {
-	authService := service.NewAuthService(db)
+	firebaseClient, _ := utils.NewFirebaseClient()
+	authService := service.NewAuthService(db, firebaseClient)
 	authController := controller.NewAuthController(authService)
 	AuthMiddleware := middleware.AuthMiddleware
 	routes := authRoutes.Group("/auth")
@@ -17,5 +19,6 @@ func AuthRoutes(authRoutes *gin.RouterGroup, db *gorm.DB) {
 		routes.POST("login", authController.Login)
 		routes.GET("me", AuthMiddleware(), authController.Me)
 		routes.POST("register", authController.Register)
+		routes.POST("validate-token", authController.ValidateToken)
 	}
 }

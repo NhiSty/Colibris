@@ -12,7 +12,32 @@
           "package_name": "com.example.front"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "181795601522-2k03fkmh1vt769gk7f3q300i7eqe02ic.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.front",
+            "certificate_hash": "b7f1760880dd36d6ae81ace040734b5d49f4edc6"
+          }
+        },
+        {
+          "client_id": "181795601522-4l4n16vsiuc22uq401deg1l9pqqn9r50.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.front",
+            "certificate_hash": "47f89476d3dd52ef4daa0ffd520b114f26beca19"
+          }
+        },
+        {
+          "client_id": "181795601522-rqcii6jk8m60t31qujr2048904vn7cvd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.front",
+            "certificate_hash": "cde661a5b4f4f481c0533b7b95b750c5f7297251"
+          }
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDhsXqyRHCqHoyc3nP0bGC8lE90R5oF500"

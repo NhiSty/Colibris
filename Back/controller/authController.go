@@ -6,6 +6,7 @@ import (
 	"Colibris/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
 )
 
 type Controller struct {
@@ -98,4 +99,53 @@ func (ctl *Controller) Me(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, user)
+}
+
+func (ctl *Controller) ValidateToken(c *gin.Context) {
+	var req dto.TokenRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var user *model.User
+	var err error
+	switch strings.ToLower(req.Provider) {
+	case "google.com":
+		user, err = ctl.authService.ValidateGoogleToken(req.Token)
+	default:
+		c.JSON(http.StatusBadRequest, gin.H{"error": "unsupported provider"})
+		return
+	}
+
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
+		return
+	}
+	email := user.Email
+
+	existingUser, err := ctl.authService.GetUserByEmail(email)
+	if err != nil {
+		newUser := model.User{
+			Email:     email,
+			Password:  "",
+			Firstname: user.Firstname,
+			Lastname:  user.Lastname,
+			Roles:     model.ROLE_USER,
+		}
+
+		if err := ctl.authService.Register(&newUser); err != nil {
+			c.JSON(http.StatusFailedDependency, gin.H{"error": err.Error()})
+			return
+		}
+		existingUser = &newUser
+	}
+
+	token, err := service.GenerateJWT(existingUser)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"token": token})
 }

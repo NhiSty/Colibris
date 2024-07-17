@@ -2,11 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/auth/auth_service.dart';
 import 'package:front/main.dart';
+import 'package:front/website/share/secure_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:front/auth/register.dart';
 import 'package:front/home_screen.dart';
 import 'package:front/reset-password/reset_password.dart';
 import 'package:front/utils/firebase.dart';
-import 'package:front/website/share/secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -23,6 +25,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   FirebaseClient firebaseClient = FirebaseClient();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +111,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _handleGoogleSignIn,
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.redAccent,
+                      ),
+                      child: const Text(
+                        'Login with Google',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                     Text(
                       'login_unknown_for_our_service'.tr(),
                       style: const TextStyle(fontSize: 16, color: Colors.white),
@@ -137,6 +153,47 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _handleGoogleSignIn() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        return;
+      }
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      final User? user = userCredential.user;
+
+      if (user != null) {
+        final idToken = await user.getIdToken();
+        // print("user $user");
+        final res = await signWithGoogle(
+          user.email!,
+          user.displayName ?? '',
+          idToken ?? '',
+          user.providerData[0].providerId,
+        );
+
+        if (res == 200) {
+          final token = await firebaseClient.getFcmToken();
+          await addFcmToken(token as String);
+
+          if (!mounted) return;
+          context.push(HomeScreen.routeName);
+        } else {
+          print('Échec de la connexion avec Google');
+        }
+      }
+    } catch (error) {
+      print(error);
+    }
   }
 
   loginClick() async {
