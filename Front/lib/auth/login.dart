@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderSide: BorderSide(color: Colors.white),
                         ),
                         errorStyle:
-                            TextStyle(color: Colors.red[500], fontSize: 15),
+                            TextStyle(color: Color(0xFFD00000), fontSize: 15),
                       ),
                       style: const TextStyle(color: Colors.white),
                       validator: (value) {
@@ -87,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderSide: BorderSide(color: Colors.white),
                         ),
                         errorStyle:
-                            TextStyle(color: Colors.red[500], fontSize: 15),
+                            TextStyle(color: Color(0xFFD00000), fontSize: 15),
                       ),
                       obscureText: true,
                       style: const TextStyle(color: Colors.white),
@@ -103,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: loginClick,
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: Colors.blueGrey,
+                        backgroundColor: Colors.blueGrey[800],
                       ),
                       child: Text(
                         'login_login'.tr(),
@@ -223,12 +223,12 @@ class _LoginScreenState extends State<LoginScreen> {
           builder: (BuildContext context) {
             return AlertDialog(
               title:
-                  Text('error'.tr(), style: const TextStyle(color: Colors.red)),
+                  Text('error'.tr(), style: const TextStyle(color: Color(0xFFD00000))),
               content: Text('error_email_or_password'.tr(),
                   style: const TextStyle(color: Colors.white)),
               actions: <Widget>[
                 TextButton(
-                  child: const Text('OK', style: TextStyle(color: Colors.red)),
+                  child: const Text('OK', style: TextStyle(color: Color(0xFFD00000))),
                   onPressed: () {
                     context.pop();
                   },

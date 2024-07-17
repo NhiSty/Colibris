@@ -220,7 +220,7 @@ class _TaskFormState extends State<TaskForm> {
             ),
             Card(
               margin: const EdgeInsets.only(top: 30, bottom: 10),
-              color: Colors.white,
+              color: Colors.blueGrey.withOpacity(0.05),
               child: base64Image.isNotEmpty
                   ? Image.memory(
                 base64Decode(base64Image),
@@ -304,7 +304,7 @@ class _TaskFormState extends State<TaskForm> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueGrey[700],
+                        backgroundColor: Colors.blueGrey[800],
                         foregroundColor: Colors.white,
                       ),
                       child: Text(widget.isEditing ? 'edit'.tr() : 'add'.tr()),

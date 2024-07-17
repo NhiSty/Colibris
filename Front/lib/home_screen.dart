@@ -61,9 +61,9 @@ class HomeScreen extends StatelessWidget {
                               } else if (state is InvitationError) {
                                 return IconButton(
                                   icon: const Icon(
-                                    Icons.circle_notifications,
+                                    Icons.notifications,
                                     color: Colors.white,
-                                    size: 50,
+                                    size: 35,
                                   ),
                                   onPressed: () {},
                                 );
@@ -72,9 +72,9 @@ class HomeScreen extends StatelessWidget {
                                 if (invitations.isEmpty) {
                                   return IconButton(
                                     icon: const Icon(
-                                      Icons.circle_notifications,
+                                      Icons.notifications,
                                       color: Colors.white,
-                                      size: 50,
+                                      size: 35,
                                     ),
                                     onPressed: () {
                                       ScaffoldMessenger.of(context)
@@ -91,9 +91,9 @@ class HomeScreen extends StatelessWidget {
                                     children: [
                                       IconButton(
                                         icon: const Icon(
-                                          Icons.circle_notifications,
+                                          Icons.notifications,
                                           color: Colors.white,
-                                          size: 50,
+                                          size: 35,
                                         ),
                                         onPressed: () {
                                           context.push(
@@ -231,8 +231,7 @@ class HomeScreen extends StatelessWidget {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 8.0, horizontal: 16.0),
                                       child: Card(
-                                        color: Colors.white,
-                                        elevation: 4,
+                                        color: Colors.blueGrey.withOpacity(0.05),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(12),
@@ -241,18 +240,18 @@ class HomeScreen extends StatelessWidget {
                                           leading: item.isPermanent
                                               ? Icon(
                                                   Icons.apartment,
-                                                  color: Colors.blue[800],
+                                                  color: Color(0xFF253BA6),
                                                 )
                                               : Icon(
                                                   Icons.apartment,
-                                                  color: Colors.red[800],
+                                                  color: Color(0xFFFF4F4F),
                                                 ),
                                           title: Text(
                                             item.name,
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.normal,
                                                 fontSize: 18,
-                                                color: Colors.black),
+                                                color: Colors.white),
                                           ),
                                           subtitle: Column(
                                             crossAxisAlignment:
@@ -262,19 +261,19 @@ class HomeScreen extends StatelessWidget {
                                                 '${'colocation_created_at'.tr()} ${DateTime.parse(item.createdAt).toLocal().toString().split(' ')[0]}',
                                                 style: const TextStyle(
                                                     fontSize: 12,
-                                                    color: Colors.black),
+                                                    color: Colors.white),
                                               ),
                                               Text(
                                                 item.location,
                                                 style: const TextStyle(
                                                     fontSize: 12,
-                                                    color: Colors.black),
+                                                    color: Colors.white),
                                               ),
                                             ],
                                           ),
                                           trailing: Icon(
                                             Icons.arrow_forward_ios,
-                                            color: Colors.blueGrey[800],
+                                            color: Colors.white,
                                           ),
                                         ),
                                       ),
@@ -304,11 +303,11 @@ class HomeScreen extends StatelessWidget {
                   onPressed: () {
                     context.push(CreateColocationPage.routeName);
                   },
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.blueGrey[800],
                   child: Icon(
                     Icons.add,
                     size: 30,
-                    color: Colors.blueGrey[800],
+                    color: Colors.white,
                   ),
                 ),
               ),

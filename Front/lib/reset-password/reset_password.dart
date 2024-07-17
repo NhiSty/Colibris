@@ -108,7 +108,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   foregroundColor: Colors.white,
-                                  backgroundColor: Colors.blueGrey,
+                                  backgroundColor: Colors.blueGrey[800],
                                 ),
                                 child: Text('forget_password_submit'.tr()),
                               ),
@@ -138,7 +138,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       showSnackBarFeedback(
                                         'forget_password_code_invalid'.tr(),
-                                        Colors.red,
+                                        Color(0xFFD00000),
                                       ),
                                     );
                                   }
@@ -184,7 +184,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.white),
         ),
-        errorStyle: TextStyle(color: Colors.red[500], fontSize: 15),
+        errorStyle: TextStyle(color: Color(0xFFD00000), fontSize: 15),
       ),
       style: const TextStyle(color: Colors.white),
       keyboardType: keyboardType,

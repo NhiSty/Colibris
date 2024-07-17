@@ -88,9 +88,8 @@ class _ColocationMembersState extends State<ColocationMembers> {
             itemCount: _users.length,
             itemBuilder: (context, index) {
               return Card(
-                color: Colors.white,
+                color: Colors.blueGrey.withOpacity(0.05),
                 margin: const EdgeInsets.symmetric(vertical: 8.0),
-                elevation: 3,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -98,7 +97,7 @@ class _ColocationMembersState extends State<ColocationMembers> {
                   contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 10.0),
                   leading: CircleAvatar(
-                    backgroundColor: Colors.green,
+                    backgroundColor: Colors.white,
                     child: Text(
                       _users[index].firstname[0],
                       style: const TextStyle(color: Colors.black),
@@ -109,7 +108,7 @@ class _ColocationMembersState extends State<ColocationMembers> {
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   subtitle: Text(
@@ -117,7 +116,7 @@ class _ColocationMembersState extends State<ColocationMembers> {
                     style: const TextStyle(
                       fontStyle: FontStyle.italic,
                       fontSize: 14,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   trailing: ElevatedButton(

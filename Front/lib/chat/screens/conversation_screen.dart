@@ -134,6 +134,16 @@ class _ConversationScreenState extends State<ConversationScreen> {
     }
   }
 
+  _whichUserGradient(Message message) {
+    if (message.senderName.contains('Admin (')) {
+      return [Colors.red.withOpacity(1), Colors.red.withOpacity(0.6)];
+    } else if (message.senderId == _userId) {
+      return [Colors.blue[800]!, Colors.blue[400]!];
+    } else {
+      return [Colors.grey.withOpacity(0.9), Colors.grey.withOpacity(0.4)];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -166,6 +176,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                   itemBuilder: (context, index) {
                     final message = _messages[index];
                     final isUserMessage = message.senderId == _userId;
+                    final isAdminMessage = message.senderName.contains('Admin (');
                     final showDateSeparator = index == 0 ||
                         _messages[index - 1].createdAt.day !=
                             message.createdAt.day;
@@ -195,9 +206,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                             padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
-                                colors: isUserMessage
-                                    ? [Colors.blue[700]!, Colors.blue[800]!]
-                                    : [Colors.grey[700]!, Colors.grey[500]!],
+                                colors: _whichUserGradient(message),
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
@@ -215,12 +224,22 @@ class _ConversationScreenState extends State<ConversationScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  message.senderName,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    if (isAdminMessage)
+                                      Container(
+                                        margin: const EdgeInsets.only(right: 5),
+                                        child: Icon(Icons.warning, color: Colors.yellow),
+                                      ),
+                                    Text(message.senderName,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+
+                                        )
+                                    )
+                                  ],
                                 ),
                                 SizedBox(height: 3),
                                 Text(
@@ -235,7 +254,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                         message.createdAt.toLocal()),
                                     style: const TextStyle(
                                       fontSize: 12,
-                                      color: Colors.black,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -274,7 +293,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                     SizedBox(width: 8),
                     FloatingActionButton(
                       onPressed: _sendMessage,
-                      backgroundColor: Colors.blueGrey,
+                      backgroundColor: Colors.blueGrey[800],
                       child: const Icon(Icons.send, color: Colors.white),
                     ),
                   ],
