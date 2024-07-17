@@ -23,8 +23,8 @@ jobs:
           echo "DB_URL=${{ secrets.DB_URL }}" > .env
           echo "MJ_APIKEY_PUBLIC=${{ secrets.MJ_APIKEY_PUBLIC }}" >> .env
           echo "MJ_APIKEY_PRIVATE=${{ secrets.MJ_APIKEY_PRIVATE }}" >> .env
-          echo "GOOGLE_APPLICATION_CREDENTIALS_CONTENTS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_CONTENTS }}" >> .env
-          echo 'Hello="Hello World"' >> .env
+          echo "${{ secrets.GOOGLE_CREDENTIALS_BASE_64 }}" | base64 --decode > google-credentials.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS_CONTENTS==$(cat google-credentials.json)" >> .env
 
       - name: Pull latest code
         run: |
