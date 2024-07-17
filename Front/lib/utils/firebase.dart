@@ -50,6 +50,7 @@ class FirebaseClient {
         onMessageOpenedApp(message);
       }
     });
+
   }
 
   Future<void> subscribeToTopic(String topic) async {

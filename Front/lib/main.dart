@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:front/auth/login.dart';
 import 'package:front/auth/register.dart';
 import 'package:front/chat/screens/conversation_screen.dart';
@@ -40,7 +41,8 @@ import 'firebase_options.dart';
 import 'package:front/vote/bloc/vote_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'firebase_options.dart';
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
 
 final StreamController<List<FeatureFlag>> _featureFlagsController =
     StreamController<List<FeatureFlag>>.broadcast();
@@ -65,7 +67,34 @@ bool isFeatureEnabled(String featureName, List<FeatureFlag> flags) {
 
 void onMessage(RemoteMessage message) {
   print('Message en premier plan reçu: ${message.notification?.title}');
+  showNotification(message);
 }
+
+
+void showNotification(RemoteMessage message) async {
+  String notificationType = message.data['type'] ?? 'default';
+
+  const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    'your_channel_id',
+    'your_channel_name',
+    channelDescription: 'your_channel_description',
+    importance: Importance.defaultImportance,
+    priority: Priority.high,
+    showWhen: false,
+  );
+  const NotificationDetails platformChannelSpecifics = NotificationDetails(
+    android: androidPlatformChannelSpecifics,
+  );
+  await flutterLocalNotificationsPlugin.show(
+    0,
+    message.notification?.title,
+    message.notification?.body,
+    platformChannelSpecifics,
+    payload: notificationType + ';' + (message.data['colocationID'] ?? '') + ';' + (message.data['invitationID'] ?? ''),
+  );
+}
+
+
 
 void onMessageOpenedApp(RemoteMessage message) {
   print('Message cliqué!: ${message.notification?.title}');
@@ -101,6 +130,37 @@ void onMessageOpenedApp(RemoteMessage message) {
   }
 }
 
+void handleNotificationClick(String payload) {
+  List<String> parts = payload.split(';');
+  String notificationType = parts[0];
+  String colocationIdStr = parts[1];
+  String invitationIdStr = parts.length > 2 ? parts[2] : '';
+
+  int colocationId = int.tryParse(colocationIdStr) ?? 0;
+  int invitationId = int.tryParse(invitationIdStr) ?? 0;
+
+  print("colocationId $colocationId");
+  print("invitationId $invitationId");
+  if (colocationId != 0) {
+    switch (notificationType) {
+      case 'chat':
+        navigatorKey.currentContext?.go(ConversationScreen.routeName, extra: {
+          'chatId': colocationId,
+          'fromNotification': true,
+        });
+        break;
+      case 'invitation':
+        navigatorKey.currentContext?.go(InvitationAcceptPage.routeName, extra: {
+          'colocationId': colocationId,
+          'invitationId': invitationId,
+          'fromNotification': true,
+        });
+        break;
+      default:
+        print('Type de notification inconnu');
+    }
+  }
+}
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
@@ -108,8 +168,25 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   FirebaseClient firebaseClient = FirebaseClient();
   await firebaseClient.requestPermission();
+  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) async {
+      if (notificationResponse.payload != null) {
+        print('Notification payload: ${notificationResponse.payload}');
+        handleNotificationClick(notificationResponse.payload!);
+      }
+    },
+  );
+
+
   firebaseClient.initializeListeners(onMessage, onMessageOpenedApp);
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   FirebaseAnalyticsObserver observer =
@@ -165,7 +242,10 @@ void main() async {
     }
   });
 }
-
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Handling a background message: ${message.messageId}");
+}
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.featureFlag});
 
