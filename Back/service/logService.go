@@ -19,6 +19,6 @@ func (l *LogService) CreateLog(log *model.Log) error {
 
 func (l *LogService) GetLogs() ([]model.Log, error) {
 	var logs []model.Log
-	err := l.db.Order("created_at desc").Find(&logs).Error
+	err := l.db.Order("created_at desc").Limit(500).Find(&logs).Error
 	return logs, err
 }
