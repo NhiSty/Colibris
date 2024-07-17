@@ -129,9 +129,9 @@
   "_commentDetailTask": "--------> Ecran détail tache <---------",
   "task_detail": "Task details",
   "task_detail_description": "Description :",
-  "task_detail_date_realization": "Realization date :",
+  "task_detail_date_realization": "Date :",
   "task_detail_duration": "Duration :",
-  "task_detail_points": "This task bring :",
+  "task_detail_points": "Award :",
   "task_detail_proof_visual": "Visual proof :",
   "task_detail_no_proof": "No visual evidence provided",
 

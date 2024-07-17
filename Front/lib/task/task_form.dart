@@ -133,7 +133,7 @@ class _TaskFormState extends State<TaskForm> {
                   ),
                   style: const TextStyle(color: Colors.white),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    if (value == null || value.trim().isEmpty) {
                       return 'task_create_description_error'.tr();
                     }
                     return null;
