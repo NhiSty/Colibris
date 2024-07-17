@@ -29,7 +29,7 @@ jobs:
       - name: Pull latest code
         run: |
           cd /home/ubuntu/Colibris
-          git reset -f
+          git clean -f
           git pull origin main
 
       - name: Build application
