@@ -30,7 +30,7 @@ jobs:
         run: |
           cd /home/ubuntu/Colibris
           git clean -f
-          git pull origin main
+          git pull
 
       - name: Build application
         run: |
