@@ -24,10 +24,6 @@ import (
 )
 
 func main() {
-	errLoad := godotenv.Load()
-	if errLoad != nil {
-		log.Fatalf("Erreur lors du chargement du fichier .env : %v", errLoad)
-	}
 	r := gin.Default()
 
 	config := cors.Config{
@@ -37,7 +33,10 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}
-
+	errLoad := godotenv.Load()
+	if errLoad != nil {
+		log.Fatalf("Erreur lors du chargement du fichier .env : %v", errLoad)
+	}
 	database := db.Connect()
 	db.Migrate(database)
 
