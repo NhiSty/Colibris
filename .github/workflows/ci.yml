@@ -22,6 +22,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Generate .env file
+        run: |
+          echo "DB_URL='postgres://postgres:postgres@postgres:5432/database'" > .env
+
       - name: Run the docker-compose
         run: docker compose up -d
         if: success()
