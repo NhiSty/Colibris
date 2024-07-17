@@ -16,9 +16,11 @@ import (
 	"Colibris/route"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	_ "github.com/joho/godotenv/autoload"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"log"
 )
 
 func main() {
@@ -31,7 +33,10 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}
-
+	errLoad := godotenv.Load()
+	if errLoad != nil {
+		log.Fatalf("Erreur lors du chargement du fichier .env : %v", errLoad)
+	}
 	database := db.Connect()
 	db.Migrate(database)
 

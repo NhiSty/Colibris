@@ -117,20 +117,17 @@ func (c *ChatController) GetMessages(ctx *gin.Context) {
 		return
 	}
 
-	// Check if the user is a member of the colocation
 	isMember, err := c.ColocMemberService.IsMemberOfColocation(userID, uint(colocationIdToInt))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	// If the user is not a member and not an admin, deny access
 	if !isMember && userRole != "ROLE_ADMIN" {
 		ctx.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
 		return
 	}
 
-	// Fetch messages if the user is authorized
 	messages, err := c.Service.GetMessages(colocationID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

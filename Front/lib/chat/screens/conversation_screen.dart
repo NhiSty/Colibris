@@ -40,8 +40,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
     _getUserData();
     _fetchMessages();
     _connectToWebSocket();
-    // final roomId = widget.conversationId;
-    // // firebaseClient.subscribeToTopic("room_colocation_$roomId");
   }
 
   @override
@@ -74,7 +72,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
   Future<void> _connectToWebSocket() async {
     var token = await getToken() ?? '';
     _channel = WebSocketService.connect(widget.conversationId, token);
-    print("Attempting to connect to WebSocket with channel: $_channel");
     _channel.stream.listen((message) {
       try {
         final data = json.decode(message);
@@ -95,7 +92,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
       }
     }, onError: (error) {
       print("WebSocket error: $error");
-      // Retry logic or additional error handling can be added here
     }, onDone: () {
       print("WebSocket closed");
     });
@@ -136,6 +132,16 @@ class _ConversationScreenState extends State<ConversationScreen> {
     }
   }
 
+  _whichUserGradient(Message message) {
+    if (message.senderName.contains('Admin (')) {
+      return [Colors.red.withOpacity(1), Colors.red.withOpacity(0.6)];
+    } else if (message.senderId == _userId) {
+      return [Colors.blue[800]!, Colors.blue[400]!];
+    } else {
+      return [Colors.grey.withOpacity(0.9), Colors.grey.withOpacity(0.4)];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -143,7 +149,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            title: Text('Chat Title'),
+            title: Text('chat_title'.tr()),
             backgroundColor: Colors.transparent,
             elevation: 0,
             leading: IconButton(
@@ -168,6 +174,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                   itemBuilder: (context, index) {
                     final message = _messages[index];
                     final isUserMessage = message.senderId == _userId;
+                    final isAdminMessage = message.senderName.contains('Admin (');
                     final showDateSeparator = index == 0 ||
                         _messages[index - 1].createdAt.day !=
                             message.createdAt.day;
@@ -198,9 +205,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                             padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
-                                colors: isUserMessage
-                                    ? [Colors.blue[700]!, Colors.blue[800]!]
-                                    : [Colors.grey[700]!, Colors.grey[500]!],
+                                colors: _whichUserGradient(message),
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
@@ -218,25 +223,12 @@ class _ConversationScreenState extends State<ConversationScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      message.senderName,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    if (isAdmin)
-                                      const Padding(
-                                        padding: EdgeInsets.only(left: 4.0),
-                                        child: Icon(
-                                          Icons.warning_amber_rounded,
-                                          color: Colors.yellow,
-                                          size: 16,
-                                        ),
-                                      ),
-                                  ],
+                                Text(
+                                  message.senderName,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 if (isAdmin)
                                   const Padding(
@@ -285,7 +277,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                         controller: _messageController,
                         style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
-                          hintText: 'Enter your message',
+                          hintText: 'chat_enter_message'.tr(),
                           hintStyle: const TextStyle(color: Colors.grey),
                           filled: true,
                           fillColor: Colors.white,

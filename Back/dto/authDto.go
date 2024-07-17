@@ -11,3 +11,8 @@ type UserLoginRequest struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required"`
 }
+
+type TokenRequest struct {
+	Token    string `json:"token"`
+	Provider string `json:"provider"`
+}

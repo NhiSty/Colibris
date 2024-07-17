@@ -55,21 +55,21 @@ class _InvitationListPageState extends State<InvitationListPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        color: Colors.white,
+                        color: Colors.blueGrey.withOpacity(0.05),
                         margin: const EdgeInsets.symmetric(vertical: 8.0),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(16.0),
                           title: Text(
                             'invitation_to_join_colocation'.tr(),
                             style: const TextStyle(
-                              color: Colors.black,
+                              color: Colors.white,
                             ),
                           ),
                           subtitle: Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
                               "${'invitation_received_at'.tr()} ${DateTime.parse(widget.invitations[index].createdAt).toLocal().toString().split(' ')[0]}",
-                              style: const TextStyle(color: Colors.black),
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ),
                           onTap: () {
@@ -82,11 +82,11 @@ class _InvitationListPageState extends State<InvitationListPage> {
                           },
                           leading: const Icon(
                             Icons.email,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                           trailing: const Icon(
                             Icons.arrow_forward_ios,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                         ),
                       );

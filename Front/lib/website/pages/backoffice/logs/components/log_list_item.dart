@@ -1,72 +1,54 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:front/services/log_service.dart';
 
 class LogListItem extends StatelessWidget {
-  final Log log;
+  final List<Log> logs;
 
-  const LogListItem({super.key, required this.log});
+  const LogListItem({super.key, required this.logs});
 
   @override
   Widget build(BuildContext context) {
+    if (logs.isEmpty) {
+      return Center(child: Text('backoffice_logs_no_log'.tr()));
+    }
+
     return LayoutBuilder(
-      builder: (context, constraints) {
-        double cardWidth = constraints.maxWidth * 0.8;
-        return Container(
-          margin: const EdgeInsets.symmetric(vertical: 8.0),
-          padding: const EdgeInsets.all(16.0),
-          width: cardWidth,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    log.level == 'ERROR' ? Icons.error : Icons.info,
-                    color: log.level == 'ERROR' ? Colors.red : Colors.blue,
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${'backoffice_logs_method'.tr()} ${log.method}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        Text('${'backoffice_logs_path'.tr()} ${log.path}'),
-                        Text(
-                            '${'backoffice_logs_client_ip'.tr()} ${log.clientIp}'),
-                        Text('${'backoffice_logs_user_date'.tr()}${log.date}'),
-                        Text('${'backoffice_logs_user_time'.tr()}${log.time}'),
-                      ],
-                    ),
-                  ),
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minWidth: constraints.maxWidth),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: DataTable(
+                columnSpacing: 20.0,
+                columns: [
+                  DataColumn(label: Text('backoffice_logs_method'.tr())),
+                  DataColumn(label: Text('backoffice_logs_path'.tr())),
+                  DataColumn(label: Text('backoffice_logs_client_ip'.tr())),
+                  DataColumn(label: Text('backoffice_logs_user_date'.tr())),
+                  DataColumn(label: Text('backoffice_logs_user_time'.tr())),
+                  DataColumn(label: Text('backoffice_logs_status'.tr())),
                 ],
+                rows: logs.map((log) {
+                  Color? rowColor =
+                      log.level == "ERROR" ? Colors.red.withOpacity(0.2) : null;
+
+                  return DataRow(
+                    color: WidgetStateProperty.all(rowColor),
+                    cells: [
+                      DataCell(Text(log.method)),
+                      DataCell(Text(log.path)),
+                      DataCell(Text(log.clientIp)),
+                      DataCell(Text(log.date)),
+                      DataCell(Text(log.time)),
+                      DataCell(Text(log.status.toString())),
+                    ],
+                  );
+                }).toList(),
               ),
-              const SizedBox(height: 8),
-              Text(
-                '${'backoffice_logs_status'.tr()} ${log.level} - ${log.status}',
-                style: TextStyle(
-                  color: log.level == 'ERROR' ? Colors.red : Colors.blue,
-                ),
-              ),
-            ],
+            ),
           ),
         );
       },

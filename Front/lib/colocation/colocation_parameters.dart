@@ -62,68 +62,85 @@ class ColocationSettingsPage extends StatelessWidget {
           elevation: 0,
         ),
         body: ListView(
+
           padding: const EdgeInsets.all(16.0),
           children: <Widget>[
-            ListTile(
-              title: Text('coloc_member'.tr(),
-                  style: const TextStyle(color: Colors.white, fontSize: 17)),
-              trailing: const Icon(Icons.arrow_forward, color: Colors.white),
-              onTap: () async {
-                var res = await findUserInColoc(colocationId);
-                if (res.isNotEmpty) {
-                  context.push(ColocationMembersList.routeName,
-                      extra: {'users': res});
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('coloc_settings_no_roommates'.tr()),
-                    backgroundColor: Colors.blue,
-                  ));
-                }
-              },
+            Card(
+              color: Colors.blueGrey.withOpacity(0.05),
+              child: ListTile(
+                title: Text('coloc_member'.tr(),
+                    style: const TextStyle(color: Colors.white, fontSize: 17)),
+                trailing: const Icon(Icons.arrow_forward, color: Colors.white),
+                onTap: () async {
+                  var res = await findUserInColoc(colocationId);
+                  if (res.isNotEmpty) {
+                    context.push(ColocationMembersList.routeName,
+                        extra: {'users': res});
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('coloc_settings_no_roommates'.tr()),
+                      backgroundColor: Colors.blue,
+                    ));
+                  }
+                },
+              ),
             ),
-            ListTile(
-              title: Text('coloc_settings_modify_colocation'.tr(),
-                  style: const TextStyle(color: Colors.white, fontSize: 17)),
-              trailing: const Icon(Icons.arrow_forward, color: Colors.white),
-              onTap: () {
-                context.push(ColocationUpdatePage.routeName,
-                    extra: {'colocationId': colocationId});
-              },
+            Card(
+              color: Colors.blueGrey.withOpacity(0.05),
+              child: ListTile(
+                title: Text('coloc_settings_modify_colocation'.tr(),
+                    style: const TextStyle(color: Colors.white, fontSize: 17)),
+                trailing: const Icon(Icons.arrow_forward, color: Colors.white),
+                onTap: () {
+                  context.push(ColocationUpdatePage.routeName,
+                      extra: {'colocationId': colocationId});
+                },
+              ),
             ),
-            ListTile(
-              title: Text('coloc_settings_invit_coloc_roommate'.tr(),
-                  style: const TextStyle(color: Colors.white, fontSize: 17)),
-              trailing: const Icon(Icons.arrow_forward, color: Colors.white),
-              onTap: () {
-                context.push(InvitationCreatePage.routeName,
-                    extra: {'colocationId': colocationId});
-              },
+            Card(
+              color: Colors.blueGrey.withOpacity(0.05),
+              child: ListTile(
+                title: Text('coloc_settings_invit_coloc_roommate'.tr(),
+                    style: const TextStyle(color: Colors.white, fontSize: 17)),
+                trailing: const Icon(Icons.arrow_forward, color: Colors.white),
+                onTap: () {
+                  context.push(InvitationCreatePage.routeName,
+                      extra: {'colocationId': colocationId});
+                },
+              ),
             ),
-            ListTile(
-              title: Text('coloc_settings_ban_coloc_roommate'.tr(),
-                  style: const TextStyle(color: Colors.white, fontSize: 17)),
-              trailing: const Icon(Icons.arrow_forward, color: Colors.white),
-              onTap: () async {
-                var res = await findUserInColoc(colocationId);
-                if (res.isNotEmpty) {
-                  context
-                      .push(ColocationMembers.routeName, extra: {'users': res});
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('coloc_settings_no_roommates_to_ban'.tr()),
-                    backgroundColor: Colors.blue,
-                  ));
-                }
-              },
+            Card(
+              color: Colors.blueGrey.withOpacity(0.05),
+              child: ListTile(
+                title: Text('coloc_settings_ban_coloc_roommate'.tr(),
+                    style: const TextStyle(color: Colors.white, fontSize: 17)),
+                trailing: const Icon(Icons.arrow_forward, color: Colors.white),
+                onTap: () async {
+                  var res = await findUserInColoc(colocationId);
+                  if (res.isNotEmpty) {
+                    context
+                        .push(ColocationMembers.routeName, extra: {'users': res});
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('coloc_settings_no_roommates_to_ban'.tr()),
+                      backgroundColor: Colors.blue,
+                    ));
+                  }
+                },
+              ),
             ),
-            ListTile(
-              title: Text('coloc_settings_delete_colocation'.tr(),
-                  style: TextStyle(color: Colors.red[200], fontSize: 17)),
-              trailing: Icon(Icons.delete, color: Colors.red[200]),
-              onTap: () {
-                _showDeleteConfirmationDialog(context);
-              },
-            ),
+            Card(
+              color: Colors.red,
+              child: ListTile(
+                title: Text('coloc_settings_delete_colocation'.tr(),
+                    style: TextStyle(color: Colors.white, fontSize: 17)),
+                trailing: Icon(Icons.delete, color: Colors.white),
+
+                onTap: () {
+                  _showDeleteConfirmationDialog(context);
+                },
+              ),
+            )
           ],
         ),
       ),

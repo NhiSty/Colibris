@@ -88,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: ElevatedButton(
                         onPressed: _submitForm,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueGrey,
+                          backgroundColor: Colors.blueGrey[800],
                           textStyle: const TextStyle(fontSize: 18),
                           foregroundColor: Colors.white,
                         ),
