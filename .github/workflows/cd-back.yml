@@ -3,7 +3,7 @@ name: Deploy Go App
 on:
   push:
     branches:
-      - fix/cd
+      - main
 
 jobs:
   deploy:
