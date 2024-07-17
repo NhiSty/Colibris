@@ -133,7 +133,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
   }
 
   _whichUserGradient(Message message) {
-    if (message.senderName.contains('Admin (')) {
+    final isAdmin = message.senderRole == 'ROLE_ADMIN';
+    if (isAdmin) {
       return [Colors.red.withOpacity(1), Colors.red.withOpacity(0.6)];
     } else if (message.senderId == _userId) {
       return [Colors.blue[800]!, Colors.blue[400]!];
@@ -223,12 +224,22 @@ class _ConversationScreenState extends State<ConversationScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  message.senderName,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    if (isAdmin)
+                                      Container(
+                                        margin: const EdgeInsets.only(right: 5),
+                                        child: Icon(Icons.warning, color: Colors.yellow),
+                                      ),
+                                    Text(message.senderName,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+
+                                        )
+                                    )
+                                  ],
                                 ),
                                 if (isAdmin)
                                   const Padding(
