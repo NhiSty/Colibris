@@ -389,10 +389,10 @@ definitions:
       value:
         type: integer
     type: object
-host: https://back.colibris.live
+host: back.colibris.live
 info:
   contact: {}
-  description: This is a sample server for a pet store.
+  description: This is Last Challenge.
   termsOfService: http://swagger.io/terms/
   title: Swagger Example API
   version: "2.0"
