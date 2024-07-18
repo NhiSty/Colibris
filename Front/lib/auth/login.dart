@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:front/auth/auth_service.dart';
 import 'package:front/main.dart';
 import 'package:front/website/share/secure_storage.dart';
@@ -27,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   FirebaseClient firebaseClient = FirebaseClient();
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
 
   @override
   Widget build(BuildContext context) {
@@ -62,8 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
                         ),
-                        errorStyle:
-                            TextStyle(color: Color(0xFFD00000), fontSize: 15),
+                        errorStyle: const TextStyle(color: Color(0xFFD00000), fontSize: 15),
                       ),
                       style: const TextStyle(color: Colors.white),
                       validator: (value) {
@@ -86,8 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
                         ),
-                        errorStyle:
-                            TextStyle(color: Color(0xFFD00000), fontSize: 15),
+                        errorStyle: const TextStyle(color: Color(0xFFD00000), fontSize: 15),
                       ),
                       obscureText: true,
                       style: const TextStyle(color: Colors.white),
@@ -111,16 +111,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    ElevatedButton(
+                    ElevatedButton.icon(
                       onPressed: _handleGoogleSignIn,
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.redAccent,
                       ),
-                      child: const Text(
-                        'Login with Google',
+                      label:  Text(
+                        'login_with_google_account'.tr(),
                         style: TextStyle(fontSize: 16),
                       ),
+                      icon: const Icon(FontAwesomeIcons.google),
                     ),
                     const SizedBox(height: 20),
                     Text(
@@ -183,16 +184,30 @@ class _LoginScreenState extends State<LoginScreen> {
         if (res == 200) {
           final token = await firebaseClient.getFcmToken();
           await addFcmToken(token as String);
-          signWithGoogle(
-            user.email!,
-            user.displayName ?? '',
-            idToken ?? '',
-            user.providerData[0].providerId,
-          );
+
+          if (widget.data != null && widget.data["intendedRoute"] != null && widget.data["intendedRoute"]!.isNotEmpty) {
+            Map<String, dynamic> extraData = {
+              "fromNotification": widget.data["fromNotification"],
+            };
+            if (widget.data.containsKey("colocationId")) {
+              extraData["colocationId"] = widget.data["colocationId"];
+            }
+
+            if (widget.data.containsKey("invitationId")) {
+              extraData["invitationId"] = widget.data["invitationId"];
+            } else if (widget.data.containsKey("paramName") && widget.data.containsKey("value")) {
+              extraData[widget.data["paramName"]] = widget.data["value"];
+            }
+
+            if (!mounted) return;
+            context.push(widget.data["intendedRoute"]!, extra: extraData);
+            return;
+          }
+
           if (!mounted) return;
           context.push(HomeScreen.routeName);
         } else {
-          print('Échec de la connexion avec Google');
+          print('Failed to sign in with Google');
         }
       }
     } catch (error) {
