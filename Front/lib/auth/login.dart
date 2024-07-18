@@ -173,7 +173,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (user != null) {
         final idToken = await user.getIdToken();
-        // print("user $user");
         final res = await signWithGoogle(
           user.email!,
           user.displayName ?? '',
@@ -184,7 +183,12 @@ class _LoginScreenState extends State<LoginScreen> {
         if (res == 200) {
           final token = await firebaseClient.getFcmToken();
           await addFcmToken(token as String);
-
+          signWithGoogle(
+            user.email!,
+            user.displayName ?? '',
+            idToken ?? '',
+            user.providerData[0].providerId,
+          );
           if (!mounted) return;
           context.push(HomeScreen.routeName);
         } else {
