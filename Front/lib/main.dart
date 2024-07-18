@@ -73,12 +73,31 @@ void onMessageOpenedApp(RemoteMessage message) {
   int colocationId = int.tryParse(colocationIdStr!) ?? 0;
 
   if (colocationId != 0) {
-    navigatorKey.currentContext?.go(LoginScreen.routeName, extra: {
-      'value': colocationId,
-      'intendedRoute': ConversationScreen.routeName,
-      "paramName": "chatId",
-      "fromNotification": true,
-    });
+    String notificationType = message.data['type'] ?? 'default';
+
+    switch (notificationType) {
+      case 'chat':
+        navigatorKey.currentContext?.go(LoginScreen.routeName, extra: {
+          'value': colocationId,
+          'intendedRoute': ConversationScreen.routeName,
+          'paramName': 'chatId',
+          'fromNotification': true,
+        });
+        break;
+      case 'invitation':
+        String? invitationIdStr = message.data['invitationID'];
+        int invitationId = int.tryParse(invitationIdStr!) ?? 0;
+
+        navigatorKey.currentContext?.go(LoginScreen.routeName, extra: {
+          'colocationId': colocationId,
+          'invitationId': invitationId,
+          'intendedRoute': InvitationAcceptPage.routeName,
+          'fromNotification': true,
+        });
+        break;
+      default:
+        print('Type de notification inconnu');
+    }
   }
 }
 
@@ -125,7 +144,7 @@ void main() async {
   );
 
   Stream<int> periodicStream =
-      Stream.periodic(const Duration(seconds: 5), (count) => count);
+      Stream.periodic(const Duration(seconds: 15), (count) => count);
 
   periodicStream.listen((event) async {
     var flags = await fetchFeatureFlags();

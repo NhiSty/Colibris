@@ -20,6 +20,7 @@ func GenerateJWT(user *model.User) (string, error) {
 	claims["email"] = user.Email
 	claims["first_name"] = user.Firstname
 	claims["last_name"] = user.Lastname
+	claims["fcm_token"] = user.FcmToken
 
 	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {

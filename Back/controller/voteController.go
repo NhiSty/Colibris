@@ -54,19 +54,19 @@ func (ctl *VoteController) AddVote(c *gin.Context) {
 		userId = int(userIDFromToken.(uint))
 	}
 
-	// Recover colocMember by userId
-	var colocMemberService = service.NewColocMemberService(ctl.voteService.GetDB())
-	colocMember, err := colocMemberService.GetColocMemberByUserId(userId)
+	var taskService = service.NewTaskService(ctl.voteService.GetDB())
+	task, err := taskService.GetById(req.TaskID)
 
+	// Check if the task exists
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
 		return
 	}
 
-	var taskService = service.NewTaskService(ctl.voteService.GetDB())
-	task, err := taskService.GetById(req.TaskID)
+	// Recover colocMember by userId
+	var colocMemberService = service.NewColocMemberService(ctl.voteService.GetDB())
+	colocMember, err := colocMemberService.GetColocMemberByUserId(int(task.UserID))
 
-	// Check if the task exists
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
 		return
