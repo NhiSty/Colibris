@@ -126,7 +126,22 @@ class HomeScreen extends StatelessWidget {
                                   );
                                 }
                               } else {
-                                return Container();
+                                return IconButton(
+                                  icon: const Icon(
+                                    Icons.notifications,
+                                    color: Colors.white,
+                                    size: 35,
+                                  ),
+                                  onPressed: () {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(
+                                      showSnackBarFeedback(
+                                        'colocation_no_invitation_yet'.tr(),
+                                        Colors.blueAccent,
+                                      ),
+                                    );
+                                  },
+                                );
                               }
                             },
                           ),
