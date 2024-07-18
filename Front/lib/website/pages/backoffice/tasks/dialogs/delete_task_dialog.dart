@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
 import 'package:front/website/pages/backoffice/tasks/bloc/task_bloc.dart';
 import 'package:front/website/pages/backoffice/tasks/bloc/task_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
@@ -12,6 +13,7 @@ void showDeleteTaskDialog({
   showDialog(
     context: context,
     builder: (BuildContext context) {
+      final colocMemberProvider = BlocProvider.of<ColocMemberBloc>(context);
       return BlocProvider.value(
         value: BlocProvider.of<TaskBloc>(context),
         child: BlocListener<TaskBloc, TaskState>(
@@ -59,6 +61,7 @@ void showDeleteTaskDialog({
                   context
                       .read<TaskBloc>()
                       .add(DeleteTask(id: taskId));
+                  colocMemberProvider.add(LoadColocMembers());
                 },
                 child: Text('delete'.tr()),
               ),

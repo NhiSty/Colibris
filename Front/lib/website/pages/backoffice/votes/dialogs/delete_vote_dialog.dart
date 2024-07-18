@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
 import 'package:front/website/pages/backoffice/votes/bloc/vote_bloc.dart';
 import 'package:front/website/pages/backoffice/votes/bloc/vote_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
@@ -66,6 +67,9 @@ void showDeleteVoteDialog({
                       voteId: voteId,
                       taskId: taskId
                   ));
+                  context
+                      .read<ColocMemberBloc>()
+                      .add(LoadColocMembers());
                 },
                 child: Text('delete'.tr()),
               ),
