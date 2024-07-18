@@ -48,7 +48,7 @@ class _ColocationMembersState extends State<ColocationMembers> {
               child: Text('confirm'.tr(), style: const TextStyle(color: Colors.red)),
               onPressed: () async {
                 var res = await deleteColocMember(user.colocMemberId!);
-                if (res == 200) {
+                if (res == 204) {
                   setState(() {
                     _users.removeWhere((u) => u.id == user.id);
                   });

@@ -141,7 +141,7 @@ class ColocationService {
         options: Options(headers: headers),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         log('Colocation deleted successfully');
       } else {
         throw Exception('Failed to delete colocation');

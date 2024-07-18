@@ -172,7 +172,7 @@ class ColocMemberService {
         options: Options(headers: headers),
       );
 
-      if (response.statusCode != 200) {
+      if (response.statusCode != 204) {
         throw Exception('Failed to delete colocation member');
       }
     } on DioException catch (e) {
