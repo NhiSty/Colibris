@@ -29,7 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -64,7 +63,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
                         ),
-                        errorStyle: const TextStyle(color: Color(0xFFD00000), fontSize: 15),
+                        errorStyle: const TextStyle(
+                            color: Color(0xFFD00000), fontSize: 15),
                       ),
                       style: const TextStyle(color: Colors.white),
                       validator: (value) {
@@ -87,7 +87,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
                         ),
-                        errorStyle: const TextStyle(color: Color(0xFFD00000), fontSize: 15),
+                        errorStyle: const TextStyle(
+                            color: Color(0xFFD00000), fontSize: 15),
                       ),
                       obscureText: true,
                       style: const TextStyle(color: Colors.white),
@@ -117,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.redAccent,
                       ),
-                      label:  Text(
+                      label: Text(
                         'login_with_google_account'.tr(),
                         style: TextStyle(fontSize: 16),
                       ),
@@ -162,14 +163,16 @@ class _LoginScreenState extends State<LoginScreen> {
       if (googleUser == null) {
         return;
       }
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      final UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
       final User? user = userCredential.user;
 
       if (user != null) {
@@ -190,7 +193,9 @@ class _LoginScreenState extends State<LoginScreen> {
             idToken ?? '',
             user.providerData[0].providerId,
           );
-          if (widget.data != null && widget.data["intendedRoute"] != null && widget.data["intendedRoute"]!.isNotEmpty) {
+          if (widget.data != null &&
+              widget.data["intendedRoute"] != null &&
+              widget.data["intendedRoute"]!.isNotEmpty) {
             Map<String, dynamic> extraData = {
               "fromNotification": widget.data["fromNotification"],
             };
@@ -200,7 +205,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
             if (widget.data.containsKey("invitationId")) {
               extraData["invitationId"] = widget.data["invitationId"];
-            } else if (widget.data.containsKey("paramName") && widget.data.containsKey("value")) {
+            } else if (widget.data.containsKey("paramName") &&
+                widget.data.containsKey("value")) {
               extraData[widget.data["paramName"]] = widget.data["value"];
             }
 
@@ -233,7 +239,9 @@ class _LoginScreenState extends State<LoginScreen> {
           context.push(HomeScreen.routeName);
         }
 
-        if (widget.data["intendedRoute"] != null && widget.data["intendedRoute"]!.isNotEmpty) {
+        if (widget.data != null &&
+            widget.data["intendedRoute"] != null &&
+            widget.data["intendedRoute"]!.isNotEmpty) {
           Map<String, dynamic> extraData = {
             "fromNotification": widget.data["fromNotification"],
           };
@@ -250,19 +258,19 @@ class _LoginScreenState extends State<LoginScreen> {
           context.push(widget.data["intendedRoute"]!, extra: extraData);
           return;
         }
-
       } else {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title:
-                  Text('error'.tr(), style: const TextStyle(color: Color(0xFFD00000))),
+              title: Text('error'.tr(),
+                  style: const TextStyle(color: Color(0xFFD00000))),
               content: Text('error_email_or_password'.tr(),
                   style: const TextStyle(color: Colors.white)),
               actions: <Widget>[
                 TextButton(
-                  child: const Text('OK', style: TextStyle(color: Color(0xFFD00000))),
+                  child: const Text('OK',
+                      style: TextStyle(color: Color(0xFFD00000))),
                   onPressed: () {
                     context.pop();
                   },
