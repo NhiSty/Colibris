@@ -452,7 +452,7 @@ func (ctl *TaskController) DeleteTask(c *gin.Context) {
 		return
 	}
 
-	if err := ctl.service.DeleteTask(uint(id)); err != nil {
+	if err := ctl.service.DeleteTask(id); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error 1": err.Error()})
 		return
 	}
