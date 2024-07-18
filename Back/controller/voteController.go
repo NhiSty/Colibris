@@ -233,9 +233,12 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		userId = int(vote.UserID)
 	}
 
+	var taskService = service.NewTaskService(ctl.voteService.GetDB())
+	task, err := taskService.GetById(vote.TaskID)
+
 	// Recover colocMember by userId
 	var colocMemberService = service.NewColocMemberService(ctl.voteService.GetDB())
-	colocMember, err := colocMemberService.GetColocMemberByUserId(userId)
+	colocMember, err := colocMemberService.GetColocMemberByUserId(int(task.UserID))
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
@@ -246,9 +249,6 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, "Unauthorized")
 		return
 	}
-
-	var taskService = service.NewTaskService(ctl.voteService.GetDB())
-	task, err := taskService.GetById(vote.TaskID)
 
 	var colocService = service.NewColocationService(ctl.voteService.GetDB())
 	colocations, err := colocService.GetAllUserColocations(userId)
