@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:front/home_screen.dart';
 import 'package:front/website/pages/backoffice/colocations/components/search_bar_and_add_colocation_button.dart';
 import 'package:go_router/go_router.dart';
+import 'package:universal_html/html.dart' as html;
 
 class TitleAndBreadcrumb extends StatelessWidget {
   const TitleAndBreadcrumb({super.key});
@@ -23,6 +24,7 @@ class TitleAndBreadcrumb extends StatelessWidget {
         const SizedBox(height: 8.0),
         GestureDetector(
           onTap: () {
+            html.window.location.reload();
             context.push(HomeScreen.routeName);
           },
           child: MouseRegion(
