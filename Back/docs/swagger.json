@@ -1,13 +1,13 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample server for a pet store.",
+        "description": "This is Last Challenge.",
         "title": "Swagger Example API",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {},
         "version": "2.0"
     },
-    "host": "https://back.colibris.live",
+    "host": "back.colibris.live",
     "paths": {
         "/auth/login": {
             "post": {
