@@ -9,6 +9,7 @@ import (
 	"google.golang.org/api/option"
 	"log"
 	"os"
+	"strconv"
 )
 
 type FirebaseClient struct {
@@ -54,7 +55,7 @@ func NewFirebaseClient() (*FirebaseClient, error) {
 	return &FirebaseClient{AuthClient: authClient, messagingClient: messagingClient}, nil
 }
 
-func (f *FirebaseClient) SendNotification(title, body, senderName, colocationID, topic string) error {
+func (f *FirebaseClient) SendNotification(title, body string, senderID int, senderName, colocationID, topic string) error {
 	if f.messagingClient == nil {
 		return fmt.Errorf("Firebase messaging client is not initialized")
 	}
@@ -66,6 +67,7 @@ func (f *FirebaseClient) SendNotification(title, body, senderName, colocationID,
 		},
 		Topic: topic,
 		Data: map[string]string{
+			"senderID":     strconv.Itoa(senderID),
 			"colocationID": colocationID,
 			"type":         "chat",
 		},

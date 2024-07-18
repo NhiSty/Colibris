@@ -93,7 +93,7 @@ func (c *ChatController) HandleConnections(ctx *gin.Context) {
 		body := string(msg)
 		topic := "colocation_room_" + colocationID
 
-		err = firebaseClient.SendNotification(title, body, senderName, colocationID, topic)
+		err = firebaseClient.SendNotification(title, body, userID, senderName, colocationID, topic)
 		if err != nil {
 			log.Printf("error sending notification: %v\n", err)
 		}
@@ -218,7 +218,7 @@ func (c *ChatController) HandleAdminConnections(ctx *gin.Context) {
 					body := content
 					topic := "colocation_room_" + colocationID
 
-					err = firebaseClient.SendNotification(title, body, senderName, colocationID, topic)
+					err = firebaseClient.SendNotification(title, body, int(userID), senderName, colocationID, topic)
 					if err != nil {
 						log.Printf("error sending notification: %v\n", err)
 					}
