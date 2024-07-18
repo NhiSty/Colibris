@@ -144,7 +144,7 @@ void main() async {
   );
 
   Stream<int> periodicStream =
-      Stream.periodic(const Duration(seconds: 5), (count) => count);
+      Stream.periodic(const Duration(seconds: 15), (count) => count);
 
   periodicStream.listen((event) async {
     var flags = await fetchFeatureFlags();
