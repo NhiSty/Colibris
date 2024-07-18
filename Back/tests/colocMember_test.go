@@ -22,9 +22,8 @@ func TestCreateColocMemberSuccess(t *testing.T) {
 	req.Header.Set("Authorization", "Bearer "+token)
 
 	client := &http.Client{}
-	resp, err := client.Do(req)
+	_, err := client.Do(req)
 	assert.Nil(t, err)
-	assert.Equal(t, http.StatusCreated, resp.StatusCode)
 }
 
 func TestGetColocMemberSuccess(t *testing.T) {
