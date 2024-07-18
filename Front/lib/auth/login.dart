@@ -29,15 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  @override
-  void initState() {
-    super.initState();
-    _initAsync();
-  }
-
-  Future<void> _initAsync() async {
-    await deleteToken();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +184,12 @@ class _LoginScreenState extends State<LoginScreen> {
         if (res == 200) {
           final token = await firebaseClient.getFcmToken();
           await addFcmToken(token as String);
-
+          await signWithGoogle(
+            user.email!,
+            user.displayName ?? '',
+            idToken ?? '',
+            user.providerData[0].providerId,
+          );
           if (widget.data != null && widget.data["intendedRoute"] != null && widget.data["intendedRoute"]!.isNotEmpty) {
             Map<String, dynamic> extraData = {
               "fromNotification": widget.data["fromNotification"],

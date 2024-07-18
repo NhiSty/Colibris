@@ -35,8 +35,8 @@ class _HomePageState extends State<HomePage> {
                     IconButton(
                       icon: const Icon(Icons.logout, color: Colors.white),
                       iconSize: buttonSize,
-                      onPressed: () {
-                        deleteToken();
+                      onPressed: () async {
+                        await deleteToken();
                         context.go(
                           LoginPage.routeName,
                         );
