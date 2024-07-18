@@ -153,7 +153,7 @@
   "login_login": "Log In",
   "login_unknown_for_our_service": "Not known yet by our services ?",
   "login_register": "Register now !",
-  "login_forget_password": "Have you forgot your password ?",
+  "login_forget_password": "Did you forgot your password ?",
   "login_password_error": "Invalid password",
   "error_email_or_password": "Email or password not correct",
 
