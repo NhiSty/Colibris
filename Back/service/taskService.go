@@ -74,6 +74,16 @@ func (t *TaskService) UpdateTask(taskId uint, taskUpdates map[string]interface{}
 	return &task, nil
 }
 
-func (t *TaskService) DeleteTask(taskId uint) error {
-	return t.db.Where("id = ?", taskId).Delete(&model.Task{}).Error
+func (t *TaskService) DeleteTask(id int) error {
+
+	errTaskAndVote := t.DeleteVotes(uint(id))
+	if errTaskAndVote != nil {
+		return errTaskAndVote
+	}
+
+	return t.db.Where("id = ?", id).Delete(&model.Task{}).Error
+}
+
+func (t *TaskService) DeleteVotes(id uint) error {
+	return t.db.Where("task_id = ?", id).Delete(&model.Vote{}).Error
 }

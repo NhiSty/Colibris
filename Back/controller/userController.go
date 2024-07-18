@@ -140,6 +140,7 @@ func (ctrl *UserController) DeleteUserById(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
+
 	if err := ctrl.service.DeleteUserById(uint(id)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
