@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:front/auth/auth_service.dart';
 import 'package:front/main.dart';
 import 'package:front/website/share/secure_storage.dart';
@@ -28,11 +29,11 @@ class _LoginScreenState extends State<LoginScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  @override
-  Future<void> initState() async {
-    super.initState();
-    await deleteToken();
-  }
+  // @override
+  // Future<void> initState() async {
+  //   super.initState();
+  //   await deleteToken();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
                         ),
-                        errorStyle:
-                            TextStyle(color: Color(0xFFD00000), fontSize: 15),
+                        errorStyle: const TextStyle(color: Color(0xFFD00000), fontSize: 15),
                       ),
                       style: const TextStyle(color: Colors.white),
                       validator: (value) {
@@ -92,8 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
                         ),
-                        errorStyle:
-                            TextStyle(color: Color(0xFFD00000), fontSize: 15),
+                        errorStyle: const TextStyle(color: Color(0xFFD00000), fontSize: 15),
                       ),
                       obscureText: true,
                       style: const TextStyle(color: Colors.white),
@@ -117,16 +116,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    ElevatedButton(
+                    ElevatedButton.icon(
                       onPressed: _handleGoogleSignIn,
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.redAccent,
                       ),
-                      child: const Text(
-                        'Login with Google',
+                      label:  Text(
+                        'login_with_google_account'.tr(),
                         style: TextStyle(fontSize: 16),
                       ),
+                      icon: const FaIcon(FontAwesomeIcons.google),
                     ),
                     const SizedBox(height: 20),
                     Text(
