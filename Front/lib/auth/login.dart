@@ -29,11 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // @override
-  // Future<void> initState() async {
-  //   super.initState();
-  //   await deleteToken();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         'login_with_google_account'.tr(),
                         style: TextStyle(fontSize: 16),
                       ),
-                      icon: const FaIcon(FontAwesomeIcons.google),
+                      icon: const Icon(FontAwesomeIcons.google),
                     ),
                     const SizedBox(height: 20),
                     Text(
