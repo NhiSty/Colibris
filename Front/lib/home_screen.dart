@@ -58,15 +58,6 @@ class HomeScreen extends StatelessWidget {
                             builder: (context, state) {
                               if (state is InvitationLoading) {
                                 return const CircularProgressIndicator();
-                              } else if (state is InvitationError) {
-                                return IconButton(
-                                  icon: const Icon(
-                                    Icons.notifications,
-                                    color: Colors.white,
-                                    size: 35,
-                                  ),
-                                  onPressed: () {},
-                                );
                               } else if (state is InvitationLoaded) {
                                 final invitations = state.invitations;
                                 if (invitations.isEmpty) {
@@ -133,8 +124,7 @@ class HomeScreen extends StatelessWidget {
                                     size: 35,
                                   ),
                                   onPressed: () {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(
+                                    ScaffoldMessenger.of(context).showSnackBar(
                                       showSnackBarFeedback(
                                         'colocation_no_invitation_yet'.tr(),
                                         Colors.blueAccent,
@@ -246,7 +236,8 @@ class HomeScreen extends StatelessWidget {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 8.0, horizontal: 16.0),
                                       child: Card(
-                                        color: Colors.blueGrey.withOpacity(0.05),
+                                        color:
+                                            Colors.blueGrey.withOpacity(0.05),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(12),

@@ -78,6 +78,15 @@ func (s *ColocMemberService) GetAllColocMembersByColoc(colocationId int) ([]mode
 }
 
 func (s *ColocMemberService) DeleteColocMember(id int) error {
+	// find the colocMember
+	colocMember, err := s.GetColocMemberById(id)
+	if err != nil {
+		return err
+	}
+	errTaskAndVotes := s.DeleteTasksAndVotes(colocMember.UserID)
+	if errTaskAndVotes != nil {
+		return errTaskAndVotes
+	}
 	return s.db.Delete(&model.ColocMember{}, id).Error
 }
 
@@ -112,4 +121,30 @@ func (s *ColocMemberService) IsMemberOfColocation(userID int, colocationID uint)
 
 func (s *ColocMemberService) GetDB() *gorm.DB {
 	return s.db
+}
+
+func (s *ColocMemberService) DeleteTasksAndVotes(userID uint) error {
+	var tasks []model.Task
+	var votes []model.Vote
+
+	if err := s.db.Where("user_id = ?", userID).Find(&tasks).Error; err != nil {
+		return err
+	}
+	if err := s.db.Where("user_id = ?", userID).Find(&votes).Error; err != nil {
+		return err
+	}
+
+	for _, task := range tasks {
+		if err := s.db.Delete(&task).Error; err != nil {
+			return err
+		}
+	}
+
+	for _, vote := range votes {
+		if err := s.db.Delete(&vote).Error; err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

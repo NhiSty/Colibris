@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/website/pages/backoffice/votes/components/add_vote_button.dart';
 import 'package:go_router/go_router.dart';
+import 'package:universal_html/html.dart' as html;
 
 class TitleAndBreadcrumb extends StatelessWidget {
   final int taskId;
@@ -26,7 +27,7 @@ class TitleAndBreadcrumb extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                context.pop();
+                html.window.location.reload();
                 context.pop();
               },
               child: MouseRegion(

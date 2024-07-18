@@ -60,14 +60,90 @@ func (s *UserService) SearchUsers(query string) ([]model.User, error) {
 	return users, result.Error
 }
 
-func (s *UserService) DeleteUserById(id uint) error {
-	return s.db.Delete(&model.User{}, id).Error
-}
-
 func (s *UserService) AddUser(user *model.User) error {
 	return s.db.Create(user).Error
 }
 
 func (s *UserService) GetDB() *gorm.DB {
 	return s.db
+}
+
+func (s *UserService) DeleteUserById(id uint) error {
+	var colocations []model.Colocation
+	err := s.db.Where("user_id = ?", id).Find(&colocations).Error
+	if err != nil {
+		return err
+	}
+
+	for _, colocation := range colocations {
+		// Delete tasks and their votes
+		err = s.DeleteTasksAndVotes(colocation.ID)
+		if err != nil {
+			return err
+		}
+
+		// Delete colocMembers
+		err = s.DeleteColocMembers(colocation.ID)
+		if err != nil {
+			return err
+		}
+
+		// Delete the colocation itself
+		err = s.db.Delete(&colocation).Error
+		if err != nil {
+			return err
+		}
+	}
+
+	// Finally, delete the user
+	return s.db.Delete(&model.User{}, id).Error
+}
+
+func (s *UserService) DeleteTasksAndVotes(colocationID uint) error {
+	var tasks []model.Task
+	err := s.db.Where("colocation_id = ?", colocationID).Find(&tasks).Error
+	if err != nil {
+		return err
+	}
+
+	for _, task := range tasks {
+		// Delete votes for each task
+		var votes []model.Vote
+		err = s.db.Where("task_id = ?", task.ID).Find(&votes).Error
+		if err != nil {
+			return err
+		}
+
+		for _, vote := range votes {
+			err = s.db.Delete(&vote).Error
+			if err != nil {
+				return err
+			}
+		}
+
+		// Delete the task itself
+		err = s.db.Delete(&task).Error
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (s *UserService) DeleteColocMembers(colocationID uint) error {
+	var colocMembers []model.ColocMember
+	err := s.db.Where("colocation_id = ?", colocationID).Find(&colocMembers).Error
+	if err != nil {
+		return err
+	}
+
+	for _, colocMember := range colocMembers {
+		err = s.db.Delete(&colocMember).Error
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

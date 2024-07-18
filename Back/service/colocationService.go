@@ -80,7 +80,19 @@ func (s *ColocationService) UpdateColocation(id int, colocationUpdates map[strin
 }
 
 func (s *ColocationService) DeleteColocation(id int) error {
-	return s.db.Delete(&model.Colocation{}, id).Error
+	us := NewUserService(s.db)
+	errTaskAndVote := us.DeleteTasksAndVotes(uint(id))
+	if errTaskAndVote != nil {
+		return errTaskAndVote
+	}
+
+	errColocMember := us.DeleteColocMembers(uint(id))
+
+	if errColocMember != nil {
+		return errColocMember
+	}
+
+	return s.db.Where("id = ?", id).Delete(&model.Colocation{}).Error
 }
 
 func (s *ColocationService) SearchColocations(query string) ([]model.Colocation, error) {
