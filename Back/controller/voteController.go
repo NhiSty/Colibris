@@ -477,7 +477,7 @@ func (ctl *VoteController) DeleteVote(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusNoContent, gin.H{
 		"Message": "vote deleted successfully",
 	})
 }
