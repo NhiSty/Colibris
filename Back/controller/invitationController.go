@@ -67,29 +67,6 @@ func (ctl *InvitationController) CreateInvitation(c *gin.Context) {
 		c.JSON(http.StatusNotFound, err.Error())
 		return
 	}
-	invitationID := invitation.ID
-
-	firebaseClient, err := utils.NewFirebaseClient()
-	if err != nil {
-		log.Printf("error initializing Firebase client: %v\n", err)
-		fmt.Println(http.StatusInternalServerError, gin.H{"error": "Failed to initialize Firebase client"})
-		return
-	}
-	invitationTitle := "Invitation en attente"
-	invitationBody := "Vous avez reçu une invitation pour rejoindre une colocation"
-
-	firstNameVal, exists := c.Get("firstName")
-	lastNameVal, exists := c.Get("lastName")
-	firstName, _ := firstNameVal.(string)
-	lastName, _ := lastNameVal.(string)
-	senderName := firstName + " " + lastName
-
-	err = firebaseClient.SendNotificationToDevice(invitationTitle, invitationBody, senderName, strconv.Itoa(int(req.ColocationID)), strconv.Itoa(int(invitationID)), user.FcmToken)
-	if err != nil {
-		log.Printf("error subscribing to topic: %v\n", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to subscribe to topic"})
-		return
-	}
 
 	c.JSON(http.StatusCreated, gin.H{
 		"Message": "invitation created successfully",

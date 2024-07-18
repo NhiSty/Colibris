@@ -10,7 +10,7 @@ import (
 )
 
 func TestCreateColocMemberSuccess(t *testing.T) {
-	token := LogAsUser()
+	token := LogAsAdmin()
 	payload := dto.ColocMemberCreateRequest{
 		ColocationID: 1,
 		UserID:       3,

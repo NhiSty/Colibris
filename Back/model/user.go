@@ -14,7 +14,7 @@ type User struct {
 	Lastname    string       `gorm:"not null"`
 	Colocations []Colocation `gorm:"foreignkey:UserID"`
 	Roles       Role         `gorm:"type:varchar(20);not null"`
-	FcmToken    string
+	FcmToken    string       `gorm:"not null;default:NA"`
 }
 
 type Role string
