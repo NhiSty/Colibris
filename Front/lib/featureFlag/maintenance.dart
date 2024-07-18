@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class MaintenanceScreen extends StatelessWidget {
   const MaintenanceScreen({super.key});
+  static const routeName = "/maintenance";
 
   @override
   Widget build(BuildContext context) {

@@ -457,7 +457,7 @@ func (ctl *TaskController) DeleteTask(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusNoContent, gin.H{
 		"Message": "task deleted successfully",
 	})
 }

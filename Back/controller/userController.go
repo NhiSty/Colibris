@@ -144,7 +144,7 @@ func (ctrl *UserController) DeleteUserById(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
+	c.JSON(http.StatusNoContent, gin.H{"message": "User deleted successfully"})
 }
 
 // GetAllUsers fetches all users from the database

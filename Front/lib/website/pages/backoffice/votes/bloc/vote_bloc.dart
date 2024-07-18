@@ -70,7 +70,7 @@ class VoteBloc extends Bloc<VoteEvent, VoteState> {
       emit(VoteLoading());
       try {
         final response = await voteService.deleteVote(event.voteId);
-        if (response['statusCode'] == 200) {
+        if (response['statusCode'] == 204) {
           emit(VoteDeleted(
               message: 'backoffice_vote_vote_deleted_successfully'.tr(),
               taskId: event.taskId

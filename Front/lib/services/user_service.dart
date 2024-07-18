@@ -141,7 +141,7 @@ class UserService {
       final response = await _dio.delete('/users/$userId',
           options: Options(headers: headers));
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         log('User deleted successfully');
       } else {
         throw Exception('Failed to delete user');

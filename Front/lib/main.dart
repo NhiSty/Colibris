@@ -177,6 +177,11 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       redirect: (BuildContext context, GoRouterState state) async {
         final isAuthenticated = await isConnected();
+        final isMaintenanceMode =  await isFeatureEnabled('maintenance', featureFlag);
+
+        if(isMaintenanceMode){
+          return MaintenanceScreen.routeName;
+        }
         if (!isAuthenticated) {
           if (state.fullPath == RegisterScreen.routeName) {
             return RegisterScreen.routeName;
@@ -199,6 +204,10 @@ class MyApp extends StatelessWidget {
                         child: LoginScreen(
                           data: state.extra,
                         ))),
+        GoRoute(
+          path: MaintenanceScreen.routeName,
+          builder: (context, state) => const MaintenanceScreen(),
+        ),
         GoRoute(
           path: LoginScreen.routeName,
           builder: (context, state) => PopScope(

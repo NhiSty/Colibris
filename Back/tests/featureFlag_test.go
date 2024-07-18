@@ -93,7 +93,7 @@ func TestDeleteFeatureFlagSuccess(t *testing.T) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	assert.Nil(t, err)
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
 }
 
 func TestDeleteFeatureFlagFailure(t *testing.T) {

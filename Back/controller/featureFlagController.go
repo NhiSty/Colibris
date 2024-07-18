@@ -194,7 +194,7 @@ func (c *FeatureFlagController) DeleteFeatureFlag(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
+	ctx.JSON(http.StatusNoContent, gin.H{
 		"Message": "feature flag deleted successfully",
 	})
 
