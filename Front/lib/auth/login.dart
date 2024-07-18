@@ -29,6 +29,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
+  Future<void> initState() async {
+    super.initState();
+    await deleteToken();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: GradientBackground(
@@ -183,16 +189,30 @@ class _LoginScreenState extends State<LoginScreen> {
         if (res == 200) {
           final token = await firebaseClient.getFcmToken();
           await addFcmToken(token as String);
-          signWithGoogle(
-            user.email!,
-            user.displayName ?? '',
-            idToken ?? '',
-            user.providerData[0].providerId,
-          );
+
+          if (widget.data != null && widget.data["intendedRoute"] != null && widget.data["intendedRoute"]!.isNotEmpty) {
+            Map<String, dynamic> extraData = {
+              "fromNotification": widget.data["fromNotification"],
+            };
+            if (widget.data.containsKey("colocationId")) {
+              extraData["colocationId"] = widget.data["colocationId"];
+            }
+
+            if (widget.data.containsKey("invitationId")) {
+              extraData["invitationId"] = widget.data["invitationId"];
+            } else if (widget.data.containsKey("paramName") && widget.data.containsKey("value")) {
+              extraData[widget.data["paramName"]] = widget.data["value"];
+            }
+
+            if (!mounted) return;
+            context.push(widget.data["intendedRoute"]!, extra: extraData);
+            return;
+          }
+
           if (!mounted) return;
           context.push(HomeScreen.routeName);
         } else {
-          print('Échec de la connexion avec Google');
+          print('Failed to sign in with Google');
         }
       }
     } catch (error) {
