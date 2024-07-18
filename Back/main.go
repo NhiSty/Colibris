@@ -1,8 +1,8 @@
 // @title Swagger Example API
 // @version 2.0
-// @description This is a sample server for a pet store.
+// @description This is Last Challenge.
 // @termsOfService http://swagger.io/terms/
-// @host https://back.colibris.live
+// @host back.colibris.live
 // @securityDefinitions.apikey Bearer
 // @in header
 // @name Authorization
