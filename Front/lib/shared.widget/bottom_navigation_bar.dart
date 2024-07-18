@@ -106,12 +106,12 @@ class BottomNavigationBarWidget extends StatelessWidget {
       unselectedItemColor: Colors.white.withOpacity(0.7),
       backgroundColor: Colors.blueGrey[800],
       type: BottomNavigationBarType.fixed,
-      onTap: (index) {
+      onTap: (index) async {
         if (index >= 0 && index < routes.length) {
           final newRoute = routes[index];
           if (newRoute.isNotEmpty && newRoute != currentRoute) {
             if (newRoute == '/login') {
-              deleteToken();
+              await deleteToken();
             }
             context.push(newRoute, extra: {
               'chatId': chatId,

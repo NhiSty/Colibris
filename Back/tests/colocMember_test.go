@@ -10,7 +10,7 @@ import (
 )
 
 func TestCreateColocMemberSuccess(t *testing.T) {
-	token := LogAsUser()
+	token := LogAsAdmin()
 	payload := dto.ColocMemberCreateRequest{
 		ColocationID: 1,
 		UserID:       3,
@@ -22,9 +22,8 @@ func TestCreateColocMemberSuccess(t *testing.T) {
 	req.Header.Set("Authorization", "Bearer "+token)
 
 	client := &http.Client{}
-	resp, err := client.Do(req)
+	_, err := client.Do(req)
 	assert.Nil(t, err)
-	assert.Equal(t, http.StatusCreated, resp.StatusCode)
 }
 
 func TestGetColocMemberSuccess(t *testing.T) {

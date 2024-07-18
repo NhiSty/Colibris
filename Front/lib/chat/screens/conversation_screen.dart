@@ -40,8 +40,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
     _getUserData();
     _fetchMessages();
     _connectToWebSocket();
-    final roomId = widget.conversationId;
-    firebaseClient.subscribeToTopic("room_colocation_$roomId");
   }
 
   @override
@@ -135,7 +133,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
   }
 
   _whichUserGradient(Message message) {
-    if (message.senderName.contains('Admin (')) {
+    final isAdmin = message.senderRole == 'ROLE_ADMIN';
+    if (isAdmin) {
       return [Colors.red.withOpacity(1), Colors.red.withOpacity(0.6)];
     } else if (message.senderId == _userId) {
       return [Colors.blue[800]!, Colors.blue[400]!];
@@ -151,22 +150,22 @@ class _ConversationScreenState extends State<ConversationScreen> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-              title: Text('chat_title'.tr()),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () async {
-                  var res = await fetchColocation(widget.conversationId);
-                  var colocation = Colocation.fromJson(res);
-                  if (widget.fromNotification) {
-                    context.go(ColocationTasklistScreen.routeName,
-                        extra: {"colocation": colocation});
-                  }
-                  context.pop();
-                  /**/
-                },
-              )),
+            title: Text('chat_title'.tr()),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () async {
+                var res = await fetchColocation(widget.conversationId);
+                var colocation = Colocation.fromJson(res);
+                if (widget.fromNotification) {
+                  context.go(ColocationTasklistScreen.routeName,
+                      extra: {"colocation": colocation});
+                }
+                context.pop();
+              },
+            ),
+          ),
           body: Column(
             children: [
               Expanded(
@@ -180,6 +179,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                     final showDateSeparator = index == 0 ||
                         _messages[index - 1].createdAt.day !=
                             message.createdAt.day;
+                    final isAdmin = message.senderRole == 'ROLE_ADMIN';
 
                     return Column(
                       children: [
@@ -200,7 +200,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           child: Container(
                             constraints: BoxConstraints(
                                 maxWidth:
-                                    MediaQuery.of(context).size.width * 0.75),
+                                MediaQuery.of(context).size.width * 0.75),
                             margin: EdgeInsets.symmetric(
                                 vertical: 2, horizontal: 8),
                             padding: EdgeInsets.all(10),
@@ -227,7 +227,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    if (isAdminMessage)
+                                    if (isAdmin)
                                       Container(
                                         margin: const EdgeInsets.only(right: 5),
                                         child: Icon(Icons.warning, color: Colors.yellow),
@@ -241,6 +241,18 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                     )
                                   ],
                                 ),
+                                if (isAdmin)
+                                  const Padding(
+                                    padding: EdgeInsets.only(top: 2.0),
+                                    child: Text(
+                                      'Message de la part d\'un admin',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontStyle: FontStyle.italic,
+                                        color: Colors.yellow,
+                                      ),
+                                    ),
+                                  ),
                                 SizedBox(height: 3),
                                 Text(
                                   message.content,
@@ -254,7 +266,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                         message.createdAt.toLocal()),
                                     style: const TextStyle(
                                       fontSize: 12,
-                                      color: Colors.white,
+                                      color: Colors.black,
                                     ),
                                   ),
                                 ),
@@ -293,7 +305,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                     SizedBox(width: 8),
                     FloatingActionButton(
                       onPressed: _sendMessage,
-                      backgroundColor: Colors.blueGrey[800],
+                      backgroundColor: Colors.blueGrey,
                       child: const Icon(Icons.send, color: Colors.white),
                     ),
                   ],

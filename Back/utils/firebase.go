@@ -67,6 +67,65 @@ func (f *FirebaseClient) SendNotification(title, body, senderName, colocationID,
 		Topic: topic,
 		Data: map[string]string{
 			"colocationID": colocationID,
+			"type":         "chat",
+		},
+	}
+
+	response, err := f.messagingClient.Send(context.Background(), message)
+	if err != nil {
+		return fmt.Errorf("error sending message: %v", err)
+	}
+
+	log.Printf("Successfully sent message: %s\n", response)
+	return nil
+}
+
+func (f *FirebaseClient) SubscribeToTopic(token string, id int) error {
+	if f.messagingClient == nil {
+		return fmt.Errorf("Firebase client is not initialized")
+	}
+	topic := fmt.Sprintf("colocation_room_%d", id)
+
+	response, err := f.messagingClient.SubscribeToTopic(context.Background(), []string{token}, topic)
+	if err != nil {
+		return fmt.Errorf("error subscribing to topic: %v", err)
+	}
+
+	log.Printf("Successfully subscribed to topic: %s\n", response)
+	return nil
+}
+
+func (f *FirebaseClient) UnsubscribeFromTopic(token string, id int) error {
+	if f.messagingClient == nil {
+		return fmt.Errorf("Firebase client is not initialized")
+	}
+
+	topic := fmt.Sprintf("colocation_room_%d", id)
+
+	response, err := f.messagingClient.UnsubscribeFromTopic(context.Background(), []string{token}, topic)
+	if err != nil {
+		return fmt.Errorf("error unsubscribing from topic: %v", err)
+	}
+
+	log.Printf("Successfully unsubscribed from topic: %s\n", response)
+	return nil
+}
+
+func (f *FirebaseClient) SendNotificationToDevice(title, body, senderName, colocationID, invitationID, fcmToken string) error {
+	if f.messagingClient == nil {
+		return fmt.Errorf("Firebase messaging client is not initialized")
+	}
+
+	message := &messaging.Message{
+		Notification: &messaging.Notification{
+			Title: title,
+			Body:  "From: " + senderName + "\n" + body,
+		},
+		Token: fcmToken,
+		Data: map[string]string{
+			"colocationID": colocationID,
+			"invitationID": invitationID,
+			"type":         "invitation",
 		},
 	}
 

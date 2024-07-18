@@ -24,7 +24,6 @@ func TestCreateInvitationSuccess(t *testing.T) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	assert.Nil(t, err)
-
 	assert.Equal(t, http.StatusCreated, resp.StatusCode)
 }
 

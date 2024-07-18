@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/colocation/colocation.dart';
+import 'package:front/home_screen.dart';
 import 'package:front/main.dart';
 import 'package:front/colocation/colocation_parameters.dart';
 import 'package:front/shared.widget/bottom_navigation_bar.dart';
@@ -71,6 +72,12 @@ class _ColocationTasklistScreenState extends State<ColocationTasklistScreen> {
                       ],
                     ),
                     backgroundColor: Colors.transparent,
+                    leading: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () async {
+                        context.go(HomeScreen.routeName);
+                      },
+                    ),
                     title: Text(
                       widget.colocation.name,
                       style: const TextStyle(color: Colors.white),

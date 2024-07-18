@@ -173,7 +173,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (user != null) {
         final idToken = await user.getIdToken();
-        // print("user $user");
         final res = await signWithGoogle(
           user.email!,
           user.displayName ?? '',
@@ -184,7 +183,12 @@ class _LoginScreenState extends State<LoginScreen> {
         if (res == 200) {
           final token = await firebaseClient.getFcmToken();
           await addFcmToken(token as String);
-
+          signWithGoogle(
+            user.email!,
+            user.displayName ?? '',
+            idToken ?? '',
+            user.providerData[0].providerId,
+          );
           if (!mounted) return;
           context.push(HomeScreen.routeName);
         } else {
@@ -204,19 +208,29 @@ class _LoginScreenState extends State<LoginScreen> {
       if (res == 200) {
         final token = await firebaseClient.getFcmToken();
         await addFcmToken(token as String);
-
+        await login(_emailController.text.trim(), _passwordController.text);
         if (await isConnected()) {
           context.push(HomeScreen.routeName);
         }
 
-        if (widget.data["intendedRoute"] != null &&
-            widget.data["intendedRoute"]!.isNotEmpty) {
-          context.push(widget.data["intendedRoute"]!, extra: {
-            widget.data["paramName"]: widget.data["value"],
-            "fromNotification": widget.data["fromNotification"]
-          });
+        if (widget.data["intendedRoute"] != null && widget.data["intendedRoute"]!.isNotEmpty) {
+          Map<String, dynamic> extraData = {
+            "fromNotification": widget.data["fromNotification"],
+          };
+          if (widget.data.containsKey("colocationId")) {
+            extraData["colocationId"] = widget.data["colocationId"];
+          }
+
+          if (widget.data.containsKey("invitationId")) {
+            extraData["invitationId"] = widget.data["invitationId"];
+          } else {
+            extraData[widget.data["paramName"]] = widget.data["value"];
+          }
+
+          context.push(widget.data["intendedRoute"]!, extra: extraData);
           return;
         }
+
       } else {
         showDialog(
           context: context,

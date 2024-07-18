@@ -29,7 +29,7 @@ func (c *ChatService) RegisterClient(client *model.Client) {
 	c.clients[client.ColocationID] = append(c.clients[client.ColocationID], client)
 }
 
-func (c *ChatService) BroadcastMessage(colocationID string, message []byte, userID int, senderName string) {
+func (c *ChatService) BroadcastMessage(colocationID string, message []byte, userID int, senderName string, senderRole string) {
 	c.clientsMu.Lock()
 	defer c.clientsMu.Unlock()
 
@@ -38,6 +38,7 @@ func (c *ChatService) BroadcastMessage(colocationID string, message []byte, user
 		SenderID:     userID,
 		SenderName:   senderName,
 		ColocationID: colocationID,
+		SenderRole:   senderRole,
 	}
 
 	savedMsg, err := c.SaveMessage(msg)
