@@ -65,22 +65,25 @@ bool isFeatureEnabled(String featureName, List<FeatureFlag> flags) {
   return flag.value;
 }
 
-void onMessage(RemoteMessage message) {
+Future<void> onMessage(RemoteMessage message) async {
   print('Message en premier plan reçu: ${message.notification?.title}');
-  showNotification(message);
+  final userId = await getUserId();
+  final senderId = message.data['senderID'] ?? "";
+  if (userId != null && senderId != null && userId.toString() != senderId) {
+    showNotification(message);
+  }
 }
 
 
 void showNotification(RemoteMessage message) async {
   String notificationType = message.data['type'] ?? 'default';
-
   const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
     'your_channel_id',
     'your_channel_name',
     channelDescription: 'your_channel_description',
     importance: Importance.defaultImportance,
     priority: Priority.high,
-    showWhen: false,
+    showWhen: true,
   );
   const NotificationDetails platformChannelSpecifics = NotificationDetails(
     android: androidPlatformChannelSpecifics,

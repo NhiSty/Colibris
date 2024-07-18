@@ -11,6 +11,11 @@ Future<String?> getToken() async {
   return await _storage.read(key: 'token');
 }
 
+Future<int?> getUserId() async {
+  var userData = await decodeToken();
+  return userData['user_id'];
+}
+
 Future<bool> isConnected() async {
   String? token = await getToken();
   if (token != null) {
