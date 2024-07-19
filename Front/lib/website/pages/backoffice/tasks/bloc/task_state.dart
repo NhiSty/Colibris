@@ -34,13 +34,13 @@ class TaskUpdated extends TaskState {
   TaskUpdated({required this.message});
 }
 
-class UsersAndColocationsLoading extends TaskState {}
+class UsersAndColocationsLoadingForTask extends TaskState {}
 
-class UsersAndColocationsLoaded extends TaskState {
+class UsersAndColocationsLoadedForTask extends TaskState {
   final List<dynamic> users;
   final List<dynamic> colocations;
 
-  UsersAndColocationsLoaded({
+  UsersAndColocationsLoadedForTask({
     required this.users,
     required this.colocations,
   });

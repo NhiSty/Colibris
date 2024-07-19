@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
 import 'package:front/website/pages/backoffice/votes/bloc/vote_bloc.dart';
 import 'package:front/website/pages/backoffice/votes/bloc/vote_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
@@ -18,6 +19,7 @@ void showAddVoteDialog({required BuildContext context, required int taskId}) {
     },
   ).then((_) {
     context.read<VoteBloc>().add(LoadVotes(taskId: taskId));
+    context.read<ColocMemberBloc>().add(LoadColocMembers());
   });
 }
 
@@ -38,7 +40,6 @@ class _AddVoteDialogState extends State<AddVoteDialog> {
 
   @override
   Widget build(BuildContext context) {
-
     return CustomDialog(
       title: 'backoffice_vote_add_vote'.tr(),
       width: 600.0,
@@ -56,7 +57,7 @@ class _AddVoteDialogState extends State<AddVoteDialog> {
                   child: Text('${state.message}'.tr()),
                 )
             ));
-            Navigator.of(context).pop();
+            context.pop();
           } else if (state is VoteError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Container(

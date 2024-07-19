@@ -272,7 +272,7 @@ func (ctl *VoteController) UpdateVote(c *gin.Context) {
 		return
 	}
 
-	if task.UserID == userIDFromToken && !service.IsAdmin(c) {
+	if task.UserID == uint(userId) {
 		c.JSON(http.StatusUnprocessableEntity, "error_votingTaskCantVoteForYourself")
 		return
 	}

@@ -102,6 +102,41 @@ func (ctl *TaskController) CreateTask(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
+
+	// check if the user is allowed to create a task
+	userIDFromToken, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	if req.UserId != userIDFromToken.(uint) && !service.IsAdmin(c) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+		return
+	}
+
+	colocationService := service.NewColocationService(ctl.service.GetDB())
+	colocation, colocationErr := colocationService.GetColocationById(int(req.ColocationId))
+
+	if colocationErr != nil {
+		c.JSON(http.StatusNotFound, colocationErr.Error())
+		return
+	}
+
+	colocationMembers := colocation.ColocMembers
+	isMember := false
+	for _, member := range colocationMembers {
+		if member.UserID == userIDFromToken.(uint) {
+			isMember = true
+			break
+		}
+	}
+
+	if !isMember && !service.IsAdmin(c) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are not allowed to access this resource"})
+		return
+	}
+
 	pts := float64(req.Duration) * .025
 	task := model.Task{
 		Title:        req.Title,
@@ -437,13 +472,24 @@ func (ctl *TaskController) DeleteTask(c *gin.Context) {
 		return
 	}
 
+	colocMemberService := service.NewColocMemberService(ctl.service.GetDB())
+
 	colocationMembers := colocation.ColocMembers
+
 	isMember := false
 	isOwner := colocation.UserID == userIDFromToken.(uint)
 	for _, member := range colocationMembers {
 		if member.UserID == userIDFromToken.(uint) {
 			isMember = true
 			break
+		}
+
+		if member.UserID == task.UserID {
+			var colocMemberNewScore = member.Score - float32(task.Pts)
+			if err := colocMemberService.UpdateColocMemberScore(int(member.ID), colocMemberNewScore); err != nil {
+				c.JSON(http.StatusInternalServerError, err.Error())
+				return
+			}
 		}
 	}
 

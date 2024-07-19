@@ -66,4 +66,4 @@ class DeleteTask extends TaskEvent {
   DeleteTask({required this.id});
 }
 
-class LoadAllUsersAndColocations extends TaskEvent {}
+class LoadAllUsersAndColocationsForTask extends TaskEvent {}

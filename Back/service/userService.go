@@ -75,6 +75,23 @@ func (s *UserService) DeleteUserById(id uint) error {
 		return err
 	}
 
+	// get all colocations where the user is member
+	var colocMembers []model.ColocMember
+	err = s.db.Where("user_id = ?", id).Find(&colocMembers).Error
+
+	if err != nil {
+		return err
+	}
+
+	// delete all tasks and votes for each colocation where the user is member
+
+	for _, colocMember := range colocMembers {
+		err = s.DeleteTasksAndVotes(colocMember.ColocationID)
+		if err != nil {
+			return err
+		}
+	}
+
 	for _, colocation := range colocations {
 		// Delete tasks and their votes
 		err = s.DeleteTasksAndVotes(colocation.ID)

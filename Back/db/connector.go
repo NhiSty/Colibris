@@ -27,6 +27,22 @@ func Connect() *gorm.DB {
 }
 
 func Migrate(db *gorm.DB) {
+
+	err2 := db.Migrator().DropTable(
+		&model.User{},
+		&model.Colocation{},
+		&model.ColocMember{},
+		&model.ResetPassword{},
+		&model.Invitation{},
+		&model.Log{},
+		&model.Task{},
+		&model.Message{},
+		&model.FeatureFlag{},
+		&model.Vote{},
+	)
+	if err2 != nil {
+		return
+	}
 	err := db.AutoMigrate(
 		&model.User{},
 		&model.Colocation{},
@@ -39,11 +55,16 @@ func Migrate(db *gorm.DB) {
 		&model.Message{},
 		&model.FeatureFlag{},
 	)
+
+	seed(db)
+
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
+	fmt.Println("Database migration completed successfully.")
+}
 
-	// Create the admin user if it does not exist
+func seed(db *gorm.DB) {
 	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.User{
 		Email: "admin@admin.com",
 		// test123!
@@ -52,17 +73,35 @@ func Migrate(db *gorm.DB) {
 		Lastname:  "admin",
 		Roles:     model.ROLE_ADMIN,
 	})
-
 	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.User{
-		Email: "test@gmail.com",
+		Email: "esgi.user@yopmail.com",
 		// test123!
 		Password:  "$2a$10$cFrne/rnK4JoEJn.bwdDJetpjbivABHtK/oy2/dYNjs6QUj7Fn0Pi",
-		Firstname: "user",
-		Lastname:  "user",
+		Firstname: "demo",
+		Lastname:  "esgi",
+		Roles:     model.ROLE_USER,
+	})
+	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.User{
+		Email: "john9@yopmail.com",
+		// test123!
+		Password:  "$2a$10$cFrne/rnK4JoEJn.bwdDJetpjbivABHtK/oy2/dYNjs6QUj7Fn0Pi",
+		Firstname: "Doe",
+		Lastname:  "John",
+		Roles:     model.ROLE_USER,
+	})
+	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.User{
+		Email: "james9@yopmail.com",
+		// test123!
+		Password:  "$2a$10$cFrne/rnK4JoEJn.bwdDJetpjbivABHtK/oy2/dYNjs6QUj7Fn0Pi",
+		Firstname: "Bond",
+		Lastname:  "james",
 		Roles:     model.ROLE_USER,
 	})
 
-	fmt.Println("Database migration completed successfully.")
+	db.Clauses(clause.OnConflict{DoNothing: true}).Create(&model.FeatureFlag{
+		Name:  "maintenance",
+		Value: false,
+	})
 }
 
 //
