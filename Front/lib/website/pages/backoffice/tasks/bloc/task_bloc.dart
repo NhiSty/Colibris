@@ -133,12 +133,12 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       }
     });
 
-    on<LoadAllUsersAndColocations>((event, emit) async {
-      emit(UsersAndColocationsLoading());
+    on<LoadAllUsersAndColocationsForTask>((event, emit) async {
+      emit(UsersAndColocationsLoadingForTask());
       try {
         final users = await taskService.getAllUsers();
         final colocations = await taskService.getAllColocations();
-        emit(UsersAndColocationsLoaded(
+        emit(UsersAndColocationsLoadedForTask(
           users: users,
           colocations: colocations,
         ));

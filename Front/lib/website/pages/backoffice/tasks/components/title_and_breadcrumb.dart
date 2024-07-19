@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:front/website/pages/backoffice/tasks/components/search_bar_and_add_task_button.dart';
+import 'package:go_router/go_router.dart';
 import 'package:universal_html/html.dart' as html;
 
 class TitleAndBreadcrumb extends StatelessWidget {
@@ -23,7 +24,7 @@ class TitleAndBreadcrumb extends StatelessWidget {
         GestureDetector(
           onTap: () {
             html.window.location.reload();
-            Navigator.pop(context, "/home");
+            context.pop();
           },
           child: MouseRegion(
             cursor: SystemMouseCursors.click,

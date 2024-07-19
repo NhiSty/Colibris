@@ -10,7 +10,7 @@ import 'package:time_range_picker/time_range_picker.dart';
 
 void showEditTaskDialog({ required BuildContext context, required Task task }) {
   final taskBloc = BlocProvider.of<TaskBloc>(context);
-  taskBloc.add(LoadAllUsersAndColocations());
+  taskBloc.add(LoadAllUsersAndColocationsForTask());
 
   showDialog(
     context: context,
@@ -41,10 +41,16 @@ class _UpdateTaskDialogState extends State<UpdateTaskDialog> {
   String? _selectedUserId;
   String? _selectedColocationId;
 
+  String convertMinutesToHHMM(int totalMinutes) {
+    int hours = totalMinutes ~/ 60;
+    int minutes = totalMinutes % 60;
+    return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
+  }
+
   @override
   void initState() {
     _titleController.text = widget.task.title;
-    _timeRangeController.text = widget.task.duration.toString();
+    _timeRangeController.text = convertMinutesToHHMM(widget.task.duration);
     _descriptionController.text = widget.task.description;
     dateController.text = widget.task.date;
     _selectedColocationId = widget.task.colocationId.toString();
@@ -103,6 +109,7 @@ class _UpdateTaskDialogState extends State<UpdateTaskDialog> {
                   )
               )
               );
+              taskBloc.add(LoadTasks());
             } else if (state is TaskError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Container(
@@ -121,7 +128,7 @@ class _UpdateTaskDialogState extends State<UpdateTaskDialog> {
               key: _formKey,
               child: BlocBuilder<TaskBloc, TaskState>(
                 builder: (context, state) {
-                  if (state is UsersAndColocationsLoaded) {
+                  if (state is UsersAndColocationsLoadedForTask) {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -281,7 +288,7 @@ class _UpdateTaskDialogState extends State<UpdateTaskDialog> {
                         ),
                       ],
                     );
-                  } else if (state is UsersAndColocationsLoading) {
+                  } else if (state is UsersAndColocationsLoadingForTask) {
                     return Center(child: CircularProgressIndicator());
                   } else {
                     return Center(child: Text('Loading...'));
@@ -308,11 +315,11 @@ class _UpdateTaskDialogState extends State<UpdateTaskDialog> {
               title: _titleController.text,
               description: _descriptionController.text,
               date: dateController.text,
-              duration: int.parse(_timeRangeController.text),
+              duration: int.parse(_timeRangeController.text.split(':')[0]) * 60 + int.parse(_timeRangeController.text.split(':')[1]),
               colocationId: int.parse(_selectedColocationId!),
               userId: int.parse(_selectedUserId!),
             ));
-            Navigator.of(context).pop();
+            context.pop();
           } else {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Container(

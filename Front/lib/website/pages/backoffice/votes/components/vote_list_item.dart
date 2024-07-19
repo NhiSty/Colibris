@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front/services/vote_service.dart';
 import 'package:front/vote/vote.dart';
 import 'package:front/services/user_service.dart';
+import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
 import 'package:front/website/pages/backoffice/votes/bloc/vote_bloc.dart';
 import 'package:front/website/pages/backoffice/votes/bloc/vote_state.dart';
 import 'package:front/website/pages/backoffice/votes/dialogs/delete_vote_dialog.dart';
@@ -144,6 +145,8 @@ class _VoteListItemState extends State<VoteListItem> {
                               ),
                             ));
 
+                            context.read<ColocMemberBloc>().add(LoadColocMembers());
+
                           } else {
                             ScaffoldMessenger.of(buildContext).showSnackBar(SnackBar(
                               content: Container(
@@ -180,6 +183,8 @@ class _VoteListItemState extends State<VoteListItem> {
                                 child: Text('${voteUpdated['message']}'.tr()),
                               ),
                             ));
+
+                            context.read<ColocMemberBloc>().add(LoadColocMembers());
 
                           } else {
                             ScaffoldMessenger.of(buildContext).showSnackBar(SnackBar(

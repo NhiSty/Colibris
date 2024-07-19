@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front/task/task_form.dart';
+import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_bloc.dart';
+import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_state.dart';
 import 'package:front/website/pages/backoffice/tasks/bloc/task_bloc.dart';
 import 'package:front/website/pages/backoffice/tasks/bloc/task_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
@@ -9,7 +12,7 @@ import 'package:go_router/go_router.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 void showAddTaskDialog(BuildContext context) {
-  context.read<TaskBloc>().add(LoadAllUsersAndColocations());
+  context.read<TaskBloc>().add(LoadAllUsersAndColocationsForTask());
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -70,7 +73,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext widgetContext) {
 
     return CustomDialog(
       title: 'backoffice_task_add_task'.tr(),
@@ -89,7 +92,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                   child: Text(state.message),
                 )
             ));
-            Navigator.of(context).pop();
+            context.pop();
           } else if (state is TaskError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Container(
@@ -108,7 +111,8 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
             key: _formKey,
             child: BlocBuilder<TaskBloc, TaskState>(
               builder: (context, state) {
-                if (state is UsersAndColocationsLoaded) {
+                if (state is UsersAndColocationsLoadedForTask) {
+                  final usersAndColocationsState = state;
                   return Container(
                     margin: const EdgeInsets.only(top: 10),
                     padding: const EdgeInsets.only(left: 25, right: 25),
@@ -219,35 +223,6 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                           decoration: InputDecoration(
                             border: const OutlineInputBorder(),
                           ),
-                          value: _selectedUserId,
-                          hint: Text(
-                              'backoffice_task_select_user_in_add_modal'
-                                  .tr()),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedUserId = value;
-                            });
-                          },
-                          items: state.users
-                              .where((user) => user.roles == 'ROLE_USER')
-                              .map((user) => DropdownMenuItem<String>(
-                            value: user.id.toString(),
-                            child:
-                            Text('${user.firstname} ${user.lastname} (${user.id})'),
-                          ))
-                              .toList(),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'please_select_user_in_add_modal'.tr();
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 30),
-                        DropdownButtonFormField<String>(
-                          decoration: InputDecoration(
-                            border: const OutlineInputBorder(),
-                          ),
                           value: _selectedColocationId,
                           hint: Text(
                               'backoffice_task_select_colocation_in_add_modal'
@@ -257,7 +232,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                               _selectedColocationId = value;
                             });
                           },
-                          items: state.colocations
+                          items: usersAndColocationsState.colocations
                               .map((coloc) => DropdownMenuItem<String>(
                             value: coloc['ID'].toString(),
                             child: Text(coloc['Name']),
@@ -270,10 +245,65 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                             return null;
                           },
                         ),
+                        SizedBox(height: 30),
+                        BlocProvider.value(
+                            value: BlocProvider.of<ColocMemberBloc>(widgetContext),
+                            child: BlocBuilder<ColocMemberBloc, ColocMemberState>(
+                              builder: (context, state) {
+                                if (state is ColocMemberLoading) {
+                                  return Center(child: CircularProgressIndicator());
+                                } else if (state is ColocMemberLoaded) {
+                                  var colocationData = _selectedColocationId != null && _selectedColocationId!.isNotEmpty
+                                      ? state.colocationData.entries.firstWhere((element) => element.key == int.parse(_selectedColocationId!)).value['result']
+                                      : null;
+
+                                  print(colocationData);
+
+                                  var colocationMembersUserIds = colocationData != null
+                                      ? colocationData['ColocMembers'].map((e) => e['UserID']).toList()
+                                      : [];
+
+                                  print(colocationMembersUserIds);
+
+                                  return DropdownButtonFormField<String>(
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(),
+                                    ),
+                                    value: _selectedUserId,
+                                    hint: Text(
+                                        'backoffice_task_select_user_in_add_modal'
+                                            .tr()),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _selectedUserId = value;
+                                      });
+                                    },
+                                    items: state.userData.values.toList()
+                                        .where((user) => colocationMembersUserIds.contains(user['ID']))
+                                        .map((user) => DropdownMenuItem<String>(
+                                      value: user['ID'].toString(),
+                                      child: Text('${user['Firstname']} ${user['Lastname']} (${user['Email']})'),
+                                    ))
+                                        .toList(),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'please_select_user_in_add_modal'.tr();
+                                      }
+                                      return null;
+                                    },
+                                  );
+                                } else if (state is ColocMemberError) {
+                                  return Center(child: Text(state.message));
+                                } else {
+                                  return Center(child: Text('- Error -'));
+                                }
+                              },
+                            ),
+                        ),
                       ],
                     ),
                   );
-                } else if (state is UsersAndColocationsLoading) {
+                } else if (state is UsersAndColocationsLoadingForTask) {
                   return Center(child: CircularProgressIndicator());
                 } else {
                   return Center(child: Text('Loading...'));

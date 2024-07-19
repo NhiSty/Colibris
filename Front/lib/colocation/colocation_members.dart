@@ -53,7 +53,7 @@ class _ColocationMembersState extends State<ColocationMembers> {
                     _users.removeWhere((u) => u.id == user.id);
                   });
                   if (!mounted) return;
-                  Navigator.of(context).pop();
+                  context.pop();
                 }
               },
             ),
@@ -134,7 +134,7 @@ class _ColocationMembersState extends State<ColocationMembers> {
                                 TextButton(
                                   child: Text('ok'.tr(), style: const TextStyle(color: Colors.amber)),
                                   onPressed: () {
-                                    Navigator.of(context).pop();
+                                    context.pop();
                                   },
                                 ),
                               ],
