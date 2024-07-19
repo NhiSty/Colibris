@@ -184,10 +184,13 @@ docker-compose exec -T golang go test tests/utils.go tests/invitation_test.go
 docker-compose exec -T golang go test tests/jwt_unitary_test.go
 ```
 
-## APK
-Voici un lien pour télécharger l'APK : 
+## Links ( may be shuttdown)  
+### APK : 
 https://drive.google.com/file/d/1jzwjF56Yioc8KCLNk9aF28xiHbBV2V1z/view
-
+### Swagger 
+https://back.colibris.live/api/v1/swagger/index.html
+### Front : 
+https://front.colibris.live
 
 ## DEMO
 ### A préparer en amont pour la démo
@@ -223,7 +226,6 @@ https://drive.google.com/file/d/1jzwjF56Yioc8KCLNk9aF28xiHbBV2V1z/view
         -  description : J'ai fais les courses
     
 - Connecter en Oauth pour hamidou pour avoir dans la bdd déjà son user :
-    - il s'appelle abdelhamidou4@gmail.com
 
 - Au final dans colocation "Chez l'esgi" on a :
     - user demo (esgi.user@yopmail.com)
@@ -249,7 +251,7 @@ https://drive.google.com/file/d/1jzwjF56Yioc8KCLNk9aF28xiHbBV2V1z/view
 
 - il va dans le chat pour dire qu'il y a un nouveau colocataire qui arrive
 
-- il va ensuite sur sur les paramètres de la colocations et invite 1 autre user (abdelhamidou4@gmail.com)
+- il va ensuite sur sur les paramètres de la colocations et invite 1 autre user
 
 - ensuite il va voir les autres membres pour consulter les scores.
 
@@ -269,7 +271,7 @@ https://drive.google.com/file/d/1jzwjF56Yioc8KCLNk9aF28xiHbBV2V1z/view
 - il met un message lui aussi de bonjour
   
 
-**TELEFONE HAMIDOU :**
+**TELEPHONE:**
 
 - se connecter avec oauth 
 
@@ -288,7 +290,7 @@ https://drive.google.com/file/d/1jzwjF56Yioc8KCLNk9aF28xiHbBV2V1z/view
 - il clique sur la notif et met un msg pour dire qu'il va voter
 
   
-**TELEFONE HAMIDOU : (OAuth)**
+**TELEFONE: (OAuth)**
 
 - cliquer sur la notif et dire ok merci et on attends les msg
 
@@ -299,7 +301,7 @@ https://drive.google.com/file/d/1jzwjF56Yioc8KCLNk9aF28xiHbBV2V1z/view
 
 - et dans le chat il dit que la photo on voit rien
 
-**TELEFONE HAMIDOU :**
+**TELEPHONE:**
 
 - va editer la tache et mettre une autre photo
 
@@ -314,7 +316,7 @@ https://drive.google.com/file/d/1jzwjF56Yioc8KCLNk9aF28xiHbBV2V1z/view
 
 - va voter :thumbsup:
 
-- ensuite il va voir les autres membres pour consulter les scores et voit que l'user hamidou a un score.
+- ensuite il va voir les autres membres pour consulter les scores et voit que l'user a son score à jour.
 
 - il voit qu'un mec n'a rien fait il le vire (martin dupond)
 
@@ -332,7 +334,7 @@ https://drive.google.com/file/d/1jzwjF56Yioc8KCLNk9aF28xiHbBV2V1z/view
 
 - montrer les notifs
 
-**TELEFONE HAMIDOU :**
+**TELEPHONE:**
 
 - montrer les notifs
 
