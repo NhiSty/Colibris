@@ -92,7 +92,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                   child: Text(state.message),
                 )
             ));
-            Navigator.of(context).pop();
+            context.pop();
           } else if (state is TaskError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Container(

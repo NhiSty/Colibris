@@ -57,7 +57,7 @@ class _AddVoteDialogState extends State<AddVoteDialog> {
                   child: Text('${state.message}'.tr()),
                 )
             ));
-            Navigator.of(context).pop();
+            context.pop();
           } else if (state is VoteError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Container(

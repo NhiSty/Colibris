@@ -5,6 +5,7 @@ import 'package:front/website/pages/backoffice/colocMembers/bloc/colocMember_blo
 import 'package:front/website/pages/backoffice/tasks/bloc/task_bloc.dart';
 import 'package:front/website/pages/backoffice/tasks/bloc/task_state.dart';
 import 'package:front/website/share/custom_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 void showDeleteTaskDialog({
   required BuildContext context,
@@ -30,7 +31,7 @@ void showDeleteTaskDialog({
                       'backoffice_task_task_deleted_successfully'.tr()),
                 ),
               ));
-              Navigator.pop(context);
+              context.pop();
             } else if (state is TaskError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Container(
@@ -52,7 +53,7 @@ void showDeleteTaskDialog({
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: Text('cancel'.tr()),
               ),
